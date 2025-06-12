@@ -11,6 +11,7 @@ RUN npm ci --legacy-peer-deps
 # Copy project files and build
 COPY . .
 RUN npm run build --prod
+RUN npm install --legacy-peer-deps
 
 
 # ---------- STEP 2: Serve using Nginx ----------
