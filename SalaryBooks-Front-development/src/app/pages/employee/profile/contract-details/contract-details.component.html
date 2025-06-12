@@ -1,0 +1,30 @@
+
+<table class="table table-hover mb-5">
+    <thead>
+        <tr>
+            <th>Sl</th>
+            <th>Contract Start Date</th>
+            <th>Contract End Date</th>
+            <th>Description</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="employee_details?.contract?.length > 0; else noTableFound">
+        <tr *ngFor="let item of employee_details?.contract; let i = index">
+            <th scope="row">{{ i+1 }}</th>
+            <td>{{ item.start_date ? (item.start_date | date:'longDate') : "N/A" }}</td>
+            <td>{{ item.end_date ? (item.end_date | date:'longDate') : "N/A" }}</td>
+            <td>{{ item.description ? item.description : 'N/A' }}</td>
+            <td>{{ item.comments ? item.comments : 'N/A' }}</td>
+            
+        </tr>
+    </tbody>
+
+    <ng-template #noTableFound>
+        <tbody>
+            <tr>
+                <td colspan="6" class="text-center">No Contracts Found</td>
+            </tr>
+        </tbody>
+    </ng-template>
+</table>

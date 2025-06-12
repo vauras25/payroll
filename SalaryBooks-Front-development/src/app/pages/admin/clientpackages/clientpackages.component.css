@@ -1,0 +1,112 @@
+
+
+.toggle-btn {
+    width: 56px;
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease-in-out;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+    .toggle-btn {
+        transition: none;
+    }
+}
+
+.toggle-btn.on {
+    background-color: #141d28;
+}
+
+.toggle-btn.on .toggle-btn-switch {
+    left: 35px;
+}
+
+.toggle-btn+.toggle-btn {
+    margin-left: 5px;
+}
+
+.toggle-btn-rounded {
+    border-radius: 25px;
+}
+
+.toggle-btn-rounded .toggle-btn-switch {
+    border-radius: 100%;
+}
+
+.toggle-btn-rounded .toggle-btn-switch::before {
+    left: -23px;
+}
+
+.toggle-btn-rounded .toggle-btn-switch::after {
+    right: -27px;
+}
+
+.toggle-btn-switch {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: 18px;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: all 0.2s ease-in-out;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+    .toggle-btn-switch {
+        transition: none;
+    }
+}
+
+.toggle-btn-switch::before,
+.toggle-btn-switch::after {
+    position: absolute;
+    top: 2px;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px rgba(33, 37, 41, 0.1);
+}
+
+.toggle-btn-switch::before {
+    content: 'on';
+    left: -25px;
+}
+
+.toggle-btn-switch::after {
+    content: 'off';
+    right: -28px;
+}
+
+.toggle-btn-primary.on {
+    background-color: #0866C6;
+}
+
+.toggle-btn-success.on {
+    background-color: #23BF08;
+}
+
+.toggle-btn-warning.on {
+    background-color: #F49917;
+}
+
+.toggle-btn-danger.on {
+    background-color: #DC3545;
+}
+
+.toggle-btn-info.on {
+    background-color: #17A2B8;
+}
+
+.toggle-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}

@@ -1,0 +1,137 @@
+<div class="table-responsive" >
+    <div class="table-wrapper mt-3" *ngFor="let item of leaveData">
+       <table  class="table display responsive nowrap wd-100p employee-table" >
+          <thead >
+             <tr>
+                <th class="text-center" colspan="8">Form E </th>
+             </tr>
+             <tr>
+                <th class="text-center" colspan="8">
+                   the mines act, 1952, the sales promotion employees (conditions of service) act, 1976 and the working journalists (conditions of service) and miscellaneous provisions act, 1957
+                </th>
+             </tr>
+             <tr>
+                <th colspan="2">Name of Establishments.....................</th>
+                <th colspan="2">Name of Owner...............................</th>
+                <th colspan="4">LIN.........................................</th>
+             </tr>
+             <tr>
+                <th >For the</th>
+                <th colspan="7">Year</th>
+             </tr>
+          </thead>
+          <tbody>
+             <tr>
+                <td rowspan="2">Sl. Number in Employees Register</td>
+                <td rowspan="2">Name</td>
+                <td rowspan="2">No. of days worked the Year</td>
+                <td colspan="4" class="text-center">Details of Compensatory Rest</td>
+             </tr>
+             <tr>
+                <td>Opening Balance</td>
+                <td>Added</td>
+                <td>Rest Not Allowed</td>
+                <td>Rest Availed</td>
+                <td>Closing Balance</td>
+             </tr>
+             <tr>
+                <td class="text-center">1</td>
+                <td>{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+                <td></td>
+                <td class="text-center">N/A</td>
+                <td class="text-center">N/A</td>
+                <td class="text-center">N/A</td>
+                <td class="text-center">N/A</td>
+                <td class="text-center">N/A</td>
+             </tr>
+             <tr>
+                <td colspan="8" style="height: 15px;background-color: white !important; border-left: none !important;border-right: none !important;"></td>
+             </tr>
+             <tr>
+                <td colspan="4" class="text-center">Details of Earned Leave</td>
+                <td colspan="4" class="text-center">Details of Medical Leave</td>
+             </tr>
+             <tr>
+                <td>Opening Balance</td>
+                <td>Added</td>
+                <td>Leave Availed</td>
+                <td>Closing Balance</td>
+                <td>Opening Balance</td>
+                <td>Added</td>
+                <td>Leave Availed</td>
+                <td>Closing Balance</td>
+             </tr>
+             <tr>
+                <td class="text-center">{{item?.earned_leave_details?.opening_balance}}</td>
+                <td class="text-center">{{item?.earned_leave_details?.added_balance}}</td>
+                <td class="text-center">{{item?.earned_leave_details?.leave_avalable_balance}}</td>
+                <td class="text-center">{{item?.earned_leave_details?.closeing_balance}}</td>
+                <td class="text-center">{{item?.medical_leave_details?.opening_balance}}</td>
+                <td class="text-center">{{item?.medical_leave_details?.added_balance}}</td>
+                <td class="text-center">{{item?.medical_leave_details?.leave_avalable_balance}}</td>
+                <td class="text-center">{{item?.medical_leave_details?.closeing_balance}}</td>
+             </tr>
+             <tr>
+                <td colspan="8" style="height: 15px;background-color: white !important; border-left: none !important;border-right: none !important;"></td>
+             </tr>
+             <tr>
+                <td colspan="7" class="text-center">Details of Other Leave</td>
+                <td class="text-center" rowspan="2">Remarks</td>
+             </tr>
+             <tr>
+                <td >Opening Balance</td>
+                <td  colspan="2">Added</td>
+                <td  colspan="2">Leave Availed</td>
+                <td  colspan="2">Closing Balance</td>
+             </tr>
+             <tr>
+                <td >{{item?.other_leave_details?.opening_balance}}</td>
+                <td colspan="2" class="text-center">{{item?.other_leave_details?.added_balance}}</td>
+                <td colspan="2" class="text-center">{{item?.other_leave_details?.leave_avalable_balance}}</td>
+                <td colspan="2" class="text-center">{{item?.other_leave_details?.leave_avalable_balance}}</td>
+                <td ></td>
+             </tr>
+             <tr>
+                <td colspan="8" style="border-left:none !important;
+                 border-bottom:none !important; 
+                 background:white !important;border-right:none !important;">
+                 <strong>Note:</strong> The Register for the month of January for the year will show the Leave Opening Balance for the year also and for the month December will show the Closing Balance for the year   
+                </td>
+             </tr>
+             <tr>
+                <td colspan="8" style="border-left:none !important;
+                 border-bottom:none !important; 
+                 background:white !important;border-right:none !important;text-align: right;">
+                 [F.No. Z-20025/27/2016-LRC]<br>
+                 R. K. GUPTA, J. Secy   
+                </td>
+             </tr>
+             <tr>
+                <td colspan="8" style="height: 20px;background-color: white !important; border-left: none !important;border-right: none !important;"></td>
+             </tr>
+             <tr>
+                <td colspan="8" style="background-color: white !important; border-left: none !important;border-right:none!important;border-bottom: none !important;">
+                    <strong>Note:</strong>
+                    
+                    
+                
+                </td>
+
+             </tr>
+             <tr>
+                <td colspan="8" style="background-color: white !important; border-left: none !important;border-right: none !important;border-bottom: none !important;">
+                    <span style="margin-left: 20px;">
+                        (1) The Building and Other Construction Workers (Regulation of Employment and Conditions of Service) Central Rules, 1998 were published in the Gazette of India vide G.S.R. 689(E), dated 19.11.1998 and was lastly amended by G.S.R. 47(E) 10.06.2015;
+                        <br>
+                        (2) The Contract Labour (Regulation and Abolition) Central Rules, 1971 were published in the Gazette of India vide G.S.R. 191, dated 10.02.1971 and was lastly amended by G.S.R. 41(E), dated 21.01.1999;
+                    </span>
+                   
+                    
+                
+                </td>
+
+             </tr>
+          </tbody>
+       </table>
+    </div>
+ </div>

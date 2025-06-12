@@ -1,0 +1,507 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Govt Forms And Register</a>
+      <a class="breadcrumb-item">Form B (Wage Register)</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Form B (Wage Register)</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [hidden]="isViewSalaryReport"
+        [monthFilter]="true"
+        [yearFilter]="true"
+        [isClient]="false"
+        [isFilterBtnDisable]="isViewSalaryReport"
+        [salaryTypeFilter]="true"
+        (onFiltered)="this.employeeListFilter = $event; fetchEmployees()"
+      ></companyuser-app-table-filter>
+    
+      <!-- <div class="d-flex justify-content-end mt-3">
+        <button
+          [disabled]="!anyRowsChecked()"
+          (click)="downloadExcelReport($event.target)"
+          type="submit"
+          class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+        >
+          Download
+        </button>
+      </div> -->
+      
+      <div class="mt-3">
+       
+        <ng-container *ngIf="!isReportView">
+          <div class="d-flex justify-content-end mt-3">
+            <button
+              [disabled]="!anyRowsChecked()"
+              (click)="viewReport()"
+              type="submit"
+              class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            >
+              View Report
+            </button>
+          </div>
+          <div class="table-wrapper mt-3">
+            <div class="table-responsive">
+              <app-custom-tableoption
+              [searchable]="true"
+              (onFilterChanged)="reportPaginationOptions.limit = +$event?.length ;tablefilterOptios.searchkey = $event.searchkey; fetchEmployees()"
+            ></app-custom-tableoption>
+              <table
+                class="table table-bordered cust-table table-striped cust-reporting-table"
+              >
+                <thead>
+                  <tr>
+                    <th [attr.colspan]="17">FORM B</th>
+                  </tr>
+                  <tr>
+                    <th [attr.colspan]="17">FORMAT OF WAGE REGISTER</th>
+                  </tr>
+                  <tr>
+                    <th class="text-left" colspan="5">
+                      Name of the Establishment: {{ company?.establishment_name }}
+                    </th>
+                    <th class="text-left" [attr.colspan]="12">
+                      Name of Owner: {{ company?.establishment_name }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left" [attr.colspan]="17">
+                      Wage period From : 01/{{
+                        this.employeeListFilter?.month?.sf
+                      }}/{{ employeeListFilter?.year?.value }} To 31/{{
+                        this.employeeListFilter?.month?.sf
+                      }}/{{ employeeListFilter?.year?.value }}
+                      Monthly/Fortnightly/Weekly/Daily/Piece Rated
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="align-content-center" rowspan="2">
+                      <label
+                        class="d-flex align-items-center mb-0"
+                        for="select-all"
+                      >
+                        <input
+                          type="checkbox"
+                          class="mr-2"
+                          id="select-all"
+                          [value]="rowCheckedAll"
+                          (change)="allRowsCheckboxChecked($event)"
+                        />
+                        SL No.
+                      </label>
+                    </th>
+                    <th class="align-content-center" rowspan="2">Name</th>
+                    <th class="align-content-center" rowspan="2">Rate of Wage</th>
+                    <th class="align-content-center" rowspan="2">
+                      No. of Days worked
+                    </th>
+                    <th class="align-content-center" rowspan="2">
+                      Overtime hours worked
+                    </th>
+                    <th class="align-content-center" [attr.colspan]="4">
+                      Earned Wages
+                    </th>
+                    <th class="align-content-center" rowspan="2">
+                      Gross wages Payable
+                    </th>
+                    <th class="align-content-center" colspan="4">Deductions</th>
+                    <th class="align-content-center" rowspan="2">
+                      Total Deduction
+                    </th>
+                    <th class="align-content-center" rowspan="2">Net Payment</th>
+                    <th class="align-content-center" rowspan="2">
+                      Employer Share PF Welfare Found
+                    </th>
+                  </tr>
+                  <tr>
+                    <!-- <th *ngFor="let key of getObjectKeys(this.salaryHeads) || []">
+                      {{ key }}
+                    </th> -->
+                    <th>BASIC</th>
+                    <th>HRA</th>
+                    <th>Others</th>
+                    <th>Overtime</th>
+  
+                    <th>PF</th>
+                    <th>PT</th>
+                    <th>ESI</th>
+                    <th>Advance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let employee of employees; let i = index">
+                    <td>
+                      <label
+                        class="d-flex align-items-center"
+                        [for]="'checkrow-' + (i + 1)"
+                      >
+                        <input
+                          type="checkbox"
+                          class="mr-2"
+                          [attr.checked]="
+                            employee.checked == true ? 'checked' : null
+                          "
+                          id="checkrow-{{ i + 1 }}"
+                          [attr.data-checkbox-id]="employee._id"
+                          (click)="rowCheckBoxChecked($event, employee)"
+                        />
+                        {{ i + 1 }}
+                      </label>
+                    </td>
+  
+                    <td>
+                      {{ employee?.emp_first_name }} {{ employee?.emp_last_name }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.master_report
+                          ?.gross_earning || 0 | number:'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.attendance_summaries
+                          ?.paydays || 0 | number:'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.attendance_summaries
+                          ?.total_overtime || 0 | number:'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      {{ employee?.earn_heads_amounts?.head_1?.amount || 0 | number:'1.2-2' }}
+                    </td>
+                    <td>
+                      {{ employee?.earn_heads_amounts?.head_2?.amount || 0 | number:'1.2-2' }}
+                    </td>
+                    <td>
+                      {{ employee?.earn_heads_amounts?.head_3?.amount || 0 | number:'1.2-2' }}
+                    </td>
+  
+                    <td>{{ employee?.employee_monthly_reports?.salary_report?.total_ot_wages || 0 | number:'1.2-2' }}</td>
+                    <td>
+                      {{ employee?.employee_monthly_reports?.salary_report?.gross_earning || 0 | number:'1.2-2' }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.salary_report?.pf_data?.emoloyee_contribution ||
+                          0 | number:'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      {{ employee?.employee_monthly_reports?.salary_report?.pt_amount || 0 | number:'1.2-2' }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.salary_report?.esic_data
+                          ?.emoloyee_contribution || 0 | number:'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.salary_report?.advance_recovered || 0 | number:'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        ( (employee?.employee_monthly_reports?.salary_report?.pf_data?.emoloyee_contribution || 0) +
+                         (employee?.employee_monthly_reports?.salary_report?.pt_amount || 0) +
+                         (employee?.employee_monthly_reports?.salary_report?.esic_data?.emoloyee_contribution || 0) +
+                         (employee?.employee_monthly_reports?.salary_report?.advance_recovered || 0) )| number:'1.2-2'
+                      }}
+                      <!-- {{ employee?.employee_monthly_reports?.salary_report?.gross_deduct || 0 | number:'1.2-2' }} -->
+                    </td>
+                    <td>
+                      {{ employee?.employee_monthly_reports?.salary_report?.net_take_home || 0 | number:'1.2-2' }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.employee_monthly_reports?.salary_report?.pf_data?.emoloyee_contribution ||
+                          0 | number:'1.2-2'
+                      }}
+                    </td>
+                  </tr>
+                  <tr *ngIf="employees.length == 0">
+                    <td colspan="100%"
+                        class="text-center"
+                        style="background-color: #f7f7f7">
+                      No records found
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isReportView">
+          <div class="text-right">
+            <button type="button"
+            (click)="downloadExcelReport($event)"
+                    class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+              <span><i style="font-size: 12px"
+                   class="mr-1 fa fa-download"></i>Export</span>
+            </button>
+  
+            <button (click)="cancelGenerateReport()"
+                    type="button"
+                    class="btn btn-danger tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+              <span><i style="font-size: 12px"
+                   class="mr-1 fa fa-times"></i>Cancel</span>
+            </button>
+          </div>
+          <div class="table-wrapper mt-3">
+            <div class="table-responsive">
+              <table class="table table-bordered cust-table table-striped cust-reporting-table">
+                <thead>
+                  <tr>
+                    <th [attr.colspan]="17">FORM B</th>
+                  </tr>
+                  <tr>
+                    <th [attr.colspan]="17">FORMAT OF WAGE REGISTER</th>
+                  </tr>
+                  <tr>
+                    <th class="text-left" colspan="5">
+                      Name of the Establishment: {{ company?.establishment_name }}
+                    </th>
+                    <th class="text-left" [attr.colspan]="12">
+                      Name of Owner: {{ company?.establishment_name }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th class="text-left" [attr.colspan]="17">
+                      Wage period From : 01/{{
+                        this.employeeListFilter?.month?.sf
+                      }}/{{ employeeListFilter?.year?.value }} To 31/{{
+                        this.employeeListFilter?.month?.sf
+                      }}/{{ employeeListFilter?.year?.value }}
+                      Monthly/Fortnightly/Weekly/Daily/Piece Rated
+                    </th>
+                  </tr>
+                  <tr class="title-sec">
+                    <ng-container *ngFor="let row of form_wageL">
+                      <ng-container *ngFor="let module of row.modules">
+                        <ng-container [ngSwitch]="module.module_slug">
+                          <ng-container *ngSwitchCase="'master_breakup'">
+                            <th
+                              
+                            >
+                              <!-- {{ module.module_title }} -->
+                            </th>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'paid_leaves_dynamic_heads'">
+                            <th
+                             
+                            >
+                              <!-- {{ module.module_title }} -->
+                            </th>
+                          </ng-container>
+            
+                          <ng-container *ngSwitchCase="'breakup'">
+                            <th
+                             
+                            >
+                              {{ module.module_title }}
+                            </th>
+                          </ng-container>
+            
+                         
+                          <ng-container *ngSwitchDefault>
+                            <th
+                            class="column-title"
+                            [attr.colspan]="
+                              getSheetTemplateHeadColspan(
+                                row.main_slug,
+                                module.module_slug
+                              )
+                            "
+                            >
+                              {{ module.module_title }}
+                            </th>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tr>
+            
+                  <tr class="headings">
+            
+                    <ng-container *ngFor="let row of form_wageL">
+                      <ng-container *ngFor="let module of row.modules">
+                        <ng-container *ngFor="let field of module.fields">
+                          <ng-container [ngSwitch]="field.slug">
+                            <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                              <ng-container
+                              *ngFor="
+                              let headInclude of empReportTempData.master_head_includes
+                              "
+                              >
+                              <th>
+                                <span
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="{{ headInclude.head_title }}"
+                                >{{ headInclude.head_abbreviation }}</span
+                                >
+                              </th>
+                            </ng-container>
+                          </ng-container>
+                            <ng-container *ngSwitchCase="'attendance-dynamic-heads'">
+                              <ng-container
+                              *ngFor="
+                              let headInclude of empReportTempData.attendance_head_includes
+                              "
+                              >
+                              <th>
+                                <span
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="{{ 'err' }}"
+                                >{{ headInclude.abbreviation }}</span
+                                >
+                              </th>
+                            </ng-container>
+                          </ng-container>
+            
+                              <ng-container *ngSwitchCase="'dynamic-heads'">
+                                <ng-container
+                                  *ngFor="let headInclude of empReportTempData.head_includes"
+                                >
+                                  <th>
+                                    <span
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="{{ headInclude.head_title }}"
+                                      >{{ headInclude.head_abbreviation }}</span
+                                    >
+                                  </th>
+                                </ng-container>
+                              </ng-container>
+                              <ng-container *ngSwitchCase="'extra-earnings'">
+                                <ng-container
+                                  *ngFor="
+                                    let extraEarning of empReportTempData.extra_earning_data
+                                  "
+                                >
+                                  <th>{{ extraEarning.earning_abbreviation }}</th>
+                                </ng-container>
+                              </ng-container>
+                              <ng-container *ngSwitchDefault>
+                                <th>
+                                  <ng-container *ngIf="field.abbreviation">
+                                    <span
+                                      data-toggle="tooltip"
+                                      data-placement="top"
+                                      title="{{ field.title }}"
+                                    >
+                                      {{ field.abbreviation }}
+                                    </span>
+                                  </ng-container>
+            
+                                  <ng-container *ngIf="!field.abbreviation">
+                                    {{ field.title }}
+                                  </ng-container>
+                                </th>
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+            
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let report of veiwEmpDoc; let i = index">
+                    <ng-container *ngFor="let row of form_wageL">
+                      <ng-container *ngFor="let module of row.modules">
+                        <ng-container *ngFor="let field of module.fields">
+                          <ng-container [ngSwitch]="field.slug">
+                            <ng-container *ngSwitchCase="'sl_no'">
+                              <td>{{ i + 1 }}</td>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                             
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'attendance-dynamic-heads'">
+                             
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'dynamic-heads'">
+                              
+                            </ng-container>
+                            <!-- <ng-container *ngSwitchCase="'attendance-dynamic-heads'">
+                              <ng-container
+                                *ngFor="let headInclude of empReportTempData.head_includes"
+                              >
+                                <td>
+                                  {{
+                                    getHeadValue(
+                                      empReportTempData.head_includes,
+                                      headInclude.head_id,
+                                      "amount"
+                                    )
+                                  }}
+                                </td>
+                              </ng-container>
+                            </ng-container> -->
+                            <ng-container *ngSwitchCase="'extra-earnings'">
+                              
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'sex'">
+                             
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'age'">
+                             
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                              <td>
+                                {{
+                                  getSheetTemplateReportValue(
+                                    row.main_slug,
+                                    module.module_slug,
+                                    field.slug,
+                                    report
+                                  ) ?? "N/A"
+                                }}
+                              </td>
+                            </ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tr>
+                  <tr *ngIf="employees?.length == 0">
+                    <td colspan="100%"
+                        class="text-center">No records found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+        <!-- <app-companyuser-master-sheet-report
+          [sheetTemplate]="selectedSheetTemplate || sheetTemplate"
+          [empReportData]="empReportData"
+        >
+        </app-companyuser-master-sheet-report> -->
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

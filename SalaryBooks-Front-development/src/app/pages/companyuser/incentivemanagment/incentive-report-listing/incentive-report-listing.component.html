@@ -1,0 +1,634 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Incentive Report Listing Console</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Incentive Report Listing Console</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        [isBankAccount]="true"
+        (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+      ></companyuser-app-table-filter>
+
+      <div class="mt-3">
+        <ng-container *ngIf="reportGenerated == false">
+          <div class="d-flex">
+            <form class="flex-1 pr-4" [formGroup]="tableOperationForm">
+              <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center" style="flex: 1">
+                  <ng-container
+                    *ngIf="
+                      Global.checkCompanyModulePermission({
+                        company_module: 'incentive',
+                        company_operation: 'payment_instruction',
+                        company_sub_module: 'payment_instructions',
+                        company_sub_operation: ['view']
+                      })
+                    "
+                  >
+                    <label
+                      style="font-size: 12px"
+                      for="payout_process"
+                      class="mr-3 mb-0"
+                    >
+                      <input
+                        class="mr-2"
+                        type="checkbox"
+                        formControlName="payout_process"
+                        id="payout_process"
+                      />Process payout
+                    </label>
+
+                    <ng-container [formGroup]="filterForm">
+                      <div
+                        style="min-width: 150px"
+                        class="pr-2"
+                        *ngIf="tableOperationForm.get('payout_process')?.value"
+                      >
+                        <ngx-select-dropdown
+                          (change)="fetchEmployees()"
+                          formControlName="wage_month"
+                          [options]="monthMaster"
+                          class="form-control p-1"
+                          [config]="{
+                            search: true,
+                            placeholder: 'Select Month'
+                          }"
+                        ></ngx-select-dropdown>
+                      </div>
+
+                      <div
+                        style="min-width: 130px"
+                        class="pr-2"
+                        *ngIf="tableOperationForm.get('payout_process')?.value"
+                      >
+                        <ngx-select-dropdown
+                          (change)="fetchEmployees()"
+                          formControlName="wage_year"
+                          [options]="yearMaster"
+                          class="form-control p-1"
+                          [config]="{
+                            search: true,
+                            placeholder: 'Select Year'
+                          }"
+                        ></ngx-select-dropdown>
+                      </div>
+                    </ng-container>
+
+                    <ng-container
+                      *ngIf="
+                        tableOperationForm.get('payout_process')?.value == true
+                      "
+                    >
+                      <ngx-select-dropdown
+                        formControlName="payout_bankid"
+                        [options]="bankMaster"
+                        class="form-control p-1 flex-1"
+                        [config]="{
+                          search: true,
+                          placeholder: 'Employee Bank',
+                          displayKey: 'template_name'
+                        }"
+                        [multiple]="false"
+                      ></ngx-select-dropdown>
+                    </ng-container>
+                  </ng-container>
+                </div>
+                <ng-container
+                  *ngIf="
+                    tableOperationForm.get('payout_process')?.value != true &&
+                    Global.checkCompanyModulePermission({
+                      company_module: 'incentive',
+                      company_operation: 'incentive_report',
+                      company_sub_module: 'incentive_report',
+                      company_sub_operation: ['view', 'edit']
+                    })
+                  "
+                >
+                  <ngx-select-dropdown
+                    style="flex: 3"
+                    formControlName="report_template"
+                    [options]="sheetTemplateMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      placeholder: 'SELECT TEMPLATE',
+                      displayKey: 'template_name'
+                    }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+
+                  <button
+                   (click)="openSettingsTemplateModal()"
+                    class="btn btn-info tx-11 tx-spacing-2 h-100 ml-2"
+                    *ngIf="
+                      Global.checkCompanyModulePermission({
+                        company_module: 'incentive',
+                        company_sub_module: 'incentive_report',
+                        company_sub_operation: ['edit'],
+                        company_strict:true
+                      })
+                    "
+                  >
+                    <span style="font-size: 20px" class="fa align-middle"
+                      >&#xf013;</span
+                    >
+                    <i class="fa-regular fa-gear"></i>
+                  </button>
+                </ng-container>
+              </div>
+            </form>
+
+            <div>
+              <div class="d-flex h-100">
+                <ng-container
+                  *ngIf="
+                    tableOperationForm.get('payout_process')?.value == true &&
+                      Global.checkCompanyModulePermission({
+                        company_module: 'incentive',
+                        company_operation: 'payment_instruction',
+                        company_sub_module: 'payment_instructions',
+                        company_sub_operation: ['add', 'edit'],
+                        company_strict:true
+                      })
+                  "
+                >
+                  <button
+                    [disabled]="
+                      !tableOperationForm.get('payout_bankid')?.valid ||
+                      !anyRowsChecked()
+                    "
+                    (click)="
+                      instruction_type = ''; generateBankInstruction($event)
+                    "
+                    type="button"
+                    class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  >
+                    <span
+                      ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                      >GENERATE BANK INSTRUCTION</span
+                    >
+                  </button>
+                  <button
+                    [disabled]="
+                      !tableOperationForm.get('payout_bankid')?.valid ||
+                      !anyRowsChecked()
+                    "
+                    (click)="
+                      instruction_type = 'voucher';
+                      generateBankInstruction($event)
+                    "
+                    type="button"
+                    class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  >
+                    <span
+                      ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                      >GENERATE CASH VOUCHER</span
+                    >
+                  </button>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    tableOperationForm.get('payout_process')?.value != true
+                  "
+                >
+                  <button
+                    *ngIf="
+                      Global.checkCompanyModulePermission({
+                        company_module: 'incentive',
+                        company_operation: 'incentive_report',
+                        company_sub_module: 'incentive_report',
+                        company_sub_operation: ['view'],
+                        company_strict:true
+                      })
+                    "
+                    (click)="generateReport()"
+                    [disabled]="!anyRowsChecked()"
+                    type="button"
+                    class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  >
+                    <span
+                      ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                      >VIEW INCENTIVE REPORT</span
+                    >
+                  </button>
+                  <!-- <button
+                    [disabled]="!anyRowsChecked()"
+                    type="button"
+                    class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  >
+                    <span
+                      ><i style="font-size: 12px" class="mr-1 fa fa-receipt"></i
+                      >GENERATE PAYSLIP</span
+                    >
+                  </button> -->
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrapper mt-3">
+            <app-custom-tableoption
+            (onFilterChanged)="employeePaginationOptions.limit = +$event?.length ; fetchEmployees({ page:employeePaginationOptions.page,options:$event})"
+          ></app-custom-tableoption>
+            <table
+              class="table display responsive nowrap wd-100p employee-table"
+            >
+              <thead>
+                <tr>
+                  <th>
+                    <label
+                      class="d-flex align-items-center mb-0"
+                      for="select-all"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        id="select-all"
+                        [value]="rowCheckedAll"
+                        (change)="allRowsCheckboxChecked($event)"
+                        *ngIf="employees.length > 0"
+                      />
+                      SL No.
+                    </label>
+                  </th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Status Bank Instructions</th>
+                  <th>Emp Bank</th>
+                  <th>Type</th>
+                  <th>Accumulated</th>
+                  <th>Settled</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let employee of employees; let i = index">
+                  <tr>
+                    <td>
+                      <ng-container *ngIf="tableOperationForm.get('payout_process')?.value">
+                        <label
+                          class="d-flex align-items-center"
+                          [for]="'checkrow-' + (i + 1)"
+                        >
+                          <input
+                            type="checkbox"
+                            class="mr-2"
+                            [attr.checked]="
+                              employee.checked == true ? 'checked' : null
+                            "
+                            id="checkrow-{{ i + 1 }}"
+                            [attr.data-checkbox-id]="employee._id"
+                            (click)="rowCheckBoxChecked($event, employee)"
+                            *ngIf="employeeCheckBoxIsVisible(employee) == true"
+                          />
+                          {{
+                            Global.getTableSerialNumber(
+                              i,
+                              employeePaginationOptions.limit,
+                              employeePaginationOptions.page
+                            )
+                          }}
+                        </label>
+                      </ng-container>
+                      <ng-container *ngIf="!tableOperationForm.get('payout_process')?.value">
+                        <label
+                          class="d-flex align-items-center"
+                          [for]="'checkrow-' + (i + 1)"
+                        >
+                          <input
+                            type="checkbox"
+                            class="mr-2"
+                            [attr.checked]="
+                              employee.checked == true ? 'checked' : null
+                            "
+                            id="checkrow-{{ i + 1 }}"
+                            [attr.data-checkbox-id]="employee._id"
+                            (click)="rowCheckBoxChecked($event, employee)"
+                            *ngIf="employeeCheckBoxIsVisible(employee) == true"
+                          />
+                          {{
+                            Global.getTableSerialNumber(
+                              i,
+                              employeePaginationOptions.limit,
+                              employeePaginationOptions.page
+                            )
+                          }}
+                        </label>
+                      </ng-container>
+                    </td>
+                    <td>{{ employee?.emp_id }}</td>
+                    <td>
+                      {{ employee?.emp_first_name }}
+                      {{ employee?.emp_last_name }}
+                    </td>
+                    <td>
+                      <label class="d-flex align-items-center mb-0">
+                        <ng-container *ngIf="employee?.UAN_no">
+                          <ng-container
+                            *ngIf="
+                              employee?.incentive_report?.bank_ins_referance_id
+                            "
+                            >Generated</ng-container
+                          >
+                          <ng-container
+                            *ngIf="
+                              !employee?.incentive_report?.bank_ins_referance_id 
+                            "
+                            >Ready</ng-container
+                          >
+                        </ng-container>
+
+                        <ng-container *ngIf="!employee?.UAN_no"
+                          >Pending</ng-container
+                        >
+                      </label>
+                    </td>
+                    <td>{{ employee?.bank_details?.bank_name ?? "N/A" }}</td>
+                    <td class="text-uppercase">
+                      {{
+                        employee?.employee_details?.template_data
+                          ?.incentive_temp_data?.settlement_frequency ?? "N/A"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.incentive_module?.accumulated_value ?? 0
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        employee?.incentive_module?.setteled_value ?? 0
+                      }}
+                    </td>
+                    <td>
+                      {{ (employee?.incentive_module?.accumulated_value ?? 0) - ( employee?.incentive_module?.setteled_value ?? 0) ?? 0}}
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="employees.length == 0">
+                  <td
+                    colspan="100%"
+                    class="text-center"
+                    style="background-color: #f7f7f7"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="reportGenerated == true">
+          <div class="text-right">
+            <button
+              type="button"
+              class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+              (click)="downloadReport()"
+            >
+              <span
+                ><i style="font-size: 12px" class="mr-1 fa fa-download"></i
+                >Export</span
+              >
+            </button>
+
+            <button
+              (click)="cancelGenerateReport()"
+              type="button"
+              class="btn btn-danger tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            >
+              <span
+                ><i style="font-size: 12px" class="mr-1 fa fa-times"></i
+                >Cancel</span
+              >
+            </button>
+          </div>
+
+          <app-incentive-view-report></app-incentive-view-report>
+
+          <!-- <div class="table-wrapper mt-3">
+            <div class="table-responsive">
+              <table
+                class="table table-bordered cust-table table-striped cust-reporting-table"
+              >
+                <thead>
+                  <ng-container *ngFor="let module of generatedReportTemplate">
+                    <tr class="title-sec">
+                      <th
+                        class="column-title text-center"
+                        [attr.colspan]="module.fields.length"
+                      >
+                        {{ module?.module_title }}
+                      </th>
+                    </tr>
+                    <tr class="headings">
+                      <th
+                        class="column-title"
+                        *ngFor="let field of module.fields"
+                      >
+                        {{ field.title }}
+                      </th>
+                    </tr>
+                  </ng-container>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let employee of employees;
+                      let employeeIndex = index
+                    "
+                  >
+                    <ng-container
+                      *ngFor="let module of generatedReportTemplate"
+                    >
+                      <ng-container *ngFor="let field of module.fields">
+                        <ng-container [ngSwitch]="field.slug">
+                          <ng-container *ngSwitchCase="'sl_no'">
+                            <td>{{ employeeIndex + 1 }}</td>
+                          </ng-container>
+
+                          <ng-container *ngSwitchDefault>
+                            <td>
+                              {{ getReportTdValue(employee, field) ?? "N/A" }}
+                            </td>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tr>
+                  <tr *ngIf="employees?.length == 0">
+                    <td colspan="100%" class="text-center">No records found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div> -->
+        </ng-container>
+      </div>
+
+      <ng-container *ngIf="reportGenerated == false">
+        <app-custom-pagination
+          [rows]="employees"
+          [paginationOptions]="employeePaginationOptions"
+          (onPageClicked)="fetchEmployees({ page: $event })"
+        ></app-custom-pagination>
+      </ng-container>
+    </div>
+  </div>
+
+  <button id="TemplateModalOpen" [hidden]="true" data-toggle="modal" data-target="#settingsTemplateModal"></button>
+
+  <div
+    id="settingsTemplateModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            {{ isSheetTemplateEdit ? 'Update' : 'Create New'}} Template
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="clearFormData()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="settingsTemplateForm" [formGroup]="templateForm">
+          <div class="modal-body pd-20">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <input
+                      type="text"
+                      class="form-control error"
+                      placeholder="Enter Template Name"
+                      formControlName="template_name"
+                    />
+
+                    <p
+                      class="mt-1 text-danger"
+                      *ngIf="
+                        templateForm.controls.template_name.hasError(
+                          'required'
+                        ) &&
+                        (templateForm.controls.template_name.dirty ||
+                          templateForm.controls.template_name.touched)
+                      "
+                    >
+                      This field is required
+                    </p>
+                  </div>
+                </div>
+
+                <ng-container *ngFor="let row of sheetTemplate">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h5 class="text-uppercase mg-t-10 text-center">
+                        {{ row.main_title }}
+                      </h5>
+                    </div>
+                    <div class="col-12">
+                      <div
+                        class="c-table my-3"
+                        *ngFor="let module of row.modules"
+                      >
+                        <div class="c-tr">
+                          <div class="c-th">
+                            <h5 class="m-0 mr-2">
+                              {{ module.module_title }}
+                            </h5>
+                            <label class="mb-0" [for]="module.module_title">
+                              <input
+                                type="checkbox"
+                                (change)="
+                                  adjustTemplateFields(module.fields, $event);
+                                  rowSelecion($event)
+                                "
+                                name="fields[{{ module.module_slug }}]"
+                                [id]="module.module_title"
+                                class="mr-1"
+                             
+                              />
+                              Select All
+                            </label>
+                          </div>
+                          <div class="c-td" *ngFor="let field of module.fields">
+                            <label
+                              (change)="
+                                adjustTemplateFields([field.slug], $event)
+                              "
+                              class="d-flex align-items-center"
+                              [for]="field.slug"
+                            >
+                              <input
+                                #innerInput
+                                type="checkbox"
+                                name="fields[{{ module.module_slug }}]"
+                                [id]="field.slug"
+                                class="mr-1"
+                                [value]="field.slug"
+                              />
+                              {{ field.title ?? "N/A" | titlecase }}
+                              <small *ngIf="field.abbreviation"
+                                >({{ field.abbreviation }})</small
+                              >
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn text-uppercase btn-secondary tx-size-xs"
+              data-dismiss="modal"
+              (click)="clearFormData()"
+            >
+              Close
+            </button>
+            <button
+              class="btn text-uppercase btn-primary tx-size-xs"
+              type="button"
+              (click)="isSheetTemplateEdit ? updateTemplate($event) : createTemplate($event)"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,221 @@
+<subadmin-app-dashboard-header></subadmin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/sub-admin">Dashboard</a>
+            <a class="breadcrumb-item">Subscription Management</a>
+            <a class="breadcrumb-item active">Plan Management</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'plan_manager', 'add') || (this.AppComponent.checkModulePermission('subadmin', 'plan_manager', 'edit') && editActionId != '')">
+        <i class="icon ion-ios-list"></i>
+        <div>
+            <h4>Plan Management</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="bonus-submit-section" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'plan_manager', 'add') || (this.AppComponent.checkModulePermission('subadmin', 'plan_manager', 'edit') && editActionId != '')">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Create Plan</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Plan</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="subscriptionPlanForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Plan Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="plan_name">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.plan_name.hasError('required') && (subscriptionPlanForm.controls.plan_name.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Monthly Rental (Credits)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="monthly_rental_date">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.monthly_rental_date.hasError('required') && (subscriptionPlanForm.controls.monthly_rental_date.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.monthly_rental_date.hasError('pattern') && (subscriptionPlanForm.controls.monthly_rental_date.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            No. Of Free Employee Included&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="free_emp_no">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_emp_no.hasError('required') && (subscriptionPlanForm.controls.free_emp_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_emp_no.hasError('pattern') && (subscriptionPlanForm.controls.free_emp_no.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Cost Of additional Employee&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="additional_emp_cost">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_emp_cost.hasError('required') && (subscriptionPlanForm.controls.additional_emp_cost.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_emp_cost.hasError('pattern') && (subscriptionPlanForm.controls.additional_emp_cost.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            No. Of Free Staff Included&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="free_staff_no">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_staff_no.hasError('required') && (subscriptionPlanForm.controls.free_staff_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_staff_no.hasError('pattern') && (subscriptionPlanForm.controls.free_staff_no.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Cost Of additional Staff&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="additional_staff_cost">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_staff_cost.hasError('required') && (subscriptionPlanForm.controls.additional_staff_cost.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_staff_cost.hasError('pattern') && (subscriptionPlanForm.controls.additional_staff_cost.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            No. Of Free Salary Template&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="free_sallary_temp_no">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_sallary_temp_no.hasError('required') && (subscriptionPlanForm.controls.free_sallary_temp_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_sallary_temp_no.hasError('pattern') && (subscriptionPlanForm.controls.free_sallary_temp_no.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Cost Of additional Salary Template&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="additional_sallary_temp_cost">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_sallary_temp_cost.hasError('required') && (subscriptionPlanForm.controls.additional_sallary_temp_cost.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_sallary_temp_cost.hasError('pattern') && (subscriptionPlanForm.controls.additional_sallary_temp_cost.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            No. Of Free Salary Heads&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="free_sallary_head_no">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_sallary_head_no.hasError('required') && (subscriptionPlanForm.controls.free_sallary_head_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.free_sallary_head_no.hasError('pattern') && (subscriptionPlanForm.controls.free_sallary_head_no.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Cost Of additional Salary Heads&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="additional_sallary_head_cost">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_sallary_head_cost.hasError('required') && (subscriptionPlanForm.controls.additional_sallary_head_cost.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.additional_sallary_head_cost.hasError('pattern') && (subscriptionPlanForm.controls.additional_sallary_head_cost.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Trigger To Suspend Input&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="trigger_suspend_no">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.trigger_suspend_no.hasError('required') && (subscriptionPlanForm.controls.trigger_suspend_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.trigger_suspend_no.hasError('pattern') && (subscriptionPlanForm.controls.trigger_suspend_no.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Maximum Suspend Period Before Account De-Activate&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="max_suspend_period">
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.max_suspend_period.hasError('required') && (subscriptionPlanForm.controls.max_suspend_period.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.max_suspend_period.hasError('pattern') && (subscriptionPlanForm.controls.max_suspend_period.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Select Client Packages&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="package_id" [options]="packageMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.package_id.hasError('required') && (subscriptionPlanForm.controls.package_id.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Valid From&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <dp-date-picker [config]="{'disableKeypress': true, 'format': 'MM/DD/YYYY'}" formControlName="valid_from" theme="dp-material" attachTo=".mat-input-wrapper"></dp-date-picker>
+                            <p class="error-element" *ngIf="subscriptionPlanForm.controls.valid_from.hasError('required') && (subscriptionPlanForm.controls.valid_from.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!subscriptionPlanForm.valid" (click)="create($event)" type="submit" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>SAVE</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" [disabled]="!subscriptionPlanForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE PLAN</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'plan_manager', 'view')">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Plan List</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Plan Name</th>
+                            <th class="">Valid From</th>
+                            <th class="">Monthly Rental (credits)</th>
+                            <th class="">No. Of Free Employee Included</th>
+                            <th class="">Cost Of Additional Employee</th>
+                            <th class="">No. Of Free Staff Included</th>
+                            <th class="">Cost Of Additional Staff</th>
+                            <th class="">No. Of Free Salary Template Included</th>
+                            <th class="">Cost Of Additional Salary Template</th>
+                            <th class="">No. Of Free Salary Heads Included</th>
+                            <th class="">Cost Of Additional Salary Heads</th>
+                            <th class="">Trigger To Suspend Input</th>
+                            <th class="">Maximum Suspend Period Before Account De-Activate</th>
+                            <th class="">Select Client Packages</th>
+                            <th class="">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <subadmin-app-dashboard-footer></subadmin-app-dashboard-footer>
+</div>

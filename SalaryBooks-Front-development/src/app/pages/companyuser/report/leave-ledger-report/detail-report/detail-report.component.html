@@ -1,0 +1,72 @@
+<div class="table-responsive">
+   <div class="table-wrapper mt-3">
+      <table class="table display responsive nowrap wd-100p employee-table" >
+         <thead>
+            <tr >
+               
+               <th class="s9 softmerge" colspan="50">
+                  <div class="softmerge-inner" style="left:-1px">Leave Ledger for the Period {{start_date | date:'dd-MM-YYYY'}} to {{end_date | date:'dd-MM-YYYY'}}</div>
+               </th>
+               
+            </tr>
+            <tr>
+               
+               <th  rowspan="2" style="width:2%;">Sl No</th>
+               <th  rowspan="2">Emp ID</th>
+               <th  rowspan="2">Name</th>
+               <th  rowspan="2">Department</th>
+               <th  rowspan="2">Designation</th>
+               <th  rowspan="2">Branch</th>
+               <th  rowspan="2">Client</th>
+               <th  rowspan="2">HOD</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Opening Balance</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Leave added</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Availed</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Lapsed</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Encashed</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Closing Balance</th>
+               <th   [attr.colspan]="leaveHeadMaster.length" class="text-center">Carry Forward</th>
+            </tr>
+            <tr >
+               
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+               <th  *ngFor="let item of leaveHeadMaster">{{item.abbreviation}}</th>
+   
+            </tr>
+         </thead>
+         <tbody>
+       
+        
+            <tr  *ngFor="let item of empReportData;let i=index">
+               
+               <td >{{i+1}}</td>
+               <td >{{item?.emp_id}}</td>
+               <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+               <td >{{item?.department[0].department_name}}</td>
+               <td >{{item?.designation[0]?.designation_name}}</td>
+               <td >{{item?.branch[0]?item?.branch[0].branch_name:''}}</td>
+               <td >{{item?.client?.client_code}}</td>
+               <td >{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+               <td  *ngFor="let subItem of item?.opening_balance">{{subItem?.balance}}</td>
+               <td  *ngFor="let subItem_2 of item?.leave_added">{{subItem_2?.balance}}</td>
+               <td  *ngFor="let subItem of item?.availed"> {{subItem?.balance}}</td>
+               <td  *ngFor="let subItem of item?.lapsed"> {{subItem?.balance}}</td>
+               <td  *ngFor="let subItem of item?.encashed"> {{subItem?.balance}}</td> 
+               <td  *ngFor="let subItem of item.closing_balance">{{subItem?.balance}}</td> 
+               <td  *ngFor="let subItem of item?.carry_forward">{{subItem?.balance}}</td>
+   
+            </tr>
+       
+          
+            
+         </tbody>
+      </table>  
+
+   </div>
+  
+</div>

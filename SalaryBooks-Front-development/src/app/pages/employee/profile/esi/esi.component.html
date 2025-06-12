@@ -1,0 +1,440 @@
+<div class="atendance-main">
+    <div class="tabheader">
+      <h5>EMPLOYEE EMPLOYMENT DETAILS</h5>
+    </div>
+    <div class="table-main">
+      <div class="row no-gutters">
+        <div class="col-md-12">
+          <div id="accordion" class="accordian-card">
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+              <form [formGroup]="employmentForm" *ngIf="employmentForm">
+                <div class="card-body">
+                  <div class="bg-card-body">
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="card-header" id="headingOne"> 
+                            
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" (click)="shuffleFields()"  [checked]="prev_employment" type="checkbox">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Previous Employment</label>
+                              </div>
+                            </div>
+                        </div>
+                       
+                      </div>
+                     
+                     <ng-container *ngIf="prev_employment"> 
+                            <ng-container formGroupName="pre_er_details"
+                        
+                            >
+                        
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>Name of Prev Employer</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" formControlName="er_name">
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_details.er_name', 'required')">This field is required</p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>Exit Date at Prev Employer</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="date" formControlName="exit_date">
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_details.exit_date', 'required')">This field is required</p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>Last Drawn Gross</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="number" formControlName="last_drawn_gross">
+
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_details.last_drawn_gross', 'required')">This field is required</p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>Last Designation</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" formControlName="last_designation">
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_details.last_designation', 'required')">This field is required</p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>Reporting to</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" formControlName="reporting_to">
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_details.reporting_to', 'required')">This field is required</p>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>Contact No</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" formControlName="contact_no">
+
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_details.contact_no', 'required')">This field is required</p>
+
+                                        <p class="error-element" *ngIf="(!Global.isInputRuleValid(employmentForm, 'pre_er_details.contact_no', 'pattern') || !Global.isInputRuleValid(employmentForm, 'pre_er_details.contact_no', 'minlength') || !Global.isInputRuleValid(employmentForm, 'pre_er_details.contact_no', 'maxlength'))">Enter valid contact number</p>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                            </div>
+                            </ng-container>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>EPFO Details</legend>
+                                    <div class="input-group">
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                    <legend>ESIC Details</legend>
+                                    <div class="input-group">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <ng-container formGroupName="pre_er_epfo_details">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group">
+                                        <legend>UAN No</legend>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" formControlName="uan_no">
+            
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_epfo_details.uan_no', 'required')">This field is required</p>
+                                        
+                                        </div>
+                                        </div>
+                                    </div>   
+                                </ng-container>
+                            <ng-container formGroupName="pre_er_esic_details">
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                    <legend>IP/ESIC No</legend>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" formControlName="esic_no">
+        
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_esic_details.esic_no', 'required')">This field is required</p>
+                                    </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            
+                            </div>
+                            <div class="row">
+                                <ng-container formGroupName="pre_er_epfo_details">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group">
+                                        <legend>Last Member ID</legend>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" formControlName="last_member_id">
+            
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_epfo_details.last_member_id', 'required')">This field is required</p>
+                                        </div>
+                                        </div>
+                                    </div>   
+                                </ng-container>
+                                <ng-container formGroupName="pre_er_esic_details">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group">
+                                        <legend>IP Dispensary</legend>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" formControlName="ip_dispensary">
+            
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_esic_details.ip_dispensary', 'required')">This field is required</p>
+                                        </div>
+                                        </div>
+                                    </div>    
+                                </ng-container>    
+                            
+                            </div>
+                            <div class="row">
+                                <ng-container formGroupName="pre_er_epfo_details">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group">
+                                        <legend>Last RO</legend>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" formControlName="last_ro">
+            
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_epfo_details.last_ro', 'required')">This field is required</p>
+                                        </div>
+                                        </div>
+                                    </div>   
+                                </ng-container>
+                                <ng-container formGroupName="pre_er_esic_details">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group">
+                                        <legend>Family Dispensary</legend>
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" formControlName="family_dispensary">
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'pre_er_esic_details.family_dispensary', 'required')">This field is required</p>
+                                        </div>
+                                        </div>
+                                    </div>    
+                                </ng-container>
+                            
+                            </div>
+                    </ng-container>
+                    <div class="row">
+                      <div class="col-md-12 mb-3">
+                        <div class="input-group">
+                          <legend>Current Employer Details</legend>
+                          <div class="input-group"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                          <legend>EPFO Details</legend>
+                          <div class="input-group"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                          <legend>ESIC Details</legend>
+                          <div class="input-group"></div>
+                        </div>
+                      </div>
+                    </div>
+                   
+                    <div class="row">
+                        <ng-container formGroupName="curr_er_epfo_details">
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                  <legend>UAN No</legend>
+                                  <div class="input-group">
+                                    <input class="form-control" type="text" formControlName="uan_no">
+                                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'curr_er_epfo_details.uan_no', 'required')">This field is required</p>
+                                  </div>
+                                </div>
+                              </div>   
+                        </ng-container>  
+                        <ng-container formGroupName="curr_er_esic_details">
+                            <div class="col-md-6 mb-3">
+                                <div class="input-group">
+                                  <legend>IP/ESIC No</legend>
+                                  <div class="input-group">
+                                    <input class="form-control" type="text" formControlName="esic_no">
+                                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'curr_er_esic_details.esic_no', 'required')">This field is required</p>
+                                  </div>
+                                </div>
+                              </div>   
+                        </ng-container>      
+                     
+                    </div>
+                    <div class="row">
+                      <ng-container formGroupName="curr_er_epfo_details">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                              <legend>Last Member ID</legend>
+                              <div class="input-group">
+                                <input class="form-control" type="text" formControlName="last_member_id">
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'curr_er_epfo_details.last_member_id', 'required')">This field is required</p>
+                              </div>
+                            </div>
+                          </div>  
+                      </ng-container>  
+                      <ng-container formGroupName="curr_er_esic_details">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                              <legend>IP Dispensary</legend>
+                              <div class="input-group">
+                                <input class="form-control" type="text" formControlName="ip_dispensary">
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'curr_er_esic_details.ip_dispensary', 'required')">This field is required</p>
+                              </div>
+                            </div>
+                          </div>  
+
+                      </ng-container>
+                     
+                    </div>
+                    <div class="row">
+                      <ng-container formGroupName="curr_er_epfo_details">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                              <legend>Last RO</legend>
+                              <div class="input-group">
+                                <input class="form-control" type="text" formControlName="last_ro">
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'curr_er_epfo_details.last_ro', 'required')">This field is required</p>
+                              </div>
+                            </div>
+                          </div>  
+                      </ng-container>  
+                      <ng-container formGroupName="curr_er_esic_details">
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                              <legend>Family Dispensary</legend>
+                              <div class="input-group">
+                                <input class="form-control" type="text" formControlName="family_dispensary">
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employmentForm, 'curr_er_esic_details.family_dispensary', 'required')">This field is required</p>
+                              </div>
+                            </div>
+                          </div>  
+                      </ng-container>
+                      
+                    </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-2">
+                                    <thead>
+                                        <tr class="bg-dark">
+                                            <th colspan="100%" class="text-center text-white">Family Details for ESIC</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>DOB</th>
+                                            <th>Relation</th>
+                                            <th>Sex</th>
+                                            <th>Residing with IP</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="esic_family_details">
+                                        <tr *ngFor="let item of Global.getFormGroupArray(employmentForm, 'esic_family_details'); let i = index" [formGroupName]="i">
+                                            <td>
+                                                <input formControlName="fm_name" type="text" class="px-3 form-control" placeholder="Name" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('fm_name')!.status) && ( item.get('fm_name')!.dirty || item.get('fm_name')!.touched )">
+                                            </td>
+
+                                            <td>
+                                                <input formControlName="fm_dob" type="date" class="px-3 form-control" placeholder="DOB" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('fm_dob')!.status) && ( item.get('fm_dob')!.dirty || item.get('fm_dob')!.touched )">
+                                            </td>
+
+                                            <td>
+                                                <ngx-select-dropdown formControlName="fm_relation" [options]="relationMaster" class="px-3 form-control" [config]="{search:true, placeholder: 'Select Relation'}" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('fm_relation')!.status) && ( item.get('fm_relation')!.dirty || item.get('fm_relation')!.touched )"></ngx-select-dropdown>
+                                            </td>
+
+                                            <td>
+                                                <ngx-select-dropdown formControlName="sex" [options]="sexMaster" class="px-3 form-control" [config]="{search: false, placeholder: 'Select Gender'}" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('sex')!.status) && ( item.get('sex')!.dirty || item.get('sex')!.touched )"></ngx-select-dropdown>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <input type="checkbox" formControlName="residing_with_if">
+                                            </td>
+
+                                            <td class="text-center">
+                                                <button class="btn btn-danger btn-sm"
+                                                    type="button"
+                                                    (click)="Global.removeFormGroupArrRow(employmentForm, 'esic_family_details', i)">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="Global.getFormGroupArray(employmentForm, 'esic_family_details').length == 0">
+                                            <td colspan="100%" class="text-center">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"></td>
+                                            <td colspan="1" class="text-center">
+                                                <button type="button" class="btn btn-primary btn-sm" (click)="addFormRows(employmentForm, 'esic_family_details')"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>   
+                        
+                                </table>   
+                             </div>   
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-2">
+                                    <thead>
+                                        <tr class="bg-dark">
+                                            <th colspan="100%" class="text-center text-white">Nominee Details for PF</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Aadhar No</th>
+                                            <th>DOB</th>
+                                            <th>Name</th>
+                                            <th>Sex</th>
+                                            <th>Relation</th>
+                                            <th>Address</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="pf_nominee_details">
+                                        <tr *ngFor="let item of Global.getFormGroupArray(employmentForm, 'pf_nominee_details'); let i = index" [formGroupName]="i">
+                                            <td>
+                                                <input formControlName="aadhar_no" type="text" class="px-3 form-control" placeholder="Aadhar No" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('aadhar_no')!.status) && ( item.get('aadhar_no')!.dirty || item.get('aadhar_no')!.touched )">
+                                            </td>
+
+                                            <td>
+                                                <input formControlName="dob" type="date" class="px-3 form-control" placeholder="DOB" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('dob')!.status) && ( item.get('dob')!.dirty || item.get('dob')!.touched )">
+                                            </td>
+                                            
+                                            <td>
+                                                <input formControlName="name" type="text" class="px-3 form-control" placeholder="Name" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('name')!.status) && ( item.get('name')!.dirty || item.get('name')!.touched )">
+                                            </td>
+
+                                            <td>
+                                                <ngx-select-dropdown formControlName="sex" [options]="sexMaster" class="px-3 form-control" [config]="{search: false, placeholder: 'Select Gender'}" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('sex')!.status) && ( item.get('sex')!.dirty || item.get('sex')!.touched )"></ngx-select-dropdown>
+                                            </td>
+
+                                            <td>
+                                                <ngx-select-dropdown formControlName="fm_relation" [options]="relationMaster" class="px-3 form-control" [config]="{search:true, placeholder: 'Select Relation'}" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('fm_relation')!.status) && ( item.get('fm_relation')!.dirty || item.get('fm_relation')!.touched )"></ngx-select-dropdown>
+                                            </td>
+                                            
+                                            <td>
+                                                <input formControlName="address" type="text" class="px-3 form-control" placeholder="Address" [class.is-invalid]="!['VALID', 'DISABLED'].includes(item.get('address')!.status) && ( item.get('address')!.dirty || item.get('address')!.touched )">
+                                            </td>
+
+                                            <td class="text-center">
+                                                <button class="btn btn-danger btn-sm"
+                                                    type="button"
+                                                    (click)="Global.removeFormGroupArrRow(employmentForm, 'pf_nominee_details', i)">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="Global.getFormGroupArray(employmentForm, 'pf_nominee_details').length == 0">
+                                            <td colspan="100%" class="text-center">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6"></td>
+                                            <td colspan="1" class="text-center">
+                                                <button type="button" class="btn btn-primary btn-sm" (click)="addFormRows(employmentForm, 'pf_nominee_details')"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>  
+                                </table>   
+                             </div>   
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="btn-bottom mt-lg-4 mt-4">
+                    <button class="btn btn-save mr-2" (click)="updateEmployeeEmploymentDetails($event)">Save</button>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

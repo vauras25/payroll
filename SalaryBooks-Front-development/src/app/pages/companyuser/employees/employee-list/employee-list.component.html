@@ -1,0 +1,1608 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Employees</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-people"></i>
+    <div>
+      <h4>Employees</h4>
+      <p class="mg-b-0">Add/Edit/Approve & Manage Employee Master Data</p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper">
+      <!--common filters -->
+      <companyuser-app-table-filter
+        [searchKeyFilter]="true"
+        [empDetailsFilter]="true"
+        [advanceFilter]="Global.checkCompanyModulePermission({
+          company_module: 'employee',
+          company_operation: 'advance_filter'
+        })"
+        (onFiltered)="filterDataTable($event)"
+      ></companyuser-app-table-filter>
+
+      <!-- first dropdown selection -->
+      <div class="card-header">
+        <div class="row">
+          <!-- <div class="col-12 d-flex justify-content-center">
+            <div class="col-6">
+              <form class="d-flex">
+                <div class="flex-1 pr-3">
+                  <ngx-select-dropdown
+                    #navDropdown
+                    [options]="navigationPageOpt"
+                    [routerLink]="navDropdown?.value?.value ?? null"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Select One',
+                      displayKey: 'label',
+                      height: '250px'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    [disabled]="
+                      !rowCheckedAll &&
+                      !checkedRowIds.length &&
+                      !uncheckedRowIds.length
+                    "
+                    class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+                    (click)="exportEmployees($event)"
+                  >
+                    <span>Submit</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div> -->
+
+          <div class="col-6 mt-3" *ngIf="Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_report',
+            company_sub_operation: [ 'view', 'edit'],
+            company_strict: true
+          })">
+            <form class="d-flex" [formGroup]="employeeExportForm">
+              <div class="flex-1 pr-3">
+                <ngx-select-dropdown
+                  formControlName="download_data_type"
+                  [options]="employeeSheetTemplate"
+                  class="form-control p-1"
+                  [config]="{
+                    
+                    search: true,
+                    placeholder: 'Select Template *',
+                    displayKey: 'template_name',
+                    height: '250px'
+                  }"
+                ></ngx-select-dropdown>
+
+                <div
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeExportForm,
+                      'download_data_type',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </div>
+              </div>
+              <div class="pr-3" *ngIf="Global.checkCompanyModulePermission({
+                company_module: 'employee',
+                company_operation: 'listing_add_approve',
+                company_sub_module: 'employee_master_report',
+                company_sub_operation: [ 'add'],
+                company_strict: true
+              })">
+                <button
+                  *ngIf="!this.employeeExportForm.get('download_data_type')?.value?.default"
+                  type="button"
+                  (click)="initTemplateCreate()"
+                  class="btn btn-block btn-primary pd-y-7 pd-x-12 bd-0 tx-uppercase tx-20 tx-spacing-2"
+                >
+                  <i class="fa fa-cog"></i>
+                </button>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  [disabled]="
+                    !rowCheckedAll &&
+                    !checkedRowIds.length &&
+                    !uncheckedRowIds.length
+                  "
+                  class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+                  (click)="exportEmployees($event.target)"
+                >
+                  <span>Generate</span>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col-6 mt-3">
+            <form class="d-flex" [formGroup]="employeeExportForm">
+              <div class="flex-1 pr-3">
+                <ngx-select-dropdown
+                  #ngxSelector
+                  [options]="pdfExportTypes"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  [disabled]="
+                    (!rowCheckedAll &&
+                      !checkedRowIds.length &&
+                      !uncheckedRowIds.length) ||
+                    !ngxSelector.value
+                  "
+                  (click)="
+                    exportEmployeesExtraData(
+                      ngxSelector.value.value,
+                      ngxSelector.value.section,
+                      $event
+                    )
+                  "
+                  class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+                >
+                  <span> Preview </span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <!-- <button class="button" class="btn btn-sm btn-dark mr-1">Update Salary Template</button> -->
+          <!-- <button class="button" class="btn btn-sm btn-dark">Update Package</button> -->
+          <!-- // staff_module: 'employee_details',
+          // staff_operation: ['add'], -->
+          <a
+            *ngIf="
+              AppComponent.checkCompanyModulePermission({
+                company_module: 'employee',
+                company_sub_module: 'employee_master_data',
+                company_sub_operation: ['add'],
+                company_strict: true
+              }) && Global.isCreditAvailable('company_user')
+            "
+            routerLink="/company/employees/add"
+            class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2"
+            >Add Employee</a
+          >
+          <!-- *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'employee', 'company_operation':'external_joining_link' })" -->
+          <button
+            class="btn btn-info ml-4"
+            (click)="openInviteEmployee($event)"
+            *ngIf="
+            AppComponent.checkCompanyModulePermission({
+              company_module: 'employee',
+              company_sub_module: 'employee_master_data',
+              company_sub_operation: ['invitation'],
+              company_strict: true
+            }) && Global.isCreditAvailable('company_user')
+          "
+            >
+            Invite Employee
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <hr />
+        </div>
+      </div>
+
+      <app-custom-tableoption
+      [searchable]="false"
+      (onFilterChanged)="paginationOptions.limit = +$event?.length; fetchEmployeeList()"
+    ></app-custom-tableoption>
+      <div class="table-responsive">
+        <table
+          class="w-100 c-table">
+          <thead>
+            <tr >
+              <th class="">
+                <!-- // staff_module: 'employee_bulk_action',
+                // staff_operation: ['add', 'edit', 'view', 'delete'], -->
+                <ng-container
+                  *ngIf="
+                    this.AppComponent.checkCompanyModulePermission({
+                      company_module: 'employee',
+                  company_operation: 'listing_add_approve',
+                  company_sub_module: 'employee_master_data',
+                  company_sub_operation: [ 'view'],
+                      company_strict: true
+                    })
+                  "
+                >
+                  <input
+                    type="checkbox"
+                    [value]="rowCheckedAll"
+                    (change)="allRowsCheckboxChecked($event)"
+                  />
+                </ng-container>
+                SL
+              </th>
+              <th class="text-center">Action</th>
+              <th class="">Employee ID</th>
+              <th class="">First Name</th>
+              <th class="">Last Name</th>
+              <th class="">Age</th>
+              <th class="">Contract</th>
+              <th>HOD</th>
+              <th class="">Client Code</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of employees; let i = index">
+              <td>
+                <input
+                      type="checkbox"
+                      class="mr-2"
+                      [attr.checked]="
+                        employee?.checked == true ? 'checked' : null
+                      "
+                      id="checkrow-{{ i + 1 }}"
+                      [attr.data-checkbox-id]="employee?._id"
+                      (click)="rowCheckBoxChecked($event, employee)"
+                    />
+                    {{
+                      Global.getTableSerialNumber(
+                        i,
+                        paginationOptions?.limit,
+                        paginationOptions?.page
+                      )
+                    }}
+              </td>
+              <td class="text-center">
+                <a routerLink="/company/employees/{{employee?._id}}/view/details" class="btn btn-info btn-icon mg-r-5 text-white" data-toggle="tooltip" data-placement="top" title="View"><div style="width:25px;height:25px;"><i class="fa fa-eye"></i></div></a>
+                <a *ngIf="Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'listing_add_approve',
+                  company_sub_module: 'employee_master_data',
+                  company_sub_operation: ['edit'],
+                  company_strict: true
+                })" routerLink="/company/employees/{{employee?._id}}/edit/details" class="btn btn-primary btn-icon mg-r-5 text-white" data-toggle="tooltip" data-placement="top" title="Edit"><div style="width:25px;height:25px;"><i class="fa fa-pen"></i></div></a>
+                <button 
+                [disabled]="(employee?.emp_id && (employee?.attendance_count > 0 || employee?.monthly_reports_count > 0)) || employee?.status == 'inactive'"  
+                (click)="deleteEmployee(employee)" class="btn btn-danger btn-icon mg-r-5 text-white" 
+                [title]="((employee?.emp_id && (employee?.attendance_count > 0 || employee?.monthly_reports_count > 0)) || employee?.status == 'inactive') ? 'This employee cannot be deleted due to associated processed data' : 'Delete'" data-toggle="tooltip" data-placement="top"><div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div></button>
+                <a class="dropdown">
+                  <button class="btn btn-info btn-icon btn-drp dropdown-toggle mt-0" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Action
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <ng-container *ngIf="employee?.status !== 'pending'">
+                      <button (click)="openPackageDetailsModal(employee?._id)" class="dropdown-item" id="packageLink" type="button">Package</button>
+                      <button (click)="openSalaryTemplateDetailsModal(employee)" class="dropdown-item" id="salaryTempLink" type="button">Salary</button>
+                      <button *ngIf="employee?.status !== 'inactive'" (click)="initEmployeeExit(employee)" class="dropdown-item" type="button">Exit</button>
+                    </ng-container>
+                    <button *ngIf="Global.checkCompanyModulePermission({
+                      company_module: 'employee',
+                      company_operation: 'letter_writer',
+                      company_sub_module: 'letter_writer',
+                      company_sub_operation: ['view']
+                    })" (click)="openLetterWritingModal('single', employee?._id)" class="dropdown-item" id="letterWriting" type="button">Letter Writing</button>
+                  </div>
+              </a>
+              </td>
+              <td>
+                <span *ngIf="employee?.approval_status !== 'pending'">{{employee?.emp_id}}</span>
+                <ng-container *ngIf="employee?.approval_status == 'pending'">
+                  <button *ngIf="Global.checkCompanyModulePermission({
+                    company_module: 'employee',
+                    company_operation: 'listing_add_approve',
+                    company_sub_module: 'employee_master_data',
+                    company_sub_operation: [ 'approve'],
+                    company_strict: true
+                  })" (click)="openApproveEmployeeModal(employee?._id)"  class="btn btn-sm btn-primary">Approve</button>
+                  <span *ngIf="!Global.checkCompanyModulePermission({
+                    company_module: 'employee',
+                    company_operation: 'listing_add_approve',
+                    company_sub_module: 'employee_master_data',
+                    company_sub_operation: [ 'approve'],
+                    company_strict: true
+                  })" class="badge badge-warning">Pending</span>
+                </ng-container>
+              </td>
+              <td>{{employee?.emp_first_name}}</td>
+              <td>{{employee?.emp_last_name}}</td>
+              <td>{{employee?.emp_age | number:'1.0-0'}}</td>
+              <td [innerHTML]="getContractDetails(employee)">
+              </td>
+              <td>{{employee?.hod?.first_name}} {{employee?.hod?.last_name}}</td>
+              <td>{{employee?.client?.client_code || 'N/A'}}</td>
+              <td>
+                <span *ngIf="employee?.approval_status == 'approved'" class="badge badge-success text-capitalize mb-0" data-toggle="tooltip" data-placement="top" title="Approved by HOD">
+                  <i class="fa fa-check"></i> {{employee?.approval_status}}</span>
+                <span *ngIf="employee?.approval_status == 'inactive'" class="badge badge-danger text-capitalize mb-0"><i class="fa fa-times"></i> Exited</span>
+                <span *ngIf=" employee?.approval_status !== 'approved' && employee?.approval_status !== 'inactive'" class="badge badge-warning text-capitalize mb-0"><i class="fa fa-times"></i> {{employee?.approval_status}}</span>
+              </td>
+            </tr>
+            <tr *ngIf="employees?.length == 0">
+              <td
+                colspan="100%"
+                class="text-center"
+                style="background-color: #f7f7f7"
+              >
+                No records found
+              </td>
+            </tr>
+          </tbody>
+
+          <!-- // company_strict:true
+  // staff_module: 'employee_bulk_action',
+  // staff_operation: ['add', 'edit', 'view', 'delete'], -->
+            <!-- *ngIf="
+              this.AppComponent.checkCompanyModulePermission({
+                company_module: 'bonus',
+                company_sub_module: 'apply_bonus',
+                company_sub_operation: ['edit'],
+                company_strict: true
+              })
+            " -->
+          <tfoot
+          >
+            <tr>
+              <td colspan="10" class="p-2" style="text-align: left !important">
+                <ng-container
+                *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'employee', 'company_operation':'letter_writer', 'company_sub_module':'letter_writer', 'company_sub_operation':['view','add', 'edit', 'delete']})"
+                >
+                  <!-- <button class="button" (click)="openSalaryTemplateModal('multiple')" [class.disabled]="rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)" class="btn btn-sm btn-dark mx-1">Update Salary Template</button> -->
+                  <!-- <button class="button" (click)="openPackageModal('multiple')" [class.disabled]="rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)" class="btn btn-sm btn-dark mx-1">Update Package</button> -->
+                  <!-- <button class="button" (click)="openBulkApproveEmployeeModal()" [class.disabled]="rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)" class="btn btn-sm btn-dark mx-1">Approve All</button> -->
+                  <button
+                    class="button"
+                    (click)="openLetterWritingModal('multiple')"
+                    [disabled]="
+                      !rowCheckedAll &&
+                      !checkedRowIds.length &&
+                      !uncheckedRowIds.length
+                    "
+                    class="btn btn-sm btn-dark mx-1"
+                  >
+                    Generate Letter
+                  </button>
+                </ng-container>
+
+                <button
+                type="button"
+                (click)="initEmployeeExport()"
+                *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'employee', 'company_sub_module':'employee_master_report', 'company_sub_operation':['view'], company_strict:true})"
+                [disabled]="
+                      !rowCheckedAll &&
+                      !checkedRowIds.length &&
+                      !uncheckedRowIds.length
+                      "
+                    class="btn btn-sm btn-dark mx-1"
+                    >
+                    Export Employees
+                  </button>
+                  <ng-container
+                  *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'employee', 'company_operation':'bulk_upload', 'company_sub_module':'bulk_joining', 'company_sub_operation':['view']})"
+                  >
+                  <button
+                    type="button"
+                    (click)="openImportModal()"
+                    class="btn btn-sm btn-dark mx-1"
+                    
+                  >
+                    Import Employees
+                  </button>
+                </ng-container>
+
+                <ng-container>
+                  <button
+                    class="button"
+                    (click)="initEmployeeExit({ _id: checkedRowIds[0] })"
+                    [disabled]="
+                      !rowCheckedAll &&
+                      !checkedRowIds.length &&
+                      !uncheckedRowIds.length
+                    "
+                    class="btn btn-sm btn-dark mx-1"
+                  >
+                    Exit Employees
+                  </button>
+                </ng-container>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <app-custom-pagination
+        [rows]="employees"
+        [paginationOptions]="paginationOptions"
+        (onPageClicked)="paginationOptions.page = $event; fetchEmployeeList()"
+      ></app-custom-pagination>
+    </div>
+  </div>
+
+  <!-- Change Status Modal -->
+  <button
+    id="changeStatusModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#changeStatusModal"
+  ></button>
+  <div id="changeStatusModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Change Employee Status
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="changeStatusForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <ngx-select-dropdown
+                  formControlName="status"
+                  [options]="statusMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    changeStatusForm.controls.status.hasError('required') &&
+                    (changeStatusForm.controls.status.dirty ||
+                      changeStatusForm.controls.status.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!changeStatusForm.valid"
+              (click)="updateEmployeeStatus($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Salary Package Modal -->
+  <button
+    id="changeSalaryPackageModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#changeSalaryPackageModal"
+  ></button>
+  <div id="changeSalaryPackageModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Change Employee Salary Template
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="salaryAssignForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <ngx-select-dropdown
+                  formControlName="salary_temp"
+                  [options]="salaryTempMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    salaryAssignForm.controls.salary_temp.hasError(
+                      'required'
+                    ) &&
+                    (salaryAssignForm.controls.salary_temp.dirty ||
+                      salaryAssignForm.controls.salary_temp.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!salaryAssignForm.valid"
+              (click)="updateEmployeeSalaryTemplate($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Package Modal -->
+  <button
+    id="changePackageModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#changePackageModal"
+  ></button>
+  <div id="changePackageModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Change Employee Package
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="packageForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <ngx-select-dropdown
+                  formControlName="package"
+                  [options]="packageMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    packageForm.controls.package.hasError('required') &&
+                    (packageForm.controls.package.dirty ||
+                      packageForm.controls.package.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!packageForm.valid"
+              (click)="updateEmployeePackage($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approve Employee Modal -->
+  <button
+    id="changeApproveEmployeeModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#changeApproveEmployeeModal"
+  ></button>
+  <div id="changeApproveEmployeeModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Approve Employee
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="approveEmployeeForm">
+          <div class="modal-body pd-25">
+            <div class="row mb-3">
+              <div class="col-lg-12">
+                <label for="">Employee Package</label>
+
+                <ngx-select-dropdown
+                  formControlName="package"
+                  [options]="packageMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    approveEmployeeForm.controls.package.hasError('required') &&
+                    (approveEmployeeForm.controls.package.dirty ||
+                      approveEmployeeForm.controls.package.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-12">
+                <label for="">Employee Salary Template</label>
+
+                <ngx-select-dropdown
+                  formControlName="salary_temp"
+                  [options]="salaryTempMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    approveEmployeeForm.controls.salary_temp.hasError(
+                      'required'
+                    ) &&
+                    (approveEmployeeForm.controls.salary_temp.dirty ||
+                      approveEmployeeForm.controls.salary_temp.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-12">
+                <label for="">Employee Gross Salary</label>
+
+                <input
+                  type="text"
+                  formControlName="gross_salary"
+                  class="form-control"
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    approveEmployeeForm.controls.gross_salary.hasError('required') &&
+                    (approveEmployeeForm.controls.gross_salary.dirty ||
+                      approveEmployeeForm.controls.gross_salary.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-lg-12">
+                <label for="">Employee Date Of Join</label>
+
+                <input
+                  type="date"
+                  formControlName="date_of_join"
+                  class="form-control"
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    approveEmployeeForm.controls.date_of_join.hasError('required') &&
+                    (approveEmployeeForm.controls.date_of_join.dirty ||
+                      approveEmployeeForm.controls.date_of_join.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-12">
+                <label for="">Employee ID</label>
+
+                <input
+                  type="text"
+                  formControlName="emp_id"
+                  class="form-control"
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    approveEmployeeForm.controls.emp_id.hasError('required') &&
+                    (approveEmployeeForm.controls.emp_id.dirty ||
+                      approveEmployeeForm.controls.emp_id.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-lg-12">
+                <label for="">Last Employee ID</label>
+
+                <input
+                  type="text"
+                  formControlName="last_emp_id"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!approveEmployeeForm.valid"
+              (click)="approveEmployee($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSV Import Modal -->
+  <button
+    id="csvImportModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#csvImportModal"
+  ></button>
+  <div id="csvImportModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Import Employee CSV
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="csvImportForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <label>Select File</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  formControlName="file"
+                  accept=".csv"
+                  (change)="
+                    onFileChanged($event, csvImportForm, 'file', 'file_source')
+                  "
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    csvImportForm.controls.file.hasError('required') &&
+                    (csvImportForm.controls.file.dirty ||
+                      csvImportForm.controls.file.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              (click)="getCsvSample($event)"
+              class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium text-white"
+            >
+              <span>Sample CSV</span>
+            </button>
+
+            <button
+              *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'employee', 'company_operation':'bulk_upload', 'company_sub_module':'bulk_joining', 'company_sub_operation':['add']})"
+              [disabled]="!csvImportForm.valid"
+              (click)="importCsv($event)"
+              type="button"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Import</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSV Import Failed Employee IDs -->
+  <button
+    id="csvFailedIdModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#csvFailedIdModal"
+  ></button>
+  <div id="csvFailedIdModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Failed Employee IDs
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pd-25">
+          <div class="row">
+            <div class="col-lg-12">
+              <table class="table table-bordered table-striped w-100 bd">
+                <thead>
+                  <tr>
+                    <th>Sl</th>
+                    <th>Employee ID</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let item of csvFailedIds; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            data-dismiss="modal"
+            aria-label="Close"
+            type="button"
+            class="btn btn-danger tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+          >
+            <span>Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiple Employees Approve Modal -->
+  <button
+    id="multipleEmpApproveModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#multipleEmpApproveModal"
+  ></button>
+  <div id="multipleEmpApproveModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Approve Employees
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="multipleApproveEmployeeForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-6 mb-2">
+                    <p>
+                      Last Employee ID :
+                      <b class="text-primary">{{ last_emp_id ?? "N/A" }}</b>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <table
+                  class="table table-bordered table-striped w-100 bd mb-0"
+                  formArrayName="employees"
+                >
+                  <thead>
+                    <tr>
+                      <th>Full Name</th>
+                      <th>Employee ID</th>
+                      <th>Package</th>
+                      <th>Salary Template</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let employeeDetailControl of getTemplateRows(
+                          multipleApproveEmployeeForm,
+                          'employees'
+                        );
+                        let i = index
+                      "
+                      [formGroupName]="i"
+                    >
+                      <td>
+                        {{
+                          multipleApproveEmployeeForm.value.employees[i]
+                            ?.employee_details?.emp_first_name
+                        }}
+                        {{
+                          multipleApproveEmployeeForm.value.employees[i]
+                            ?.employee_details?.emp_last_name
+                        }}
+                      </td>
+                      <td>
+                        <input
+                          class="form-control"
+                          type="text"
+                          formControlName="userid"
+                          placeholder="Enter Employee ID"
+                        />
+                      </td>
+                      <td>
+                        <ngx-select-dropdown
+                          formControlName="package"
+                          [options]="packageMaster"
+                          class="form-control p-1"
+                          [config]="{
+                            search: false,
+                            placeholder: 'Select Package'
+                          }"
+                          [multiple]="false"
+                        ></ngx-select-dropdown>
+                      </td>
+                      <td>
+                        <ngx-select-dropdown
+                          formControlName="salary_temp"
+                          [options]="salaryTempMaster"
+                          class="form-control p-1"
+                          [config]="{
+                            search: false,
+                            placeholder: 'Select Salary Template'
+                          }"
+                          [multiple]="false"
+                        ></ngx-select-dropdown>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              (click)="submitMultipleApproveEmployee($event)"
+              [disabled]="!multipleApproveEmployeeForm.valid"
+              type="submit"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Submit</span>
+            </button>
+            <button
+              data-dismiss="modal"
+              aria-label="Close"
+              type="button"
+              class="btn btn-danger tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Close</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter Writing Template Modal -->
+  <button
+    id="generateLetterWritingModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#generateLetterWritingModal"
+  ></button>
+  <div id="generateLetterWritingModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Letter Writing <small>Select Template</small>
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="employeeLetterWritingForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <ngx-select-dropdown
+                  formControlName="template"
+                  [options]="letterMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    employeeLetterWritingForm.controls.template.hasError(
+                      'required'
+                    ) &&
+                    (employeeLetterWritingForm.controls.template.dirty ||
+                      employeeLetterWritingForm.controls.template.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+            *ngIf="Global.checkCompanyModulePermission({
+              company_module: 'employee',
+              company_operation: 'letter_writer',
+              company_sub_module: 'letter_writer',
+              company_sub_operation: ['add']
+            })"
+              type="button"
+              [disabled]="!employeeLetterWritingForm.valid"
+              (click)="generateLetterWritingTemplate($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Get Letter</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter Writing Employees Modal -->
+  <button
+    id="letterWritingEmpModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#letterWritingEmpModal"
+  ></button>
+  <div id="letterWritingEmpModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Letter Writing
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body pd-25">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="table-responsive">
+                <table
+                  class="table table-bordered table-striped"
+                  style="border: 1px solid #eee"
+                >
+                  <thead>
+                    <tr>
+                      <th>Sl</th>
+                      <th>Employee Name</th>
+                      <th>Employee ID</th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of letterWritingEmployees; let i = index"
+                    >
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        {{ item.emp_first_name }} {{ item.emp_last_name }}
+                      </td>
+                      <td>{{ item.userid }}</td>
+                      <td class="text-center">
+                        <button
+                          (click)="generatePdf(item.letter_writing_data)"
+                          class="btn btn-sm btn-info"
+                        >
+                          <i class="fa fa-file-pdf"></i>&nbsp;PDF Copy
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr *ngIf="letterWritingEmployees.length == 0">
+                      <td class="text-center" colspan="100%">
+                        No employees found
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-danger tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+          >
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee Export Modal -->
+  <button
+    id="employeeExportModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#employeeExportModal"
+  ></button>
+  <div id="employeeExportModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            
+            Export Employees
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="employeeExportForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <label>
+                  Select Type
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      Global.isValidationAvailable(
+                        employeeExportForm,
+                        'download_data_type',
+                        'required'
+                      )
+                    "
+                    >*</span
+                  >
+                </label>
+                <ngx-select-dropdown
+                  formControlName="download_data_type"
+                  [options]="employeeSheetTemplate"
+                  class="form-control p-1"
+                  [config]="{
+                    search: false,
+                    placeholder: 'Select One',
+                    displayKey: 'template_name'
+                  }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeExportForm,
+                      'download_data_type',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div
+                class="col-lg-12"
+                *ngIf="
+                  this.employeeExportForm.get('download_data_type')?.value
+                    ?.value == 'custom'
+                "
+              >
+                <hr />
+                <h4 class="text-center text-uppercase mb-4">
+                  <!-- <small class="float-left">
+                                        <label for="field-selectall">
+                                            <input type="checkbox" id="field-selectall">
+                                            Select All
+                                        </label>
+                                    </small> -->
+
+                  Please Select Fields
+                </h4>
+
+                <div class="row" formArrayName="field_set">
+                  <ng-container
+                    *ngFor="
+                      let item of Global.getFormGroupArray(
+                        employeeExportForm,
+                        'field_set'
+                      );
+                      let i = index
+                    "
+                  >
+                    <div class="col-md-4">
+                      <label for="field-{{ i }}">
+                        <input
+                          type="checkbox"
+                          id="field-{{ i }}"
+                          [formControlName]="i"
+                        />
+                        {{ employeeExportCustomFields[i]?.label ?? "N/A" }}
+                      </label>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+              (click)="cancelEmployeeExport()"
+            >
+              <span>Cancel</span>
+            </button>
+
+            <button
+              type="submit"
+              *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'employee', 'company_sub_module':'employee_master_report', 'company_sub_operation':['add'], company_strict:true})"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+              (click)="exportEmployees($event)"
+            >
+              <span>Export</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee Exit Modal -->
+  <button
+    id="employeeExitModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#employeeExitModal"
+  ></button>
+  <div id="employeeExitModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Employee Exit
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ng-container *ngIf="exitEmployeeDetails?._id">
+            <companyuser-app-employee-form-fullfinal
+              [actionfrom]="'exitmodal'"
+              [actionEmployeeId]="exitEmployeeDetails?._id"
+            ></companyuser-app-employee-form-fullfinal>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    id="settingsTemplateModalOpen"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#settingsTemplateModal"
+  ></button>
+  <div
+    id="settingsTemplateModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            {{ isSheetTemplateEdit ? 'Update' : 'Create New' }} Template
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form id="settingsTemplateForm" [formGroup]="templateForm">
+          <div class="modal-body pd-20 px-5">
+            <div>
+              <input
+                type="text"
+                class="form-control error"
+                placeholder="Enter Template Name"
+                formControlName="template_name"
+              />
+
+              <p
+                class="mt-1 text-danger"
+                *ngIf="
+                  templateForm.controls.template_name.hasError('required') &&
+                  (templateForm.controls.template_name.dirty ||
+                    templateForm.controls.template_name.touched)
+                "
+              >
+                This field is required
+              </p>
+            </div>
+            <div
+              class="c-table my-3"
+              *ngFor="let row of employeeExportCustomFields"
+            >
+              <div class="c-tr">
+                <div class="c-th">
+                  <h4 class="text-dark m-0 mr-2">{{ row.section }}</h4>
+                  <label class="mb-0 text-dark" [for]="row.section">
+                    <input
+                      type="checkbox"
+                      (change)="
+                        adjustTemplateFields(row.values, $event);
+                        rowSelecion($event, row.section)
+                      "
+                      name="fields[{{ row.section }}]"
+                      [id]="row.section"
+                      class="mr-1"
+                    />
+                    Select All
+                  </label>
+                </div>
+                <div class="c-td" *ngFor="let item of row.values">
+                  <label
+                    (change)="adjustTemplateFields([item], $event)"
+                    class=""
+                    [for]="'field_'+  item.value"
+                  >
+                    <input
+                      #innerInput
+                      type="checkbox"
+                      name="fields[{{ row.section }}]"
+                      [id]="'field_'+  item.value"
+                      class="mr-1"
+                    />
+                    {{ item.label ?? "N/A"  }}
+                  </label>
+                </div>
+              </div>
+              <!-- <label for="field-{{ i }}">
+                      <input type="checkbox" id="field-{{ i }}" />
+                      {{
+                        employeeExportCustomFields[i]?.label ?? "N/A"
+                          | titlecase
+                      }}
+                    </label> -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn text-uppercase btn-secondary tx-size-xs"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn text-uppercase btn-primary tx-size-xs"
+              (click)="isSheetTemplateEdit ? updateTemplate($event) :  submitTemplate($event)"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- invite employee Modal -->
+
+  <button
+    id="inviteEmployeeModalOpen"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#inviteEmployeeModal"
+  ></button>
+  <div
+    id="inviteEmployeeModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Invite Employee
+          </h6>
+          <button
+          (click)="invitationForm.reset(); invitationLink = ''"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form id="settingsTemplateForm" [formGroup]="invitationForm">
+          <div class="modal-body pd-20">
+            <div class="row">
+              <div class="col-lg-12">
+                <div *ngIf="!invitationLink">
+                  <div>Select HOD*</div>
+                  <ngx-select-dropdown
+                    [options]="hodMaster"
+                    formControlName="hod_id"
+                    class="form-control p-1 mt-2"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Select One',
+                      height: '250px'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+                <ng-container *ngIf="invitationLink">
+                  <label>Invitation Link</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      readonly
+                      disabled
+                      type="text"
+                      class="form-control"
+                      [value]="invitationLink"
+                    />
+                    <button class="rounded-md btn ml-3" (click)="copyToClipboard()">
+                      <i style="font-size: 20px;" class="fas fa-clipboard "></i>
+                    </button>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" *ngIf="!invitationLink">
+            <button
+              [disabled]="invitationForm.invalid"
+              (click)="generateInviteLink($event)"
+              type="button"
+              class="btn btn-info text-uppercase btn-secondary tx-size-xs"
+            >
+              Generate
+            </button>
+            <button
+              type="button"
+              class="btn text-uppercase btn-secondary tx-size-xs"
+              data-dismiss="modal"
+              (click)="invitationForm.reset(); invitationLink = ''"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-employee-salarytemp-details
+    [employeeDetails]="employeeDetails"
+    [salaryTemplateDetails]="salaryTempateDetails"
+  ></companyuser-employee-salarytemp-details>
+  <companyuser-employee-package-details
+    [packageDetails]="packageDetails"
+  ></companyuser-employee-package-details>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

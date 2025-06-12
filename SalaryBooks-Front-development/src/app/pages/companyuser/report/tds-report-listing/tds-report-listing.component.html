@@ -1,0 +1,150 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">TDS Report Listing</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>TDS Report Listing</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <ng-container *ngIf="!reportGenerated">
+      <companyuser-app-table-filter
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        [hidden]="reportGenerated"
+        (onFiltered)="fetchtdsListing({page: 1, filter: $event})"
+      >
+      </companyuser-app-table-filter>
+      <form class="flex-1 pr-4" [formGroup]="tableOperationForm">
+      <div class="row">
+       
+        <div class="col-6">
+          <ngx-select-dropdown
+            [options]="sheetTemplateMaster"
+            formControlName="report_template"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'SELECT TEMPLATE',
+              displayKey: 'template_name'
+
+            }"
+            [multiple]="false"
+          ></ngx-select-dropdown>
+        </div>
+        
+        <!-- <div class="col-4"></div> -->
+        <div class="col-6 d-flex justify-content-end">
+          <button
+          type="button"
+          (click)="generateReportNew();"
+          class="btn btn-info tx-11 tx-mont tx-medium h-100 mr-3 "
+
+          [disabled]="!anyRowsChecked() || tableOperationForm.value?.report_template == null"
+        >
+          <span
+            ><i style="font-size: 12px" class="mr-1 fa fa-file"></i>VIEW
+            REPORT</span
+          >
+        </button>
+        <!-- <button
+              #btn2
+              type="button"
+              class="btn btn-block btn-info pd-x-12 h-100 mt-0"
+              style="font-size: 13px; min-width: 120px; max-width: 160px"
+            >
+              <i class="fa fa-download mr-1"></i>
+              <i style="font-size: 16px" class="fa mr-1">&#xf1c6;</i>
+              Download Batch
+            </button> -->
+        </div>
+    
+      </div>
+    </form>
+        <div class="mt-3">
+          
+          <div class="table-responsive mt-3">
+            <app-custom-tableoption
+            [searchable]="true"
+            (onFilterChanged)="employeePaginationOptions.limit = +$event?.length ; fetchtdsListing({ page:employeePaginationOptions.page, options:$event})"
+          ></app-custom-tableoption>
+            <table class="w-100 c-table">
+              <colgroup span="3"></colgroup>
+              <thead>
+                <tr>
+                  <th>
+                    <label class="d-flex align-items-center mb-0" for="select-all">
+                      <input type="checkbox" class="mr-2" id="select-all" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="employees.length > 0">
+                      SL No.
+                  </label>
+                  </th>
+                  <!-- <th>Action</th> -->
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>PAN No</th>
+                  <th>Template Type</th>
+                  <th>Taxable Earning</th>
+                  <th>Total TAX</th>
+                  <th>Tax Deducted</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let employee of employees; let i = index">
+                  <td>
+                    <label class="d-flex align-items-center" [for]="'checkrow-' + (i+1)">
+                      <input type="checkbox" class="mr-2" [attr.checked]="employee.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="employee._id" (click)="rowCheckBoxChecked($event, employee)" *ngIf="employeeCheckBoxIsVisible(employee) == true">
+                      {{ Global.getTableSerialNumber(i, employeePaginationOptions.limit, employeePaginationOptions.page) }}
+                  </label>
+                  </td>
+                  <td>{{employee?.emp_id}}</td>
+
+                  <td>{{employee?.emp_first_name}}</td>
+                  <td>{{employee?.pan_no}}</td>
+                  <td>{{(employee?.employee_details?.template_data?.tds_temp_data?.frequency | titlecase) ?? 'N/A'}}</td>
+                  <td>{{employee?.taxable_earning | number:'1.2-2'}}</td>
+                  <td>{{employee?.total_tax | number:'1.2-2'}}</td>
+                  <td>{{employee?.total_deducted | number:'1.2-2'}}</td>
+                </tr>
+                <tr *ngIf="employees.length==0">
+                  <td colspan="7" class="text-center">No Record(s) Found</td>
+                </tr>
+             
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+        <app-custom-pagination [rows]="employees" [paginationOptions]="employeePaginationOptions" (onPageClicked)="fetchtdsListing({'page' : $event})"></app-custom-pagination>
+
+      </ng-container>
+      <ng-container>
+       
+        <app-register-form-twentythree [reportFilter]="reportFilter" *ngIf="report_type=='form-sixteen-a'"></app-register-form-twentythree>
+
+      
+    </ng-container>
+      <ng-container *ngIf="reportGenerated">
+       
+
+        <app-tds-custom-report [reportFilter]="reportFilter" (cencellReport)="cancelGenerateReport();" *ngIf="report_type=='tds-report-custom'"></app-tds-custom-report>
+      </ng-container>
+     
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

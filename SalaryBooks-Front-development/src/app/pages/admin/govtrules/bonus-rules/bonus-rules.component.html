@@ -1,0 +1,171 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Government Rules</a>
+            <a class="breadcrumb-item active">Bonus Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-card"></i>
+        <div>
+            <h4>Bonus Rule</h4>
+            <p class="mg-b-0">Create, define bonus rule</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="bonus-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Define Bonus Rule</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Bonus Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="bonusRuleForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Govt Document No&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="gov_document_no">
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.gov_document_no.hasError('required') && (bonusRuleForm.controls.gov_document_no.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Effective Date&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <dp-date-picker [config]="{'disableKeypress': true, 'format': 'MM/DD/YYYY'}" formControlName="effective_date" theme="dp-material" attachTo=".mat-input-wrapper"></dp-date-picker>
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.effective_date.hasError('required') && (bonusRuleForm.controls.effective_date.dirty)">This field is required</p>
+
+                            <!-- <input class="form-control fc-datepicker" type="text" formControlName="effective_date"> -->
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Min Service to Qualify (Months)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="min_service_qualify">
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.min_service_qualify.hasError('required') && (bonusRuleForm.controls.min_service_qualify.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.min_service_qualify.hasError('pattern') && (bonusRuleForm.controls.min_service_qualify.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Maximum Bonus (%)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="max_bonus">
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.max_bonus.hasError('required') && (bonusRuleForm.controls.max_bonus.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.max_bonus.hasError('pattern') && (bonusRuleForm.controls.max_bonus.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Max Bonus Wage (Rs)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="max_bonus_wage">
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.max_bonus_wage.hasError('required') && (bonusRuleForm.controls.max_bonus_wage.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.max_bonus_wage.hasError('pattern') && (bonusRuleForm.controls.max_bonus_wage.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Eligible Capping&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="eligible_capping">
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.eligible_capping.hasError('required') && (bonusRuleForm.controls.eligible_capping.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="bonusRuleForm.controls.eligible_capping.hasError('pattern') && (bonusRuleForm.controls.eligible_capping.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!bonusRuleForm.valid" (click)="create($event)" type="submit" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>SAVE</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" [disabled]="!bonusRuleForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE RULE</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">View, manage, update Bonus rules</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Action</th>
+                            <th class="">Govt Doc No</th>
+                            <th class="">Wef</th>
+                            <th class="">Min Service</th>
+                            <th class="">Max Bonus%</th>
+                            <th class="">Max Bonus Wage</th>
+                            <th class="">Wage Ceiling </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Govt Doc No</th>
+                                <th class="">Wef</th>
+                                <th class="">Min Service</th>
+                                <th class="">Max Bonus%</th>
+                                <th class="">Max Bonus Wage</th>
+                                <th class="">Wage Ceiling </th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

@@ -1,0 +1,165 @@
+
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dasboard</a>
+            <a class="breadcrumb-item" href="javascript:void(0)">Expense Management</a>
+            
+            <a class="breadcrumb-item active">Run Extra Earning</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-wand"></i>
+        <div>
+            <h4>Run Extra Earning</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            
+            <br>
+            <companyuser-app-table-filter
+            [searchKeyFilter]="true"
+            [monthFilter]="true"
+            [yearFilter]="true"
+            (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+
+          >
+          </companyuser-app-table-filter>
+          <div class="card bd-0">
+            <div class="card-header">
+              
+                <div class="d-flex justify-content-end">
+                  <button
+                    #btn
+                    [disabled]="!anyRowsChecked()"
+                    (click)="runextraEarning();"
+                    type="button"
+                    class="btn btn-block btn-info pd-x-12 h-100 mr-3"
+                    style="font-size: 13px; min-width: 120px; max-width: 160px"
+                  >
+                    
+                    Run Extra Earing
+                  </button>
+                 
+                </div>
+              <!-- </div> -->
+            </div>
+    
+            <div class="card-body px-0 bd-t-0 pt-0 rounded-bottom">
+              <!-- <app-custom-tableoption (onFilterChanged)="generateMasterSheet({page: 1, options: $event})"></app-custom-tableoption> -->
+              <app-custom-tableoption
+              [searchable]="false"
+              (onFilterChanged)="paginationOptions.limit = +$event?.length ; fetchEmployees({ page:1})"
+            ></app-custom-tableoption>
+              <div class="table-responsive">
+                <!-- <div class="table-responsive"> -->
+                    <table class="table nowrap wd-100p table-bordered" style="border: 1px solid #eee;">
+                        <thead>
+                            <tr>
+                                <th>
+                                <label class="d-flex align-items-center mb-0" for="srNo">
+                                    <input
+                                      class="mb-0 mr-1"
+                                      (change)="allRowsCheckboxChecked($event)"
+                                      type="checkbox"
+                                      name="item"
+                                      id="srNo"
+                                    />
+                                    SL No.
+                                  </label>
+                                </th>
+                                <th class="text-center">Status</th>
+
+                                <th class="text-center">Emp Code</th>
+                                <th class="text-center">Emp Name</th>
+                                <th class="text-center">Month</th>
+                                <th class="text-center">Year</th>
+                                <th class="text-center">Amount</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let employee of employees;let i=index;">
+                                <td  class="text-center">
+                                    <label
+                                      class="d-flex align-items-center"
+                                      [for]="'checkrow-' + (i + 1)"
+                                      *ngIf="getSheetGenerationStatus(employee)?.checkbox == true;else no_check_box"
+                                     >
+                                    
+                                      <input
+                                        type="checkbox"
+                                        class="mr-2"
+                                        [attr.checked]="
+                                        employee?.checked == true ? 'checked' : null
+                                        "
+                                        id="checkrow-{{ i + 1 }}"
+                                        [attr.data-checkbox-id]="employee?._id"
+                                        (click)="rowCheckBoxChecked($event, employee)"
+                                      />
+                                      {{
+                                        Global.getTableSerialNumber(
+                                          i,
+                                          paginationOptions.limit,
+                                          paginationOptions.page
+                                        )
+                                      }}
+                                    </label>
+                                    <ng-template #no_check_box>
+                                        {{
+                                            Global.getTableSerialNumber(
+                                              i,
+                                              paginationOptions.limit,
+                                              paginationOptions.page
+                                            )
+                                          }}
+                                    </ng-template>
+                                   
+                                  </td>
+                                <td class="text-center">{{ getSheetGenerationStatus(employee).label }}</td>
+
+                                <td class="text-center">{{ employee.emp_id }}</td>
+                                <td class="text-center">{{ employee?.emp_first_name }} {{ employee?.emp_last_name }}</td>
+                                <td class="text-center" >
+                                  {{employee?.month?.description}}  
+                                </td>
+                                <td class="text-center">
+                                    {{employee?.wage_year}} 
+                                </td>
+                                <td class="text-center">
+                                    {{employee?.total_amount | currency:'₹'}} 
+                                </td>
+                               
+                                
+                            </tr>
+
+                            <tr *ngIf="employees.length == 0">
+                                <td class="text-center" colspan="8">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <!-- </div> -->
+              </div>
+    
+             
+            </div>
+          </div>
+          <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="fetchEmployees({'page':$event})"></app-custom-pagination>
+
+           
+
+        </div>
+    </div>
+
+  
+
+    <companyuser-extra-deduction-headmaster [initEarningHeadEntry]="extraDeductionHeadMasterEventSubject.asObservable()" [earningStatusMaster]="earningStatusMaster" (headMasterSubmitted)="fetchEarningHeads()"></companyuser-extra-deduction-headmaster>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

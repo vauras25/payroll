@@ -1,0 +1,177 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Family Members</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">Employee Family Members</h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section" *ngIf="operation == 'edit'" id="family-submit-section">
+                <form [formGroup]="employeeFamilyForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Date of Birth&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'dob', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="date" formControlName="dob">
+
+                            <p class="error-element" *ngIf="employeeFamilyForm.controls.dob.hasError('required') && ( employeeFamilyForm.controls.dob.dirty || employeeFamilyForm.controls.dob.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Name&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="name">
+
+                            <p class="error-element" *ngIf="employeeFamilyForm.controls.name.hasError('required') && ( employeeFamilyForm.controls.name.dirty || employeeFamilyForm.controls.name.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Relation&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'relation', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="relation">
+
+                            <p class="error-element" *ngIf="employeeFamilyForm.controls.relation.hasError('required') && ( employeeFamilyForm.controls.relation.dirty || employeeFamilyForm.controls.relation.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Dependent&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'dependent', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label class="rdiobox">
+                                <input formControlName="dependent" type="radio" value="yes">
+                                <span>Yes</span>
+                            </label>
+
+                            <label class="rdiobox">
+                                <input formControlName="dependent" type="radio" value="no">
+                                <span>No</span>
+                            </label>
+
+                            <p class="error-element" *ngIf="employeeFamilyForm.controls.dependent.hasError('required') && ( employeeFamilyForm.controls.dependent.dirty || employeeFamilyForm.controls.dependent.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Nominee&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'nominee', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label class="rdiobox">
+                                <input formControlName="nominee" type="radio" value="yes">
+                                <span>Yes</span>
+                            </label>
+
+                            <label class="rdiobox">
+                                <input formControlName="nominee" type="radio" value="no">
+                                <span>No</span>
+                            </label>
+
+                            <p class="error-element" *ngIf="employeeFamilyForm.controls.nominee.hasError('required') && ( employeeFamilyForm.controls.nominee.dirty || employeeFamilyForm.controls.nominee.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Aadhaar No&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'aadhaar_no', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="aadhaar_no">
+
+                            <p class="error-element" *ngIf="employeeFamilyForm.controls.aadhaar_no.hasError('required') && ( employeeFamilyForm.controls.aadhaar_no.dirty || employeeFamilyForm.controls.aadhaar_no.touched )">This field is required</p>
+
+                            <p class="error-element" *ngIf="(employeeFamilyForm.controls.aadhaar_no.hasError('pattern') || employeeFamilyForm.controls.aadhaar_no.hasError('minlength') || employeeFamilyForm.controls.aadhaar_no.hasError('maxlength')) && ( employeeFamilyForm.controls.aadhaar_no.dirty || employeeFamilyForm.controls.aadhaar_no.touched )">Please enter a valid AadhaarCard Number</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Aadhaar Image&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeFamilyForm, 'family_mem_aadhar_image', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="operation == 'edit'">
+                                <input class="form-control" type="file" accept="image/*" formControlName="family_mem_aadhar_image" (change)="onFileChanged($event, employeeFamilyForm, 'family_mem_aadhar_image', 'family_mem_aadhar_image_file')">
+
+                                <p class="error-element" *ngIf="employeeFamilyForm.controls.family_mem_aadhar_image.hasError('required') && ( employeeFamilyForm.controls.family_mem_aadhar_image.dirty || employeeFamilyForm.controls.family_mem_aadhar_image.touched )">This field is required</p>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-danger mr-2" (click)="cancelEntry()">Cancel</button>
+                            <button type="submit" class="btn btn-info" (click)="updateEmployeeFamilyDetails($event)">
+                              <span *ngIf="member_id; else addMemberSpanBlock">Update Member</span>
+                              <ng-template #addMemberSpanBlock>
+                                <span>Add Member</span>
+                              </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bd bd-gray-300 rounded table-responsive mt-5">
+                <table class="table table-striped mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Name</th>
+                            <th>Relation</th>
+                            <th>DOB</th>
+                            <th>Dependent</th>
+                            <th>Nominee</th>
+                            <th>Aadhar Card</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="employee_details?.emp_det?.family_member.length > 0; else noTableFound">
+                        <tr *ngFor="let item of employee_details?.emp_det?.family_member; let i = index">
+                            <th scope="row">{{ i+1 }}</th>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.relation }}</td>
+                            <td>{{ item.dob | date:'longDate' }}</td>
+                            <td class="text-uppercase">{{ item.dependent }}</td>
+                            <td class="text-uppercase">{{ item.nominee }}</td>
+                            <td>{{ item.aadhaar_no }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-info mr-2" *ngIf="item.family_mem_aadhar_image" (click)="Global.imageViewer(Global.BACKEND_URL + '/' + item.family_mem_aadhar_image)" data-toggle="tooltip" data-placement="top" title="View Aadhar Card"><i class="fa fa-file"></i></button>
+                                <button class="btn btn-sm btn-primary" (click)="getEdit(item)" data-toggle="tooltip" data-placement="top" title="Edit Member"><i class="fa fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-template #noTableFound>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="text-center">No Members Found</td>
+                            </tr>
+                        </tbody>
+                    </ng-template>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

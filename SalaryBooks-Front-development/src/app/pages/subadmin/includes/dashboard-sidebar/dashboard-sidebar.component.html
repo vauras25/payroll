@@ -1,0 +1,55 @@
+<div class="br-sideleft sideleft-scrollbar">
+    <label class="sidebar-label pd-x-10 mg-t-20 op-3">Navigation</label>
+    <ul class="br-sideleft-menu">
+        <li class="br-menu-item">
+            <a routerLink="/sub-admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-speedometer-outline tx-24"></i>
+                <span class="menu-item-label">Dashboard</span>
+            </a>
+        </li>
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'sub_admin', ['add','edit','view','delete'])">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/sub-admin/subadmins/manage'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-personadd-outline tx-20"></i>
+                <span class="menu-item-label">Sub Admin</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'sub_admin', ['add','edit','view','delete'])">
+                    <a routerLink="/sub-admin/subadmins/manage" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Management</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'role', ['add','edit','view','delete'])">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/sub-admin/role-access/manage-roles'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-people-outline tx-20"></i>
+                <span class="menu-item-label">Role Based Access</span>
+            </a>
+            <ul class="br-menu-sub" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'role', ['add','edit','view','delete'])">
+                <li class="sub-item"><a routerLink="/sub-admin/role-access/manage-roles" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Roles Management</a></li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'client_package_master', ['add','edit','view','delete'])">
+            <a routerLink="/sub-admin/client-package" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">Client Package</span>
+            </a>
+        </li>
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'plan_manager', ['add','edit','view','delete']) || this.AppComponent.checkModulePermission('subadmin', 'user_manager', ['add','edit','view','delete'])">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/sub-admin/subscription-management/plans', '/sub-admin/subscription-management/users'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-list-outline tx-20"></i>
+                <span class="menu-item-label">Subscription Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'plan_manager', ['add','edit','view','delete'])">
+                    <a routerLink="/sub-admin/subscription-management/plans" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Plan Management</a>
+                </li>
+                <li class="sub-item" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'user_manager', ['add','edit','view','delete'])">
+                    <a routerLink="/sub-admin/subscription-management/users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">User Management</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

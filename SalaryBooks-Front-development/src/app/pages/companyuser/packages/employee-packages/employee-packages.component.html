@@ -1,0 +1,217 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">Policy Package</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['add','edit','view','delete'], 'company_strict': true })">
+        <i class="icon icon ion-ios-list"></i>
+        <div>
+            <h4>Employee Packages</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="package-submit-section" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1',   'company_sub_module': 'policy_package', 'company_sub_operation': ['add', 'edit', 'delete', 'view'], 'company_strict': true })">
+        <div class="br-section-wrapper">
+            <ng-container *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['add','edit'], 'company_strict': true })">
+                <ng-container *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['add'], 'company_strict': true })">
+                    <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add Employee Package</h6>
+                </ng-container>
+                <ng-template #editHeader>
+                    <ng-container *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['edit'], 'company_strict': true })">
+                        <h6 class="br-section-label mb-3">Edit Employee Package</h6>
+                    </ng-container>
+                </ng-template>
+
+                <div class="form-layout form-layout-6">
+                    <form [formGroup]="employeePackageForm">
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Package Name&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="package_name" placeholder="Enter Package Name">
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.package_name.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Attendance Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="attendance_temp" [options]="attendanceRuleMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.attendance_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Incentive Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="incentive_temp" [options]="incentiveTempMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.incentive_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Bonus Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="bonus_temp" [options]="bonusTempMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.bonus_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                OverTime Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="overtime_temp" [options]="overtimeTempMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.overtime_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                TDS Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="tds_temp" [options]="tdsRuleMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.tds_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Leave Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="leave_temp" [options]="leaveTempMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.leave_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                LWF Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="lwf_temp" [options]="lwfTempMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.lwf_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                P-Tax Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="ptax_temp" [options]="ptaxRuleMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.ptax_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Payslip Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="payslip_temp" [options]="paySlipTempMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="employeePackageForm.controls.payslip_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                ArrearSlip Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="arrear_slip_temp" [options]="arrearSlipMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+    
+                                <p class="error-element" *ngIf="employeePackageForm.controls.arrear_slip_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Bonus Slip Template&nbsp;
+                                <span class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="bonus_slip_temp" [options]="bonusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+    
+                                <p class="error-element" *ngIf="employeePackageForm.controls.bonus_slip_temp.hasError('required') && isSubmitted">This field is required</p>
+                            </div>
+                        </div>
+                       
+
+                        <div class="row no-gutters">
+                            <div class="col-12 col-sm-12">
+                                <ng-container *ngIf="editActionId == ''; else editButtonSection">
+                                    <ng-container *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['add'], 'company_strict': true })">
+                                        <button type="submit" [disabled]="!employeePackageForm.valid" (click)="create($event)" class="btn btn-info">
+                                            <span>Add Package</span>
+                                        </button>
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-template #editButtonSection>
+                                    <ng-container *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['edit'], 'company_strict': true })">
+                                        <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                          <span>Cancel Editing</span>
+                                        </button>
+                                        <button type="submit" [disabled]="!employeePackageForm.valid" (click)="update($event)" class="btn btn-info">
+                                          <span>Update Package</span>
+                                        </button>
+                                    </ng-container>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-container>
+
+            <!--  -->
+
+            <ng-container *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'company_rules_1','company_sub_module': 'policy_package' , 'company_sub_operation': ['view'], 'company_strict': true })">
+                <h6 class="br-section-label mb-3 mt-5">Package List</h6>
+                <div class="table-wrapper">
+                    <!-- <div class="table-responsive"> -->
+                    <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p">SL</th>
+                                <th class="wd-25p text-center">Action</th>
+                                <th class="wd-15p">Package Name</th>
+                                <th class="wd-15p">Updated At</th>
+                                <th class="wd-15p">Corporate ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <!-- </div> -->
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

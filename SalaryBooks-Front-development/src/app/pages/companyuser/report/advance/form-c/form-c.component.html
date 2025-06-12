@@ -1,0 +1,77 @@
+<div class="table-responsive mt-3">
+    <div class="table-responsive mt-3">
+       <table class="table nowrap wd-100p employee-table">
+        <thead>
+            <tr >
+               
+                <th  colspan="4" class="text-center">FORM C</th>
+                <th colspan="9"></th>
+             </tr>
+             <tr>
+              
+                <th  colspan="4" class="text-center">Format of register of Loan/Recoveries/Damage/Loss/Fine/Advance/Absence</th>
+                <th colspan="9"></th>
+
+             </tr>
+             <tr >
+              
+                 <th  colspan="4" class="text-center">{{company?.establishment_name}}</th>
+                 <th colspan="9"></th>
+
+              </tr>
+            
+             <tr >
+               
+                <th >Sr. Number in Employee / Workman / Worker Register</th>
+                <th >Name</th>
+                <th >Recovery type (Damage/Loss/fine/Advance/Loans/Absence)</th>
+                <!-- <th class="s11">Particulars</th> -->
+                <th >Date Of Damage/ Loss / Absence</th>
+                <th >Amount</th>
+                <!-- <th class="s12">Whether Show cause issued</th> -->
+                <!-- <th class="s12">Explanation heard in presence of</th> -->
+                <th >Number of instalments</th>
+                <th >First Month/ Year</th>
+                <th >Last Month/ Year</th>
+                <th >Date of Complete Recovery</th>
+                <th >Remarks</th>
+             </tr>
+         </thead>
+         <tbody>
+            <tr >
+               <td >1</td>
+               <td >2</td>
+               <td >3</td>
+               <!-- <td >4</td> -->
+               <td >5</td>
+               <td >6</td>
+               <!-- <td >7</td> -->
+               <!-- <td >8</td> -->
+               <td >9</td>
+               <td >10</td>
+               <td >11</td>
+               <td >12</td>
+               <td >13</td>
+            </tr>
+            <ng-container *ngFor="let employee of employees">
+               <tr >
+                  <td >{{employee?.emp_id}}</td>
+                  <td >{{employee?.emp_first_name}} {{employee?.emp_last_name}}</td>
+                  <td class="s15">Advance</td>
+                  <!-- <td ></td> -->
+                  <td >N/A</td>
+                  <td >{{employee?.advance_module?.total_amount ?? 0}}</td>
+                  <!-- <td ></td> -->
+                  <!-- <td ></td> -->
+                  <td >{{employee?.advance_module?.no_of_instalments ?? 0}}</td>
+                  <td >{{getMonth(employee?.advance_module?.payment_start_month)}} {{employee?.advance_module?.payment_start_year }}</td>
+                  <td >{{getMonth(employee?.advance_module?.payment_last_month)}} {{employee?.advance_module?.payment_last_year }}</td>
+                  <td >{{getMonth(employee?.advance_module?.payment_last_month)}} {{employee?.advance_module?.payment_last_year }}</td>
+                  <!-- <td >{{employee?.advance_module?.no_of_instalments}}</td> -->
+                  <td ></td>
+               </tr>
+            </ng-container>
+         </tbody>
+       </table>
+    </div>
+ </div>

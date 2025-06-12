@@ -1,0 +1,163 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Attendance Listing Console</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Attendance Listing Console </h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <!-- [registerType]="true" -->
+      <companyuser-app-table-filter
+        [monthFilter]="true"
+        [yearFilter]="true"
+        [reportType]="true"
+        [attendanceTypeFilter]="true"
+        (onFiltered)="generateMasterSheet({page: 1, options:$event}); fetchAttendanceReport() "
+      >
+      <div addOn_btn1 class="col-sm-2 col-12">
+        <button
+          [disabled]="true"
+          class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+        >
+          <i class="fa fa-refresh" aria-hidden="false"></i>
+          <i style="font-size: 10px" class="fa">&#xf021;</i>
+          Reset
+        </button>
+      </div>
+      </companyuser-app-table-filter>
+
+      <div class="mt-3">
+        <div class="d-flex justify-content-end align-items-center">
+         
+          <div *ngIf="Global.checkCompanyModulePermission({
+            company_module: 'attendance',
+            company_operation: 'attendance_report',
+            company_sub_module:'attendance_report',
+            company_sub_operation:['view'],
+            company_strict:true
+          })">
+            <!-- *ngIf="employeeListFilter?.report_type == 'form_d'" -->
+            <!-- <button
+            [disabled]="!anyRowsChecked"
+            (click)="previewFormA($event)"
+              type="button"
+              class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            >
+              <span
+                ><i style="font-size: 12px" class="mr-1 fa fa-receipt"></i
+                >VIEW REPORT C</span
+              >
+            </button> -->
+            <!-- *ngIf="employeeListFilter?.report_type !== 'form_d'" -->
+            <button
+            [disabled]="!anyRowsChecked || !employeeListFilter?.report_type"
+            (click)="viewAndPrintAttendanceReport($event)"
+              type="button"
+              class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            >
+              <span
+                ><i style="font-size: 12px" class="mr-1 fa fa-receipt"></i
+                >VIEW REPORT</span
+              >
+            </button>
+          </div>
+        </div>
+        <div class="card-body px-0 bd-t-0 rounded-bottom">
+          <app-custom-tableoption (onFilterChanged)="updateEmployeeListFilter($event)" [searchable]="true"></app-custom-tableoption>
+          <div class="table-wrapper table-responsive mt-3">
+            <table *ngIf="!newreport_type" class="table display responsive nowrap wd-100p employee-table">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" />
+                    SL No.
+                  </th>
+                  <th style="width: 10%;">Employee ID</th>
+                  <th style="width: 40%;">Employee Name</th>
+                  <th style="width: 20%;">Register Type</th>
+                  <th style="width: 20%;">Avail Attend Record</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let report of attendanceReportListing; let i = index">
+                  <td>
+                    <label
+                      class="d-flex align-items-center"
+                      [for]="'checkrow-' + (i + 1)"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          report?.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="report?._id"
+                        (click)="rowCheckBoxChecked($event, report)"
+                      />
+                      {{
+                        Global.getTableSerialNumber(
+                          i,
+                          paginationOptions.limit,
+                          paginationOptions.page
+                        )
+                      }}
+                    </label>
+                  </td>
+                  <td>{{ report?.emp_id}}</td>
+                  <td>{{ report?.emp_first_name }} {{report?.emp_last_name}}</td>
+                  <td>
+                    {{ report?.register_type[0] | titlecase}}
+                  </td>
+                  <td>{{ report?.monthdays || '0' }}/{{report?.attendance_summ?.[0]?.paydays}}</td>
+                </tr>
+                <tr *ngIf="attendanceReportListing?.length == 0">
+                  <td
+                    colspan="100%"
+                    class="text-center"
+                    style="background-color: #f7f7f7"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="table-responsive"> -->
+
+              <app-form-d *ngIf="newreport_type=='1'" [employeeListFilter]="employeeListFilter"></app-form-d>
+              <app-late-report-detail  [employeeListFilter]="employeeListFilter"  *ngIf="newreport_type=='monthly_late_report'"></app-late-report-detail>
+              <app-late-report-summary [employeeListFilter]="employeeListFilter"  *ngIf="newreport_type=='late_summary_report'"></app-late-report-summary>
+              <app-month-wise-summary [employeeListFilter]="employeeListFilter" *ngIf="newreport_type=='month_wise_summary'"></app-month-wise-summary>
+              <app-summary-report [employeeListFilter]="employeeListFilter" *ngIf="newreport_type=='summary'"></app-summary-report>
+              <app-half-day [employeeListFilter]="employeeListFilter" *ngIf="newreport_type=='2' && attendance_type=='halfday'"></app-half-day>
+              <app-whole-day [employeeListFilter]="employeeListFilter" *ngIf="newreport_type=='2' && attendance_type=='wholeday'"></app-whole-day>
+              <app-time-report [employeeListFilter]="employeeListFilter"  *ngIf="newreport_type=='2' && attendance_type=='time'"></app-time-report>
+              <!-- </div> -->
+          </div>
+        </div>
+      </div>
+      <app-custom-pagination *ngIf="!newreport_type"
+      [rows]="attendanceReportListing"
+      [paginationOptions]="paginationOptions"
+      (onPageClicked)="this.paginationOptions.page = $event; fetchAttendanceReport()"
+      ></app-custom-pagination>
+      <!-- (onPerPageChange)="getValue($event); this.paginationOptions.limit = $event; fetchAttendanceReport()" -->
+    </div>
+  </div>
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

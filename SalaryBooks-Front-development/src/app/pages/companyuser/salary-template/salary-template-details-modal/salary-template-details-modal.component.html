@@ -1,0 +1,114 @@
+<button id="viewSalaryTemplateModalButton" [hidden]="true" data-toggle="modal" data-target="#viewSalaryTemplateModal"></button>
+<div id="viewSalaryTemplateModal" data-keyboard="false" class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-header pd-x-20">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Salary Template</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20" *ngIf="salaryTempateDetails != null">
+                <div class="bd bd-gray-300 rounded table-responsive">
+                    <table class="table table-striped mg-b-0">
+                        <tbody>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Template Name</th>
+                                <td>{{salaryTempateDetails?.template_name ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Restricted PF</th>
+                                <td class="text-uppercase">{{salaryTempateDetails?.restricted_pf ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Voluntary PF <small>(% of PF wages)</small></th>
+                                <td>{{salaryTempateDetails?.voluntary_pf ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">No Pension</th>
+                                <td class="text-uppercase">{{salaryTempateDetails?.no_pension ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Advance</th>
+                                <td class="text-uppercase">{{salaryTempateDetails?.advance ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Minimum Wage Amount</th>
+                                <td>{{salaryTempateDetails?.minimum_wage_amount ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Minimum Wage Percentage</th>
+                                <td>{{salaryTempateDetails?.minimum_wage_percentage ?? "N/A"}}</td>
+                            </tr>
+                            <tr>
+                                <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Wage Applicable</th>
+                                <td class="text-capitalize">{{salaryTempateDetails?.wage_applicable ?? "N/A"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bd bd-gray-300 rounded table-responsive mg-t-10">
+                    <table class="table table-striped mg-b-0 text-center">
+                        <thead class="bg-info">
+                            <tr>
+                                <th class="text-uppercase text-white" colspan="10">Earnings</th>
+                            </tr>
+                        </thead>
+                        <thead class="bg-dark">
+                            <tr>
+                                <th style="white-space: nowrap;" class="text-white">SL No</th>
+                                <th style="white-space: nowrap;" class="text-white">% OF</th>
+                                <th style="white-space: nowrap;" class="text-white">Full Name</th>
+                                <th style="white-space: nowrap;" class="text-white">Priority</th>
+                                <th style="white-space: nowrap;" class="text-white">Percentage (%)</th>
+                                <th style="white-space: nowrap;" class="text-white">Dependent Head</th>
+                                <th style="white-space: nowrap;" class="text-white">Attendance Relateion</th>
+                                <th style="white-space: nowrap;" class="text-white">Head Include in</th>
+                                <th style="white-space: nowrap;" class="text-white">Type</th>
+                                <th style="white-space: nowrap;" class="text-white">Value</th>
+                            </tr> 
+                        </thead>
+
+                        <tbody *ngIf="(salaryTempateDetails?.earnings ?? []).length > 0; else noViewEarningFound">
+                            <tr *ngFor="let item of salaryTempateDetails.earnings; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>{{item.is_percentage == 'yes' ? "Yes" : "No"}}</td>
+                                <td>{{item.head_full_name ?? "N/A"}}</td>
+                                <td>{{item.priority ?? "N/A"}}</td>
+                                <td>{{item.percentage_amount ? item.percentage_amount + ' %' : "N/A"}}</td>
+                                <td>{{item.dependent_head_full_name ?? "N/A"}}</td>
+                                <td class="text-capitalize">{{item.attendance_relation ?? "N/A"}}</td>
+                                <td>
+                                    <ng-container *ngIf="item.head_include_in.length > 0; else noHeadIncludeFound">
+                                        <ng-container *ngFor="let item of item.head_include_in">
+                                            <span style="font-size: 12px; margin: 3px; padding: 4px 10px;" class="badge badge-primary">{{item}}</span>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <ng-template #noHeadIncludeFound>
+                                        -
+                                    </ng-template>
+                                </td>
+                                <td class="text-capitalize">{{item.type ?? "N/A"}}</td>
+                                <td>{{item.earning_value ?? "N/A"}}</td>
+                            </tr>
+                        </tbody>
+
+                        <ng-template #noViewEarningFound>
+                            <tbody>
+                                <tr>
+                                    <td colspan="10" class="text-center">No Earnings Added</td>
+                                </tr>
+                            </tbody>
+                        </ng-template>
+                    </table>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

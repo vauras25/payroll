@@ -1,0 +1,77 @@
+<div class="br-pagebody pd-x-20 pd-sm-x-30 padding-top p-0">
+    
+    <div class="psbodymain">
+        <div class="left-subbar">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+            <button class="nav-link active" [hidden]="permission?.rights?.view.includes('leave')?false:true" id="v-pills-leave-status-tab" data-toggle="pill" data-target="#v-pills-leave-status" type="button" role="tab" aria-controls="v-pills-leave-status" aria-selected="false">Leave Status</button>
+
+            <button class="nav-link" [hidden]="permission?.rights?.view.includes('payslip')?false:true" id="v-pills-payy-slip-tab" data-toggle="pill" data-target="#v-pills-pay-slip" type="button" role="tab" aria-controls="v-pills-pay-slip" aria-selected="false">Pay Slip</button>
+
+            <button class="nav-link" [hidden]="permission?.rights?.view.includes('advance')?false:true" id="v-Advance-tab" data-toggle="pill" data-target="#v-Advance" type="button" role="tab" aria-controls="v-Advance" aria-selected="false">Advance</button>
+
+            <button class="nav-link" [hidden]="permission?.rights?.view.includes('reimburdement')?false:true" id="v-Reimbursement-tab" data-toggle="pill" data-target="#v-Reimbursement" type="button" role="tab" aria-controls="v-Reimbursement" aria-selected="false">Reimbursement</button>
+
+            <button class="nav-link" id="Declaration-tab" [hidden]="permission?.rights?.view.includes('tds')?false:true" data-toggle="pill" data-target="#Declaration" type="button" role="tab" aria-controls="Declaration" aria-selected="false">TDS Declaration</button>
+
+
+            <button class="nav-link" id="Document-tab"  [hidden]="permission?.rights?.view.includes('documents')?false:true" data-toggle="pill" data-target="#Document" type="button" role="tab" aria-controls="Document" aria-selected="false">Document</button>
+
+            </div>
+        </div>
+        <div class="righttab-details">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active"  [hidden]="permission?.rights?.view.includes('leave')?false:true" id="v-pills-leave-status" role="tabpanel" aria-labelledby="v-pills-leave-status-tab">
+                    <div class="tabheader">
+                        <h5>Leave Status</h5>
+                    </div>
+                    <div class="table-responsive table-main">
+                       <app-leave-status></app-leave-status>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-pay-slip" [hidden]="permission?.rights?.view.includes('payslip')?false:true" role="tabpanel" aria-labelledby="v-pills-pay-slip-tab">
+                    <div class="tabheader">
+                        <h5>Pay Slip</h5>
+                    </div>
+                    <div class="ed-details">
+                        <app-e-payslip></app-e-payslip>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" [hidden]="permission?.rights?.view.includes('advance')?false:true"  id="v-Advance" role="tabpanel" aria-labelledby="v-Advance-tab">
+                    <div class="tabheader">
+                        <h5>Advance</h5>
+                    </div>    
+                        <div class="ed-details">
+                          
+                        <app-advance-requests></app-advance-requests>
+                           
+                        </div>
+                    </div>
+                
+
+                <div class="tab-pane fade" id="v-Reimbursement" [hidden]="permission?.rights?.view.includes('reimburdement')?false:true" role="tabpanel" aria-labelledby="v-Reimbursement-tab">
+                    <div class="tabheader">
+                        <h5>Reimbursement</h5>
+                        <a class="editicon" href="javascript:;"><i class="fas fa-pencil-alt"></i> Edit</a>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="Declaration" role="tabpanel" [hidden]="permission?.rights?.view.includes('tds')?false:true" aria-labelledby="Declaration-tab">
+                    <div class="tabheader">
+                        <h5>TDS Declaration</h5>
+                        <a class="editicon" href="javascript:;"><i class="fas fa-pencil-alt"></i> Edit</a>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="Document" [hidden]="permission?.rights?.view.includes('documents')?false:true" role="tabpanel" aria-labelledby="Document-tab">
+                    <div class="tabheader">
+                        <h5>Document</h5>
+                    </div>
+                   <app-document-list></app-document-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

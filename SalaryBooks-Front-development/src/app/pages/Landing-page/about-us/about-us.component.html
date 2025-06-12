@@ -1,0 +1,91 @@
+<section class="h-bg">
+    <div class="container">
+        <div class="banner-text">
+        <h1>{{aboutPageData?.page_title}}</h1>
+        <p>{{aboutPageData?.page_content | slice:0:20}}</p>
+    </div>
+        <div class="main-area plan-area">
+            <div class="container">
+                <div class="p-box c-wrapper cms-area">
+                   {{aboutPageData?.page_content}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials-area">
+    <div class="container">
+        <div class="row testimonials-title align-items-center">
+            <div class="col-lg-6">
+                <h2>We love our customers and they love us too</h2>
+            </div>
+            <div class="col-lg-6"><a routerLink="/" class="btn">See All</a></div>
+        </div>
+
+        <div class="row">
+          <ng-container *ngFor="let data of aboutPostData">
+            <div *ngIf="data?.category === 'testimonial'" class="col-lg-4">
+              <div class="client-box">
+                <div class="c-content" [innerHTML]="data?.content">
+                  <!-- {{data?.content}} -->
+                  <!-- Really good. Payroll has completely surpassed our expectations.
+                  I'd be lost without Payroll. Payroll was worth a fortune to my
+                  company. -->
+                </div>
+                <div class="t-client d-flex align-items-center">
+                  <img src="assets/img/landing-page/client.png" alt="" />
+                  <div class="c-text">
+                    <h5>Daisy Phelps</h5>
+                    <p>Lorem Ipsum, Designation</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <!-- <div class="col-lg-4">
+            <div class="client-box">
+              <div class="c-content">
+                Really good. Payroll has completely surpassed our expectations.
+                I'd be lost without Payroll. Payroll was worth a fortune to my
+                company.
+              </div>
+              <div class="t-client d-flex align-items-center">
+                <img src="assets/img/landing-page/client.png" alt="" />
+                <div class="c-text">
+                  <h5>Daisy Phelps</h5>
+                  <p>Lorem Ipsum, Designation</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="client-box">
+              <div class="c-content">
+                Really good. Payroll has completely surpassed our expectations.
+                I'd be lost without Payroll. Payroll was worth a fortune to my
+                company.
+              </div>
+              <div class="t-client d-flex align-items-center">
+                <img src="assets/img/landing-page/client.png" alt="" />
+                <div class="c-text">
+                  <h5>Daisy Phelps</h5>
+                  <p>Lorem Ipsum, Designation</p>
+                </div>
+              </div>
+            </div>
+          </div> -->
+        </div>
+    </div>
+</section>
+
+<section class="call-area">
+    <div class="container">
+        <h3>Get started with Payroll today!</h3>
+        <p>Simplify your HR operations, retain talent, and build a
+            high-performing workforce while putting employee experience first.</p>
+            <a href="javascript:void(0)" class="btn">Get Started Now</a>
+            <a href="javascript:void(0)" class="btn">Request Registration</a>
+    </div>
+</section>
+

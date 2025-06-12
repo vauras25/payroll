@@ -1,0 +1,313 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Government Rules</a>
+            <a class="breadcrumb-item active">EPFO Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-card"></i>
+        <div>
+            <h4>EPFO Rule</h4>
+            <p class="mg-b-0">Create, define EPFO rule</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="epfo-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Define EPFO Rule</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update EPFO Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="epfoRuleForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Circular No
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="circular_no">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.circular_no.hasError('required') && (epfoRuleForm.controls.circular_no.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <p>
+                                Provident Fund <br>
+                                <small class="text-muted">(Employer Contribution)</small>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="pf_employer_contribution">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.pf_employer_contribution.hasError('required') && (epfoRuleForm.controls.pf_employer_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.pf_employer_contribution.hasError('pattern') && (epfoRuleForm.controls.pf_employer_contribution.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Total Employer Contribution (%)
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="total_employer_contribution">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.total_employer_contribution.hasError('required') && (epfoRuleForm.controls.total_employer_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.total_employer_contribution.hasError('pattern') && (epfoRuleForm.controls.total_employer_contribution.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <p>
+                                Provident Fund <br>
+                                <small class="text-muted">(Employee Contribution)</small>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="pf_employee_contribution">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.pf_employee_contribution.hasError('required') && (epfoRuleForm.controls.pf_employee_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.pf_employee_contribution.hasError('pattern') && (epfoRuleForm.controls.pf_employee_contribution.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Total Employee Contribution (%)
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="total_employee_contribution">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.total_employee_contribution.hasError('required') && (epfoRuleForm.controls.total_employee_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.total_employee_contribution.hasError('pattern') && (epfoRuleForm.controls.total_employee_contribution.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <p>
+                                Pension Fund <br>
+                                <small class="text-muted">(Employer Contribution)</small>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="pension_employer_contribution" style="border-bottom: 1px solid #eee;">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.pension_employer_contribution.hasError('required') && (epfoRuleForm.controls.pension_employer_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.pension_employer_contribution.hasError('pattern') && (epfoRuleForm.controls.pension_employer_contribution.dirty)">The value should be numeric</p>
+
+                            <label class="ckbox mg-t-15">
+                                <input type="checkbox" formControlName="pension_employer_contribution_restrict">
+                                <span>Restrict to Wage Ceiling</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Retirement Age
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="retirement_age">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.retirement_age.hasError('required') && (epfoRuleForm.controls.retirement_age.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.retirement_age.hasError('pattern') && (epfoRuleForm.controls.retirement_age.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <p>
+                                EDLI <br>
+                                <small class="text-muted">(Employer Contribution)</small>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" style="border-bottom: 1px solid #eee;" formControlName="edli_employer_contribution">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.edli_employer_contribution.hasError('required') && (epfoRuleForm.controls.edli_employer_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.edli_employer_contribution.hasError('pattern') && (epfoRuleForm.controls.edli_employer_contribution.dirty)">The value should be numeric</p>
+
+                            <label class="ckbox mg-t-15">
+                                <input type="checkbox" formControlName="edli_employer_contribution_restrict">
+                                <span>Restrict to Wage Ceiling</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Wage Ceiling (Rs.)
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="wage_ceiling">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.wage_ceiling.hasError('required') && (epfoRuleForm.controls.wage_ceiling.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.wage_ceiling.hasError('pattern') && (epfoRuleForm.controls.wage_ceiling.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <p>
+                                Admin Charges <br>
+                                <small class="text-muted">(Employer Contribution)</small>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" style="border-bottom: 1px solid #eee;" formControlName="admin_charges">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.admin_charges.hasError('required') && (epfoRuleForm.controls.admin_charges.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.admin_charges.hasError('pattern') && (epfoRuleForm.controls.admin_charges.dirty)">The value should be numeric</p>
+
+                            <label class="ckbox mg-t-15">
+                                <input type="checkbox" formControlName="admin_charges_restrict">
+                                <span>Restrict to Wage Ceiling</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Minimum Admin (Rs.)
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="minimum_admin_charges">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.minimum_admin_charges.hasError('required') && (epfoRuleForm.controls.minimum_admin_charges.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.minimum_admin_charges.hasError('pattern') && (epfoRuleForm.controls.minimum_admin_charges.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <p>
+                                EDLI Admin Charges <br>
+                                <small class="text-muted">(Employer Contribution)</small>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" style="border-bottom: 1px solid #eee;" formControlName="edli_admin_charges">
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.edli_admin_charges.hasError('required') && (epfoRuleForm.controls.edli_admin_charges.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.edli_admin_charges.hasError('pattern') && (epfoRuleForm.controls.edli_admin_charges.dirty)">The value should be numeric</p>
+
+                            <label class="ckbox mg-t-15">
+                                <input type="checkbox" formControlName="edli_admin_charges_restrict">
+                                <span>Restrict to Wage Ceiling</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Round Off
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label class="rdiobox">
+                                <input formControlName="round_off" type="radio" value="up">
+                                <span>Round Up</span>
+                            </label>
+                            <label class="rdiobox">
+                                <input formControlName="round_off" type="radio" value="off">
+                                <span>Round Off</span>
+                            </label>
+                            <label class="rdiobox">
+                                <input formControlName="round_off" type="radio" value="down">
+                                <span>Round Down</span>
+                            </label>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Effective Date
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <dp-date-picker [config]="{'disableKeypress': true, 'format': 'MM/DD/YYYY'}" formControlName="effective_date" theme="dp-material" attachTo=".mat-input-wrapper"></dp-date-picker>
+                            <p class="error-element" *ngIf="epfoRuleForm.controls.effective_date.hasError('required') && (epfoRuleForm.controls.effective_date.dirty)">This field is required</p>
+
+                            <!-- <input class="form-control fc-datepicker" type="text" formControlName="effective_date"> -->
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!epfoRuleForm.valid" (click)="create($event)" type="submit" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>SAVE</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" [disabled]="!epfoRuleForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE RULE</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">View, manage, update EPFO rules</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Action</th>
+                            <th class="">Date</th>
+                            <th class="">Govt Doc No</th>
+                            <th class="">Wef</th>
+                            <th class="">ER PF %</th>
+                            <th class="">EE PF %</th>
+                            <th class="">EE PS %</th>
+                            <th class="">EDLI</th>
+                            <th class="">EDLI Admin</th>
+                            <th class="">Admin</th>
+                            <th class="">Min Admin</th>
+                            <th class="">Retirement</th>
+                            <th class="">Wage Ceiling</th>
+                            <th class="">Total ER%</th>
+                            <th class="">Total EE%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Govt Doc No</th>
+                                <th class="">Wef</th>
+                                <th class="">ER PF %</th>
+                                <th class="">EE PF %</th>
+                                <th class="">EE PS %</th>
+                                <th class="">EDLI</th>
+                                <th class="">EDLI Admin</th>
+                                <th class="">Admin</th>
+                                <th class="">Min Admin</th>
+                                <th class="">Retirement</th>
+                                <th class="">Wage Ceiling</th>
+                                <th class="">Total ER%</th>
+                                <th class="">Total EE%</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

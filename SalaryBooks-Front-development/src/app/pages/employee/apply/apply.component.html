@@ -1,0 +1,155 @@
+<div class="br-pagebody pd-x-20 pd-sm-x-30 padding-top p-0">
+    <div class="psbodymain">
+        <div class="left-subbar">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+            <button class="nav-link active" id="apply-live-tab" data-toggle="pill" data-target="#apply-live" type="button" role="tab" aria-controls="apply-live" aria-selected="true" 
+            [hidden]="permission?.rights?.apply.includes('leave')?false:true">Leave</button>
+
+            <button class="nav-link" [hidden]="permission?.rights?.apply.includes('advance')?false:true" id="apply-advance-tab" data-toggle="pill" data-target="#apply-advance" type="button" role="tab" aria-controls="apply-advance" aria-selected="false">Advance</button>
+
+            <button class="nav-link" [hidden]="permission?.rights?.apply.includes('reimburdement')?false:true" id="apply-reimbursement-tab" data-toggle="pill" data-target="#apply-reimbursement" type="button" role="tab" aria-controls="apply-reimbursement" aria-selected="false">Reimbursement</button>
+
+            <button class="nav-link" id="apply-extraearning-tab" data-toggle="pill" data-target="#apply-extraearning" type="button" role="tab" aria-controls="apply-extraearning" aria-selected="false">Extra Earning</button>
+    
+
+            <button class="nav-link"  [hidden]="permission?.rights?.apply.includes('tds')?false:true" id="apply-TDSdeclaration-tab" data-toggle="pill" data-target="#apply-TDSdeclaration" type="button" role="tab" aria-controls="apply-TDSdeclaration" aria-selected="false">TDS Declaration</button>
+
+            </div>
+        </div>
+
+        <div class="righttab-details">
+            <div class="tab-content" id="v-pills-tabContent">
+
+                <div class="tab-pane fade show active"  [hidden]="permission?.rights?.apply.includes('leave')?false:true" id="apply-live" role="tabpanel" aria-labelledby="apply-live-tab">
+                    <div class="tabheader">
+                        <h5>Leave</h5>
+                        <a class="editicon apply-btn" href="javascript: void(0)" data-toggle="modal" data-target="#leaveapplyModal">Apply</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>LEAVE TYPE</th>
+                                    <th>FORM</th>
+                                    <th>TO</th>
+                                    <th>NO OF DAYS</th>
+                                    <th>REASON</th>
+                                    <th>STATUS</th>
+                                    <th>Approve By</th>
+                                    <th>Approve Date</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of leave_requests; let i = index">
+                                    <th>{{item?.leave_temp_head?.full_name}}</th>
+                                    <th>{{item.leave_from_date | date:'dd/MM/YY'}}</th>
+                                    <th>{{item.leave_to_date | date:'dd/MM/YY'}}</th>
+                                    <th>{{item.leave_count_days}} Days</th>
+                                    <th>{{item.note}}</th>
+                                    <th>{{item.leave_approval_status | titlecase}}</th>
+                                    <th>{{item.approve_by?item.approve_by:'N/A'}}</th>
+                                    <th>{{item.approve_date?(item.approve_date | date:'dd/mm/YY'):'N/A' }}</th>
+
+                                </tr>
+                                <tr *ngIf="leave_requests.length == 0">
+                                    <td colspan="8" class="text-center">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <app-custom-pagination [rows]="leave_requests" [paginationOptions]="paginationOptions" (onPageClicked)="fetchleaveRequest($event)"></app-custom-pagination>
+
+                </div>
+
+                <div class="tab-pane fade" [hidden]="permission?.rights?.apply.includes('advance')?false:true" id="apply-advance" role="tabpanel" aria-labelledby="apply-advance-tab">
+                <app-advance-request></app-advance-request> 
+
+                </div>
+
+                <div class="tab-pane fade" [hidden]="permission?.rights?.apply.includes('reimburdement')?false:true" id="apply-reimbursement" role="tabpanel" aria-labelledby="apply-reimbursement-tab">
+                 <app-reimbursement></app-reimbursement>   
+
+                </div>
+                <div class="tab-pane fade"  id="apply-extraearning" role="tabpanel" aria-labelledby="apply-extraearning-tab">
+                    <app-extra-earning></app-extra-earning>   
+   
+                   </div>
+
+                <div class="tab-pane fade" [hidden]="permission?.rights?.apply.includes('tds')?false:true" id="apply-TDSdeclaration" role="tabpanel" aria-labelledby="apply-TDSdeclaration-tab">
+                 <app-tds></app-tds>   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade come-from-modal modal-design right" id="leaveapplyModal" tabindex="-1" role="dialog" aria-labelledby="leaveapplyModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUnitLabel">Leave</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body form-main">
+                <form [formGroup]="leaveapplyForm">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label>Leave Type</label>
+                            <select  class="form-control" (change)="settotalDays($event)" formControlName="leave_id">
+                                <option value="">Select Leave Type</option>
+                                <option value="{{item._id}}" [disabled]="item.total_balance<=0" *ngFor="let item of leave_cat_lists">{{item?.abbreviation}}(Balance {{item?.total_balance}} Days)</option>
+
+                              
+                            </select>
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'leave_temp_head', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-6">
+                            <label>From</label>
+                            <input type="Date" class="form-control" (change)="getDays();" placeholder="" formControlName="leave_from_date">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'leave_from_date', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-6">
+                            <label>To</label>
+                            <input type="Date" class="form-control" placeholder=""  (change)="getDays();"  formControlName="leave_to_date">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'leave_to_date', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Number of Days</label>
+                            <input type="text" class="form-control" placeholder="" readonly formControlName="no_of_days">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'no_of_days', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Remaining Leaves</label>
+                            <input type="text" class="form-control" placeholder="" readonly formControlName="leave_balance">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'leave_balance', 'required')">This field is required</p>
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'leave_balance', 'min')">Not Enough Leave Balance</p>
+
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Reason</label>
+                            <textarea class="form-control" formControlName="note"></textarea>
+                            
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(leaveapplyForm, 'note', 'required')">This field is required</p>
+
+
+                        </div>
+                        <div class="form-group col-12 mb-0">
+                            <button type="submit" class="btn btn-apply w-100" (click)="submitForm($event);">Apply</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Modal End-->

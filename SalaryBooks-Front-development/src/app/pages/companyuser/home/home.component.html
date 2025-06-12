@@ -1,0 +1,764 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pagebody pd-x-20 pd-sm-x-30">
+    <div class="dashTop">
+      <div class="editbutton">
+        <button routerLink="/company/home-edit">Go to Dashboard Edit</button>
+      </div>
+      
+
+      <!-- aman -->
+     
+      <div 
+           cdkDropList
+           (cdkDropListDropped)="dropSection($event)">
+
+        <div class="widget-container">
+          
+          <ng-container *ngFor="let section of dashboardSections; let i = index"
+                        [ngSwitch]="section.index"
+                        >
+
+            <div class="d-widget-1"
+                 *ngSwitchCase="0"
+                 cdkDrag>
+              <div class="shadow-base bg-white radius3">
+                <div class="row no-gutters"
+                     *ngIf="isDragDropEnabled">
+                 
+
+                  <div class="col-md-6 border-right">
+                    <div class="d-flex align-items-center commonbox">
+                      <figure style="cursor: pointer"
+                              routerLink="employees"
+                              [queryParams]="{ filter: 'approved' }"
+                              class="roundIcon">
+                        <img src="assets/img/d-staff.png"
+                             alt="" />
+                      </figure>
+                      <div style="cursor: pointer"
+                           routerLink="employees"
+                           [queryParams]="{ filter: 'approved' }"
+                           class="commonbox-text">
+                        <h3>Active Employees</h3>
+                        <span>{{ dashboardTotalData?.active_emp_count || 0 }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="d-flex align-items-center commonbox">
+                      <figure style="cursor: pointer"
+                              routerLink="staff/manage"
+                              class="roundIcon">
+                        <img src="assets/img/d-staff.png"
+                             alt="" />
+                      </figure>
+                      <div style="cursor: pointer"
+                           routerLink="staff/manage"
+                           class="commonbox-text">
+                        <h3>Active Staff</h3>
+                        <span>{{ dashboardTotalData?.staffs?.length || 0 }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-widget-2"
+                 *ngSwitchCase="1"
+                 cdkDrag>
+              <ng-container *ngIf="isDragDropEnabled2">
+              
+                <div class="shadow-base bg-white radius3">
+                  <div class="row no-gutters">
+                    <div class="col-md-6 border-right">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img src="assets/img/d-staff.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text blacktxt">
+                          <h3>Credit Balance</h3>
+                          <span>{{ dashboardTotalData?.credit_stat || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img src="assets/img/d-staff.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text blacktxt">
+                          <h3>Current Plan</h3>
+                          <span>{{ dashboardTotalData?.plan_name || 0 }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+
+            <div class="d-widget-3"
+                 *ngSwitchCase="2"
+                 cdkDrag>
+              
+                <div class="shadow-base bg-white radius3 actionNeeded">
+                  <div class="blue-head">Action Needed</div>
+                  <div class="row no-gutters">
+                    <div class="col-md-4 border-right border-bottom">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img style="cursor: pointer"
+                               routerLink="employees"
+                               [queryParams]="{ filter: 'pending' }"
+                               src="assets/img/d-approval.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text">
+                          <h3 style="cursor: pointer"
+                              routerLink="employees"
+                              [queryParams]="{ filter: 'pending' }">Joining Approval</h3>
+                          <span style="cursor: pointer"
+                                routerLink="employees"
+                                [queryParams]="{ filter: 'pending' }">{{
+                            dashboardTotalData?.pending_emp_count || 0
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 border-right border-bottom">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img style="cursor: pointer"
+                               routerLink="approval/advance-request"
+                               src="assets/img/d-request-count.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text">
+                          <h3 style="cursor: pointer"
+                              routerLink="approval/advance-request">Advance Request</h3>
+                          <span style="cursor: pointer"
+                                routerLink="approval/advance-request">{{
+                            dashboardTotalData?.employee_advances?.length || 0
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 border-bottom">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img style="cursor: pointer"
+                               routerLink="approval/leave"
+                               src="assets/img/d-leave.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text">
+                          <h3 style="cursor: pointer"
+                              routerLink="approval/leave">Leave Application</h3>
+                          <span style="cursor: pointer"
+                                routerLink="approval/leave">{{
+                            dashboardTotalData?.employee_leaves?.length || 0
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 border-right">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img style="cursor: pointer"
+                               routerLink="reports/pf-challan-report/data-new"
+                               [queryParams]="{ filter: 'pf' }"
+                               src="assets/img/d-pf.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text">
+                          <h3 style="cursor: pointer"
+                              routerLink="reports/pf-challan-report/data-new"
+                              [queryParams]="{ filter: 'pf' }">Confirmation Due PF</h3>
+                          <span style="cursor: pointer"
+                                routerLink="reports/pf-challan-report/data-new"
+                                [queryParams]="{ filter: 'pf' }">{{
+                            dashboardTotalData?.pending_pf_challan_count || 0
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 border-right">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img style="cursor: pointer"
+                               routerLink="reports/pf-challan-report/data-new"
+                               [queryParams]="{ filter: 'esic' }"
+                               src="assets/img/d-dueEsi.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text">
+                          <h3 style="cursor: pointer"
+                              routerLink="reports/pf-challan-report/data-new"
+                              [queryParams]="{ filter: 'esic' }">Confirmation Due ESI</h3>
+                          <span style="cursor: pointer"
+                                routerLink="reports/pf-challan-report/data-new"
+                                [queryParams]="{ filter: 'esic' }">{{
+                            dashboardTotalData?.pending_esic_challan_count || 0
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center commonbox">
+                        <figure class="roundIcon">
+                          <img style="cursor: pointer"
+                               routerLink="reports/instruction-report/data"
+                               [queryParams]="{ filter: 'pending' }"
+                               src="assets/img/d-bank.png"
+                               alt="" />
+                        </figure>
+                        <div class="commonbox-text">
+                          <h3 style="cursor: pointer"
+                              routerLink="reports/instruction-report/data"
+                              [queryParams]="{ filter: 'pending' }">Confirmation Due Bank Instruction</h3>
+                          <span style="cursor: pointer"
+                                routerLink="reports/instruction-report/data"
+                                [queryParams]="{ filter: 'pending' }">{{
+                            dashboardTotalData?.bank_instructions?.length || 0
+                            }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              
+            </div>
+
+            <div class="d-widget-4"
+                 *ngSwitchCase="3"
+                 cdkDrag>
+                 <ng-container *ngIf="isDragDropEnabled3">
+              <div class="shadow-base bg-white radius3 p20 salaryRange">
+                <!-- <div class="blackHead">Employee count by salary range</div> -->
+                <!-- <img src="assets/img/d-salary-range.jpg" alt="" /> -->
+                <!-- <div class="row"> -->
+                <div class="blackHead d-flex justify-content-between align-items-center">
+                  <div class="slide-btn">
+                    <button (click)="tab = 'Financial Year'"
+                            [class.active]="tab == 'Financial Year'">
+                      Financial Year
+                    </button>
+                    <button (click)="tab = 'Date Range'"
+                            [class.active]="tab == 'Date Range'">
+                      Date Range
+                    </button>
+                  </div>
+                  <select *ngIf="tab == 'Financial Year'"
+                          (change)="getDashboardChartData()"
+                          formControlName="challan_date_filter"
+                          name=""
+                          id="">
+                    <option *ngFor="let year of financialYearOptions"
+                            [value]="year.value">
+                      {{year?.label}}
+                    </option>
+                    <!-- <option value="2021-2022">2021-22</option>
+                <option value="2022-2023">2022-23</option>
+                <option value="2023-2024">2023-24</option> -->
+                  </select>
+                  <div class="d-flex pl-3"
+                       *ngIf="tab == 'Date Range'">
+                    <div class="d-flex align-items-center justify-content-between px-2">
+                      <!-- <div class="mr-1">From: </div> -->
+                      <input formControlName="challan_date_from"
+                             class="form-control p-1 px-2"
+                             (change)="getDashboardChartData()"
+                             style="max-width: 110px"
+                             type="date"
+                             placeholder="MM/YYYY"
+                             [max]="
+                      curruntYear + '-0' + curruntMonth + '-' + curruntDate
+                    " />
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between px-2 mt-1">
+                      <!-- <div class="mr-1">To:</div> -->
+                      <input formControlName="challan_date_to"
+                             class="form-control p-1 px-2"
+                             (change)="getDashboardChartData()"
+                             style="max-width: 110px"
+                             type="date"
+                             placeholder="DD/MM/YYYY"
+                             [min]="
+                      filterForm.get('challan_date_from')?.value ||
+                      curruntYear + '-0' + curruntMonth + '-' + curruntDate
+                    "
+                             [max]="
+                      getDateFromToMaxValidation(
+                        filterForm.get('challan_date_from')?.value
+                      ) || curruntYear + '-0' + curruntMonth + '-' + curruntDate
+                    " />
+                    </div>
+                  </div>
+                </div>
+                <div class="row align-items-center">
+                  <div class="col-5">
+                    <div style="font-size: 13px">On time payment of PF</div>
+                  </div>
+                  <div class="col-7 pl-0 my-4">
+                    <div class="progress w-100 flex-1">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           [style]="'width:' + dashboardChartData?.pf_precent + '%'">
+                        {{ dashboardChartData?.pf_precent || 0 | number }}%
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-5 mt-3">
+                    <div style="font-size: 13px">On time payment of ESI</div>
+                  </div>
+                  <div class="col-7 pl-0 mt-3">
+                    <div class="progress w-100 flex-1">
+                      <div class="progress-bar"
+                           role="progressbar"
+                           [style]="'width:' + dashboardChartData?.esic_precent + '%'">
+                        {{ dashboardChartData?.esic_precent || 0 | number }}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="col-2"></div> -->
+                <!-- </div> -->
+              </div>
+              </ng-container>
+            </div>
+
+            <div class="d-widget-5"
+                 *ngSwitchCase="4"
+                 cdkDrag>
+              <div class="shadow-base bg-white radius3 p20 EmployeesDash ">
+                <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                  <span>Employees</span>
+                  <select (change)="getDashboardChartData(true)"
+                          formControlName="emp_date_filter">
+                    <option *ngFor="let year of financialYearOptions"
+                            [value]="year.value">
+                      {{year?.label}}
+                    </option>
+                    <!-- <option value="2021-2022">2021-22</option>
+                <option value="2022-2023">2022-23</option>
+                <option value="2023-2024">2023-24</option> -->
+                  </select>
+                </div>
+                <div class="text-center"
+                     *ngIf="!isBarChart2Loading">
+                  <canvas baseChart
+                          class="chart"
+                          [data]="barChartData2"
+                          [options]="barChartOptions2"
+                          [type]="barChartType"
+                          width="100"
+                          height="280"></canvas>
+                  <!-- <img
+                style="max-width: 100%; height: 339px; margin-top: -60px"
+                src="assets/img/emple-dash.jpg"
+                alt=""
+              /> -->
+                </div>
+                <div class="text-center"
+                     *ngIf="isBarChart2Loading">
+                  <canvas baseChart
+                          class="chart"
+                          [data]="barChartData2"
+                          [options]="barChartOptions2"
+                          [type]="barChartType"
+                          width="100"
+                          height="280"></canvas>
+                  <!-- <img
+                style="max-width: 100%; height: 339px; margin-top: -60px"
+                src="assets/img/emple-dash.jpg"
+                alt=""
+              /> -->
+                </div>
+              </div>
+            </div>
+
+            <div class="d-widget-6"
+                 *ngSwitchCase="5"
+                 cdkDrag>
+              <div class="shadow-base bg-white radius3 p20 kycSts">
+                <div class="blackHead">KYC Status</div>
+                <div class="ksrow row">
+                  <div class="col-md-6">
+                    <div class="ksBox d-flex align-items-center">
+                      <figure class="roundIcon">
+                        <img src="assets/img/d-aadhar.png"
+                             alt="" />
+                      </figure>
+                      <div class="ksTxt">
+                        <h3>Aadhar Pending</h3>
+                        <span>{{ dashboardTotalData?.aadhar_pending }} /
+                          {{ dashboardTotalData?.active_emp_count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="ksBox d-flex align-items-center">
+                      <figure class="roundIcon">
+                        <img src="assets/img/d-pan.png"
+                             alt="" />
+                      </figure>
+                      <div class="ksTxt">
+                        <h3>PAN Pending</h3>
+                        <span>{{ dashboardTotalData?.pan_pending }} /
+                          {{ dashboardTotalData?.active_emp_count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="ksBox d-flex align-items-center">
+                      <figure class="roundIcon">
+                        <img src="assets/img/d-uan.png"
+                             alt="" />
+                      </figure>
+                      <div class="ksTxt">
+                        <h3>UAN Pending</h3>
+                        <span>{{ dashboardTotalData?.uan_pending }} /
+                          {{ dashboardTotalData?.active_emp_count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="ksBox d-flex align-items-center">
+                      <figure class="roundIcon">
+                        <img src="assets/img/d-ip.png"
+                             alt="" />
+                      </figure>
+                      <div class="ksTxt">
+                        <h3>IP Pending</h3>
+                        <span>{{ dashboardTotalData?.ip_pending }} /
+                          {{ dashboardTotalData?.active_emp_count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="ksBox d-flex align-items-center">
+                      <figure class="roundIcon">
+                        <img src="assets/img/d-bank-details.png"
+                             alt="" />
+                      </figure>
+                      <div class="ksTxt">
+                        <h3>Bank Details Pending</h3>
+                        <span>{{ dashboardTotalData?.bank_details_pending }} /
+                          {{ dashboardTotalData?.active_emp_count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-widget-7"
+                 *ngSwitchCase="6"
+                 cdkDrag>
+              <div class="finacial-tbl shadow-base bg-white radius3 mb20">
+                <div class="fnl-head d-flex">
+                  <span>Financial Year</span>
+                  <select class="fnl-select"
+                          (change)="getDashboardFinancialData()"
+                          formControlName="financial_date_filter">
+                    <option *ngFor="let year of financialYearOptions"
+                            [value]="year.value">
+                      {{year?.label}}
+                    </option>
+                    <!-- <option value="2021-2022">2021-22</option>
+          <option value="2022-2023">2022-23</option>
+          <option value="2023-2024">2023-24</option> -->
+                  </select>
+                  <!-- <select name="" id="" class="fnl-select">
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+        </select> -->
+                </div>
+                <div class="table-responsive">
+                  <div class="d-flex">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Till Date Amount</th>
+                          <th>
+                            {{ this.dashboardFinancialData?.total_fy_pf_amount_1 }} /-
+                          </th>
+                          <th>
+                            {{ this.dashboardFinancialData?.total_fy_esic_amount_1 }} /-
+                          </th>
+                          <th>
+                            {{ this.dashboardFinancialData?.total_fy_hold_salary_1 }} /-
+                          </th>
+                          <th>
+                            {{
+                            this.dashboardFinancialData?.total_fy_pending_salary_1
+                            }}
+                            /-
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{ filterForm?.get("financial_date_filter")?.value }}</td>
+                          <td><span>Unpaid PF</span>No. of Emp/ Amt.</td>
+                          <td><span>Unpaid ESIC</span>No. of Emp/ Amt.</td>
+                          <td><span>Hold Salary</span>Sal Only / Sal + Compliance</td>
+                          <td><span>Unpaid Salary</span>No. of Emp / Amt.</td>
+                        </tr>
+                        <tr *ngFor="
+                  let item of this.dashboardFinancialData?.items | slice : 0 : 6
+                ">
+                          <td>
+                            <span>{{ item?.month }}</span>{{ filterForm?.get("financial_date_filter")?.value }}
+                          </td>
+                          <td>
+                            {{ item?.challan_data?.total_pf_pending || 0 }} /
+                            {{ item?.challan_data?.total_pf_amount || 0 }}/-
+                          </td>
+                          <td>
+                            {{ item?.challan_data?.total_esic_pending || 0 }} /
+                            {{ item?.challan_data?.total_esic_amount || 0 }}/-
+                          </td>
+                          <td>
+                            {{ item?.hold_salary?.hold_salary || 0 }} /
+                            {{ item?.hold_salary?.total_gross_salary || 0 }}/-
+                          </td>
+                          <td>
+                            {{ item?.unpaid_salary?.unpaid_salary || 0 }} /
+                            {{ item?.unpaid_salary?.total_gross_earning || 0 }}/-
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>
+                            Total for the <br />
+                            FY Amount
+                          </th>
+                          <th>
+                            {{ this.dashboardFinancialData?.total_fy_pf_amount_2 }} /-
+                          </th>
+                          <th>
+                            {{ this.dashboardFinancialData?.total_fy_esic_amount_2 }} /-
+                          </th>
+                          <th>
+                            {{ this.dashboardFinancialData?.total_fy_hold_salary_2 }} /-
+                          </th>
+                          <th>
+                            {{
+                            this.dashboardFinancialData?.total_fy_pending_salary_2
+                            }}
+                            /-
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{ filterForm?.get("financial_date_filter")?.value }}</td>
+                          <td><span>Unpaid PF</span>No. of Emp/ Amt.</td>
+                          <td><span>Unpaid ESIC</span>No. of Emp/ Amt.</td>
+                          <td><span>Hold Salary</span>Sal Only / Sal + Compliance</td>
+                          <td><span>Unpaid Salary</span>No. of Emp / Amt.</td>
+                        </tr>
+                        <tr *ngFor="
+                  let item of this.dashboardFinancialData?.items
+                    | slice : 6 : 12
+                ">
+                          <td>
+                            <span>{{ item?.month }}</span>{{ filterForm?.get("financial_date_filter")?.value }}
+                          </td>
+                          <td>
+                            {{ item?.challan_data?.total_pf_pending || 0 }} /
+                            {{ item?.challan_data?.total_pf_amount || 0 }}/-
+                          </td>
+                          <td>
+                            {{ item?.challan_data?.total_esic_pending || 0 }} /
+                            {{ item?.challan_data?.total_esic_amount || 0 }}/-
+                          </td>
+                          <td>
+                            {{ item?.hold_salary?.hold_salary || 0 }} /
+                            {{ item?.hold_salary?.total_gross_salary || 0 }}/-
+                          </td>
+                          <td>
+                            {{ item?.unpaid_salary?.unpaid_salary || 0 }} /
+                            {{ item?.unpaid_salary?.total_gross_earning || 0 }}/-
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-widget-8"
+                 *ngSwitchCase="7"
+                 cdkDrag>
+
+              <div class="shadow-base bg-white radius3 mb20 p20">
+                <div class="row row-sm">
+                  <div class="col-md-6">
+                    <div class="btmBox radius3">
+                      <div class="blackHead d-flex justify-content-between">
+                        Last 10 Pending FNF
+                        <a [queryParams]="{ filter: 'exited' }"
+                           routerLink="/company/employees">View All</a>
+                      </div>
+                      <div class="gray-part d-flex justify-content-between">
+                        <span>Employee</span>
+                        <span>Date of Exit</span>
+                      </div>
+                      <div class="scroll-wrap">
+                        <div class="scroll-list">
+                          <div class="d-flex btmBox-list align-items-center"
+                               *ngFor="
+                    let employee of dashboardTotalData?.inactive_employees
+                      | slice : 0 : 10
+                  ">
+                            <figure class="round-img">
+                              <img src="https://www.w3schools.com/howto/img_avatar.png"
+                                   alt="" />
+                            </figure>
+                            <div class="btm-mdl">
+                              <h3>
+                                {{ employee?.emp_first_name
+                                }}{{ employee?.emp_last_name }}
+                              </h3>
+                              <p><span>Employee ID:</span>{{ employee?.emp_id }}</p>
+                            </div>
+                            <div class="btm-price ml-auto">
+                              {{ employee?.date_of_exit || "N/A" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="btmBox radius3">
+                      <div class="blackHead d-flex justify-content-between">
+                        Last 10 New Employee
+                        <a [queryParams]="{ filter: 'approved' }"
+                           routerLink="/company/employees">View All</a>
+                      </div>
+                      <div class="gray-part d-flex justify-content-between">
+                        <span>Employee</span>
+                        <span>Date of Joining</span>
+                      </div>
+                      <div class="scroll-wrap">
+                        <div class="scroll-list">
+                          <div class="d-flex btmBox-list align-items-center"
+                               *ngFor="
+                    let employee of dashboardTotalData?.active_employees
+                      | slice : 0 : 10
+                  ">
+                            <figure class="round-img">
+                              <img src="https://www.w3schools.com/howto/img_avatar.png"
+                                   alt="" />
+                            </figure>
+                            <div class="btm-mdl">
+                              <h3>
+                                {{ employee?.emp_first_name
+                                }}{{ employee?.emp_last_name }}
+                              </h3>
+                              <p><span>Employee ID:</span>{{ employee?.emp_id }}</p>
+                            </div>
+                            <div class="btm-price ml-auto">
+                              {{ employee?.date_of_join || "N/A" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-widget-9"
+                 *ngSwitchCase="8"
+                 cdkDrag>
+              <div [formGroup]="filterForm"
+                   class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                  <span>CTC Graph</span>
+                  <select (change)="getDashboardCTCData()"
+                          formControlName="ctc_date_filter">
+                    <option *ngFor="let year of financialYearOptions"
+                            [value]="year.value">
+                      {{year?.label}}
+                    </option>
+                    <!-- <option value="2021-2022">2021-22</option>
+          <option value="2022-2023">2022-23</option>
+          <option value="2023-2024">2023-24</option> -->
+                  </select>
+                </div>
+
+                <div class="text-center"
+                     *ngIf="!isCtcGraphLoading">
+                  <!-- <img
+          src="assets/img/bottom-graph.jpg"
+          style="max-width: 100%; margin-top: -25px"
+          alt=""
+        /> -->
+                  <canvas baseChart
+                          class="chart"
+                          [data]="barChartData"
+                          [options]="barChartOptions"
+                          [type]="barChartType"
+                          width="100"
+                          height="400">
+                  </canvas>
+                </div>
+                <div class="text-center"
+                     *ngIf="isCtcGraphLoading">
+                  <!-- <img
+          src="assets/img/bottom-graph.jpg"
+          style="max-width: 100%; margin-top: -25px"
+          alt=""
+        /> -->
+                  <canvas baseChart
+                          class="chart"
+                          [data]="barChartData"
+                          [options]="barChartOptions"
+                          [type]="barChartType"
+                          width="100"
+                          height="400">
+                  </canvas>
+                </div>
+              </div>
+            </div>
+
+          </ng-container>
+        </div>
+
+
+      </div>
+
+
+      <!-- aman -->
+
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

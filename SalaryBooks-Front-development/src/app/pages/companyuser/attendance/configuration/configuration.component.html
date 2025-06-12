@@ -1,0 +1,131 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Attendance Management</a>
+            <a class="breadcrumb-item active">Attendance Configuration</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-calendar"></i>
+        <div>
+            <h4>Attendance Configuration</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <div class="d-flex align-items-center justify-content-end mg-b-10">
+                <div class="d-md-flex pd-y-20 pd-md-y-0">
+                    <input type="text" class="form-control fc-datepicker" placeholder="Sort Month">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white bg-primary pd-t-15 pd-b-15 tx-semibold">
+                            {{attendance_config_data?.reporting_time ?? '00:00'}}
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Company Reporting Time</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white bg-danger pd-t-15 pd-b-15 tx-semibold">
+                            {{attendance_config_data?.closing_time ?? '00:00'}}
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Company Closing Time</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white bg-success pd-t-15 pd-b-15 tx-semibold">
+                            <small class="text-capitalize">{{attendance_config_data?.attendance_days ?? 'N/A'}}</small>
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Attendance Days</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white bg-indigo pd-t-15 pd-b-15 tx-semibold">
+                            {{attendance_config_data?.full_day_hours ?? '0'}} (Hours)
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Minimum No. Of Hours For Full Days</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white pd-t-15 pd-b-15 tx-semibold" style="background-color: #1CAF9A;">
+                            {{attendance_config_data?.half_day_hours ?? '0'}} (Hours)
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Minimum No. Of Hours For Half Days</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white pd-t-15 pd-b-15 tx-semibold bg-info ">
+                            {{attendance_config_data?.grace_period ?? '0'}} (Hours)
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Company Attendance Grace Period</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white pd-t-15 pd-b-15 tx-semibold bg-pink text-uppercase">
+                            {{attendance_config_data?.sandwich_leave ?? '-'}}
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Sandwich Leave</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white pd-t-15 pd-b-15 tx-semibold bg-purple text-uppercase">
+                            {{attendance_config_data?.comp_off ?? '-'}}
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>Comp Off</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-12 mg-b-30">
+                    <div class="card bd-0 rounded-10 text-center">
+                        <div class="card-header tx-30 bd-0 tx-white pd-t-15 pd-b-15 tx-semibold bg-orange">
+                            {{attendance_config_data?.absent ?? '0'}} (Absent) / {{attendance_config_data?.no_of_late ?? '0'}} (Late)
+                        </div>
+                        <div class="card-body bd bd-t-0 rounded-bottom pd-l-5 pd-r-5">
+                            <p class="mg-b-0 tx-13"><strong>No. of Absent per No. of Late attendance</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,42 @@
+.box {
+    position: relative;
+    width: 200px;
+    height: 100px;
+    background-color: rgb(197, 200, 202);
+    border-radius: 5px;
+  }
+.payslip-title{
+    position: absolute;
+    top: 20%;
+    bottom: 50%;
+    left: 40%;
+    font-size: 34px;
+    /* transform: translate(-50%, -50%); */
+    opacity: 1;
+    margin:auto;
+}
+
+  /* Style for the button */
+  .button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    /* width: 80%; */
+    /* background-color: #4CAF50; */
+    /* color: white; */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0; /*Initially hidden*/
+    transition: opacity 0.3s ease-in-out; /* Add a smooth transition */
+  }
+
+  /* Show the button when hovering over the container */
+  .box:hover .button {
+    opacity: 1;
+  }
+  .box:hover .payslip-title {
+    opacity: 0;
+  }

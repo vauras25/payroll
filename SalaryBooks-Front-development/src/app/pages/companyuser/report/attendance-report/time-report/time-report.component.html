@@ -1,0 +1,125 @@
+<div class="table-responsive" >
+  <div class="table-wrapper mt-3">
+    <table class="table display responsive nowrap wd-100p employee-table" >
+      <thead>
+        <tr >
+
+         
+          <th class="s0">Date Range</th>
+          <th class="freezebar-cell"></th>
+          <th class="s1">From</th>
+          <th class="s1"></th>
+          <th class="s1">To</th>
+          
+        </tr>
+        <tr >
+  
+        
+          <th class="s2" colspan="2">{{start_date | date:'MM/dd/YYYY'}}</th>
+          <th class="s2" colspan="2">{{end_date | date:'MM/dd/YYYY'}}</th>
+         
+        </tr>
+        <tr>
+  
+          <th class="s2" colspan="5"></th>
+          <th class="text-center" colspan="2" *ngFor="let item of days">{{item | date:'dd/MM'}}</th>
+          <th colspan="7" class="text-center">Total</th>
+          
+        </tr>
+      </thead>
+      
+      <tr >
+
+        <th class="s5">
+          <label
+           class="d-flex align-items-center mb-0"
+           for="select-all"
+         >
+           <input
+             type="checkbox"
+             class="mr-2"
+             id="select-all"
+             [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"
+           />
+           SL No.
+         </label>
+        </th>
+        <th class="s5">Emp. ID</th>
+        <th class="s5">Name</th>
+        <th class="freezebar-cell"></th>
+        <th class="s5">Shift</th>
+        <th class="s5">In Time</th>
+        <th class="s5">Out Time</th>
+        <ng-container *ngFor="let item of days">
+          <th class="s5">Actual In Time</th>
+          <th class="s5">Actual Out Time</th>
+        </ng-container>
+
+
+        <th class="s5">Total Working Hours</th>
+        <th class="s5">Extra Working Hours</th>
+        <th class="s5">Total Present</th>
+        <th class="s5">Total Absent</th>
+        <th class="s5" style="border-right: 1px SOLID #000000;">Total WO/HO</th>
+      </tr>
+      <tbody>
+  
+        
+        <tr style="height: 19px" *ngFor="let item of empReportData;let i=index">
+
+          <td class="s6">
+            <label
+            class="d-flex align-items-center"
+            [for]="'checkrow-' + (i + 1)"
+          >
+            <input
+              type="checkbox"
+              class="mr-2"
+              [attr.checked]="
+              item?.checked == true ? 'checked' : null
+              "
+              id="checkrow-{{ i + 1 }}"
+              [attr.data-checkbox-id]="item?._id"
+              (click)="rowCheckBoxChecked($event, item)"
+            />
+            {{
+              Global.getTableSerialNumber(
+                i,
+                paginationOptions.limit,
+                paginationOptions.page
+              )
+            }}
+          </label>
+          </td>
+          <td class="s7">{{item?.emp_id}}</td>
+          <td class="s7">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+          <td class="freezebar-cell"></td>
+          <td class="s7">{{item?.shift_data?.shift_name}}</td>
+          <td class="s8">{{item?.shift_data?.shift1_start_time}}</td>
+          <td class="s8">{{item?.shift_data?.shift1_end_time}}</td>
+          <ng-container *ngFor="let subItem of item?.attendance">
+
+          <td class="s8">{{subItem.login_time}}</td>
+          <td class="s8">{{subItem.logout_time}}</td>
+
+        </ng-container>
+          <td class="s7">{{item?.attendance_summ[0]?.total_working_hours | number:'1.2-2'}}</td>
+          <td class="s7">{{item?.attendance_summ[0]?.total_overtime | number:'1.2-2'}}</td>
+          <td class="s9">{{item?.attendance_summ[0]?.total_present}}</td>
+          <td class="s6">{{item?.attendance_summ[0]?.total_absent}}</td>
+          <td class="s6">{{item?.attendance_summ[0]?.total_wo}}</td>
+      </tr>
+      <tr *ngIf="empReportData.length<=0">
+        <td [attr.colspan]="12+(days.length*2)" >No Recod(s) Found</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  </div>
+  <app-custom-pagination
+  [rows]="empReportData"
+  [paginationOptions]="paginationOptions"
+  (onPageClicked)="getFiltered($event)"
+></app-custom-pagination>

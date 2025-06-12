@@ -1,0 +1,269 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item active">Team Management</a>
+            <a class="breadcrumb-item">Sub Admin</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-personadd"></i>
+        <div>
+            <h4>Sub Admin Management</h4>
+            <p class="mg-b-0">Create, edit Sub Admin</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="subadmin-submit-section">
+        <div class="br-section-wrapper">
+            <div class="form-layout form-layout-2">
+                <form [formGroup]="subAdminForm">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label">First name: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="text" formControlName="first_name" placeholder="Enter First Name">
+                                <p class="error-element" *ngIf="subAdminForm.controls.first_name.hasError('required') && (subAdminForm.controls.first_name.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mg-t--1 mg-md-t-0">
+                            <div class="form-group mg-md-l--1">
+                                <label class="form-control-label">Last name: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="text" formControlName="last_name" placeholder="Enter Last Name">
+                                <p class="error-element" *ngIf="subAdminForm.controls.last_name.hasError('required') && (subAdminForm.controls.last_name.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mg-t--1 mg-md-t-0">
+                            <div class="form-group mg-md-l--1">
+                                <label class="form-control-label">Email address: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="email" formControlName="email_id" placeholder="Enter Email Address">
+                                <p class="error-element" *ngIf="subAdminForm.controls.email_id.hasError('required') && (subAdminForm.controls.email_id.dirty)">This field is required</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" *ngIf="editActionId == ''">
+                        <div class="col-md-4 mg-t--1 mg-md-t-0">
+                            <div class="form-group mg-md-l--1">
+                                <label class="form-control-label">User ID: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="text" formControlName="userid" placeholder="Enter User ID">
+                                <p class="error-element" *ngIf="subAdminForm.controls.userid.hasError('required') && (subAdminForm.controls.userid.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mg-t--1 mg-md-t-0">
+                            <div class="form-group mg-md-l--1">
+                                <label class="form-control-label">Password: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="password" formControlName="password" placeholder="Enter Password" autocomplete="new-password">
+                                <p class="error-element" *ngIf="subAdminForm.controls.password.hasError('required') && (subAdminForm.controls.password.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mg-t--1 mg-md-t-0">
+                            <div class="form-group mg-md-l--1">
+                                <label class="form-control-label">Password Confirmation: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="password" formControlName="password_confirmation" placeholder="Re-enter Password">
+                                <p class="error-element" *ngIf="subAdminForm.controls.password_confirmation.hasError('required') && (subAdminForm.controls.password_confirmation.dirty)">This field is required</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <div class="form-group bd-t-0-force">
+                                <label class="form-control-label">Phone Number: <span class="tx-danger">*</span></label>
+                                <input class="form-control" type="number" formControlName="phone_no" placeholder="Enter Phone Number">
+                                <p class="error-element" *ngIf="subAdminForm.controls.phone_no.hasError('required') && (subAdminForm.controls.phone_no.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group mg-md-l--1 bd-t-0-force">
+                                <label class="form-control-label">Designation: <span class="tx-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="designation_id" [options]="designationMaster" class="form-control" [config]="{search:true, placeholder: 'Select Designation'}"></ngx-select-dropdown>
+                                <p class="error-element" *ngIf="subAdminForm.controls.designation_id.hasError('required') && (subAdminForm.controls.designation_id.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group mg-md-l--1 bd-t-0-force">
+                                <label class="form-control-label">Department: <span class="tx-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="department_id" [options]="departmentMaster" class="form-control" [config]="{search:true, placeholder: 'Select Department'}"></ngx-select-dropdown>
+                                <p class="error-element" *ngIf="subAdminForm.controls.department_id.hasError('required') && ((subAdminForm.controls.department_id.dirty))">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group bd-t-0-force">
+                                <label class="form-control-label mg-b-0-force">Branch: <span class="tx-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="branch_id" [options]="branchMaster" class="form-control" [config]="{search:true, placeholder: 'Select Branch'}"></ngx-select-dropdown>
+                                <p class="error-element" *ngIf="subAdminForm.controls.branch_id.hasError('required') && (subAdminForm.controls.branch_id.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group bd-t-0-force">
+                                <label class="form-control-label mg-b-0-force">HOD: <span class="tx-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="hod_id" [options]="hodMaster" class="form-control" [config]="{search:true, placeholder: 'Select HOD'}"></ngx-select-dropdown>
+                                <p class="error-element" *ngIf="subAdminForm.controls.hod_id.hasError('required') && (subAdminForm.controls.hod_id.dirty)">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group mg-md-l--1 bd-t-0-force">
+                                <label class="form-control-label mg-b-5-force">Is HOD?: <span class="tx-danger">*</span></label>
+                                <div class="row row mt-3">
+                                    <div class="col-lg-4">
+                                        <label class="rdiobox">
+                                            <input formControlName="is_hod" type="radio" value="yes">
+                                            <span>Yes</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label class="rdiobox">
+                                            <input formControlName="is_hod" type="radio" value="no">
+                                            <span>No</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="error-element" *ngIf="subAdminForm.controls.is_hod.hasError('required') && (subAdminForm.controls.is_hod.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group bd-t-0-force">
+                                <label class="form-control-label">Assigned Roles: <span class="tx-danger">*</span></label>
+                                <div class="row">
+                                    <div class="col-lg-3" *ngFor="let item of roleMaster">
+                                        <label class="ckbox mt-2">
+                                            <input name="roles[]" type="checkbox" value="{{item.id}}"><span>{{item.description}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-md-4">
+                            <div class="form-group bd-t-0-force">
+                                <label class="form-control-label mg-b-0-force">Roles: <span class="tx-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="roles[]" [options]="roleMaster" class="form-control" [config]="{search:true, placeholder: 'Select Roles'}" [multiple]="true"></ngx-select-dropdown>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="form-layout-footer bd pd-20 bd-t-0" *ngIf="editActionId == ''; else editButtonSection">
+                        <button type="button" (click)="cancelEntry()" class="btn btn-secondary mr-2">Cancel</button>
+                        <button type="submit" (click)="create($event)" [disabled]="!subAdminForm.valid" class="btn btn-info">
+                            <span>Create</span>
+                        </button>
+                    </div>
+
+                    <ng-template #editButtonSection>
+                        <div class="form-layout-footer bd pd-20 bd-t-0">
+                            <button type="button" (click)="cancelEntry()" class="btn btn-danger mg-r-5">
+                                <span>Cancel</span>
+                            </button>
+                            <button type="submit" [disabled]="!subAdminForm.valid" (click)="update($event)" class="btn btn-info">
+                                <span>Update</span>
+                            </button>
+                        </div>
+                    </ng-template>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-personadd"></i>
+        <div>
+            <h4>Sub Admin Listing</h4>
+            <p class="mg-b-0">View, manage Sub Admin</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <div class="d-flex align-items-center justify-content-center bg-gray-100 ht-md-80 bd pd-x-20">
+                <form [formGroup]="filterForm">
+                    <div class="d-md-flex pd-y-20 pd-md-y-0 datatable-filter-section">
+                        <input type="text" formControlName="first_name" class="form-control" placeholder="First Name">
+                        <input type="text" formControlName="last_name" class="form-control mg-md-l-10 mg-t-10 mg-md-t-0" placeholder="Last Name">
+                        <input type="text" formControlName="email_id" class="form-control mg-md-l-10 mg-t-10 mg-md-t-0" placeholder="E-mail">
+                        <input type="text" formControlName="phone_no" class="form-control mg-md-l-10 mg-t-10 mg-md-t-0" placeholder="Phone Number">
+
+                        <ngx-select-dropdown formControlName="designation" [options]="designationMaster" class="form-control mg-md-l-10 mg-t-10 mg-md-t-0" [config]="{search:true, placeholder: 'Designation'}" [multiple]="false"></ngx-select-dropdown>
+                        <ngx-select-dropdown formControlName="department" [options]="departmentMaster" class="form-control mg-md-l-10 mg-t-10 mg-md-t-0" [config]="{search:true, placeholder: 'Department'}" [multiple]="false"></ngx-select-dropdown>
+
+                        <button class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2" (click)="filterDataTable()">Filter By</button>
+                    </div>
+                </form>
+            </div>
+
+            <br>
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">User ID</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">First Name</th>
+                            <th class="wd-15p">Last Name</th>
+                            <th class="wd-15p">E-mail</th>
+                            <th class="wd-15p">Mobile</th>
+                            <th class="wd-15p">Designation</th>
+                            <th class="wd-15p">Department</th>
+                            <th class="wd-15p">HOD</th>
+                            <th class="wd-15p">Branch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <button id="changePasswordModalButton" [hidden]="true" data-toggle="modal" data-target="#changePasswordModal"></button>
+    <div id="changePasswordModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Update SubAdmin Password</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="changePasswordForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <input class="form-control" type="text" placeholder="New Password" formControlName="password">
+                            </div>
+
+                            <div class="col-lg-12 pt-3">
+                                <input class="form-control" type="text" placeholder="Re-enter New Password" formControlName="password_confirmation">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!changePasswordForm.valid" (click)="updatePassword($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Update</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

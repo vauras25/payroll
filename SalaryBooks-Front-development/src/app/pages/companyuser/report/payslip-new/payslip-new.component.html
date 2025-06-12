@@ -1,0 +1,354 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Pay Slip</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Manage Pay Slip</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [searchKeyFilter]="true"
+        [monthFilter]="true"
+        [yearFilter]="true"
+        (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+      >
+        <div addOn_btn1 class="col-sm-2 col-12">
+          <button
+            [disabled]="true"
+            class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+          >
+            <i class="fa fa-refresh" aria-hidden="false"></i>
+            <i style="font-size: 10px" class="fa">&#xf021;</i>
+            Reset
+          </button>
+        </div>
+      </companyuser-app-table-filter>
+      <div class="card bd-0">
+        <div class="card-header">
+          <!-- <div class="d-flex "> -->
+            <!-- <div class="d-flex">
+              <label for="option-1" class="m-0">
+                <input
+                  (change)="
+                    salary_type_filter = $any($event.target).value;
+                    fetchEmployees({ page: 1 })
+                  "
+                  type="radio"
+                  name="salary_type"
+                  id="option-1"
+                  value="salary"
+                  checked
+                />
+                Salary
+              </label>
+              <label for="option-2" class="m-0 ml-3">
+                <input
+                  (change)="
+                    salary_type_filter = $any($event.target).value;
+                    fetchEmployees({ page: 1 })
+                  "
+                  type="radio"
+                  name="salary_type"
+                  id="option-2"
+                  value="supplement"
+                />
+                Supplement
+              </label>
+            </div> -->
+            <div class="d-flex justify-content-end"
+            >
+              <button
+              *ngIf="Global.checkCompanyModulePermission({
+                company_module: 'salary',
+                company_operation: 'bulkemail'
+              })"
+                #btn
+                [disabled]="!anyRowsChecked()"
+                (click)="smtpSendTo = 'multiple'; openSendMailModal()"
+                type="button"
+                class="btn btn-block btn-info pd-x-12 h-100 mr-3"
+                style="font-size: 13px; min-width: 120px; max-width: 160px"
+              > 
+                <i class="fa fa-envelope mr-1"></i>
+                SEND VIA @MAIL
+              </button>
+              <button
+              *ngIf="Global.checkCompanyModulePermission({
+                company_module: 'salary',
+                company_operation: 'payslip'
+              })"
+                #btn2
+                [disabled]="!anyRowsChecked()"
+                type="button"
+                class="btn btn-block btn-info pd-x-12 h-100 mt-0"
+                style="font-size: 13px; min-width: 120px; max-width: 160px"
+                (click)="printMultiplePayslips($event)"
+              >
+              <span>
+                <i class="fa fa-download mr-1"></i>
+                Download Batch
+              </span>
+                <!-- <i style="font-size: 16px" class="fa mr-1">&#xf1c6;</i> -->
+              </button>
+            </div>
+          <!-- </div> -->
+        </div>
+
+        <div class="card-body px-0 bd-t-0 pt-0 rounded-bottom">
+          
+          <div class="table-responsive">
+            <app-custom-tableoption (onFilterChanged)="this.employeeTableFilterOptions.length = +$event?.length; fetchEmployees()" [searchable]="false" class="mt-3"></app-custom-tableoption>
+            <!-- <div class="table-responsive"> -->
+            <table class="w-100 c-table">
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    <label class="d-flex align-items-center mb-0" for="srNo">
+                      <input
+                        class="mb-0 mr-1"
+                        (change)="allRowsCheckboxChecked($event)"
+                        type="checkbox"
+                        name="item"
+                        id="srNo"
+                      />
+                      SL No.
+                    </label>
+                  </th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Client</th>
+                  <th>Branch</th>
+                  <th>Department</th>
+                  <th *ngIf="Global.checkCompanyModulePermission({
+                    company_module: 'salary',
+                    company_operation: 'payslip'
+                  })">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let report of employees; let i = index">
+                  <tr>
+                    <td>
+                      <label
+                        class="d-flex align-items-center"
+                        [for]="'checkrow-' + (i + 1)"
+                      >
+                        <input
+                          type="checkbox"
+                          class="mr-2"
+                          [attr.checked]="
+                            report?.checked == true ? 'checked' : null
+                          "
+                          id="checkrow-{{ i + 1 }}"
+                          [attr.data-checkbox-id]="report?._id"
+                          (click)="rowCheckBoxChecked($event, report)"
+                        />
+                        {{
+                          Global.getTableSerialNumber(
+                            i,
+                            employeePaginationOptions.limit,
+                            employeePaginationOptions.page
+                          )
+                        }}
+                      </label>
+                    </td>
+
+                    <td>
+                      {{ report?.emp_id ?? "N/A" }}
+                    </td>
+                    <td>
+                      {{ report?.emp_first_name }} {{ report?.emp_last_name }}
+                    </td>
+                    <td>
+                      {{ report?.client?.client_name ?? "N/A" }}
+                    </td>
+                    <td>
+                      {{ report?.branch?.branch_name ?? "N/A" }}
+                    </td>
+                    <td>
+                      {{
+                        report?.department?.department_name || "N/A"
+                      }}
+                    </td>
+                    <td class="text-center" *ngIf="Global.checkCompanyModulePermission({
+                      company_module: 'salary',
+                      company_operation: 'payslip',
+                      company_sub_module: 'pay_slip',
+                      company_sub_operation: ['view']
+                    })">
+                      <button 
+                        *ngIf="report?.payslip_temp_data "
+                        class="btn btn-primary btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="View"
+                        (click)="viewPayslipTemplate(report)"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-eye"></i>
+                        </div>
+                      </button>
+                      <button
+                      *ngIf="Global.checkCompanyModulePermission({
+                        company_module: 'salary',
+                        company_sub_module: 'pay_slip',
+                        company_sub_operation: ['generate'],
+                        company_strict:true
+                      })"
+                        class="btn btn-primary btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Download"
+                        (click)="downloadSinglePayslip(report?._id, report?.emp_id)"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-download"></i>
+                        </div>
+                      </button>
+                      <button
+                        class="btn btn-primary btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Send Email"
+                        (click)="payslip_id = report?._id; smtpSendTo = 'individual'; openSendMailModal()"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-envelope"></i>
+                        </div>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="!employees.length">
+                  <tr>
+                    <td
+                    colspan="100%"
+                    class="text-center"
+                    style="background-color: #f7f7f7"
+                  >
+                    No records found
+                  </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            <!-- </div> -->
+          </div>
+
+          <app-custom-pagination 
+          [rows]="employees"
+          [paginationOptions]="employeePaginationOptions"
+          (onPageClicked)="fetchEmployees({ page: $event })"
+          ></app-custom-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+
+  <button
+    id="viewTemplate"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#viewTemplateModel"
+  ></button>
+  <div id="viewTemplateModel" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div id="print-section" class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+              Payslip Data
+          </h6>
+          <button type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                  (click)=" payslipTemplateKeys = null; payslipTemplateKeyValues = null"
+                  >
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+        <div class="modal-body pd-y-20 pd-x-25" *ngIf="payslipTemplateKeys">
+          <!-- <payslip-template-modal
+            [empData]="
+            "
+            [tempDetails]="templateDetails"
+            [wageMonth]="this.employeeFilter?.month?.index"
+            [wageYear]="this.employeeFilter?.year?.value"
+          ></payslip-template-modal>
+        </div> -->
+        
+        <payslip-template-modal
+         [tempDetails]="payslipTemplateKeys" 
+         [empData]="payslipTemplateKeyValues"
+         [wageMonth]="this.employeeFilter?.month?.index"
+         [wageYear]="this.employeeFilter?.year?.value"
+         ></payslip-template-modal>
+      
+      </div>
+    </div>
+  </div>
+</div>
+  <button id="viewSendMail"
+          [hidden]="true"
+          data-toggle="modal"
+          data-target="#viewSendMailModal"></button>
+  <div id="viewSendMailModal"
+       tabindex="-1"
+       class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md"
+         role="document">
+      <div id="print-section"
+           class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Send @MAIL
+          </h6>
+          <button id="data-dismiss" type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                  (click)="{}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div [formGroup]="payslipSendForm" class="modal-body pd-y-20 pd-x-25">
+             <ngx-select-dropdown
+             formControlName="smtp_id"
+             [options]="smtpList"
+             class="form-control p-1"
+             style="flex: 3"
+             [config]="{
+               search: true,
+               placeholder: 'SELECT SMTP',
+               displayKey: 'username'
+             }"
+             [multiple]="false"
+           ></ngx-select-dropdown>
+
+        </div>
+        <div class="modal-footer">
+          <button (click)="sendEmail('multiple', $event )" type="button" class="btn text-uppercase btn-primary tx-size-xs"><span>Send</span></button>
+          <button type="button" class="btn text-uppercase btn-secondary tx-size-xs"><span>Cancel</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<ngx-spinner  type="ball-scale-multiple"></ngx-spinner>

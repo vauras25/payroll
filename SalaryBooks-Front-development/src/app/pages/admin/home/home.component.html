@@ -1,0 +1,518 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item"
+               [routerLink]="[]">Dashboard</a>
+            <a class="breadcrumb-item active">Home</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-speedometer"></i>
+        <div>
+            <h4>Dashboard</h4>
+            <p class="mg-b-0">Overall Statistics </p>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" [formGroup]="graphFilterForm">
+        <!-- <div class="row no-gutters widget-1 shadow-base">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">Today's Sales</h6>
+                        <a href=""><i class="icon ion-android-more-horizontal"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <span id="spark1">5,3,9,6,5,9,7,3,5,2</span>
+                        <span>₹1,850</span>
+                    </div>
+                    <div class="card-footer">
+                        <div>
+                            <span class="tx-11">Credit Sales</span>
+                            <h6 class="tx-inverse">₹2,210</h6>
+                        </div>
+                        <div>
+                            <span class="tx-11">Gross Sales</span>
+                            <h6 class="tx-danger">₹320</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+     
+            <div class="col-sm-6 col-lg-3 mg-t-1 mg-sm-t-0">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">This Week's Sales</h6>
+                        <a href=""><i class="icon ion-android-more-horizontal"></i></a>
+                    </div>
+                  
+                    <div class="card-body">
+                        <span id="spark2">2,8,7,8,2,6,5,3,5,2</span>
+                        <span class="tx-medium tx-inverse tx-32">₹3,324</span>
+                    </div>
+                   
+                    <div class="card-footer">
+                        <div>
+                            <span class="tx-11">Credit Sales</span>
+                            <h6 class="tx-inverse">₹5,471</h6>
+                        </div>
+                        <div>
+                            <span class="tx-11">Gross Sales</span>
+                            <h6 class="tx-danger">₹1,988</h6>
+                        </div>
+                    </div>
+             
+                </div>
+             
+            </div>
+         
+            <div class="col-sm-6 col-lg-3 mg-t-1 mg-lg-t-0">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">This Month's Sales</h6>
+                        <a href=""><i class="icon ion-android-more-horizontal"></i></a>
+                    </div>
+                 
+                    <div class="card-body">
+                        <span id="spark3">8,6,5,9,8,4,9,3,5,9</span>
+                        <span>₹12,324</span>
+                    </div>
+                  
+                    <div class="card-footer">
+                        <div>
+                            <span class="tx-11">Credit Sales</span>
+                            <h6 class="tx-inverse">₹18,433</h6>
+                        </div>
+                        <div>
+                            <span class="tx-11">Gross Sales</span>
+                            <h6 class="tx-danger">₹3,314</h6>
+                        </div>
+                    </div>
+            
+                </div>
+              
+            </div>
+
+            <div class="col-sm-6 col-lg-3 mg-t-1 mg-lg-t-0">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">Overall Sales</h6>
+                        <a href=""><i class="icon ion-android-more-horizontal"></i></a>
+                    </div>
+           
+                    <div class="card-body">
+                        <span id="spark4">8,3,9,6,3,7,1,3,8,5</span>
+                        <span>₹32,324</span>
+                    </div>
+ 
+                    <div class="card-footer">
+                        <div>
+                            <span class="tx-11">Credit Sales</span>
+                            <h6 class="tx-inverse">₹56,433</h6>
+                        </div>
+                        <div>
+                            <span class="tx-11">Gross Sales</span>
+                            <h6 class="tx-danger">₹15,354</h6>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        
+        </div> -->
+        <div class="dashMdl mb20">
+            <div class="row row-sm">
+                <div class="col-md-9">
+                    <div class="shadow-base bg-white radius3 h-100">
+                        <!-- <div class="blue-head">Action Needed</div> -->
+                        <div class="row no-gutters">
+                            <div class="col-md-4 border-right border-bottom">
+                                <div class="d-flex align-items-center commonbox">
+                                    <figure class="roundIcon" routerLink="/admin/user-management" [queryParams]="{ filter: 'active' }">
+                                        <img src="assets/img/users.svg"
+                                             alt="" />
+                                    </figure>
+                                    <div class="commonbox-text" routerLink="/admin/user-management" [queryParams]="{ filter: 'active' }">
+                                        <h3>Active Corporate ID</h3>
+                                        <span>{{dashboardTotalData?.active_company || 0 | number}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-right border-bottom">
+                                <div class="d-flex align-items-center commonbox">
+                                    <figure class="roundIcon" routerLink="/admin/user-management" [queryParams]="{ filter: 'inactive' }">
+                                        <img src="assets/img/suspended_users.svg"
+                                             alt="" />
+                                    </figure>
+                                    <div class="commonbox-text" routerLink="/admin/user-management" [queryParams]="{ filter: 'inactive' }">
+                                        <h3>Suspended Corporate ID</h3>
+                                        <span>{{
+                                            dashboardTotalData?.suspended_company || 0 | number
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-bottom">
+                                <div class="d-flex align-items-center commonbox">
+                                    <figure class="roundIcon" routerLink="/admin/user-management" [queryParams]="{ filter: 'inactive' }">
+                                        <img src="assets/img/deactivated.svg"
+                                             alt="" />
+                                    </figure>
+                                    <div class="commonbox-text" routerLink="/admin/user-management" [queryParams]="{ filter: 'inactive' }">
+                                        <h3>Deactivated Corporate ID</h3>
+                                        <span>{{
+                                            dashboardTotalData?.deactived_company ||  0 | number
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-right">
+                                <div class="d-flex align-items-center commonbox">
+                                    <figure class="roundIcon">
+                                        <img src="assets/img/users.svg"
+                                             alt="" />
+                                    </figure>
+                                    <div class="commonbox-text">
+                                        <h3>Active Employees</h3>
+                                        <span>{{
+                                            dashboardTotalData?.active_employee || 0 | number
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-right">
+                                <div class="d-flex align-items-center commonbox">
+                                    <figure class="roundIcon">
+                                        <img src="assets/img/balance_wallet.svg"
+                                             alt="" />
+                                    </figure>
+                                    <div class="commonbox-text">
+                                        <h3>No of Corporate ID with low balance</h3>
+                                        <span>{{
+                                            dashboardTotalData?.low_balance_company || 0 | number
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center commonbox">
+                                    <figure class="roundIcon">
+                                        <img src="assets/img/credit_balance.svg"
+                                             alt="" />
+                                    </figure>
+                                    <div class="commonbox-text">
+                                        <h3>Unutilized Credit Balance</h3>
+                                        <span>{{
+                                            dashboardTotalData?.company_un_utilised || 0 | number
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="shadow-base bg-white radius3 h-100">
+                        <div class="px-3 pt-2 text-dark"
+                             style="font-weight: 600;">Storage</div>
+                        <div class="text-center picarticon mb-3">
+                            <canvas baseChart
+                                    class="chart"
+                                    [data]="pieChartData"
+                                    [options]="pieChartOptions"
+                                    [type]="pieChartType"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                    <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                        <span>Credit Consumption</span>
+                        <select formControlName="creditDateRange" (change)="fetchCreditConsumptionData()">
+                            <option *ngFor="let year of financialYearOptions"
+                                    [value]="year">
+                                {{year}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="text-center">
+                        <canvas baseChart
+                                *ngIf="!isCreditBarChartLoading"
+                                class="chart"
+                                [data]="creditBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                    <div *ngIf="isCreditBarChartLoading" class="text-center">
+                        <canvas baseChart
+                                *ngIf="isCreditBarChartLoading"
+                                class="chart"
+                                [data]="creditBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                    <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                        <span>Sales</span>
+                        <select formControlName="salesDateRange" (change)="fetchSalesData()">
+                            <option *ngFor="let year of financialYearOptions"
+                                    [value]="year">
+                                {{year}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="text-center">
+                        <canvas baseChart
+                                *ngIf="!isSalesBarChartLoading"
+                                height="300"
+                                class="chart"
+                                [data]="salesBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType">
+                        </canvas>
+                    </div>
+                    <div *ngIf="isSalesBarChartLoading" class="text-center">
+                        <canvas baseChart
+                                
+                                height="300"
+                                class="chart"
+                                [data]="salesBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                    <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                        <span>Purchased Plan</span>
+                        <select formControlName="plansDateRange" (change)="fetchPurchasedPlanData()">
+                            <option *ngFor="let year of financialYearOptions"
+                                    [value]="year">
+                                {{year}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="text-center">
+                        <canvas baseChart
+                                *ngIf="!isPlansBarChartLoading"
+                                class="chart"
+                                [data]="plansBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                    <div *ngIf="isPlansBarChartLoading" class="text-center">
+                        <canvas baseChart
+                                class="chart"
+                                [data]="plansBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                    <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                        <span>Monthly Acquisition Graph</span>
+                        <select formControlName="acquisitionDateRange" (change)="fetchMonthlyAcquisitionData()">
+                            <option *ngFor="let year of financialYearOptions "
+                                    [value]="year"> 
+                                {{year}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="text-center">
+                        <canvas baseChart
+                                class="chart"
+                                *ngIf="!isAcquisitionBarChartLoading"
+                                [data]="acquisitionBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                    <div *ngIf="isAcquisitionBarChartLoading" class="text-center">
+                        <canvas baseChart
+                                class="chart"
+                                [data]="acquisitionBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class=""> -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="btmBox bg-white radius3 shadow-base mb20 p20">
+                  <div class="blackHead d-flex justify-content-between">
+                    Top 10 Reseller
+                    <a routerLink="/admin/master/reseller">View All</a>
+                  </div>
+               
+                  <div class="scroll-wrap">
+                    <div class="scroll-list">
+                        <div class="row m-0">
+                            <div class="col-6 m-0 p-0" *ngFor="let reseller of TopTenReseller">
+                                <div
+                                  class="d-flex btmBox-list align-items-center" >
+                                  <figure class="round-img">
+                                    <img
+                                      src="https://www.w3schools.com/howto/img_avatar.png"
+                                      alt=""
+                                    />
+                                  </figure>
+                                  <div class="btm-mdl">
+                                    <h3>
+                                      {{ reseller?.reseller_name | titlecase}}
+                                    </h3>
+                                    <p><span class="m-0">ID: </span>{{reseller?.corporate_id}}</p>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="btmBox bg-white radius3 shadow-base mb20 p20">
+                  <div class="blackHead d-flex justify-content-between">
+                    Top 10 Corporate ID 
+                    <a routerLink="/admin/user-management">View All</a>
+                  </div>
+               
+                  <div class="scroll-wrap">
+                    <div class="scroll-list" >
+                        <div class="row m-0">
+                            <div class="col-6 m-0 p-0" *ngFor="let company of TopTenCorpIds">
+                                <div
+                                  class="d-flex btmBox-list align-items-center" >
+                                  <figure class="round-img">
+                                    <img
+                                      src="https://www.w3schools.com/howto/img_avatar.png"
+                                      alt=""
+                                    />
+                                  </figure>
+                                  <div class="btm-mdl">
+                                    <h3>
+                                      {{ company?.establishment_name | titlecase}}
+                                    </h3>
+                                    <p><span class="m-0">ID: </span>{{company?.corporate_id}}</p>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+            </div>
+          <!-- </div> -->
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-6">
+                <div class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                    <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                        <span>Promo redemption</span>
+                        <select formControlName="promoDateRange" (change)="fetchPromoRedemptionData()">
+                            <option *ngFor="let year of financialYearOptions"
+                                    [value]="year">
+                                {{year}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="text-center">
+                        <canvas baseChart
+                                *ngIf="!isPromoBarChartLoading"
+                                class="chart"
+                                [data]="promoBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                    <div *ngIf="isPromoBarChartLoading" class="text-center">
+                        <canvas baseChart
+                                
+                                class="chart"
+                                [data]="promoBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType"
+                                height="300">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="bottom-graph shadow-base bg-white radius3 mb20 p20">
+                    <div class="blackHead position-relative d-flex align-items-center justify-content-between">
+                        <span>Month wise CTC processed</span>
+                        <select formControlName="ctcDateRange" (change)="fetchCTCData()" >
+                            <option *ngFor="let year of financialYearOptions"
+                                    [value]="year">
+                                {{year}}
+                            </option>
+                        </select>
+                    </div>
+                
+                    <div class="text-center">
+                        <canvas baseChart
+                                *ngIf="!isCtcBarChartLoading"
+                                height="300"
+                                class="chart"
+                                [data]="ctcBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType">
+                        </canvas>
+                    </div>
+                    <div *ngIf="isCtcBarChartLoading" class="text-center">
+                        <canvas baseChart
+                               
+                                height="300"
+                                class="chart"
+                                [data]="ctcBarChartData"
+                                [options]="barChartOptions"
+                                [type]="barChartType">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="bg-gray-300 ht-100 d-flex align-items-center justify-content-center mg-t-20">
+            <h6 class="tx-uppercase mg-b-0 tx-roboto tx-normal tx-spacing-2">More Coming Soon...</h6>
+        </div> -->
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

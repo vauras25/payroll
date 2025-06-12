@@ -1,0 +1,247 @@
+<div class="atendance-main">
+    <div class="tabheader">
+        <h5>Attendance</h5>
+    </div>
+    
+    <div *ngIf="register_type=='time'" class="form-row p-4">
+        <div class="col-lg-6 mb-2">
+            <div class="widget-2">
+                <div class="card shadow-base overflow-hidden">
+                    <div class="card-header">
+                        <h6 class="card-title">Attendance Statistics</h6>
+                    </div>
+                    <div class="card-body row p-0 px-3">
+                        <div class="prgss-main col-6 p-2 m-0 border-right border-bottom pt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4>Today</h4>
+                                <h5>{{attendanceStatistics?.daily_time | number :"1.2-3"}} Hrs</h5>
+                            </div>
+                            <!-- <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.daily_time / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div> -->
+                        </div>
+                        <div class="prgss-main col-6 p-2 m-0 pt-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4>This Week</h4>
+                                <h5>{{attendanceStatistics?.weekly_time | number:"1.2-3"}} Hrs </h5>
+                            </div>
+                            <!-- <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.weekly_time / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div> -->
+                        </div>
+                        <div class="prgss-main col-6 p-2 m-0 border-right pt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4>This Month</h4> 
+                                <h5>{{attendanceStatistics?.monthly_time | number:"1.2-3"}} Hrs</h5>
+                            </div>
+                            <!-- <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.monthly_time / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div> -->
+                        </div>
+                        <div class="prgss-main col-6 p-2 m-0 pt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4>Overtime</h4>
+                                <h5>{{attendanceStatistics?.overtime | number:"1.2-3"}} Hrs</h5>
+                            </div>
+                            <!-- <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.overtime / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-2">
+            <div class="widget-2">
+                <div class="card shadow-base overflow-hidden">
+                    <div class="card-header">
+                        <h6 class="card-title">Today Activity</h6>
+                    </div>
+                    <div class="card-body pd-0 pading-body d-flex">
+                        <ul class="customlist mx-4">
+                            <li  *ngFor="let activity of todayActivites | slice:0 : (todayActivites?.length*2) > 8 ? ((todayActivites?.length/2) + 0.5) : 4 ">
+                                <h4>Punch {{activity?.entry_type}} at</h4>
+                                <h5>{{activity?.entry_time }}</h5>
+                            </li>
+                        </ul>
+                        <ul class="customlist mx-5">
+                            <li  *ngFor="let activity of todayActivites | slice:(todayActivites?.length*2) > 8 ? ((todayActivites?.length/2)+0.5)  : 5 :todayActivites?.length">
+                                <h4>Punch {{activity?.entry_type}} at</h4>
+                                <h5>{{activity?.entry_time }}</h5>
+                            </li>
+                        </ul>
+                        <div *ngIf="!todayActivites.length && !isAttendanceDataLoading" class="text-center" >
+                                Not Login Yet!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="table-responsive table-main table-castam">
+        <ng-container *ngIf="register_type=='wholeday'">
+            <h4>Daily Attendance</h4>
+            <table class="table table-hover mb-5"
+                   *ngIf="register_type=='wholeday'">
+                <!-- <thead> -->
+                <tr>
+                    <th>Date</th>
+                    <th *ngFor="let rec of Global.attendance_head; let j = index">{{rec.name}}</th>
+
+                </tr>
+                <!-- </thead>
+                <tbody> -->
+                <ng-container *ngIf="(rows | dynamicFilter: { register_type: 'wholeday'}).length>0 else no_records">
+                    <tr *ngFor="let item of rows | dynamicFilter: { register_type: 'wholeday'}; let i = index">
+                        <th>{{ item.attendance_date ? (item.attendance_date | date:'dd/MM/YY') : "N/A" }}</th>
+                        <th *ngFor="let rec of Global.attendance_head"
+                            [ngClass]="(item.attendance_stat == rec.value) ? 'checkmain' : 'dashmain'">
+                            <div class="checkmark"
+                                 *ngIf="(item.attendance_stat==rec.value) else uncheck_block">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <ng-template #uncheck_block>
+                                <i class="fa fa-minus"></i>
+                            </ng-template>
+                        </th>
+                    </tr>
+                </ng-container>
+                <ng-template #no_records>
+                    <tr>
+                        <th colspan="22"
+                            style="text-align: center;">No Record(s) Found</th>
+
+
+                    </tr>
+                </ng-template>
+
+                <!-- </tbody> -->
+            </table>
+        </ng-container>
+        <ng-container *ngIf="register_type=='halfday'">
+            <h4>Half Day wise Attendance</h4>
+
+            <table class="table table-hover mb-5">
+                <!-- <thead> -->
+                <tr>
+                    <th>Date</th>
+                    <th>1st Half</th>
+                    <th>2nd Half</th>
+                    <th *ngFor="let rec of Global.attendance_head; let j = index">{{rec.name}}</th>
+
+                </tr>
+                <!-- </thead> -->
+                <!-- <tbody> -->
+                <ng-container *ngIf="(rows | dynamicFilter: { register_type: 'halfday'}).length>0 else no_records">
+                    <tr *ngFor="let item of rows | dynamicFilter: { register_type: 'halfday'};">
+                        <th>{{ item.attendance_date ? (item.attendance_date | date:'dd/MM/YY') : "N/A" }}</th>
+                        <th></th>
+                        <th></th>
+                        <th *ngFor="let rec of Global.attendance_head"
+                            [ngClass]="(item.attendance_stat == rec.value) ? 'checkmain p-0' : 'dashmain'">
+                            <div class="checkmark w-100"
+                                 *ngIf="(item.attendance_stat==rec.value) else uncheck_block">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <ng-template #uncheck_block>
+                                <i class="fa fa-minus"></i>
+                            </ng-template>
+                        </th>
+
+                    </tr>
+                </ng-container>
+                <ng-template #no_records>
+                    <tr>
+                        <th colspan="24"
+                            style="text-align: center;">No Record(s) Found</th>
+
+
+                    </tr>
+                </ng-template>
+
+
+                <!-- </tbody> -->
+            </table>
+        </ng-container>
+        <ng-container *ngIf="register_type=='monthly'">
+            <h4>Monthly</h4>
+
+            <table class="table table-hover mb-5">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th *ngFor="let rec of Global.attendance_head; let j = index">{{rec.name}}</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="(rows | dynamicFilter: { register_type: 'monthly'}).length>0 else no_records">
+
+                        <tr *ngFor="let item of rows | dynamicFilter: { register_type: 'monthly'}; let i = index">
+
+                            <th>{{ item.attendance_date ? (item.attendance_date | date:'dd/MM/YY') : "N/A" }}</th>
+
+                            <th *ngFor="let rec of Global.attendance_head"
+                                [ngClass]="(item.attendance_stat == rec.value) ? 'checkmain' : 'dashmain'">
+                                <div class="checkmark"
+                                     *ngIf="(item.attendance_stat==rec.value) else uncheck_block">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <ng-template #uncheck_block>
+                                    <i class="fa fa-minus"></i>
+                                </ng-template>
+                            </th>
+                        </tr>
+                    </ng-container>
+                    <ng-template #no_records>
+                        <th colspan="22"
+                            style="text-align: center;">No Record(s) Found</th>
+
+                    </ng-template>
+                </tbody>
+            </table>
+        </ng-container>
+        <ng-container *ngIf="register_type=='time'">
+            <h4>Punch In Punch Out</h4>
+
+            <table class="table table-hover mb-5">
+                <!-- <thead> -->
+                <tr>
+                    <th>Date</th>
+                    <th>Punch In</th>
+                    <th>Punch Out</th>
+                    <th>Break Hours</th>
+                    <th>Gross Hours</th>
+                    <th *ngFor="let rec of Global.attendance_head; let j = index">{{rec.name}}</th>
+
+                </tr>
+                <!-- </thead> -->
+                <!-- <tbody> -->
+                <ng-container *ngIf="(rows | dynamicFilter: { register_type: 'time'}).length>0 else no_records">
+                    <tr *ngFor="let item of rows | dynamicFilter: { register_type: 'time'}; let i = index">
+                        <th>{{ item.attendance_date ? (item.attendance_date | date:'dd/MM/YY') : "N/A" }}</th>
+                        <th>{{item.login_time?item.login_time:item.shift1_start_time}}</th>
+                        <th>{{item.logout_time?item.logout_time:item.shift1_end_time}}</th>
+                        <th>{{item.total_break_time}} Hr</th>
+                        <th>{{item.total_logged_in}} Hr</th>
+
+                        <th *ngFor="let rec of Global.attendance_head"
+                            [ngClass]="(item.attendance_stat == rec.value) ? 'checkmain' : 'dashmain'">
+                            <div class="checkmark"
+                                 *ngIf="(item.attendance_stat==rec.value) else uncheck_block">
+                                <i class="fas fa-check"></i>
+                            </div>
+
+                            <ng-template #uncheck_block>
+                                <i class="fa fa-minus"></i>
+                            </ng-template>
+                        </th>
+                    </tr>
+                </ng-container>
+                <ng-template #no_records>
+                    <th colspan="26"
+                        style="text-align: center;">No Record(s) Found</th>
+
+                </ng-template>
+
+
+                <!-- </tbody> -->
+            </table>
+        </ng-container>
+
+
+    </div>
+</div>

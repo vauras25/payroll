@@ -1,0 +1,95 @@
+<div #btns  class="container text-right py-3">
+    <a (click)="closeWindow();">
+        <button
+    
+        class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+      >
+        Cancel
+      </button>
+    </a>
+   
+    <button
+      (click)="exportExcel();" 
+      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+    >
+      Excel
+    </button>
+  </div>
+<div class="table-responsive mt-3">
+                      
+    <table class="table nowrap wd-100p employee-table">
+        <thead>
+            <tr>
+                <th *ngIf="template_fields.includes('sl_no')">
+                    SL No.
+                </th>
+                <th *ngIf="template_fields.includes('emp_id')">Employee ID</th>
+                <th *ngIf="template_fields.includes('emp_name')">Employee Name</th>
+                <th *ngIf="template_fields.includes('department')">Department</th>
+                <th *ngIf="template_fields.includes('designation')">Designation</th>
+                <th *ngIf="template_fields.includes('client')">Client</th>
+                <th *ngIf="template_fields.includes('branch')">Branch</th>
+                <th *ngIf="template_fields.includes('hod')">Hod</th>
+                <th *ngIf="template_fields.includes('ot_hours')">Ot Hours</th>
+                <th *ngIf="template_fields.includes('ot_days')">Ot Days</th>
+                <th *ngIf="template_fields.includes('ot_wage')">Ot Wage</th>
+                <th *ngIf="template_fields.includes('ot_hour_amt')">Ot Hour Amt</th>
+                <th *ngIf="template_fields.includes('ot_days_amt')">Ot Days Amt</th>
+                <th *ngIf="template_fields.includes('openin_advance')">Opening Advance</th>
+                <th *ngIf="template_fields.includes('ot_advance_recovered')">Ot Advance Recovered</th>
+                <th *ngIf="template_fields.includes('closin_advance_vs_ot')">Closing Advance Vs Ot</th>
+                <th *ngIf="template_fields.includes('tds')">Tds</th>
+                <th *ngIf="template_fields.includes('ee_pf')">Ee Pf</th>
+                <th *ngIf="template_fields.includes('er_pf')">Er Pf</th>
+                <th *ngIf="template_fields.includes('ee_esi')">Ee Esi</th>
+                <th *ngIf="template_fields.includes('er_esic')">Er Esic</th>
+                <th *ngIf="template_fields.includes('amt_payable')">Amt Payable</th>
+                <th *ngIf="template_fields.includes('amt_remitted')">Amt Remitted</th>
+                <th *ngIf="template_fields.includes('bank_name')">Bank Name</th>
+                <th *ngIf="template_fields.includes('account_no')">Account No</th>
+                <th *ngIf="template_fields.includes('ifsc')">IFSC</th>
+                <th *ngIf="template_fields.includes('payment_mode')">Payment Mode</th>
+                <th *ngIf="template_fields.includes('signature')">Signature</th>
+
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of empReportData;let i=index">
+            <td *ngIf="template_fields.includes('sl_no')">
+               {{i+1}}
+            </td>
+            <td *ngIf="template_fields.includes('emp_id')">{{item?.temp_data?.emp_id}}</td>
+            <td *ngIf="template_fields.includes('emp_name')">{{item?.temp_data?.emp_name}}</td>
+            <td *ngIf="template_fields.includes('department')">{{item?.temp_data?.department?.department_name}}</td>
+            <td *ngIf="template_fields.includes('designation')">{{item?.temp_data?.designation?.designation_name}}</td>
+            <td *ngIf="template_fields.includes('client')">{{item?.temp_data?.client?.client_code}}</td>
+            <td *ngIf="template_fields.includes('branch')">{{item?.temp_data?.branch?.branch_name}}</td>
+            <td *ngIf="template_fields.includes('hod')">{{item?.temp_data?.hod?.first_name}} {{item?.temp_data?.hod?.last_name}}</td>
+            <td *ngIf="template_fields.includes('ot_hours')">{{item?.temp_data?.ot_hours}}</td>
+            <td *ngIf="template_fields.includes('ot_days')">{{item?.temp_data?.ot_days}}</td>
+            <td *ngIf="template_fields.includes('ot_wage')">{{item?.temp_data?.ot_wage}}</td>
+            <td *ngIf="template_fields.includes('ot_hour_amt')">{{(item?.temp_data?.ot_hour_amt | number:'1.2-2') ?? "N/A"}}</td>
+            <td *ngIf="template_fields.includes('ot_days_amt')">{{(item?.temp_data?.ot_days_amt | number:'1.2-2') ?? "N/A" }}</td>
+            <td *ngIf="template_fields.includes('openin_advance')">{{(item?.temp_data?.openin_advance | number:'1.2-2') ?? "N/A" }}</td>
+            <td *ngIf="template_fields.includes('ot_advance_recovered')">{{(item?.temp_data?.ot_advance_recovered | number:'1.2-2') ?? "N/A"}}</td>
+            <td *ngIf="template_fields.includes('closin_advance_vs_ot')">{{(item?.temp_data?.closin_advance_vs_ot | number:'1.2-2') ?? "N/A"}}</td>
+            <td *ngIf="template_fields.includes('tds')">{{item?.temp_data?.tds | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('ee_pf')">{{item?.temp_data?.ee_pf | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('er_pf')">{{item?.temp_data?.er_pf | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('ee_esi')">{{item?.temp_data?.ee_esi | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('er_esic')">{{item?.temp_data?.er_esic | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('amt_payable')">{{item?.temp_data?.amt_payable | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('amt_remitted')">{{item?.temp_data?.amt_remitted | number:'1.2-2'}}</td>
+            <td *ngIf="template_fields.includes('bank_name')">{{item?.temp_data?.bank_name}}</td>
+            <td *ngIf="template_fields.includes('account_no')">{{item?.temp_data?.account_no}}</td>
+            <td *ngIf="template_fields.includes('ifsc')">{{item?.temp_data?.ifsc}}</td>
+            <td *ngIf="template_fields.includes('payment_mode')">{{item?.temp_data?.payment_mode}}</td>
+            <td *ngIf="template_fields.includes('signature')">{{item?.temp_data?.signature}}</td>
+
+        </tr>
+        <tr *ngIf="empReportData.length<=0">
+          <td [attr.colspan]="template_fields.length">No Recoed(s) Found</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

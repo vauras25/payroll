@@ -1,0 +1,239 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashbaord</a>
+            <span class="breadcrumb-item">Shift Management</span>
+            <span class="breadcrumb-item active">Define/Create Shift</span>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-clock"></i>
+        <div>
+            <h4>Define Shift</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="shift-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Define Shift</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Shift</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="shiftForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Shift Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="shift_name">
+                            <p class="error-element" *ngIf="shiftForm.controls.shift_name.hasError('required') && (shiftForm.controls.shift_name.dirty || shiftForm.controls.shift_name.touched)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Shift Allowance&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="shift_allowance">
+                            <p class="error-element" *ngIf="shiftForm.controls.shift_allowance.hasError('required') && (shiftForm.controls.shift_allowance.dirty || shiftForm.controls.shift_allowance.touched)">This field is required</p>
+                        </div>                        
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Overtime&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="overtime">
+                            <p class="error-element" *ngIf="shiftForm.controls.overtime.hasError('required') && (shiftForm.controls.overtime.dirty || shiftForm.controls.overtime.touched)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Company Late Allowed&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="d-flex py-2">
+                                <label class="rdiobox mx-1">
+                                    <input type="radio" formControlName="company_late_allowed" value="yes">
+                                    <span>Yes</span>
+                                </label>
+
+                                <label class="rdiobox mx-1">
+                                    <input type="radio" formControlName="company_late_allowed" value="no">
+                                    <span>No</span>
+                                </label>
+                            </div>
+
+                            <p class="error-element" *ngIf="shiftForm.controls.overtime.hasError('required') && (shiftForm.controls.overtime.dirty || shiftForm.controls.overtime.touched)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Early Arrival&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="d-flex py-2">
+                                <label class="rdiobox mx-1">
+                                    <input type="radio" formControlName="company_early_arrival" value="yes">
+                                    <span>Yes</span>
+                                </label>
+
+                                <label class="rdiobox mx-1">
+                                    <input type="radio" formControlName="company_early_arrival" value="no">
+                                    <span>No</span>
+                                </label>
+                            </div>
+
+                            <p class="error-element" *ngIf="shiftForm.controls.company_early_arrival.hasError('required') && (shiftForm.controls.company_early_arrival.dirty || shiftForm.controls.company_early_arrival.touched)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Break Shift&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="d-flex py-2">
+                                <label class="rdiobox mx-1">
+                                    <input type="radio" formControlName="break_shift" value="yes">
+                                    <span>Yes</span>
+                                </label>
+
+                                <label class="rdiobox mx-1">
+                                    <input type="radio" formControlName="break_shift" value="no">
+                                    <span>No</span>
+                                </label>
+                            </div>
+
+                            <p class="error-element" *ngIf="shiftForm.controls.break_shift.hasError('required') && (shiftForm.controls.break_shift.dirty || shiftForm.controls.break_shift.touched)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="shiftForm.get('break_shift')?.value == 'yes'">
+                                Shift1
+                            </ng-container>
+                            Start Time&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="time" formControlName="shift1_start_time">
+                            <p class="error-element" *ngIf="shiftForm.controls.shift1_start_time.hasError('required') && (shiftForm.controls.shift1_start_time.dirty || shiftForm.controls.shift1_start_time.touched)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <ng-container *ngIf="shiftForm.get('break_shift')?.value == 'yes'">
+                                Shift1
+                            </ng-container>
+                            End Time&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="time" formControlName="shift1_end_time">
+                            <p class="error-element" *ngIf="shiftForm.controls.shift1_end_time.hasError('required') && (shiftForm.controls.shift1_end_time.dirty || shiftForm.controls.shift1_end_time.touched)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" *ngIf="shiftForm.get('break_shift')?.value == 'yes'">
+                        <div class="col-3 col-sm-3">
+                            Shift2 Start Time&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="time" formControlName="shift2_start_time">
+                            <p class="error-element" *ngIf="shiftForm.controls.shift2_start_time.hasError('required') && (shiftForm.controls.shift2_start_time.dirty || shiftForm.controls.shift2_start_time.touched)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst" *ngIf="shiftForm.get('break_shift')?.value == 'yes'">
+                            Shift2 End Time&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="time" formControlName="shift2_end_time">
+                            <p class="error-element" *ngIf="shiftForm.controls.shift2_end_time.hasError('required') && (shiftForm.controls.shift2_end_time.dirty || shiftForm.controls.shift2_end_time.touched)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Effective Date&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="date" formControlName="effective_date">
+                            <p class="error-element" *ngIf="shiftForm.controls.effective_date.hasError('required') && (shiftForm.controls.effective_date.dirty || shiftForm.controls.effective_date.touched)">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst">
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button type="button" (click)="cancelEdit()" class="text-uppercase btn btn-danger mg-r-5">
+                                <span>Cancel</span>
+                            </button>
+
+                            <button class="text-uppercase btn btn-info" (click)="create($event)" type="submit" *ngIf="editActionId == '' && Global.checkCompanyModulePermission({
+                                company_module: 'shift_management',
+                                company_sub_module:'define_shift',
+                                company_sub_operation:['add'],
+                                company_strict:true
+                              });">
+                                <span>Save</span>
+                            </button>
+
+                            <ng-container *ngIf="editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'shift_management',
+                                company_sub_module:'define_shift',
+                                company_sub_operation:['edit'],
+                                company_strict:true
+                              })">
+                                <button type="submit" [disabled]="!shiftForm.valid" (click)="update($event)" class="text-uppercase btn btn-info">
+                                    <span>Update</span>
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Shift list</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>Shift Name</th>
+                            <th *ngIf="Global.checkCompanyModulePermission({
+                                company_module: 'shift_management',
+                                company_sub_module:'define_shift',
+                                company_sub_operation:['edit'],
+                                company_strict:true
+                              })">Action</th>
+                            <th>Shift1 Start Time</th>
+                            <th>Shift1 End Time</th>
+                            <th>Shift2 Start Time</th>
+                            <th>Shift2 End Time</th>
+                            <th>Shift Allowance</th>
+                            <th>Over Time</th>
+                            <th>Company Late Allowed</th>
+                            <th>Early Arrival</th>
+                            <th>Break Shift</th>
+                            <th>Created Date</th>
+                            <th>Effective From</th>
+                            <th>Last Modified</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

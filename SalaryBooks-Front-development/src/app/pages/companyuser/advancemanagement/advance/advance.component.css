@@ -1,0 +1,7 @@
+td .form-control {
+    border: 1px solid #eee;
+}
+
+.form-control[disabled] {
+    cursor: no-drop;
+}

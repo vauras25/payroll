@@ -1,0 +1,70 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Attendance Management</a>
+            <a class="breadcrumb-item active">Attendance Register Type</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-calendar"></i>
+        <div>
+            <h4>Attendance Register Type</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <div class="box p-4">
+                <form [formGroup]="registerTypeForm">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="tx-normal"><strong>Attendance Register Type <span class="text-danger">*</span></strong></p>
+
+                                <div class="d-flex flex-wrap ">
+                                    <div class="col-sm-2 col-12">
+                                        <label class="rdiobox">
+                                          <input name="register_type" formControlName="register_type" value="daily" type="radio">
+                                          <span>Daily</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-2 col-12">
+                                        <label class="rdiobox">
+                                          <input name="register_type" formControlName="register_type" value="monthly" type="radio">
+                                          <span>Monthly</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-2 col-12">
+                                        <label class="rdiobox">
+                                          <input name="register_type" formControlName="register_type" value="hourly" type="radio">
+                                          <span>Hourly</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mg-t-20" id="register-type-section" style="display: none;">
+                                <p class="tx-normal"><strong>Daily Register Type <span class="text-danger">*</span></strong></p>
+
+                                <ngx-select-dropdown formControlName="daily_type" [options]="dailyRegisterTypeMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select One'}" style="width: 250px;"></ngx-select-dropdown>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box-footer mt-4">
+                        <button class="btn btn-primary" [disabled]="!registerTypeForm.valid" (click)="submitRegisterType($event)"><span>Submit</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

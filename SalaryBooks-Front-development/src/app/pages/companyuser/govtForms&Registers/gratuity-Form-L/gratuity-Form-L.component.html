@@ -1,0 +1,183 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Govt Forms And Register</a>
+      <a class="breadcrumb-item">Form L (Gratuity)</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Form L (Gratuity)</h4>
+      <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        (onFiltered)="employeeListFilter = $event; fetchEmployees()"
+      >
+      </companyuser-app-table-filter>
+
+      <div class="mt-3">
+       
+        <!-- <div class="text-right">
+                <button
+                (click)="exportForm()"
+                  [disabled]="!anyRowsChecked()"
+                  type="button"
+                  class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                >
+                  <span
+                    ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                    >Download</span
+                  >
+                </button>
+        </div> -->
+        <ng-container *ngIf="!isReportView">
+          <div class="text-right">
+            <button
+            (click)="viewReport()"
+              [disabled]="!anyRowsChecked()"
+              type="button"
+              class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            >
+              <span
+                ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                >View Report</span
+              >
+            </button>
+    </div>
+          <div class="table-responsive mt-3">
+            <app-custom-tableoption
+            [searchable]="true"
+            (onFilterChanged)="employeePaginationOptions.limit = +$event?.length ;employeeTableFilterOptions.searchkey = $event.searchkey; fetchEmployees()"
+          ></app-custom-tableoption>
+            <table class="w-100 c-table">
+              <colgroup span="3"></colgroup>
+              <thead>
+                <tr>
+                  <th>
+                    <label class="d-flex align-items-center mb-0" for="srNo">
+                      <input
+                        class="mb-0 mr-1"
+                        (change)="allRowsCheckboxChecked($event)"
+                        type="checkbox"
+                        name="item"
+                        id="srNo"
+                      />
+                      SL No.
+                    </label>
+                  </th>
+                
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Designation</th>
+                  <th>Branch</th>
+                  <th>Client</th>
+                  <th>HOD</th>
+                </tr>
+              </thead>
+              <tbody>
+  
+                <tr *ngFor="let employee of employees; let i = index">
+                  <td>
+                    <label
+                      class="d-flex align-items-center"
+                      [for]="'checkrow-' + (i + 1)"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          employee?.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="employee?._id"
+                        (click)="rowCheckBoxChecked($event, employee)"
+                      />
+                      {{
+                        Global.getTableSerialNumber(
+                          i,
+                          employeePaginationOptions.limit,
+                          employeePaginationOptions.page
+                        )
+                      }}
+                    </label>
+                  </td>
+                
+                  <td>{{ employee?.emp_id }}</td>
+                  <td>
+                    {{ employee?.emp_first_name }} {{ employee?.emp_last_name }}
+                  </td>
+                  <td>{{ employee?.department?.department_name || "N/A" }}</td>
+                  <td>{{ employee?.designation?.designation_name || "N/A" }}</td>
+                  <td>{{ employee?.branch?.branch_name || "N/A" }}</td>
+                  <td>{{ employee?.client?.client_code || "N/A" }}</td>
+                  <td>
+                    {{ employee?.hod?.first_name || "N/A" }}
+                    {{ employee?.hod?.last_name }}
+                  </td>
+               
+                </tr>
+                <tr *ngIf="employees.length == 0">
+                  <td colspan="100%"
+                      class="text-center"
+                      style="background-color: #f7f7f7">
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <app-custom-pagination
+          [rows]="employees"
+          [paginationOptions]="employeePaginationOptions"
+          (onPageClicked)="employeePaginationOptions.page = $event; fetchEmployees()"
+          ></app-custom-pagination>
+        </ng-container>
+        <ng-container *ngIf="isReportView">
+        
+          <div class="text-right">
+            <button type="button"
+            (click)="exportForm()"
+                    class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+              <span><i style="font-size: 12px"
+                   class="mr-1 fa fa-download"></i>Export</span>
+            </button>
+  
+            <button (click)="cancelGenerateReport()"
+                    type="button"
+                    class="btn btn-danger tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+              <span><i style="font-size: 12px"
+                   class="mr-1 fa fa-times"></i>Cancel</span>
+            </button>
+          </div>
+          <div class="table-wrapper mt-3">
+            <div class="table-responsive">
+              <ng-container *ngFor="let employee of viewEmpDoc">
+                <app-FormL-template></app-FormL-template>
+              </ng-container>
+             
+            </div>
+          </div>
+        </ng-container>
+      
+      </div>
+      <!-- <app-custom-pagination
+      [rows]="layoffListing"
+      [paginationOptions]="employeePaginationOptions"
+      (onPageClicked)="fetchEmployees()"
+      ></app-custom-pagination> -->
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

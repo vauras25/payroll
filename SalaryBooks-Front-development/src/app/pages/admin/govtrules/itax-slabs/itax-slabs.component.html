@@ -1,0 +1,413 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Government Rules</a>
+            <a class="breadcrumb-item active">Income Tax Slab</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-card"></i>
+        <div>
+            <h4>Income Tax Slab</h4>
+          <p class="mg-b-0">Define income tax slab</p>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="itaxslab-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define Income Tax Templates
+                <!-- <button class="btn btn-info float-right btn-xs" data-toggle="modal" data-target="#categorymodal">Add Category</button> -->
+                <a class="btn btn-info float-right btn-xs" routerLink="/admin/govt-rules/itax-categories">Add Category</a>
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Income Tax Template
+                    <!-- <button class="btn btn-info float-right btn-xs" data-toggle="modal" data-target="#categorymodal">Add Category</button> -->
+                    <a class="btn btn-info float-right btn-xs" routerLink="/admin/govt-rules/itax-categories">Add Category</a>
+                </h6>
+            </ng-template>
+
+            <br>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="iTaxSlabForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="template_name">
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.template_name.hasError('required') && (iTaxSlabForm.controls.template_name.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Category&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="category" [options]="categoryMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.category.hasError('required') && (iTaxSlabForm.controls.category.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Upper Limit&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="upper_limit">
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.upper_limit.hasError('required') && (iTaxSlabForm.controls.upper_limit.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.upper_limit.hasError('pattern') && (iTaxSlabForm.controls.upper_limit.dirty)">This value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Lower Limit&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="lower_limit">
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.lower_limit.hasError('required') && (iTaxSlabForm.controls.lower_limit.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.lower_limit.hasError('pattern') && (iTaxSlabForm.controls.lower_limit.dirty)">This value should be numeric</p>
+                        </div>
+                    </div> -->
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Financial Year From&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="financial_year_from">
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.financial_year_from.hasError('required') && (iTaxSlabForm.controls.financial_year_from.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="(iTaxSlabForm.controls.financial_year_from.hasError('pattern') || iTaxSlabForm.controls.financial_year_from.hasError('minlength') || iTaxSlabForm.controls.financial_year_from.hasError('maxlength')) && (iTaxSlabForm.controls.financial_year_from.dirty)">Insert a valid year</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Financial Year To&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="financial_year_to">
+                            <p class="error-element" *ngIf="iTaxSlabForm.controls.financial_year_to.hasError('required') && (iTaxSlabForm.controls.financial_year_to.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="(iTaxSlabForm.controls.financial_year_to.hasError('pattern') || iTaxSlabForm.controls.financial_year_to.hasError('minlength') || iTaxSlabForm.controls.financial_year_to.hasError('maxlength')) && (iTaxSlabForm.controls.financial_year_to.dirty)">Insert a valid year</p>
+                        </div>
+                    </div>
+
+                    <div formArrayName="income_tax_slab">
+                        <div *ngFor="let taxSlabControl of getTaxSlabControls(); let i = index">
+                            <div [formGroupName]="i">
+                                <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                                    <div class="col-12 col-sm-12">
+                                        Income Slab {{i+1}}
+                                    </div>
+                                </div>
+
+                                <div class="row no-gutters">
+                                    <div class="col-3 col-sm-3">
+                                        From&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-3 col-sm-3">
+                                        <input class="form-control" formControlName="income_slab_from" type="number">
+                                    </div>
+                                    <div class="col-3 col-sm-3 sameasfirst">
+                                        To&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-3 col-sm-3">
+                                        <input class="form-control" formControlName="income_slab_to" type="number">
+                                    </div>
+                                </div>
+
+                                <div class="row no-gutters">
+                                    <div class="col-3 col-sm-3">
+                                        Tax rate&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-3 col-sm-3">
+                                        <input class="form-control" formControlName="tax_rate" type="number">
+                                    </div>
+                                    <div class="col-3 col-sm-3 sameasfirst">
+                                        Additional Charges&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-3 col-sm-3">
+                                        <input class="form-control" formControlName="additional_charge" type="number">
+                                    </div>
+                                </div>
+
+                                <div class="row no-gutters">
+                                    <div class="col-3 col-sm-3">
+                                        Additional Cess&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-3 col-sm-3">
+                                        <input class="form-control" formControlName="additional_cess" type="number">
+                                    </div>
+                                    <div class="col-6 col-sm-6">
+                                        <button type="button" class="btn-danger btn mr-1" (click)="removeTaxSlab(i)" *ngIf="getTaxSlabControls().length > 1">Remove Slab</button>
+                                        <button type="button" class="btn-info btn" (click)="addTaxSlab()" *ngIf="(getTaxSlabControls().length - 1) == i">Add Slab</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!iTaxSlabForm.valid" (click)="create($event)" type="submit" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>SAVE</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" [disabled]="!iTaxSlabForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE SLAB</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="reseller-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Income tax template list</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Action</th>
+                            <th class="">Template Name</th>
+                            <th class="">Category</th>
+                            <!-- <th class="">Upper Limit</th> -->
+                            <!-- <th class="">Lower Limit</th> -->
+                            <th class="">FY From</th>
+                            <th class="">FY To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div id="categorymodal" data-keyboard="false" class="modal fade">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add New Category</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+                </div>
+                <form [formGroup]="iTaxCategoryForm">
+                    <div class="modal-body pd-20">
+                        <input type="text" formControlName="category_name" class="form-control" placeholder="Enter Category Name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" [disabled]="!iTaxCategoryForm.valid" (click)="createCategory($event)" class="btn text-uppercase btn-primary tx-size-xs"><span>Save changes</span></button>
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> -->
+
+    <button id="viewmmodalbutton" [hidden]="true" data-toggle="modal" data-target="#viewmodal"></button>
+    <div id="viewmodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Details</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+                </div>
+                <div class="modal-body pd-20" *ngIf="viewItTaxTemplate != null">
+                    <div class="bd bd-gray-300 rounded table-responsive">
+                        <table class="table table-striped mg-b-0">
+                            <tbody>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Template Name</th>
+                                    <td>{{viewItTaxTemplate.template_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Category</th>
+                                    <td *ngFor="let item of viewItTaxTemplate.categorydata">{{item.category_name}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Upper Limit</th>
+                                    <td>{{viewItTaxTemplate.upper_limit}}</td>
+                                </tr> -->
+                                <!-- <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Lower Limit</th>
+                                    <td>{{viewItTaxTemplate.lower_limit}}</td>
+                                </tr> -->
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Financial Year From</th>
+                                    <td>{{viewItTaxTemplate.financial_year_from}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Financial Year To</th>
+                                    <td>{{viewItTaxTemplate.financial_year_to}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bd bd-gray-300 rounded table-responsive mg-t-10">
+                        <table class="table table-striped mg-b-0">
+                            <thead>
+                                <tr>
+                                    <th colspan="6" class="bg-info text-center">
+                                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold text-white">Income Slabs</h6>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tx-uppercase tx-bold">Sl</th>
+                                    <th class="tx-uppercase tx-bold">From</th>
+                                    <th class="tx-uppercase tx-bold">To</th>
+                                    <th class="tx-uppercase tx-bold">Tax Rate</th>
+                                    <th class="tx-uppercase tx-bold">Additional Charges</th>
+                                    <th class="tx-uppercase tx-bold">Additional Cess</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of viewItTaxTemplate.income_tax_slab; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.income_slab_from}}</td>
+                                    <td>{{item.income_slab_to}}</td>
+                                    <td>{{item.tax_rate}}</td>
+                                    <td>{{item.additional_charge}}</td>
+                                    <td>{{item.additional_cess}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="table-responsive">
+                        <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Action</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Template Name</th>
+                                <th class="">Category</th>
+                                <th class="">FY From</th>
+                                <th class="">FY To</th>
+                            </thead>
+                            <tbody style="width: 100%;"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="viewhistorymodalbutton" [hidden]="true" data-toggle="modal" data-target="#viewhistorymodal"></button>
+    <div id="viewhistorymodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Previous Version of the Template</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20" *ngIf="viewItTaxTemplateHistory != null">
+                    <div class="bd bd-gray-300 rounded table-responsive">
+                        <table class="table table-striped mg-b-0">
+                            <tbody>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Template Name</th>
+                                    <td>{{viewItTaxTemplateHistory.template_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Category</th>
+                                    <td *ngFor="let item of viewItTaxTemplateHistory.categorydata">{{item.category_name ?? 'N/A'}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Upper Limit</th>
+                                    <td>{{viewItTaxTemplateHistory.upper_limit}}</td>
+                                </tr> -->
+                                <!-- <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Lower Limit</th>
+                                    <td>{{viewItTaxTemplateHistory.lower_limit}}</td>
+                                </tr> -->
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Financial Year From</th>
+                                    <td>{{viewItTaxTemplateHistory.financial_year_from}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Financial Year To</th>
+                                    <td>{{viewItTaxTemplateHistory.financial_year_to}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bd bd-gray-300 rounded table-responsive mg-t-10">
+                        <table class="table table-striped mg-b-0">
+                            <thead>
+                                <tr>
+                                    <th colspan="6" class="bg-info text-center">
+                                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold text-white">Income Slabs</h6>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tx-uppercase tx-bold">Sl</th>
+                                    <th class="tx-uppercase tx-bold">From</th>
+                                    <th class="tx-uppercase tx-bold">To</th>
+                                    <th class="tx-uppercase tx-bold">Tax Rate</th>
+                                    <th class="tx-uppercase tx-bold">Additional Charges</th>
+                                    <th class="tx-uppercase tx-bold">Additional Cess</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of viewItTaxTemplateHistory.income_tax_slab; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.income_slab_from}}</td>
+                                    <td>{{item.income_slab_to}}</td>
+                                    <td>{{item.tax_rate}}</td>
+                                    <td>{{item.additional_charge}}</td>
+                                    <td>{{item.additional_cess}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

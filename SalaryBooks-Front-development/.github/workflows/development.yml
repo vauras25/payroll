@@ -1,0 +1,47 @@
+# name: Deploy AngularJS to cPanel
+
+# on:
+#   push:
+#     branches:
+#       - development
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Update apt cache
+#         run: sudo apt-get update
+
+#       # - name: Install Python 2 for node-gyp
+#       #   run: |
+#       #     sudo add-apt-repository ppa:deadsnakes/nightly -y
+#       #     sudo apt-get update
+#       #     sudo apt-get install python2 -y
+
+#       # - name: Set Python 2 as default
+#       #   run: sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '14.20.0'
+
+#       - name: Install dependencies
+#         run: npm install --force
+#         env:
+#           NODE_OPTIONS: "--max_old_space_size=4096"
+
+#       - name: Build AngularJS project
+#         run: npm run build -- --c development --base-href=/payroll/payroll_frontend/ --aot --output-hashing=all --output-path=dist
+
+#       - name: Deploy to cPanel
+#         uses: SamKirkland/FTP-Deploy-Action@4.1.0
+#         with:
+#           server: ${{ vars.FTP_HOST }}
+#           username: ${{ vars.FTP_USERNAME }}
+#           password: ${{ vars.FTP_PASSWORD }}
+#           local-dir: dist/
+#           server-dir: ${{ vars.SERVER_DIR }}

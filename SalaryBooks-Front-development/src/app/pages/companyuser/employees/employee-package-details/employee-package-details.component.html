@@ -1,0 +1,597 @@
+<div id="empPackageDetailsModal" tabindex='-1' class="modal right fade">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content bd-0 tx-14">
+            <div class="modal-header pd-y-20 pd-x-25">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse mt-1">
+                    <ng-container *ngIf="packageDetails?.package_info">
+                        <span class="text-muted">Package Name:</span><b class="ml-2">{{ packageDetails?.package_info?.package_name }}</b>
+                    </ng-container>
+                    <ng-container *ngIf="!packageDetails?.package_info">
+                        <b>Package Details</b>
+                    </ng-container>
+                </h6>
+                <a class="text-info" href="javascript:;" (click)="printPackageDetails()">
+                    Download PDF&nbsp;&nbsp;<i class="fa fa-download"></i>
+                </a>
+            </div>
+
+            <div class="modal-body template-details">
+                <div class="row">
+                    <div class="col-md-4 border-right">
+                        <ul class="nav nav-pills flex-column" role="tablist">
+                            <li class="nav-item"><a href="javascript:;" data-target="#attendance" tabnav class="nav-link active">Attendance Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#incentive" tabnav class="nav-link">Incentive Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#bonus" tabnav class="nav-link">Bonus Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#overtime" tabnav class="nav-link">Overtime Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#tds" tabnav class="nav-link">TDS Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#leave" tabnav class="nav-link">Leave Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#lwf" tabnav class="nav-link">LWF Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#ptax" tabnav class="nav-link">P-TAX Template</a></li>
+                            <li class="nav-item"><a href="javascript:;" data-target="#payslip" tabnav class="nav-link">{{packageDetails?.payslip_temp_data ? "PAYSLIP Template":""}}</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="template-tables " id="print-section-policy">
+                            <!-- Attendance Template -->
+                            <div id="attendance" class="templete-item">
+                                <h6 class="title">Attendance Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="100%" class="text-uppercase">Cut Off Date</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Last date of the month</td>
+                                            <th class="text-uppercase">{{ packageDetails?.attendance_temp_data?.last_day_of_month ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Cut of date custom</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.cut_off_day_custom ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">No of Late (Day)</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.no_of_days ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Absent</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.absent ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Grace Period (Minute)</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.grace_period ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Register Type</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.attendance_temp_data?.register_type">
+                                                    <ng-container *ngSwitchCase="'time'">Time</ng-container>
+                                                    <ng-container *ngSwitchCase="'wholeday'">Whole Day</ng-container>
+                                                    <ng-container *ngSwitchCase="'halfday'">Half Day</ng-container>
+                                                    <ng-container *ngSwitchCase="'monthly'">Monthly</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.attendance_temp_data?.register_type ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Minimum Hours for Full day (hours)</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.full_day_max_hours ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Minimum Hours for Half day (hours)</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.half_day_max_hours ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="100%" class="text-uppercase">Define Month Days</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Full Month Days</td>
+                                            <th class="text-uppercase">{{ packageDetails?.attendance_temp_data?.full_month_days ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Custom Days</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.custom_days ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Reporting Time</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.reporting_time ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Closing Time</td>
+                                            <th>{{ packageDetails?.attendance_temp_data?.closing_time ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="100%" class="text-uppercase">Additional Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Comp Off</td>
+                                            <th class="text-uppercase">{{ packageDetails?.attendance_temp_data?.comp_off ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Sandwich Leave</td>
+                                            <th class="text-uppercase">{{ packageDetails?.attendance_temp_data?.sandwich_leave ?? "N/A" }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- Incentive Template -->
+                            <div id="incentive" class="templete-item">
+                                <h6 class="title">Incentive Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.incentive_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Min Hold</td>
+                                            <th>{{ packageDetails?.incentive_temp_data?.min_hold ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Max Hold</td>
+                                            <th>{{ packageDetails?.incentive_temp_data?.max_hold ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Settlement Frequency</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.incentive_temp_data?.settlement_frequency">
+                                                    <ng-container *ngSwitchCase="'daily'">Daily</ng-container>
+                                                    <ng-container *ngSwitchCase="'weekly'">Weekly</ng-container>
+                                                    <ng-container *ngSwitchCase="'fortnightly'">Fortnightly</ng-container>
+                                                    <ng-container *ngSwitchCase="'monthly'">Monthly</ng-container>
+                                                    <ng-container *ngSwitchCase="'quaterly'">Quaterly</ng-container>
+                                                    <ng-container *ngSwitchCase="'yearly'">Yearly</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.incentive_temp_data?.settlement_frequency ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">TDS Applied</td>
+                                            <th class="text-uppercase">{{ packageDetails?.incentive_temp_data?.tds_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">ESIC Applied</td>
+                                            <th class="text-uppercase">{{ packageDetails?.incentive_temp_data?.esic_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">PF Applied</td>
+                                            <th class="text-uppercase">{{ packageDetails?.incentive_temp_data?.pf_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">PT Applied</td>
+                                            <th class="text-uppercase">{{ packageDetails?.incentive_temp_data?.pt_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Eligible Advance Auto Disburse</td>
+                                            <th class="text-uppercase">{{ packageDetails?.incentive_temp_data?.eligble_disburse ?? "N/A" }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- Bonus Template -->
+                            <div id="bonus" class="templete-item">
+                                <h6 class="title">Bonus Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.bonus_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Auto-fill From Archive</td>
+                                            <th class="text-uppercase">{{ packageDetails?.bonus_temp_data?.auto_fill_archive ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Min Service to Qualify (Months)</td>
+                                            <th>{{ packageDetails?.bonus_temp_data?.min_service ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Maximum Bonus (%)</td>
+                                            <th>{{ packageDetails?.bonus_temp_data?.max_bonus ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Max Bonus Wage (Rs)</td>
+                                            <th>{{ packageDetails?.bonus_temp_data?.max_bonus_wage ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Eligible Capping</td>
+                                            <th>{{ packageDetails?.bonus_temp_data?.eligible_capping ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="100%" class="text-uppercase">Preference</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Disbursement Frequency</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.bonus_temp_data?.disbursement_frequency">
+                                                    <ng-container *ngSwitchCase="'monthly'">Monthly</ng-container>
+                                                    <ng-container *ngSwitchCase="'quaterly'">Quaterly</ng-container>
+                                                    <ng-container *ngSwitchCase="'half_yearly'">Half Yearly</ng-container>
+                                                    <ng-container *ngSwitchCase="'yearly'">Yearly</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.bonus_temp_data?.disbursement_frequency ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Disbursement Type</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.bonus_temp_data?.disbursement_type">
+                                                    <ng-container *ngSwitchCase="'fixed'">Fixed</ng-container>
+                                                    <ng-container *ngSwitchCase="'percent'">Percentage</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.bonus_temp_data?.disbursement_type ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">ESIC Applicable</td>
+                                            <th class="text-uppercase">{{ packageDetails?.bonus_temp_data?.esic_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">PT Applicable</td>
+                                            <th class="text-uppercase">{{ packageDetails?.bonus_temp_data?.pt_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">TDS Applicable</td>
+                                            <th class="text-uppercase">{{ packageDetails?.bonus_temp_data?.tds_apply ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">EPFO Applicable</td>
+                                            <th class="text-uppercase">{{ packageDetails?.bonus_temp_data?.epfo_apply ?? "N/A" }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- Overtime Template -->
+                            <div id="overtime" class="templete-item">
+                                <h6 class="title">Overtime Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.overtime_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Over-Time Type</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.overtime_temp_data?.overtime_type">
+                                                    <ng-container *ngSwitchCase="'hourly_fix'">Amount Rate Hourly Basis</ng-container>
+                                                    <ng-container *ngSwitchCase="'daily_fix'">Amount Rate Daily Basis</ng-container>
+                                                    <ng-container *ngSwitchCase="'hourly_per'">Percentage Rate Hourly Basis</ng-container>
+                                                    <ng-container *ngSwitchCase="'daily_per'">Percentage Daily Basis</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.overtime_temp_data?.overtime_type ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Rate (Rs / %)</td>
+                                            <th>{{ packageDetails?.overtime_temp_data?.overtime_rate ?? "N/A" }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- TDS Template -->
+                            <div id="tds" class="templete-item">
+                                <h6 class="title">TDS Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.tds_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Over-Time Type</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.tds_temp_data?.application_methode">
+                                                    <ng-container *ngSwitchCase="'assumed'">Assumed</ng-container>
+                                                    <ng-container *ngSwitchCase="'progreesive_acual_investment'">Progressive with Actual Investment</ng-container>
+                                                    <ng-container *ngSwitchCase="'progreesive_assumed_investment'">Progressive with Assumed Investment</ng-container>
+                                                    <ng-container *ngSwitchCase="'one_time'">One Time</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.tds_temp_data?.application_methode ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Frequency</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.tds_temp_data?.frequency">
+                                                    <ng-container *ngSwitchCase="'monthly'">Monthly</ng-container>
+                                                    <ng-container *ngSwitchCase="'quaterly'">Quaterly</ng-container>
+                                                    <ng-container *ngSwitchCase="'half_yearly'">Half Yearly</ng-container>
+                                                    <ng-container *ngSwitchCase="'yearly'">Yearly</ng-container>
+                                                    <ng-container *ngSwitchCase="'not_defined'">Not Defined</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.tds_temp_data?.frequency ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Deadline Day</td>
+                                            <th>{{ packageDetails?.tds_temp_data?.deadline_day ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Deadline Month</td>
+                                            <th>{{ packageDetails?.tds_temp_data?.deadline_month ?? "N/A" }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- Leave Template -->
+                            <div id="leave" class="templete-item">
+                                <h6 class="title">Leave Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.leave_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+
+                                        <ng-container *ngFor="let item of (packageDetails?.leave_temp_data?.template_data ?? []); let i = index">
+                                            <tr>
+                                                <th colspan="100%" class="text-uppercase">Row {{ i+1 }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Leave Type</td>
+                                                <th>
+                                                    <ng-container [ngSwitch]="item?.leave_type">
+                                                        <ng-container *ngSwitchCase="'earned'">Earned Leave</ng-container>
+                                                        <ng-container *ngSwitchCase="'com_defined'">Company Defined Leave</ng-container>
+                                                        <ng-container *ngSwitchDefault>{{ item?.leave_type?.full_name ?? "N/A" }}</ng-container>
+                                                    </ng-container>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Restriction on Availment</td>
+                                                <th class="text-uppercase">{{ item?.restriction_on_availment ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Number of Working Days</td>
+                                                <th>{{ item?.no_of_working_day ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Number of Days</td>
+                                                <th>{{ item?.no_of_day ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Restriction Tenure</td>
+                                                <th>{{ item?.restriction_tenure ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Leave Tenure</td>
+                                                <th>{{ item?.leave_tenure ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Restriction Days</td>
+                                                <th>{{ item?.restriction_days ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Carry Forward</td>
+                                                <th class="text-uppercase">{{ item?.carry_forward ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Cashable</td>
+                                                <th class="text-uppercase">{{ item?.cashable ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Carry Forward Years</td>
+                                                <th>{{ item?.carry_forward_years ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Effective From</td>
+                                                <th>{{ item?.effective_form ? ( item?.effective_form | date ) : "N/A" }}</th>
+                                            </tr>
+                                        </ng-container>
+
+                                        <tr *ngIf="(packageDetails?.leave_temp_data?.template_data ?? [])?.length < 1">
+                                            <th colspan="100%" class="text-uppercase">Template not updated</th>
+                                        </tr>
+
+                                        <!--  -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- LWF Template -->
+                            <div id="lwf" class="templete-item">
+                                <h6 class="title">LWF Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">State</td>
+                                            <th>{{ packageDetails?.lwf_temp_data?.state ?? "N/A" }}</th>
+                                        </tr>
+
+                                        <ng-container *ngFor="let item of (packageDetails?.lwf_temp_data?.template_data ?? []); let i = index">
+                                            <tr>
+                                                <th colspan="100%" class="text-uppercase">Row {{ i+1 }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Effective From</td>
+                                                <th>{{ item?.effective_form ? ( item?.effective_form | date ) : "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Period <small>Start</small></td>
+                                                <th>{{ item?.from_date ? ( item?.from_date | date ) : "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Period <small>End</small></td>
+                                                <th>{{ item?.to_date ? ( item?.to_date | date ) : "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Wage Band</td>
+                                                <th class="text-uppercase">{{ item?.wage_band ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Wage From</td>
+                                                <th>{{ item?.wage_from ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Wage To</td>
+                                                <th>{{ item?.wage_to ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Employee Contribution</td>
+                                                <th>{{ item?.employee_contribution ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Employer Contribution</td>
+                                                <th>{{ item?.employer_contribution ?? "N/A" }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-uppercase">Gross Type</td>
+                                                <th>
+                                                    <ng-container [ngSwitch]="item?.gross_type">
+                                                        <ng-container *ngSwitchCase="'rate'">Rate of Gross</ng-container>
+                                                        <ng-container *ngSwitchCase="'earned'">Earned Gross </ng-container>
+                                                        <ng-container *ngSwitchCase="'na'">NA</ng-container>
+                                                        <ng-container *ngSwitchDefault>{{ item?.gross_type ?? "N/A" }}</ng-container>
+                                                    </ng-container>
+                                                </th>
+                                            </tr>
+                                        </ng-container>
+
+                                        <tr *ngIf="(packageDetails?.lwf_temp_data?.template_data ?? [])?.length < 1">
+                                            <th colspan="100%" class="text-uppercase">Template not updated</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- P-TAX Template -->
+                            <div id="ptax" class="templete-item">
+                                <h6 class="title">P-TAX Template</h6>
+                                <table class="table table-hovered table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-uppercase">Template Name</td>
+                                            <th>{{ packageDetails?.ptax_temp_data?.template_name ?? "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Effective From</td>
+                                            <th>{{ packageDetails?.ptax_temp_data?.effective_from ? ( packageDetails?.ptax_temp_data?.effective_from | date ) : "N/A" }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">Salary Type</td>
+                                            <th>
+                                                <ng-container [ngSwitch]="packageDetails?.ptax_temp_data?.salary_type">
+                                                    <ng-container *ngSwitchCase="'rate'">Fixed Salary</ng-container>
+                                                    <ng-container *ngSwitchCase="'earned'">Earned Salary</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ packageDetails?.ptax_temp_data?.salary_type ?? "N/A" }}</ng-container>
+                                                </ng-container>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-uppercase">State</td>
+                                            <th>{{ packageDetails?.ptax_temp_data?.state_name ?? "N/A" }}</th>
+                                        </tr>
+
+                                        <ng-container *ngIf="packageDetails?.ptax_temp_data?.settlement_frequency != 'monthly'">
+                                            <ng-container *ngFor="let item of (packageDetails?.ptax_temp_data?.tax_range_amount ?? []); let i = index">
+                                                <tr>
+                                                    <th colspan="100%" class="text-uppercase">Row {{ i+1 }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-uppercase">Amount From</td>
+                                                    <th>{{ item?.amount_from ?? "N/A" }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-uppercase">Amount To</td>
+                                                    <th>{{ item?.amount_to ?? "N/A" }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-uppercase">P-TAX Amount</td>
+                                                    <th>{{ item?.tax_amount ?? "N/A" }}</th>
+                                                </tr>
+                                            </ng-container>
+                                            <tr *ngIf="(packageDetails?.ptax_temp_data?.tax_range_amount ?? [])?.length < 1">
+                                                <th colspan="100%" class="text-uppercase">P-TAX not updated</th>
+                                            </tr>
+                                        </ng-container>
+                                       
+                                        <ng-container *ngIf="packageDetails?.ptax_temp_data?.settlement_frequency == 'monthly'">
+                                            <ng-container *ngFor="let period of (packageDetails?.ptax_temp_data?.periods ?? []); let periodIndex = index">
+                                                <tr>
+                                                    <th colspan="100%" class="text-uppercase">Period {{ periodIndex + 1 }} (From Month: {{ getMonth(period.from_month) }} - To Month: {{ getMonth(period.to_month) }})</th>
+                                                </tr>
+                                              
+                                                
+                                                    <tr>
+                                                      <th colspan="100%" class="text-uppercase">Tax Slabs</th>
+                                                    </tr>
+                                                  
+                                                 
+                                                    <ng-container *ngFor="let item of period.tax_range_amount; let ind = index">
+                                                        <tr>
+                                                            <th colspan="100%" class="text-uppercase">Row {{ ind+1 }}</th>
+                                                        </tr>
+                                                      <tr>
+                                                        <td class="text-uppercase">Amount From</td>
+                                                        <td>{{ item?.amount_from ?? "N/A" }}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-uppercase">Amount To</td>
+                                                        <td>{{ item?.amount_to ?? "N/A" }}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-uppercase">P-TAX Amount</td>
+                                                        <td>{{ item?.tax_amount ?? "N/A" }}</td>
+                                                      </tr>
+                                                      <tr *ngIf="i < period.tax_range_amount.length - 1">
+                                                        <td colspan="2"></td> 
+                                                      </tr> 
+                                                    </ng-container>
+                                                
+                                              </ng-container>
+                                              <tr *ngIf="(packageDetails?.ptax_temp_data?.periods ?? [])?.length < 1">
+                                                <th colspan="100%" class="text-uppercase">P-TAX not updated</th>
+                                            </tr>
+                                        </ng-container>
+                                       
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="m-0">
+
+                            <!-- PAYSLIP Template -->
+                            <ng-container *ngIf="packageDetails?.payslip_temp_data">
+
+                              <div id="payslip" class="templete-item">
+                                  <h6 class="title">PAYSLIP Template</h6>
+                                  <payslip-template-modal [tempDetails]="packageDetails?.payslip_temp_data"></payslip-template-modal>
+                              </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                    <span>Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

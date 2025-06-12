@@ -1,0 +1,548 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item"
+               routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item active">Client Package</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-grid"></i>
+        <div>
+            <h4>Client Package</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+            <p class="mg-b-0">Create module/features combinations</p>
+        </div>
+    </div>
+
+    <!-- <div class="br-pagebody pd-x-20 pd-sm-x-30" id="clientpackage-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add Client Package</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit Client Package</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="packageForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Client Package Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="package_name">
+                            <p class="error-element" *ngIf="packageForm.controls.package_name.hasError('required') && (packageForm.controls.package_name.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Gratuity Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="gratuity_rule" [options]="gratuityRulesMaster" class="form-control" [config]="{search:true, placeholder: 'Select Gratuity Rule'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="packageForm.controls.gratuity_rule.hasError('required') && (packageForm.controls.gratuity_rule.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            PF Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="pf_rule" [options]="pfRulesMaster" class="form-control" [config]="{search:true, placeholder: 'Select PF Rule'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="packageForm.controls.pf_rule.hasError('required') && (packageForm.controls.pf_rule.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            ESIC Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="esic_rule" [options]="esicRulesMaster" class="form-control" [config]="{search:true, placeholder: 'Select ESIC Rule'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="packageForm.controls.esic_rule.hasError('required') && (packageForm.controls.esic_rule.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <div class="card-columns column-count-4 mg-t-10">
+                                <div class="card shadow-base widget-11" *ngFor="let item of permissionMaster">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <label class="ckbox">
+                                                <input type="checkbox" (change)="permissionCheckboxChanged($event, 'selectpermission', item._id)" id="permission-{{item._id}}-select">
+                                                <span>{{item.name}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mg-b-0">
+                                            <li *ngFor="let permission of item.permission">
+                                                <label class="ckbox">
+                                                    <input type="checkbox" name="permission[{{item._id}}]" value="{{permission.key}}" (change)="permissionCheckboxChanged($event)">
+                                                    <span>{{permission.value}}</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <button type="submit" [disabled]="!packageForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>Save</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel Editing</span>
+                                </button>
+                                <button type="submit" [disabled]="!packageForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Package</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="br-pagebody"
+         id="clientpackage-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Define Client Package</h6>
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="packageForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Client Package Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control"
+                                   type="text"
+                                   formControlName="package_name">
+                            <p class="error-element"
+                               *ngIf="packageForm.controls.package_name.hasError('required') && (packageForm.controls.package_name.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Document Storage Size (KB) (Per Employee)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control"
+                                   type="text"
+                                   formControlName="employee_vault">
+                            <p class="error-element"
+                               *ngIf="packageForm.controls.employee_vault.hasError('required') && (packageForm.controls.employee_vault.dirty)">This field is required</p>
+                            <p class="error-element"
+                               *ngIf="packageForm.controls.employee_vault.hasError('pattern') && (packageForm.controls.employee_vault.dirty)">Please enter a numeric value</p>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row no-gutters">
+                        <div class="col-md"
+                             style="border:1px solid #ced4da;">
+                            <div class="card bd-0">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active"
+                                               href="#rule"
+                                               data-toggle="tab">Government Rule</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                               href="#module"
+                                               data-toggle="tab">Modules</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body color-gray-lighter pd-0">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active"
+                                             id="rule">
+                                            <div class="row no-gutters">
+                                                <div class="col-12 col-sm-12"
+                                                     style="padding: 0px; border:0px;">
+                                                    <div class="card-columns column-count-2 mg-t-10">
+                                                        
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    Provident Fund
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_pf_rule"
+                                                                                     [options]="pfRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_pf_rule.hasError('required') && (packageForm.controls.gov_pf_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_pf_rule_type"
+                                                                                     [options]="pfRuleTypesMaster"
+                                                                                     class="form-control gov-pf-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_pf_rule_type.hasError('required') && (packageForm.controls.gov_pf_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.providentFunds; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_pf_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    Gratuity
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_gratuity_rule"
+                                                                                     [options]="gratuityRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_gratuity_rule.hasError('required') && (packageForm.controls.gov_gratuity_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_gratuity_rule_type"
+                                                                                     [options]="gratuityRuleTypesMaster"
+                                                                                     class="form-control gov-gratuity-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_gratuity_rule_type.hasError('required') && (packageForm.controls.gov_gratuity_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.gratuity; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_gratuity_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    Bonus
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_bonus_rule"
+                                                                                     [options]="bonusRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_bonus_rule.hasError('required') && (packageForm.controls.gov_bonus_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_bonus_rule_type"
+                                                                                     [options]="bonusRuleTypesMaster"
+                                                                                     class="form-control gov-bonus-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_bonus_rule_type.hasError('required') && (packageForm.controls.gov_bonus_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.bonus; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_bonus_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    LWF
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_lwf_rule"
+                                                                                     [options]="lwfRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_lwf_rule.hasError('required') && (packageForm.controls.gov_lwf_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_lwf_rule_type"
+                                                                                     [options]="lwfRuleTypesMaster"
+                                                                                     class="form-control gov-lwf-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_lwf_rule_type.hasError('required') && (packageForm.controls.gov_lwf_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.lwf; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_lwf_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    ESIC
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_esic_rule"
+                                                                                     [options]="esicRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_esic_rule.hasError('required') && (packageForm.controls.gov_esic_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_esic_rule_type"
+                                                                                     [options]="esicRuleTypesMaster"
+                                                                                     class="form-control gov-esic-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_esic_rule_type.hasError('required') && (packageForm.controls.gov_esic_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.esic; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_esic_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    P-Tax
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_ptax_rule"
+                                                                                     [options]="ptaxRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_ptax_rule.hasError('required') && (packageForm.controls.gov_ptax_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_ptax_rule_type"
+                                                                                     [options]="ptaxRuleTypesMaster"
+                                                                                     class="form-control gov-ptax-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_ptax_rule_type.hasError('required') && (packageForm.controls.gov_ptax_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.professionalTax; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_ptax_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card shadow-base widget-11">
+                                                            <div class="card-header">
+                                                                <div class="card-title">
+                                                                    TDS
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ngx-select-dropdown formControlName="gov_tds_rule"
+                                                                                     [options]="tdsRulesMaster"
+                                                                                     class="form-control"
+                                                                                     [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_tds_rule.hasError('required') && (packageForm.controls.gov_tds_rule.dirty)">This field is required</p>
+
+                                                                <ngx-select-dropdown style="display: none;"
+                                                                                     formControlName="gov_tds_rule_type"
+                                                                                     [options]="tdsRuleTypesMaster"
+                                                                                     class="form-control gov-tds-rule-fields"
+                                                                                     [config]="{search:false, placeholder: 'Choose Type'}"></ngx-select-dropdown>
+                                                                <p class="error-element"
+                                                                   *ngIf="packageForm.controls.gov_tds_rule_type.hasError('required') && (packageForm.controls.gov_tds_rule_type.dirty)">This field is required</p>
+
+                                                                <ul class="list-unstyled mg-b-0 mg-t-10">
+                                                                    <li *ngFor="let item of rulesPermissionMaster?.tds; let i = index">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   [checked]="item?.isChecked"
+                                                                                   [disabled]="item?.isDisable"
+                                                                                   name="gov_tds_permission[]"
+                                                                                   value="{{item.value}}">
+                                                                            <span>{{item.description}}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane"
+                                             id="module">
+                                            <div class="row no-gutters">
+                                                <div class="col-12 col-sm-12"
+                                                     style="padding: 0px; border:0px;">
+                                                    <div class="card-columns column-count-4 mg-t-10">
+                                                        <div class="card shadow-base widget-11"
+                                                             *ngFor="let item of permissionMaster">
+                                                            <div class="card-header">
+                                                                <div class="card-title"
+                                                                     style="display: contents;">
+                                                                    <span>{{item.name}}</span>
+                                                                    <div (click)="toggleOnOff($event,item) "
+                                                                         id="{{item.slug}}-toggle-switch"
+                                                                         class="toggle-btn toggle-btn-rounded toggle-btn-primary off">
+                                                                        <div (click)="toggleOnOff($event,item) "  class="toggle-btn-switch" id="{{item.slug}}-toggle-switch-nested"  ></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="list-unstyled mg-b-0">
+                                                                    <li>
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                   name="permission[{{item.slug}}]-all"
+                                                                                   value="all"
+                                                                                   [disabled]="!isToggleOn(item)"
+                                                                                   (change)="permissionCheckboxChanged($event, item.slug,'all-fields')">
+                                                                            <span>Select All</span>
+                                                                        </label>
+                                                                    </li>
+                                                                    <li *ngFor="let permission of item.permission">
+                                                                        <label class="ckbox">
+                                                                            <input type="checkbox"
+                                                                                    disabled="true"
+                                                                                   name="permission[{{item.slug}}]"
+                                                                                   value="{{permission.key}}"
+                                                                                   >
+                                                                            <span>{{permission.value }}</span>
+                                                                        </label>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1"
+                         style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <button type="submit"
+                                    [disabled]="!packageForm.valid"
+                                    (click)="create($event)"
+                                    class="btn btn-info"
+                                    *ngIf="editActionId == ''; else editButtonSection">
+                                <span>Save Package</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button"
+                                        (click)="cancelEdit()"
+                                        class="btn btn-danger mg-r-5">
+                                    <span>Cancel Editing</span>
+                                </button>
+                                <button type="submit"
+                                        [disabled]="!packageForm.valid"
+                                        (click)="update($event)"
+                                        class="btn btn-info">
+                                    <span>Update Package</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Client Package List</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p"
+                       datatable
+                       [dtOptions]="dtOptions"
+                       id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">Sl No</th>
+                            <th class="text-center">Action</th>
+                            <th class="">Package Name</th>
+                            <th class="">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

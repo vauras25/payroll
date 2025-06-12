@@ -1,0 +1,181 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashbaord</a>
+            <span class="breadcrumb-item">Shift Management</span>
+            <span class="breadcrumb-item active">Shift Batch</span>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-clock"></i>
+        <div>
+            <h4>Shift Management</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Shift list</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>Action</th>
+                            <th>Shift Name</th>
+                            <th>Shift1 Start Time</th>
+                            <th>Shift1 End Time</th>
+                            <th>Shift2 Start Time</th>
+                            <th>Shift2 End Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+
+<!-- Employee List Modal -->
+<button class="d-none" data-toggle="modal" data-target="#shiftEmployeeModal" id="shiftEmployeeModalOpenButton"></button>
+<div id="shiftEmployeeModal" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content bd-0 tx-14">
+            <div class="modal-header pd-y-20 pd-x-25">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Shift Employees <small>{{shiftDetails?.shift_name}}</small></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body pd-25">
+                
+                <div class="table-responsive mt-3">
+                    <table class="table nowrap wd-100p employee-table" style="border: 1px solid #dee2e6;">
+                        <thead class="thead-colored thead-info">
+                            <tr>
+                                <th colspan="3">1 Start Time {{(pershiftItem?.shift1_start_time ) ?? "N/A"}}
+
+                                    1 End Time {{(pershiftItem?.shift1_end_time ) ?? "N/A"}}
+                                </th>
+                                <th colspan="3">
+                                     {{pershiftItem?.shift2_start_time!='' ?'2 Start Time '+pershiftItem?.shift2_start_time: "" }}
+                                     {{pershiftItem?.shift2_start_time!='' ?' 2 End Time '+pershiftItem?.shift2_end_time: "" }} 
+                                     
+
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label class="d-flex align-items-center mb-0" for="select-all">
+                                        <input type="checkbox" class="mr-2" id="select-all" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="shiftEmployeeList.length > 0">
+                                        SL No.
+                                    </label>
+                                </th>
+                                <th *ngIf="Global.checkCompanyModulePermission({
+                                    company_module: 'shift_management',
+                                    company_operation: 'employee_shift_add',
+                                    company_sub_module:'manage_shift_batch',
+                                    company_sub_operation:['edit']
+                                  })" class="text-center">Action</th>
+                                <th>Employe Name</th>
+                                <th>Employee ID</th>
+                                <th>Shift Start</th>
+                                <th>Shift End</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of shiftEmployeeList; let i = index;">
+                                <td>
+
+                                    <label class="d-flex align-items-center" [for]="'checkrow-' + (i+1)">
+                                        <input type="checkbox" class="mr-2" [attr.checked]="item.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="item._id" (click)="rowCheckBoxChecked($event, item)" >
+                                        {{ Global.getTableSerialNumber(i, employeeListPaginationOptions.limit, employeeListPaginationOptions.page) }}
+                                    </label>
+
+
+                                </td>
+                                <td *ngIf="Global.checkCompanyModulePermission({
+                                    company_module: 'shift_management',
+                                    company_operation: 'employee_shift_add',
+                                    company_sub_module:'manage_shift_batch',
+                                    company_sub_operation:['edit']
+                                  })" class="text-center">
+                                    <button (click)="getEmployeeShiftEdit(item)" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
+                                </td>
+                                <td>{{item.emp_first_name}} {{item.emp_last_name}}</td>
+                                <td>{{item.emp_id}}</td>
+                                <td>{{item.shift?.shift_start_date | date}}</td>
+                                <td>{{item.shift?.shift_end_date | date}}</td>
+                            </tr>
+
+                            <tr *ngIf="shiftEmployeeList.length < 1">
+                                <td colspan="100%" class="text-center">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div #btns  class="container text-right py-3">
+                  
+                   
+                    <button
+                      (click)="exportAll();"
+                      [disabled]="!anyRowsChecked()"
+                      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+                    >
+                      Excel
+                    </button>
+                  </div>   
+                <app-custom-pagination [rows]="shiftEmployeeList" [paginationOptions]="employeeListPaginationOptions" (onPageClicked)="fetchShiftDetails(shiftDetails._id, $event)"></app-custom-pagination>
+            </div>
+           
+           
+        </div>
+    </div>
+</div>
+
+<!-- Edit Shift Modal -->
+<button id="editEmployeeShiftModalButton" [hidden]="true" data-toggle="modal" data-target="#editEmployeeShiftModal"></button>
+<div id="editEmployeeShiftModal" tabindex='-1' class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bd-0 tx-14">
+            <div class="modal-header pd-y-20 pd-x-25">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Edit Shift</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form [formGroup]="editShiftEmployeeForm">
+                <div class="modal-body pd-25">
+                    <div class="row">
+                        <div class="col-lg-12 mb-3">
+                            <label>Shift <span class="text-danger">*</span></label>
+                            <ngx-select-dropdown formControlName="shift_id" [options]="shiftMaster" class="form-control p-2" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+                        </div>
+
+                        <div class="col-lg-12 mb-3">
+                            <label>Start Date <span class="text-danger">*</span></label>
+                            <input type="date" formControlName="shift_start_date" class="form-control">
+                        </div>
+
+                        <div class="col-lg-12 mb-3">
+                            <label>End Date <span class="text-danger">*</span></label>
+                            <input type="date" formControlName="shift_end_date" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <button type="button" [disabled]="!editShiftEmployeeForm.valid" (click)="updateEmployeeShift($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                      <span>Update</span>
+                  </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

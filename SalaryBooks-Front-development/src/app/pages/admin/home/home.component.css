@@ -1,0 +1,92 @@
+/* .mb20{margin-bottom: 20px;}
+.mt20{margin-top: 20px;}
+.p20{padding: 20px;}
+.radius3{border-radius: 3px; overflow: hidden;}
+.dashTop{padding: 20px 0; }
+.commonbox{
+  padding: 12px 20px;
+  min-height: 105px;
+  background-color: #fff;
+}
+.commonbox-text h3, .ksTxt h3{
+  color: #868BA1;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: normal;
+  margin-bottom: 5px;
+  font-family: var(--font-work);
+}
+.commonbox-text span, .ksTxt span{
+  color: #1D232A;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: normal;
+  font-family: var(--font-roboto);
+}
+.roundIcon{
+  width: 37px;
+  height: 37px;
+  border-radius: 100%;
+  overflow: hidden;
+  background-color: #EDEDF2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; margin: 0 20px 0 0;
+  transition: all 300ms ease-in-out;
+}
+.roundIcon img{
+  transition: all 300ms ease-in-out;
+}
+.commonbox-text.blacktxt h3{
+  color: #000000;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: var(--font-roboto);
+}
+.commonbox-text.blacktxt span{
+  font-size: 15px;
+  line-height: normal;
+  color: #000000;
+  font-weight: 500;
+}
+.blue-head{
+  background-color: #B2DFE5;
+  color: #07515A;
+  font-size: 12px;
+  line-height: normal;
+  font-weight: 500;
+  font-family: var(--font-roboto);
+  text-align: center;
+  padding: 8px 10px;
+}
+.blackHead{
+  color: #1D232A;
+  font-size: 15px;
+  line-height: normal;
+  font-weight: 500;
+  margin-bottom: 20px;
+  font-family: var(--font-roboto);
+}
+.actionNeeded, .salaryRange{
+  min-height: 240px;
+}
+.EmployeesDash, .kycSts{
+  min-height: 378px;
+}
+.ksTxt span{
+  font-size: 15px;
+  line-height: normal;
+  color: #000000;
+  font-weight: 500;
+}
+.commonbox:hover .roundIcon, .ksBox:hover .roundIcon{
+  background-color: #17a3b4;
+}
+.commonbox:hover .roundIcon img, .ksBox:hover .roundIcon img{filter: brightness(0) invert(1);}
+.ksBox{
+  height: 100%;
+  padding: 12px 10px;
+  border: 1px solid #EDEDF2;
+  border-radius: 3px;
+} *

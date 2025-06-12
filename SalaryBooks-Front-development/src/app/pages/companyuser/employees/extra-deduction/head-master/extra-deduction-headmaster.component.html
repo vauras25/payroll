@@ -1,0 +1,48 @@
+<!-- Earning Heads Modal -->
+<button id="earningHeadsModalButton" [hidden]="true" data-toggle="modal" data-target="#earningHeadsModal"></button>
+<div id="earningHeadsModal" tabindex='-1' class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bd-0 tx-14">
+            <div class="modal-header pd-y-20 pd-x-25">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Earning Head</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="earningHeadForm">
+                <div class="modal-body pd-25">
+                    <div class="row">
+                        <div class="col-lg-12 mb-4">
+                            <input class="form-control" type="text" placeholder="Enter Head Name" formControlName="head_name">
+                        </div>
+
+                        <div class="col-lg-12 mb-4">
+                            <input class="form-control" type="text" placeholder="Enter Head Abbreviation" formControlName="abbreviation">
+                        </div>
+
+                        <div class="col-lg-12 mb-4">
+                            <ngx-select-dropdown formControlName="earning_status" [options]="earningStatusMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Earning Status', displayKey: 'description'}"></ngx-select-dropdown>
+                        </div>
+
+                        <div class="col-lg-12 mb-4">
+                            <label class="text-uppercase mb-2">Head Includes</label>
+
+                            <div class="row">
+                                <div class="col-2" *ngFor="let item of headIncludeMaster">
+                                    <label class="ckbox wd-10p d-flex">
+                                        <input type="checkbox" name="headincludes" value="{{ item.value }}"><span>{{ item.description }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <button type="button" [disabled]="!earningHeadForm.valid" (click)="addEarningHead($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                        <span>Update</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

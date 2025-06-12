@@ -1,0 +1,50 @@
+.nested-th{
+  vertical-align: middle !important;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+
+.c-table{
+  border:1px solid #dee2e6;
+  border-collapse: collapse;
+}
+.c-table thead tr{
+  border-bottom:1px solid #dee2e6;
+}
+
+.c-table tbody tr{
+  background-color: #fff;
+  color: #000;
+  font-size: 13px !important;
+}
+
+.c-table tbody tr:nth-child(even){
+  background-color: #f5f5f5;
+}
+
+.c-table th{
+  font-size: 14px !important;
+  font-weight: 500;
+  color: #1e1e1e;
+  padding:  12px ;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.c-table td{
+  border-bottom:1px solid #dee2e6;
+  border-collapse: collapse;
+  padding: 13px ;
+}
+
+.actionBtn{
+  border: 1px solid #E3E3EE;
+  border-radius: 4px;
+  background: #F6F6F9;
+  padding: 10px;
+}
+
+
+table td {
+  vertical-align: baseline !important;
+}

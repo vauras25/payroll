@@ -1,0 +1,154 @@
+<div class="table-responsive" >
+   <div class="table-wrapper mt-3">
+      <table class="table display responsive nowrap wd-100p employee-table">
+         <thead>
+           <tr >
+              <th colspan="8"></th>
+              <th colspan="10" *ngFor="let item of days" class="text-center">Wage Month {{item | date:'MM'}}</th>
+              <th colspan="12" class="text-center">Total</th>
+           </tr>
+           <tr >
+  
+              <th >
+                 <label
+                    class="d-flex align-items-center mb-0"
+                    for="select-all"
+                    >
+                    <input
+                       type="checkbox"
+                       class="mr-2"
+                       id="select-all"
+                       [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"
+                    />
+                    SL No.
+                    </label>
+              </th>
+              <th >Emp ID</th>
+              <th >Name</th>
+              <th >Client</th>
+              <th >
+                 <div class="softmerge-inner">Branch</div>
+              </th>
+              <th >
+                 <div class="softmerge-inner">Department </div>
+              </th>
+              <th >
+                 <div class="softmerge-inner">Designation</div>
+              </th>
+              <th >HOD</th>
+              <ng-container *ngFor="let item of days">
+              <th >
+                 <div class="softmerge-inner">Month Days</div>
+              </th>
+              <th >
+                 <div class="softmerge-inner">Persent Days</div>
+              </th>
+              <th >
+                 <div class="softmerge-inner">Pay days</div>
+              </th>
+              <th>WO</th>
+              <th >H</th>
+              <th>SL</th>
+              <th >PL</th>
+              <th >EL</th>
+              <th>OT</th>
+              <th>LOP etc</th>
+             </ng-container>
+             <th >
+                <div class="softmerge-inner" >Month Days</div>
+             </th>
+             <th >
+                <div class="softmerge-inner" >Persent Days</div>
+             </th>
+             <th >
+                <div class="softmerge-inner" >Pay days</div>
+             </th>
+             <th  >WO</th>
+             <th  >H</th>
+             <th  >SL</th>
+             <th  >PL</th>
+             <th  >EL</th>
+             <th  >OT</th>
+             <th  >LOP etc</th>
+           </tr>
+         </thead>
+         <tbody>
+  
+           
+            <tr style="height: 18px" *ngFor="let item of empReportData;let i=index">
+  
+               <td>
+                <label
+                class="d-flex align-items-center"
+                [for]="'checkrow-' + (i + 1)"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-2"
+                  [attr.checked]="
+                  item?.checked == true ? 'checked' : null
+                  "
+                  id="checkrow-{{ i + 1 }}"
+                  [attr.data-checkbox-id]="item?._id"
+                  (click)="rowCheckBoxChecked($event, item)"
+                />
+                {{
+                  Global.getTableSerialNumber(
+                    i,
+                    paginationOptions.limit,
+                    paginationOptions.page
+                  )
+                }}
+              </label>
+               </td>
+               <td>{{item?.emp_id}}</td>
+               <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+               <td>{{item?.client[0]?.client_code}}</td>
+               <td>{{item?.branch[0]?.name}}</td>
+               <td>{{item?.department[0]?.department_name}}</td>
+               <td>{{item?.designation[0]?.designation_name}}</td>
+               <td>{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+               <ng-container *ngFor="let subItem of item?.attendance_summ">
+  
+               <td>{{subItem.total_days}}</td>
+               <td>{{subItem.total_present}}</td>
+               <td>{{subItem.paydays}}</td>
+               <td>{{subItem.total_wo}}</td>
+               <td>{{subItem.holiday}}</td>
+               <td>{{subItem.total_SKL}}</td>
+               <td>{{subItem.total_PVL}}</td>
+               <td>{{subItem.total_ERL}}</td>
+               <td>{{subItem.total_overtime!='N/A'?(subItem.total_overtime |  number:'1.2-2'):''}}</td>
+               <td>{{subItem.total_lop}}</td>
+               </ng-container>
+               <td>{{item?.summary_days}}</td>
+  
+               <td>{{item?.summary_present}}</td>
+  
+               <td>{{item?.summary_paydays}}</td>
+  
+               <td>{{item?.summary_wo}}</td>
+  
+               <td>{{item?.summary_ho}}</td>
+  
+               <td>{{item?.summary_skl}}</td>
+  
+               <td>{{item?.summary_pvl}}</td>
+  
+               <td>{{item?.summary_erl}}</td>
+  
+               <td>{{item?.summary_ot | number:'1.2-2'}}</td>
+  
+               <td>{{item?.summary_lop}}</td>
+            </tr>
+  
+         </tbody>
+      </table>   
+   </div>
+ 
+ </div>
+ <app-custom-pagination
+ [rows]="empReportData"
+ [paginationOptions]="paginationOptions"
+ (onPageClicked)="getFiltered($event)"
+></app-custom-pagination>

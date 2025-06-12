@@ -1,0 +1,195 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" href="javascript:void(0)">Expense Management</a>
+
+            
+
+            <a class="breadcrumb-item active">Apply Reimbursement</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-wand"></i>
+        <div>
+            <h4>Apply Reimbursement</h4>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">
+                Apply Reimbursement Templates
+            </h6>
+
+            <br>
+            <companyuser-app-table-filter
+            [searchKeyFilter]="true"
+            [monthFilter]="true"
+            [yearFilter]="true"
+            [isClient]="false"
+            (onFiltered)="employeeFilter = $event; fetch()"
+          >
+          </companyuser-app-table-filter>
+
+            <div class="table-wrapper mt-5">
+                <div class="table-responsive">
+                    <app-custom-tableoption
+                    [searchable]="false"
+                    (onFilterChanged)="paginationOptions.limit = +$event?.length ;fetch()"
+                  ></app-custom-tableoption>
+                    <table class="table nowrap wd-100p table-bordered" style="border: 1px solid #eee;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">SL</th>
+                                <th class="text-center">Action</th>
+                                <th class="">Emp Code</th>
+                                <th class="">Emp Name</th>
+                                <th class="text-center">Head</th>
+                                <th class="text-center">Amount</th>
+                                <!-- <th class="text-center">Defined Amount</th> -->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let employee of employees; let i = index">
+                                <td class="text-center">{{i + 1}}</td>
+                                <td class="text-center">
+                                    <button (click)="initEmployeeExpenseAdd(employee)" class="btn btn-primary btn-sm mx-1 my-1">
+                                        <i class="fa fa-plus"></i> Add New
+                                    </button>
+
+                                    <button *ngIf="employee?.reimbursements?.length" class="btn btn-info btn-sm mx-1 my-1" (click)="updateReimbursetment(employee?.emp_id, employee?.reimbursements)">
+                                        <i class="fa fa-edit"></i> Update
+                                    </button>
+                                </td>
+                                <td>{{employee?.emp_id}}</td>
+                                <td>{{ employee?.emp_first_name }} {{ employee?.emp_last_name }}</td>
+                                <td class="text-center">
+                                    <div *ngFor="let reimbursement of employee?.reimbursements; let ri = index" class="input-group mt-2">      
+                                        <input type="text" class="form-control" placeholder="Enter Head" value="{{ reimbursement?.head_id }}" id="{{employee?.emp_id}}-{{ri}}-head">
+                                        <button type="button" (click)="updateEarningValue(employee?.emp_id+'-'+ ri +'-head', employee?.emp_id, 'head_id', reimbursement)" class="btn btn-primary input-group-addon"><i class="fa fa-save tx-16 lh-0 op-6"></i></button>
+                                    </div>
+                                </td>
+                                <td class="text-center ">
+                                    <div *ngFor="let reimbursement of employee?.reimbursements;  let ri = index" class="input-group mt-2">
+                                        <input type="number" class="form-control" placeholder="Enter Amount" value="{{ reimbursement?.amount }}" id="{{employee?.emp_id}}-{{ri}}-amount">
+                                        <button type="button" (click)="updateEarningValue( employee?.emp_id+'-'+ri+'-amount', employee?.emp_id, 'amount', reimbursement)" class="btn btn-primary input-group-addon"><i class="fa fa-save tx-16 lh-0 op-6"></i></button>
+                                    </div>
+                                    <!-- <div >{{reimbursement?.amount}}</div> -->
+                                </td>
+                                <!-- <ng-container *ngFor="let reimbursement of employee?.reimbursements">
+                                    <td>{{reimbursement.head_id}}</td>
+                                    <td>{{reimbursement.amount}}</td>
+                                </ng-container> -->
+                                <!-- <td>{{ getDefinedEarningAmount(employee, earning.head_id)?.earning_amount ?? '-' }}</td> -->
+                            </tr>
+                            <!-- <ng-container *ngFor="let employee of employees; let empInd = index">
+                                <ng-container *ngIf="(employee?.reimbursements ?? []).length == 0">
+                                    <tr>
+                                        <td class="text-center"><b>{{ (empInd+1) }}</b></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-primary btn-sm" (click)="initEmployeeExpenseAdd(employee)">
+                                                <i class="fa fa-plus"></i> Add New
+                                            </button>
+                                        </td>
+                                        <td>{{ employee.emp_id }}</td>
+                                        <td>{{ employee.emp_first_name }} {{ employee.emp_last_name }}</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                    </tr>
+                                </ng-container>
+
+                                <ng-container *ngIf="(employee?.reimbursements ?? []).length > 0">
+                                    <ng-container *ngFor="let earning of employee?.reimbursements; let earningIndex = index">
+                                        <tr>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length" class="text-center"><b>{{ (empInd+1) }}</b></td>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length" class="text-center">
+                                                <button (click)="initEmployeeExpenseAdd(employee)" class="btn btn-primary btn-sm mx-1 my-1">
+                                                    <i class="fa fa-plus"></i> Add New
+                                                </button>
+
+                                                <button class="btn btn-info btn-sm mx-1 my-1" (click)="employeeExpenseUpdate(employee)">
+                                                    <i class="fa fa-edit"></i> Update
+                                                </button>
+                                            </td>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length">{{ employee.emp_id }}</td>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length">{{ employee.emp_first_name }} {{ employee.emp_last_name }}</td>
+                                            <td class="text-center" id="emp-earningfield-head-{{earning._id}}">
+                                                <div class="input-group">
+                                                
+                                                    <input type="text" class="form-control" placeholder="Enter Head" value="{{ earningHead }}" id="{{employee?.emp_id}}-{{earningIndex}}-earninghead">
+                                                    <button type="button" (click)="updateEarningValue( employee?.emp_id+'-'+earningIndex+'-earninghead', employee.emp_id, 'head_id', earning)" class="btn btn-primary input-group-addon"><i class="fa fa-save tx-16 lh-0 op-6"></i></button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center" id="emp-earningfield-amount-{{earning._id}}">
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" placeholder="Enter Amount" value="{{ earning.amount }}" id="{{employee.emp_id}}-{{earningIndex}}-earningamount">
+                                                    <button type="button" (click)="updateEarningValue( employee.emp_id+'-'+earningIndex+'-earningamount', employee.emp_id, 'amount', earning)" class="btn btn-primary input-group-addon"><i class="fa fa-save tx-16 lh-0 op-6"></i></button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">{{ getDefinedEarningAmount(employee, earning.head_id)?.earning_amount ?? '-' }}</td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container> -->
+
+                            <tr *ngIf="employees.length == 0">
+                                <td class="text-center" colspan="100%">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="paginationOptions.page = $event; fetch()"></app-custom-pagination>
+        </div>
+    </div>
+
+    <!-- Add New Expense Modal -->
+    <button id="addEmployeeExpenseModalButton" [hidden]="true" data-toggle="modal" data-target="#addEmployeeExpenseModal"></button>
+    <div id="addEmployeeExpenseModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Reimbursement <small>{{ addEmployeeReimbursementForm.value?.emp_id }}</small></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form [formGroup]="addEmployeeReimbursementForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <!-- <div class="col-lg-12 mb-3">
+                                <ngx-select-dropdown formControlName="head_id" [options]="earningHeadsMaster.concat(employeeEarningHeadMaster)" class="form-control p-1" [config]="{search:true, placeholder: 'Select One', displayKey: 'head_name'}"></ngx-select-dropdown>
+                            </div> -->
+
+                            <div class="col-lg-12 mb-3">
+                                <input class="form-control" type="text" placeholder="Enter Head" formControlName="head_id">
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <input class="form-control" type="number" placeholder="Enter Amount" formControlName="amount">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!addEmployeeReimbursementForm.valid" (click)="addEmployeeReimbursement($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                          <span>Add</span>
+                        </button>
+                        <!-- <button type="button" [disabled]="!addEmployeeReimbursementForm.valid" (click)="addEmployeeReimbursement($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                          <span>Update</span>
+                      </button> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- <companyuser-extra-deduction-headmaster [initEarningHeadEntry]="extraDeductionHeadMasterEventSubject.asObservable()" [earningStatusMaster]="earningStatusMaster" (headMasterSubmitted)="fetchEarningHeads()"></companyuser-extra-deduction-headmaster> -->
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,112 @@
+<div class="px-5"  >
+  <div *ngIf="template_type === 'join'" class="table-wrapper table-responsive mt-3">
+    <table class="table display responsive nowrap wd-100p employee-table">
+      <thead>
+        <tr >
+          <th>UAN Number</th>
+          <th>Prv MemberId</th>
+          <th>Member Name</th>
+          <th>D.O.B as per Aadhaar (dd/mm/yyyy)</th>
+          <th>Gender</th>
+          <th>Father's/ Husband Name</th>
+          <th>Relationship</th>
+          <th>Mobile Number</th>
+          <th>Email id</th>
+          <th>Nationality</th>
+          <th>EPF Wages</th>
+          <th>Qualification</th>
+          <th>Marital Status</th>
+          <th>Is International Worker</th>
+          <th>Country of origin</th>
+          <th>Passport number</th>
+          <th>Passport valid from</th>
+          <th>Passport valid till</th>
+          <th>Is physical handicap</th>
+          <th>locomotive</th>
+          <th>hearing</th>
+          <th>visual</th>
+          <th>Bank Account Number</th>
+          <th>IFSC Code</th>
+          <th>Name As Per Bank</th>
+          <th>PAN</th>
+          <th>Name as per PAN</th>
+          <th>Aadhaar Number</th>
+          <th>Name as on Aadhaar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of employeesList; let i = index">
+          <td>{{ report?.employee_details?.pf_esic_details?.curr_er_epfo_details?.uan_no}}</td>
+          <td></td>
+          <td>{{report?.emp_first_name}} {{report?.emp_last_name}}</td>
+          <td>{{formatDate(report?.emp_dob)}}</td>
+          <td>
+            <span *ngIf="report?.sex === 'm'">Male</span>
+            <span *ngIf="report?.sex === 'f'">Female</span>
+          </td>
+          <td>{{report?.emp_father_name}}</td>
+          <td>{{report?.marital_status}}</td>
+          <td>{{report?.mobile_no}}</td>
+          <td>{{report?.email_id}}</td>
+          <td>{{report?.nationality}}</td>
+          <td></td>
+          <td></td>
+          <td>{{report?.marital_status}}</td>
+          <td></td>
+          <td></td>
+          <td>{{report?.passport_no}}</td>
+          <td>{{report?.passport_val_form}}</td>
+          <td>{{report?.passport_val_to}}</td>
+          <td>{{report?.physical_disability}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{report?.employee_details?.bank_details?.account_no}}</td>
+          <td>{{report?.employee_details?.bank_details?.ifsc_code}}</td>
+          <td>{{report?.emp_first_name}} {{report?.emp_last_name}}</td>
+          <td>{{report?.pan_no}}</td>
+          <td>{{report?.emp_first_name}} {{report?.emp_last_name}}</td>
+          <td>{{report?.aadhar_no}}</td>
+          <td>{{report?.emp_first_name}} {{report?.emp_last_name}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+  <div *ngIf="template_type === 'exit'" class="table-wrapper table-responsive mt-3">
+    <table class="table display responsive nowrap wd-100p employee-table">
+      <thead>
+        <tr >
+          <th>UAN</th>
+          <th>Exit Date</th>
+          <th>Exit Reason Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of employeesList; let i = index">
+          <td>{{report?.employee_details?.pf_esic_details?.curr_er_epfo_details?.uan_no || 'N/A'}}</td>
+          <td>{{report?.employee_details?.full_and_final?.last_working_date || 'N/A'}}</td>
+          <!-- <td>{{report?.employee_details?.pf_esic_details?.curr_er_epfo_details?.last_ro}}</td> -->
+          <td>N/A</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+  <div #btns *ngIf="employeesList?.length" class="container text-right py-3">
+    <button
+     (click)="closeWindow()"
+      class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+    >
+      Cancel
+    </button>
+    <button
+      (click)="excelExport(btns)"
+      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+    >
+      Download
+    </button>
+  </div>
+</div>

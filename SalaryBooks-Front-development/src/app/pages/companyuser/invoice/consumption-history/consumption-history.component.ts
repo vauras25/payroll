@@ -1,0 +1,284 @@
+import { DatePipe } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, UntypedFormBuilder } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { Title } from 'chart.js';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { AdminService } from 'src/app/services/admin.service';
+import * as Global from 'src/app/globals';
+import { CompanyuserService } from 'src/app/services/companyuser.service';
+
+@Component({
+  selector: 'app-consumption-history',
+  templateUrl: './consumption-history.component.html',
+  styleUrls: ['./consumption-history.component.css'],
+})
+export class ConsumptionHistoryComponent implements OnInit {
+  Global = Global;
+  dtOptions: DataTables.Settings = {};
+  rowCheckedAll: Boolean = false;
+  checkedRowIds: any[] = [];
+  uncheckedRowIds: any[] = [];
+  @Input() filterOptions: any = {};
+  @Output() resetFilter: any = new EventEmitter();
+  rows: any = [];
+  showContent: any = false;
+  subscriptionUserSearchForm: FormGroup;
+  creditDetails: any = {};
+  tableFilter: any = {};
+  corporate_id: any = null;
+  creditListing?: any[] = [];
+  constructor(
+    public formBuilder: UntypedFormBuilder,
+    private toastr: ToastrService,
+    private router: Router,
+    private companyuserService: CompanyuserService,
+    private spinner: NgxSpinnerService,
+    private datePipe: DatePipe,
+    private sanitizer: DomSanitizer
+  ) {
+    this.corporate_id = Global.getCurrentUser().corporate_id;
+    this.subscriptionUserSearchForm = formBuilder.group({
+      wage_to_date: [null],
+      wage_from_date: [null],
+    });
+  }
+
+  ngOnInit(): void {
+    let self = this;
+    this.dtOptions = {
+      processing: true,
+      ordering: false,
+      paging: false,
+      order: [],
+      searching: false,
+      lengthChange: true,
+      lengthMenu: Global.DataTableLengthChangeMenu,
+      scrollX: true,
+      responsive: false,
+      language: {
+        searchPlaceholder: 'Search...',
+        search: '',
+      },
+    };
+  }
+  ngOnChanges() {
+    this.subscriptionUserSearchForm.patchValue({
+      wage_from_date: this.filterOptions?.wage_from_date,
+      wage_to_date: this.filterOptions?.wage_to_date,
+    });
+
+    this.fetch();
+  }
+
+  private isRowChecked(rowId: any) {
+    if (!this.rowCheckedAll)
+      return this.checkedRowIds.indexOf(rowId) >= 0 ? true : false;
+    else return this.uncheckedRowIds.indexOf(rowId) >= 0 ? false : true;
+  }
+
+  rowCheckBoxChecked(event: any, row: any) {
+    let rowId: any = row._id;
+    let checkbox: any = document.querySelectorAll(
+      '[data-checkbox-id="' + rowId + '"]'
+    );
+
+    if (checkbox.length > 0) {
+      if (checkbox[0].checked) {
+        this.uncheckedRowIds.splice(this.uncheckedRowIds.indexOf(rowId), 1);
+        if (!this.rowCheckedAll) {
+          if (!this.checkedRowIds.includes(rowId)) {
+            this.checkedRowIds.push(rowId);
+          }
+        }
+      } else {
+        this.checkedRowIds.splice(this.checkedRowIds.indexOf(rowId), 1);
+        if (this.rowCheckedAll) {
+          if (!this.uncheckedRowIds.includes(rowId)) {
+            this.uncheckedRowIds.push(rowId);
+          }
+        }
+      }
+    }
+  }
+
+  allRowsCheckboxChecked(event: any) {
+    if (this.rowCheckedAll) {
+      this.uncheckedRowIds.length = 0;
+      this.rowCheckedAll = false;
+    } else {
+      this.checkedRowIds.length = 0;
+      this.rowCheckedAll = true;
+    }
+
+    this.fetch();
+  }
+
+  anyRowsChecked(): boolean {
+    return (
+      this.rowCheckedAll == true ||
+      this.checkedRowIds.length > 0 ||
+      this.uncheckedRowIds.length > 0
+    );
+  }
+
+
+ 
+  fetch(filter?: any) {
+    if (filter) this.tableFilter = filter;
+    if (!Object.keys(this.tableFilter).length) return;
+  // console.log(this.tableFilter);
+
+    // let date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    this.showContent = false;
+
+    let filterOptions = {
+      pageno: 1,
+      wage_month_from: this.tableFilter?.wage_month_from,
+      wage_year_from: this.tableFilter?.wage_year_from,
+      wage_month_to: this.tableFilter?.wage_month_to,
+      wage_year_to: this.tableFilter?.wage_year_to,
+      corporate_id: this.corporate_id ?? null,
+      row_checked_all: false,
+      unchecked_row_ids: [],
+      checked_row_ids: [],
+    };
+    this.companyuserService.fetchCreditUsageView(filterOptions).subscribe(
+      (res) => {
+        if (res.status == 'success') {
+          var docs: any = [];
+          this.creditListing = res?.company[0]?.company_credit_history_logs;
+          let sl_no = 1;
+          if (this.creditListing?.length) {
+            this.creditListing?.forEach((elem: any) => {
+              let particular = elem.type;
+              if (particular == 'consumed') {
+                particular = 'Consumed';
+              }
+              if (particular == 'credit_coupon') {
+                particular = 'Promo';
+              }
+              if (particular == 'credit') {
+                particular = 'Purchase';
+              }
+              elem.particular = particular;
+              let inv_id;
+              if (elem.type == 'credit' || elem.type == 'credit_coupon') {
+                inv_id = elem?.details?.inv_id;
+              }
+              if (elem?.type == 'consumed') {
+                inv_id =
+                  Global.monthMaster.find(
+                    (x) => x.index == elem?.details?.wage_month
+                  )?.sf +
+                  '-' +
+                  elem?.details?.wage_year;
+              }
+              elem.inv_id = inv_id;
+
+              let credited_amnt;
+              if (elem.type == 'credit' || elem?.type == 'credit_coupon') {
+                credited_amnt = elem?.details?.credit_amount;
+              }
+              elem.credited_amnt = credited_amnt ?? '';
+
+              let deduct_amnt;
+              if (elem?.type == 'consumed') {
+                deduct_amnt = elem?.balance;
+              }
+              elem.deduct_amnt = deduct_amnt ?? '';
+              elem.sl_no = sl_no;
+              elem.checked = this.isRowChecked(elem?._id);
+
+              sl_no++;
+            });
+
+            // });
+          } else {
+            this.creditListing = [];
+          }
+
+          // $('#my-datatable').dataTable().api().clear()
+          // this.rows=docs;
+          // $('#my-datatable').dataTable().api().draw();
+
+          this.showContent = true;
+        } else if (res.status == 'val_err') {
+          this.toastr.error(Global.showValidationMessage(res.val_msg));
+        } else {
+          this.toastr.error(res.message);
+        }
+      },
+      (err) => {
+        this.toastr.error(
+          'Internal server error occured. Please try again later.'
+        );
+      }
+    );
+  }
+
+  exportData() {
+    try {
+      if(!this.creditListing?.length) return;
+        let filterOptions = {
+          pageno: 1,
+          wage_month_from: this.tableFilter?.wage_month_from,
+          wage_year_from: this.tableFilter?.wage_year_from,
+          wage_month_to: this.tableFilter?.wage_month_to,
+          wage_year_to: this.tableFilter?.wage_year_to,
+          corporate_id: this.corporate_id ?? null,
+          row_checked_all: this.rowCheckedAll,
+          unchecked_row_ids: this.uncheckedRowIds,
+          checked_row_ids: this.checkedRowIds,
+          generate: 'excel'
+        };
+
+        this.companyuserService.downloadFile('get-company-credit-usage-details-list', 'Credit-Consumption-History')
+    } catch (err) {
+      
+    }
+    // this.companyuserService.fetchCreditUsageView(filterOptions).subscribe(
+    //   (res) => {
+    //     if (res.status == 'success') {
+    //       //  window.open(res?.url);
+    //     } else if (res.status == 'val_err') {
+    //       this.toastr.error(Global.showValidationMessage(res.val_msg));
+    //     } else {
+    //       this.toastr.error(res.message);
+    //     }
+    //   },
+    //   (err) => {
+    //     this.toastr.error(
+    //       'Internal server error occured. Please try again later.'
+    //     );
+    //   }
+    // );
+  }
+
+  viewData(item: any = {}) {
+    this.creditDetails = {
+      total_free_employee: item?.details?.total_free_employee ?? '',
+      total_additional_employee: item?.details?.total_additional_employee ?? '',
+      total_free_staff: item?.details?.total_free_staff ?? '',
+      total_additional_staff: item?.details?.total_additional_staff ?? '',
+      plan: item?.details?.plan?.plan_name ?? '',
+      type: item?.type,
+      file_path: item?.details?.file_path
+        ? this.sanitizer.bypassSecurityTrustResourceUrl(
+            Global.BACKEND_URL + item?.details?.file_path
+          )
+        : '',
+      total_employee_cost: item?.details?.total_employee_cost,
+      total_staff_cost: item?.details?.total_staff_cost,
+      credit_balance: item?.details?.credit_balance,
+    };
+
+    $('#historymmodalbutton').click();
+  }
+
+  cancellData() {
+    this.resetFilter.emit(true);
+  }
+}

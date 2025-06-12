@@ -1,0 +1,360 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Compliance Listing Console</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Compliance Listing Console</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [monthFilter]="true"
+        [yearFilter]="true"
+        [salarySheet]="true"
+        [complianceStatus]="true"
+        [isBranchMultiple]="false"
+        (onFiltered)="employeeFilter = $event; fetchEmployeeList()"
+      >
+        <div addOn_btn1 class="col-sm-2 col-12">
+          <button
+            [disabled]="true"
+            class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+          >
+            <i class="fa fa-refresh" aria-hidden="false"></i>
+            <i style="font-size: 10px" class="fa">&#xf021;</i>
+            Reset
+          </button>
+        </div>
+      </companyuser-app-table-filter>
+      <div class="my-3 d-flex">
+        <div class="d-flex">
+          <div class="switch" [class.actve-tab]="listing_type === 'pf'">
+            <label class="d-flex mb-0" for="pf"
+              ><input
+                class="mr-1"
+                type="radio"
+                id="pf"
+                name="type"
+                checked
+                (change)="listing_type = 'pf'; fetchEmployeeList()"
+              />
+              PF</label
+            >
+          </div>
+          <div class="switch" [class.actve-tab]="listing_type === 'esic'">
+            <label class="d-flex mb-0" for="esic"
+              ><input
+                class="mr-1"
+                type="radio"
+                id="esi"
+                name="type"
+                (change)="listing_type = 'esic'; fetchEmployeeList()"
+              />
+              ESI</label
+            >
+          </div>
+        </div>
+      </div>
+      <div class="card bd-0 mt-2">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <div style="font-size: 18px; font-weight: 500" class="text-dark">
+              PF Listing
+            </div>
+            <div class="d-flex">
+              <div class="d-flex mr-3">
+                <div
+                  class="switch"
+                  [class.active-tab]="compliance_type === 'ecr'"
+                >
+                  <label class="d-flex mb-0" for="ecr"
+                    ><input
+                      class="mr-1"
+                      type="radio"
+                      id="ecr"
+                      name="type2"
+                      (change)="compliance_type = 'ecr'; fetchEmployeeList()"
+                      checked
+                    />
+                    ECR</label
+                  >
+                </div>
+                <div
+                  class="switch"
+                  [class.active-tab]="compliance_type === 'arrear'"
+                >
+                  <label class="d-flex mb-0" for="Arrear"
+                    ><input
+                      class="mr-1"
+                      type="radio"
+                      id="Arrear"
+                      name="type2"
+                      (change)="compliance_type = 'arrear'; fetchEmployeeList()"
+                    />
+                    Arrear</label
+                  >
+                </div>
+              </div>
+              <button
+                *ngIf="
+                  Global.checkCompanyModulePermission({
+                    company_module: 'compliance',
+                    company_sub_module: 'compliance_listing',
+                    company_sub_operation: ['generate'],
+                    company_strict: true
+                  })
+                "
+                #btn2
+                [disabled]="!anyRowsChecked()"
+                (click)="generateEmployeePayslip($event)"
+                type="button"
+                class="btn btn-info pd-x-12 h-100 mt-0"
+                style="font-size: 13px"
+              >
+                <i class="fa">&#xf021;</i>
+                GENERATE
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body px-0 bd-t-0 rounded-bottom pt-0">
+          <!-- <app-custom-tableoption (onFilterChanged)="generateMasterSheet({page: 1, options: $event})"></app-custom-tableoption> -->
+
+          <div class="finacial-tbl">
+            <app-custom-tableoption
+              [searchable]="true"
+              (onFilterChanged)="
+                employeePaginationOptions.limit = +$event?.length;employeeTableFilterOptions.searchkey = $event.searchkey;
+                fetchEmployeeList()
+              "
+            ></app-custom-tableoption>
+            <!-- <div class="table-responsive"> -->
+            <table class="w-100">
+              <thead>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      [value]="rowCheckedAll"
+                      [checked]="rowCheckedAll"
+                      (change)="allRowsCheckboxChecked($event)"
+                    />
+                    SL No.
+                  </th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Earning</th>
+                  <th>Type</th>
+                  <th>Wage Month</th>
+                  <th>Status</th>
+                  <th>File Id/Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngFor="let employee of employeesListing; let i = index"
+                >
+                  <tr
+                    *ngFor="
+                      let type of employee?.compliance_report?.sheet_types;
+                      let j = index
+                    "
+                  >
+                    <td>
+                      <label
+                        class="d-flex align-items-center"
+                        for="checkrow-{{ i + 1 }}-{{ j + 1 }}"
+                      >
+                        <input
+                          *ngIf="
+                            employee?.compliance_report[type]?.hold_salary !=
+                              'active' &&
+                            ((employee?.compliance_report?.emp_uan_no !== '' &&
+                              listing_type == 'pf' &&
+                              (!employee?.compliance_report[type]
+                                ?.pf_challan_referance_id ||
+                                employee?.compliance_report[type]
+                                  ?.pf_challan_referance_id === '')) ||
+                              ((!employee?.compliance_report?.esic_no ||
+                                employee?.compliance_report?.esic_no != '') &&
+                                listing_type == 'esic' &&
+                                (!employee?.compliance_report[type]
+                                  ?.esic_challan_referance_id ||
+                                  employee?.compliance_report[type]
+                                    ?.esic_challan_referance_id === '')))
+                          "
+                          type="checkbox"
+                          class="mr-2"
+                          [attr.checked]="
+                            employee?.compliance_report?.[type]?.checked == true ? 'checked' : null
+                          "
+                          [checked]="employee?.compliance_report?.[type]?.checked == true ? 'checked' : null"
+                          id="checkrow-{{ i + 1 }}-{{ j + 1 }}"
+                          [attr.data-checkbox-id]="employee?._id + type"
+                          (click)="rowCheckBoxChecked($event, employee, type)"
+                        />
+
+                        {{
+                          Global.getTableSerialNumber(
+                            i,
+                            employeePaginationOptions.limit,
+                            employeePaginationOptions.page
+                          )
+                        }}
+
+                        <span *ngIf="j !== 0">
+                          {{
+                            (employee?.compliance_report?.sheet_types?.length ||
+                              0) > 1
+                              ? "." + j
+                              : ""
+                          }}</span
+                        >
+                      </label>
+                    </td>
+                    <td>
+                      <div *ngIf="j === 0">{{ employee?.emp_id }}</div>
+                    </td>
+                    <td>
+                      <div *ngIf="j === 0">
+                        {{ employee?.emp_first_name }}
+                        {{ employee?.emp_last_name }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{
+                          employee?.compliance_report[type]?.sheet_type
+                            | titlecase
+                        }}
+                      </div>
+                    </td>
+                    <td>{{ getPayload()?.compliance_type | titlecase }}</td>
+                    <td>{{ formatmonth() }}</td>
+                    <td
+                      class="d-flex justify-content-around align-items-center"
+                    >
+                      {{ getPayload()?.compliance_status | titlecase }}
+                      <button
+                        *ngIf="getPayload()?.compliance_status == 'generated'"
+                        class="btn btn-custom btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="View"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa">&#xf021;</i>
+                        </div>
+                      </button>
+                    </td>
+                    <td>
+                      <span
+                        *ngIf="
+                          listing_type == 'pf' &&
+                          employee?.compliance_report?.emp_uan_no == ''
+                        "
+                        >No UAN</span
+                      >
+                      <span
+                        *ngIf="
+                          listing_type == 'esic' &&
+                          employee?.compliance_report?.esic_no == ''
+                        "
+                        >No ESI no.</span
+                      >
+                      <span
+                        *ngIf="
+                          (listing_type == 'pf' &&
+                            employee?.compliance_report?.emp_uan_no != '') ||
+                          (listing_type == 'esic' &&
+                            employee?.compliance_report?.esic_no != '')
+                        "
+                      >
+                        <span
+                          *ngIf="
+                            getPayload().listing_type == 'pf' &&
+                            (!employee?.compliance_report[type]
+                              ?.pf_challan_referance_id ||
+                              employee?.compliance_report[type]
+                                ?.pf_challan_referance_id === '')
+                          "
+                          >Ready</span
+                        >
+                        <span
+                          *ngIf="
+                            getPayload().listing_type == 'esic' &&
+                            (!employee?.compliance_report[type]
+                              ?.esic_challan_referance_id ||
+                              employee?.compliance_report[type]
+                                ?.esic_challan_referance_id == '')
+                          "
+                          >Ready</span
+                        >
+                        <span
+                          *ngIf="
+                            getPayload().listing_type == 'pf' &&
+                            employee?.compliance_report[type]
+                              ?.pf_challan_referance_id != ''
+                          "
+                          >{{
+                            employee?.compliance_report[type]
+                              ?.pf_challan_referance_id
+                          }}</span
+                        >
+                        <span
+                          *ngIf="
+                            getPayload().listing_type == 'esic' &&
+                            employee?.compliance_report[type]
+                              ?.esic_challan_referance_id != ''
+                          "
+                          >{{
+                            employee?.compliance_report[type]
+                              ?.esic_challan_referance_id
+                          }}</span
+                        >
+                      </span>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="employeesListing.length == 0">
+                  <td
+                    colspan="100%"
+                    class="text-center"
+                    style="background-color: #f7f7f7"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- </div> -->
+          </div>
+          <app-custom-pagination
+            [rows]="employeesListing"
+            [paginationOptions]="employeePaginationOptions"
+            (onPageClicked)="
+              employeePaginationOptions.page = $event; fetchEmployeeList()
+            "
+          ></app-custom-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

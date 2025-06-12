@@ -1,0 +1,162 @@
+<div class="tab-pane fade show active" id="apply-live" role="tabpanel" aria-labelledby="apply-live-tab">
+    <div class="tabheader">
+        <h5>Reimbursement</h5>
+        <a class="editicon apply-btn" href="javascript: void(0)" data-toggle="modal" id="reimbursementModal_modal_btn" data-target="#reimbursementModal" >Apply</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>MONTH</th>
+                    <th>YEAR</th>
+                    <th>HEAD</th>
+                    <th>AMOUNT</th>
+                    <th>DOCUMENT</th>
+                    <th>STATUS</th>
+                    <th>REMARKS</th>
+    
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of extra_earnings; let i = index">
+                    <th>{{item.created_at | date:'dd/MM/YY'}}</th>
+                    <th>{{item.month?.description}}</th>
+                    <th>{{item?.year?.value}}</th>
+                    <th>{{item?.head_id ?? 'N/A'}}</th>
+                    <th>{{item.amount | currency:'₹'}}</th>
+                    <th>
+                        <a style="cursor: pointer;" *ngIf="item?.document;else no_image" (click)="openDocument(item?.document)"> Document  &nbsp;</a>
+                        <ng-template #no_image>
+                         N/A   
+                        </ng-template>
+                    </th>
+                    
+                    <th>{{item.status | titlecase}}</th>
+                   
+                    <th>
+                       
+                            <button   class="btn btn-primary btn-icon mx-1" data-toggle="tooltip"  data-placement="top" title="Remarks" (click)="openRemark(item);">
+                              <div style="width:25px; height:25px;"><i class="fa fa-eye"></i></div>
+                          </button>
+                        
+                    </th>
+    
+                </tr>
+                <tr *ngIf="extra_earnings.length == 0">
+                    <td colspan="5" class="text-center">No records found</td>
+                </tr>
+            </tbody>
+        </table> 
+    </div>
+
+</div>
+<app-custom-pagination [rows]="extra_earnings" [paginationOptions]="paginationOptions" (onPageClicked)="fetchextraEarning($event)"></app-custom-pagination>
+
+<div class="modal fade come-from-modal modal-design right" id="reimbursementModal" tabindex="-1" role="dialog" aria-labelledby="reimbursementModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUnitLabel">Reimbursement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body form-main">
+                <form [formGroup]="extraeariningapplyForm">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label>Month</label>
+                            <ngx-select-dropdown formControlName="wage_month" [options]="Global.monthMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Month *'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(extraeariningapplyForm, 'wage_month', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Year</label>
+                            <ngx-select-dropdown formControlName="wage_year" [options]="yearMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Year *'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(extraeariningapplyForm, 'wage_year', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-12" >
+                            <label>Head</label>
+                            <input type="text" class="form-control" placeholder=""    formControlName="head_id">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(extraeariningapplyForm, 'head_id', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Amount</label>
+                            <input type="text" class="form-control" placeholder=""    formControlName="amount">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(extraeariningapplyForm, 'amount', 'required')">This field is required</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>File</label>
+                            <input type="file" accept="image/*" class="form-control" placeholder="" formControlName="extra_earnings_document"   (change)="onsingleFileChanged($event,'extra_earnings_document')">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(extraeariningapplyForm, 'amount', 'required')">This field is required</p>
+                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                            <p class="error-element" *ngIf="extraeariningapplyForm.get('extra_earnings_document')?.hasError('fileSize')">File size exceeds {{ extraeariningapplyForm.get('extra_earnings_document').getError('maxSize') }} KB.</p>
+                            
+                            <a *ngIf="extraeariningapplyForm?.value?.document_preview;" href="{{Global.BACKEND_URL}}/{{extraeariningapplyForm?.value?.document_preview}}" target="_blank"> Document  &nbsp;</a>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Reason</label>
+                            <textarea class="form-control"  formControlName="remark"></textarea>
+
+                        </div>
+                        <div class="form-group col-12 mb-0">
+                            <button type="submit" class="btn btn-apply w-100" (click)="submitForm($event);">Apply</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<button id="empremarkmodalbutton" [hidden]="true" data-toggle="modal" data-target="#empremarkmodal"></button>
+<div id="empremarkmodal" tabindex='-1' class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-header pd-x-20">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Remarks</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+             {{rowDetail?.company_remark ?? 'N/A' }}   
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="documentmodalbutton" [hidden]="true" data-toggle="modal" data-target="#documentmodal"></button>
+<div id="documentmodal" tabindex='-1' class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-header pd-x-20">
+                <!-- <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Remarks</h6> -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-1">
+                <img width="100%" height="100%"  [src]="documentLink" alt="">
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+

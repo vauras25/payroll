@@ -1,0 +1,249 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item" routerLink="/company/settings"
+        >Company Settings</a
+      >
+      <a
+        class="breadcrumb-item"
+        routerLink="/company/settings"
+        [queryParams]="{ active: 'mastersettings' }"
+        >Master</a
+      >
+      <a class="breadcrumb-item active">Location Master</a>
+    </nav>
+  </div>
+
+  <ng-container>
+    <div class="br-pagetitle">
+      <i class="icon icon ion-ios-home"></i>
+      <div>
+        <h4>Location Master</h4>
+        <p class="mg-b-0">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+        </p>
+      </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="client-submit-section">
+      <div class="br-section-wrapper">
+        <ng-container>
+          <ng-container>
+            <h6 class="br-section-label mb-3">
+              {{ !editActionId ? "Add Location" : "Edit Location" }}
+            </h6>
+          </ng-container>
+
+          <div class="form-layout form-layout-7">
+            <form [formGroup]="GeoFenceForm">
+              <div class="row no-gutters">
+                <div class="col-5 col-sm-4">Location:</div>
+                <div class="col-7 col-sm-8">
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="location"
+                    placeholder="Enter Location"
+                  />
+
+                  <p
+                    class="error-element"
+                    *ngIf="
+                      GeoFenceForm.controls.location.hasError('required') &&
+                      GeoFenceForm.controls.location.dirty
+                    "
+                  >
+                    This field is required
+                  </p>
+                </div>
+              </div>
+              <div class="row no-gutters">
+                <div class="col-5 col-sm-4">Address:</div>
+                <div class="col-7 col-sm-8">
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="address"
+                    ngx-google-places-autocomplete
+                    (onAddressChange)="handleAddressChange($event)"
+                    placeholder="Choose Address"
+                  />
+
+                  <p
+                    class="error-element"
+                    *ngIf="
+                      GeoFenceForm.controls?.latitude?.hasError('required') &&
+                      GeoFenceForm.controls?.latitude?.dirty &&
+                      GeoFenceForm.controls?.longitude?.hasError('required') &&
+                        GeoFenceForm.controls?.longitude?.dirty
+                    "
+                  >
+                    This field is required
+                  </p>
+                </div>
+              </div>
+              <div class="row no-gutters">
+                <div class="col-5 col-sm-4">Radius <small>(in meters)</small>: </div>
+                <div class="col-7 col-sm-8">
+                  <input
+                    class="form-control"
+                    type="number"
+                    min="1"
+                    formControlName="radius"
+                    placeholder="Enter Raduis (meters)"
+                  />
+                  <p
+                    class="error-element"
+                    *ngIf="
+                      GeoFenceForm.controls.radius.hasError('required') &&
+                      GeoFenceForm.controls.radius.dirty
+                    "
+                  >
+                    This field is required
+                  </p>
+                </div>
+              </div>
+              <div class="row no-gutters">
+                <div class="col-5 col-sm-4">Description:</div>
+                <div class="col-7 col-sm-8">
+                  <textarea
+                    class="form-control"
+                    formControlName="description"
+                    rows="4"
+                    cols="100%"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="row no-gutters">
+                <div class="col-5 col-sm-4"></div>
+
+                <div class="col-7 col-sm-8">
+                  <ng-container *ngIf="!editActionId">
+                    <button
+                      type="submit"
+                      [disabled]="!GeoFenceForm.valid"
+                      (click)="create($event)"
+                      class="btn btn-info"
+                    >
+                      <span>Add Location</span>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="editActionId">
+                    <button
+                      type="button"
+                      (click)="cancelEdit()"
+                      class="btn btn-danger mg-r-5"
+                    >
+                      <span>Cancel Editing</span>
+                    </button>
+                    <button
+                      type="submit"
+                      [disabled]="!GeoFenceForm.valid"
+                      (click)="update($event)"
+                      class="btn btn-info"
+                    >
+                      <span>Update Location</span>
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+
+        <!--  -->
+
+        <ng-container>
+          <h6 class="br-section-label mb-3 mt-5">Locations List</h6>
+          <div class="table-wrapper">
+            <app-custom-tableoption
+            [searchable]="true"
+            (onFilterChanged)="reportPaginationOptions.limit = +$event?.length;reportTableFilterOptions.searchkey = $event.searchkey; fetchLocationList($event) "
+          ></app-custom-tableoption>
+            <table class="table display responsive nowrap wd-100p">
+              <thead>
+                <tr>
+                  <th class="wd-15p text-center">SL</th>
+                  <th class="wd-15p text-center">Location</th>
+                  <th class="wd-15p text-center">Status</th>
+                  <th class="wd-25p text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let location of locationListing; let i = index">
+                  <td style="width: 10%" class="text-center">{{ i + 1 }}</td>
+                  <td style="width: 50%" class="text-center">
+                    {{ location?.address }}
+                  </td>
+                  <td style="width: 10%" class="text-center">
+                    <div
+                      class="br-toggle br-toggle-rounded br-toggle-primary"
+                      [class.on]="location?.status == 'active'"
+                      (click)="updateStatus(location)"
+                    >
+                      <div class="br-toggle-switch"></div>
+                    </div>
+                  </td>
+                  <td style="width: 30%" class="text-center">
+                    <button
+                      class="btn btn-primary btn-icon mx-1"
+                      (click)="viewLocation(location)"
+                    >
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-eye"></i>
+                      </div>
+                    </button>
+                    <button
+                      class="btn btn-primary btn-icon mx-1"
+                      (click)="patchFormValues(location)"
+                    >
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-pen"></i>
+                      </div>
+                    </button>
+                    <button
+                      class="btn btn-danger btn-icon mx-1"
+                      (click)="deleteLocation(location?._id)"
+                    >
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-trash"></i>
+                      </div>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="!locationListing.length">
+                  <td colspan="4" class="text-center">No records found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <button
+    id="viewLocation"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#viewLocationModel"
+  ></button>
+  <div id="viewLocationModel" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h4 class="text-dark">Location</h4>
+        </div>
+        <div class="modal-body pd-y-20 pd-x-25">
+         <app-view-location-map [location]="locationMaster"></app-view-location-map>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+

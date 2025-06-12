@@ -1,0 +1,196 @@
+<div class="table-responsive">
+<div class="table-wrapper mt-3">
+   <table  class="table display responsive nowrap wd-100p employee-table">
+      <!-- <thead>
+         <tr >
+               
+            <th class="text-center" colspan="10">
+               Register or Leave
+            </th>
+            <th colspan="30"></th>
+            
+         </tr>
+         <tr >
+            
+            <th  class="text-center" colspan="10">
+              [Prescribed under sub-rule (2) of Rule 18 and Rule 21 of the West Bengal Shops and Establishments Rules, 1964]
+            </th>
+            <th colspan="30"></th>
+         </tr>
+         <tr >
+          
+           <th class="s9 softmerge">
+              <div class="softmerge-inner" >Name of Shop/Establishment : </div>
+           </th>
+           
+           <th class="s17 softmerge">
+              <div class="softmerge-inner" >{{leaveData[0]?.companies?.establishment_name}}</div>
+           </th>
+           
+           <th class="s9 softmerge" colspan="3">
+              <div class="softmerge-inner">Name of Employee : </div>
+           </th>
+           
+           <th class="s21" colspan="30">{{leaveData[0]?.emp_first_name}} {{leaveData[0]?.emp_last_name}}</th>
+           
+         </tr>
+         <tr >
+          
+           <th class="s9 softmerge">
+              <div class="softmerge-inner" >Name of Shop-keeper/Employer : </div>
+           </th>
+           
+           <th class="s17 softmerge">
+              <div class="softmerge-inner" >{{leaveData[0]?.companies?.establishment_name}}</div>
+           </th>
+           
+           <th class="s9 softmerge" colspan="3">
+              <div class="softmerge-inner" >Father’s Name : </div>
+           </th>
+           
+           <th class="s22" colspan="30">{{leaveData[0]?.emp_father_name}} </th>
+           
+         </tr>
+         <tr >
+           
+           <th class="s9 softmerge">
+              <div class="softmerge-inner" style="width:256px;left:-1px">Address in full of Shop/Establishment : </div>
+           </th>
+           
+           <th class="s17 softmerge">
+              <div class="softmerge-inner" style="width:343px;left:-1px">
+               
+               {{leaveData[0]?.company_details?.reg_office_address?.street_name}}
+               {{leaveData[0]?.company_details?.reg_office_address?.door_no}}
+               {{leaveData[0]?.company_details?.reg_office_address?.locality}}
+               {{leaveData[0]?.company_details?.reg_office_address?.district_name}}
+               {{leaveData[0]?.company_details?.reg_office_address?.pin_code}}
+               {{leaveData[0]?.company_details?.reg_office_address?.state}}
+
+            
+            </div>
+           </th>
+           
+           <th class="s9 softmerge" colspan="3">
+              <div class="softmerge-inner" >Date of appointment : </div>
+           </th>
+         
+           <th class="s24" colspan="30">2/26/2021</th>
+           
+         </tr>
+         <tr >
+          
+           <th class="s9 softmerge" colspan="30">
+              <div class="softmerge-inner">Registration No. : </div>
+           </th>
+           <th class="s7"></th>
+          
+         </tr>
+      </thead> -->
+      
+   </table>
+    <table  class="table display responsive nowrap wd-100p employee-table" *ngFor="let item_main of rows">
+        
+         <tbody>
+          
+            <tr >
+              
+               <td class="text-center" colspan="10" >PRIVILEGE LEAVE</td>
+               <td class="text-center" colspan="10">MATERNITY LEAVE</td>
+               <td class="text-center" colspan="10">SPECIAL LEAVE</td>
+            </tr>
+            
+            <tr >
+              
+               <td class="s36" rowspan="3">Date of application</td>
+               <td class="text-center" colspan="2">Applied</td>
+               <td class="s36" colspan="2">Leave Granted<br></td>
+               <td class="s36" rowspan="3">Balance<br>due<br></td>
+               <td class="text-center" colspan="3">If refused in part or full</td>
+               <td class="s35" rowspan="3">Remarks</td>
+               <td class="text-center" rowspan="3">Date of application</td>
+               <td class="text-center" colspan="2">Applied</td>
+               <td class="text-center" colspan="2">Leave Granted<br></td>
+               <td class="text-center" rowspan="3">Balance<br>due<br></td>
+               <td class="text-center" colspan="3">If refused in part or full</td>
+               <td class="text-center" rowspan="3">Remarks</td>
+               <td class="text-center" rowspan="3">Date of application</td>
+               <td class="text-center" colspan="2">Applied</td>
+               <td class="text-center" colspan="2">Leave Granted<br></td>
+               <td class="text-center" rowspan="3">Balance<br>due<br></td>
+               <td class="text-center" colspan="3">If refused in part or full</td>
+               <td class="s35" rowspan="3">Remarks</td>
+            </tr>
+            <tr >
+              
+               <td class="s36" rowspan="2">From (Date)</td>
+               <td class="s36" rowspan="2">To    (Date)</td>
+               <td class="s36" rowspan="2">From  (Date)</td>
+               <td class="s36" rowspan="2">To  (Date)</td>
+               <td class="s36" rowspan="2">From (Date)</td>
+               <td class="s36" rowspan="2">To    (Date)</td>
+               <td class="s35" rowspan="2">Reasons</td>
+               <td class="s36" rowspan="2">From (Date)</td>
+               <td class="s36" rowspan="2">To    (Date)</td>
+               <td class="s36" rowspan="2">From  (Date)</td>
+               <td class="s36" rowspan="2">To  (Date)</td>
+               <td class="s36" rowspan="2">From (Date)</td>
+               <td class="s36" rowspan="2">To    (Date)</td>
+               <td class="s35" rowspan="2">Reasons</td>
+               <td class="s36" rowspan="2">From (Date)</td>
+               <td class="s36" rowspan="2">To    (Date)</td>
+               <td class="s36" rowspan="2">From  (Date)</td>
+               <td class="s36" rowspan="2">To  (Date)</td>
+               <td class="s36" rowspan="2">From (Date)</td>
+               <td class="s36" rowspan="2">To    (Date)</td>
+               <td class="s35" rowspan="2">Reasons</td>
+            </tr>
+            <tr >
+              
+            </tr>
+            <tr *ngFor="let item of item_main?.data">
+               
+               <td class="s35">{{item?.privilege?.application_date?(item?.privilege?.application_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38">{{item?.privilege?.from_date?(item?.privilege?.from_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38">{{item?.privilege?.to_date?(item?.privilege?.to_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38"></td>
+               <td class="s38"></td>
+               <td class="s39">{{item?.privilege?.balance_due?(item?.privilege?.balance_due | number:'1.2-2'):'N/A'}}</td>
+               <td class="s38"></td>
+               <td class="s38"></td>
+               <td class="s38"></td>
+               <td class="s38"></td>
+               <td class="s35">{{item?.maternity?.application_date?(item?.maternity?.application_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38">{{item?.maternity?.from_date?(item?.maternity?.from_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38">{{item?.maternity?.to_date?(item?.maternity?.to_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s39">{{item?.maternity?.balance_due?(item?.maternity?.balance_due | number:'1.2-2'):'N/A'}}</td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s35">{{item?.special?.application_date?(item?.special?.application_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38">{{item?.special?.from_date?(item?.special?.from_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s38">{{item?.special?.to_date?(item?.special?.to_date | date:'dd-MM-YYYY'):'N/A'}}</td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s39">{{item?.special?.balance_due?(item?.special?.balance_due | number:'1.2-2'):'N/A'}}</td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+               <td class="s41"></td>
+            </tr>
+            <tr>
+               <td colspan="30" class="text-center" *ngIf="rows.length<=0">No Record(s) Found</td>
+            </tr>
+            
+          
+         </tbody>
+    </table>  
+
+
+
+
+</div>
+</div>

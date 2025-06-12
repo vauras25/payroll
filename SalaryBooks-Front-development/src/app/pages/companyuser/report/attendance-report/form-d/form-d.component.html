@@ -1,0 +1,103 @@
+<div class="table-responsive">
+  <div class="table-wrapper mt-3">
+    <table class="table display responsive nowrap wd-100p employee-table">
+      <thead>
+        <tr >
+          <th class="text-center" [attr.colspan]="employeeListFilter?.month?.days + 5">FORM D</th>
+        </tr>
+        <tr>
+          <th class="text-center" [attr.colspan]="employeeListFilter?.month?.days + 5">FORMAT OF ATTENDANCE REGISTER</th>
+        </tr>
+        <tr>
+          <th rowspan="2">
+            <label class="d-flex align-items-center mb-0" for="select-all">
+              <input
+                type="checkbox"
+                class="mr-2"
+                id="select-all"
+                [value]="rowCheckedAll"
+                (change)="allRowsCheckboxChecked($event)"
+                *ngIf="empReportData.length > 0"
+              />
+              SL No.
+            </label>
+          </th>
+          <!-- <th  rowspan="2">Clinet ID</th> -->
+          <th rowspan="2">Employee Code</th>
+          <th rowspan="2">Name</th>
+          <!-- <th  rowspan="2">RELAY # OR SET WORK/Designation</th> -->
+          <!-- <th  rowspan="2">Place of work*</th> -->
+          <th rowspan="2">Date of Joining</th>
+          <th
+            [attr.colspan]="employeeListFilter?.month?.days"
+            class="text-center"
+          >
+            {{ employeeListFilter?.month?.description }}-{{
+              employeeListFilter?.wage_year_from
+            }}
+          </th>
+          <th rowspan="2">Summary No. Of Days</th>
+          <!-- <th  rowspan="2">Signature of Register Keeper</th> -->
+        </tr>
+        <tr>
+          <th *ngFor="let item of days">{{ item }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of empReportData; let i = index">
+          <td>
+            <label
+              class="d-flex align-items-center"
+              [for]="'checkrow-' + (i + 1)"
+            >
+              <input
+                type="checkbox"
+                class="mr-2"
+                [attr.checked]="item?.checked == true ? 'checked' : null"
+                id="checkrow-{{ i + 1 }}"
+                [attr.data-checkbox-id]="item?._id"
+                (click)="rowCheckBoxChecked($event, item)"
+              />
+              {{
+                Global.getTableSerialNumber(
+                  i,
+                  paginationOptions.limit,
+                  paginationOptions.page
+                )
+              }}
+            </label>
+          </td>
+          <!-- <td >{{ item?.client[0]?.client_code }}</td> -->
+          <td>{{ item?.emp_id }}</td>
+          <td class="s9">
+            {{ item?.emp_first_name }} {{ item?.emp_last_name }}
+          </td>
+          <!-- <td >{{ item?.designation[0]?.designation_name }}</td> -->
+          <!-- <td ></td> -->
+          <td>
+            {{
+              item?.employee_details[0]?.employment_hr_details?.date_of_join
+                | date : "MM/dd/YYYY"
+            }}
+          </td>
+          <td *ngFor="let subItem of item?.attendance">
+            {{ subItem?.attendance_stat }}
+          </td>
+
+          <td></td>
+          <!-- <td ></td> -->
+        </tr>
+        <tr *ngIf="empReportData.length <= 0">
+          <td [attr.colspan]="days.length + 9" style="text-align: center">
+            No Record(s) Found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<app-custom-pagination
+  [rows]="empReportData"
+  [paginationOptions]="paginationOptions"
+  (onPageClicked)="getFiltered($event)"
+></app-custom-pagination>

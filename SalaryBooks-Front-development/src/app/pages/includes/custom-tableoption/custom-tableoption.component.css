@@ -1,0 +1,10 @@
+.table-options {
+    margin-bottom: 10px;
+}
+
+.table-options .table-search {
+    float: right;
+    width: 15rem;
+    padding: 8px 10px;
+    height: auto;
+}

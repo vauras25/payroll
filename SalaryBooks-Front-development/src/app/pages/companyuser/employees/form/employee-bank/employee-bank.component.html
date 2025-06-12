@@ -1,0 +1,201 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Bank</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Bank Details
+
+                <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'bankdetails'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section">
+                <form [formGroup]="employeeBankForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Bank Name
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'bank_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="bank_name">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'bank_name', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Branch
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'branch_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="branch_name">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'branch_name', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Branch Address
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'branch_address', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="branch_address">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'branch_address', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Bank PIN
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'branch_pin', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="branch_pin">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'branch_pin', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            A/C No
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'account_no', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="account_no">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'account_no', 'required')">This field is required</p>
+
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'account_no', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'account_no', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'account_no', 'maxlength'))">Enter valid A/C No</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Re-enter A/C No
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'account_no_confirmation', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="account_no_confirmation">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'required')">This field is required</p>
+
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'maxlength'))">Enter valid A/C No</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            A/C Type
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'account_type', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="account_type" [options]="accountTypeMaster" class="form-control" [config]="{search:false, placeholder: 'Select One'}" [multiple]="false"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'account_type', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            IFSC Code
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'ifsc_code', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="ifsc_code">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'required')">This field is required</p>
+
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'maxlength'))">Enter valid IFSC Code</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            MICR No
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'micr_no', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="micr_no">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'micr_no', 'required')">This field is required</p>
+
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'micr_no', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'micr_no', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'micr_no', 'maxlength'))">Enter valid MICR No</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Upload Cheque/Passbook
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeBankForm, 'cancel_cheque', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="operation == 'view'">
+                                <button *ngIf="employee_details?.emp_det?.bank_details?.cancel_cheque; else noPassbookImage" (click)="imageViewer(Global.BACKEND_URL + '/' + employee_details.emp_det?.bank_details?.cancel_cheque)" class="btn btn-primary">View Passbook Image</button>
+                                <ng-template #noPassbookImage>
+                                    N/A
+                                </ng-template>
+                            </ng-container>
+
+                            <ng-container *ngIf="operation == 'edit'">
+                                <input class="form-control" type="file" 
+                              
+                                
+                                accept="image/*" formControlName="cancel_cheque" (change)="onFileChanged($event, employeeBankForm, 'cancel_cheque', 'cancel_cheque_file')">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'cancel_cheque', 'required')">This field is required</p>
+                                <p class="error-element" *ngIf="(max_upload_limit>0 && net_uploaded_size>max_upload_limit)">Max Upload Size Exceed</p>
+                                <p class="error-element" *ngIf="employeeBankForm.get('cancel_cheque').hasError('fileSize')">
+                                    File size exceeds {{ employeeBankForm.get('cancel_cheque').getError('maxSize') }} KB.</p>
+
+
+                            </ng-container>
+                        </div>
+                    </div>
+                    
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info text-uppercase" (click)="updateEmployeeBankDetails($event)">
+                              <span *ngIf="Global.checkCompanyModulePermission({ 'staff_module': 'employee_hr_details', 'staff_operation': ['add', 'edit', 'view', 'delete'], 'company_strict': true }); else onlyUpdateBlock">Update</span>
+                              <ng-template #onlyUpdateBlock>
+                                <span>Update</span>
+                              </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+<div id="image-viewer-modal" tabindex="-1" class="modal fade animated fadeInLeftBig">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0">
+            <div class="modal-body pd-0">
+                <div class="row flex-row-reverse no-gutters">
+                    <div class="col-lg-12">
+                        <button style="position: absolute; color: white; right: 0;" type="button" class="close mg-t-2 mg-r-2 text-dark" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <div class="p-3 pt-2 mt-2">
+                            <img src="" alt="" id="image-src" class="w-100 img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

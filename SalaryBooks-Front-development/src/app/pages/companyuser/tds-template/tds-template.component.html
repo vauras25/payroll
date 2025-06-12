@@ -1,0 +1,606 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+      <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+      <a class="breadcrumb-item active">TDS Rule</a>
+    </nav>
+  </div>
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-briefcase"></i>
+    <div>
+      <h4>TDS Rule Declaration</h4>
+      <p class="mg-b-0">
+        Define Income Tax Rule for the Financial Year
+        <!-- Lorem Ipsum is simply dummy text of the printing and typesetting -->
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+
+    <div *ngIf="Global.checkCompanyModulePermission({
+      company_module: 'company_rules_2',
+      company_sub_module: 'tds_rules',
+      company_sub_operation: ['add', 'edit'],
+      company_strict: true
+    })" class="br-section-wrapper" id="lwf-rule-form">
+      <form [formGroup]="tdsForm" *ngIf="tdsForm">
+        <h6 class="br-section-label mb-3">
+          <ng-container *ngIf="!editActionId; else updateHeadingText">
+              Define TDS Rule
+
+              <button (click)="openTemplateLibrary()" class="btn btn-sm btn-primary float-right"><i class="fa fa-book"></i>&nbsp;Template Library</button>
+          </ng-container>
+          <ng-template #updateHeadingText>
+              Update TDS Rule
+          </ng-template>
+      </h6>
+        <!-- <div class="c-table"></div> -->
+          <!-- <div class="row 1">
+            <div class="col-4 t-el t-head">Salary Heads</div>
+            <div class="col-7 t-el t-head">Income Tax Earning Heads</div>
+            <div class="col-1 t-el t-head">Action</div>
+            <ng-container formArrayName="salary_head_to_earning_head" >
+              <ng-container *ngFor="let templateDataControl of getTemplateRows('salary_head_to_earning_head'); let i = index" [formGroupName]="i">
+                  <div class="col-4 t-el t-data" *ngIf="salaryHeads.length>0">
+                      <ngx-select-dropdown
+                      formControlName="salary_head"
+                      [options]="salaryHeads"
+                      class="form-control p-1"
+                      [config]="{ search: true, placeholder: 'Select Head' }"
+                    ></ngx-select-dropdown>
+                  </div>
+                  <div class="col-7 t-el t-data" *ngIf="gov_earning_heads.length>0">
+                      <ngx-select-dropdown
+                      formControlName="tax_earning_head"
+                      [options]="gov_earning_heads"
+                      class="form-control p-1"
+                      [config]="{ search: true, placeholder: 'Select Head' }"
+                      ></ngx-select-dropdown>
+                  </div>    
+                  <div class="col-1 t-el t-data d-flex align-items-center">
+                      <div class="">
+                          <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('salary_head_to_earning_head')" class="btn btn-primary btn-icon mg-r-5" *ngIf="((getTemplateRows('salary_head_to_earning_head').length - 1) == i)">
+                          <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                      </button>
+
+                          <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('salary_head_to_earning_head', i)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('salary_head_to_earning_head').length > 1">
+                          <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                      </button>
+                      </div>
+                  </div>
+             </ng-container>
+            </ng-container>    
+          </div>
+          <div class="row 2">
+            <div class="col-12 t-el t-data">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch25" 
+                [checked]="tdsForm.value.define_deductions_rebate=='yes'" (click)="definerebate($event,'define_deductions_rebate')"
+                >
+                <label class="custom-control-label" for="customSwitch25"> Define Deductions/Rebate</label>
+              </div>
+            </div>
+          </div> -->
+          <table class="table table-bordered define-lwf-rule-table nowrap mt-5">
+            <tbody>
+              <tr> <td>
+                <div class="row no-gutters">
+                  <div class="col-3 col-sm-3">
+                      Template Name&nbsp;<span class="text-danger">*</span>
+                  </div>
+                  <div class="col-9 col-sm-9">
+                      <input class="form-control" type="text" formControlName="template_name">
+                      <p class="error-element" *ngIf="tdsForm.controls.template_name.hasError('required') && (tdsForm.controls.template_name.dirty)">This field is required</p>
+                  </div>
+              </div>
+              </td></tr>
+              <tr>
+                <td class="p-0" colspan="3">
+                  <table class="w-100">
+                    <thead>
+                        <tr>
+                            <th>Salary Heads</th>
+                            <th >Income tax Earning Heads</th>
+                        </tr>
+                    </thead>
+                   
+                  <tbody>
+                    <ng-container formArrayName="salary_head_to_earning_head" >
+                        <tr *ngFor="let templateDataControl of getTemplateRows('salary_head_to_earning_head'); let i = index" [formGroupName]="i">
+                          
+                          <td class="pl-0" *ngIf="salaryHeads.length>0">
+                                <ngx-select-dropdown
+                                formControlName="salary_head"
+                                [options]="salaryHeads"
+                                class="form-control p-1"
+                                [config]="{ search: true, placeholder: 'Select Head' }"
+                               
+                              ></ngx-select-dropdown>
+                            </td>
+                            <td *ngIf="gov_earning_heads.length>0">
+                                
+                                <ngx-select-dropdown
+                                formControlName="tax_earning_head"
+                                [options]="gov_earning_heads"
+                                class="form-control p-1"
+                                [config]="{ search: true, placeholder: 'Select Head' }"
+                                ></ngx-select-dropdown>
+                            </td>    
+                            <td>
+                                <div class="">
+                                    <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('salary_head_to_earning_head')" class="btn btn-primary btn-icon mg-r-5" *ngIf="((getTemplateRows('salary_head_to_earning_head').length - 1) == i)">
+                                    <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                </button>
+
+                                    <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('salary_head_to_earning_head', i)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('salary_head_to_earning_head').length > 1">
+                                    <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                </button>
+                                </div>
+                            </td>
+                    </ng-container>    
+                   
+                  </tbody>
+                  
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch25" 
+                        [checked]="tdsForm.value.define_deductions_rebate=='yes'" (click)="definerebate($event,'define_deductions_rebate')"
+                        >
+                        <label class="custom-control-label" for="customSwitch25"> Define Deductions/Rebate</label>
+                      </div>
+                </td>
+            </tr>
+            <tr>
+               <td >Financial Year<span class="text-danger">*</span></td>
+               <td >
+                <ngx-select-dropdown formControlName="define_deductions_rebate_financial_year" [options]="yearMaster" class="form-control" [config]="{search:true, placeholder: 'Financial Year *'}"></ngx-select-dropdown>
+
+               </td>
+             
+
+              
+            </tr>
+          
+            <tr>
+              <td colspan="5"   class="tds_accordian" data-toggle="collapse" href="#old_regime">OLD Regime</td>
+            </tr>
+            <tr>
+              <td colspan="5" id="old_regime" class="panel-collapse ">
+                <ng-container >
+                  <tr>
+                      <td colspan="5">
+                         
+                          <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="customSwitch21" 
+                              [checked]="tdsForm.value.define_standard_deduction=='yes'" 
+                              (click)="definerebate($event,'define_standard_deduction')"
+                              >
+                              <label class="custom-control-label" for="customSwitch21">Define Standard Deduction <span class="text-danger">*</span></label>
+                            </div>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td colspan="5">Standard Deduction for the FY <span class="text-danger">*</span></td>
+                      <td colspan="5">
+                        
+                        
+                        <input type="text" placeholder="Standard Deduction for the FY" class="form-control" formControlName="standard_deduction_amount">
+                        <p class="error-element" *ngIf="tdsForm['controls']['standard_deduction_amount'].errors?.min"> This Field not a negetive Value</p>
+
+                      
+                      </td>
+                  </tr>
+                  <tr>
+                      <td colspan="10">
+      
+                          <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="customSwitch23" 
+                              [checked]="tdsForm.value.define_rebate=='yes'" (click)="definerebate($event,'define_rebate')"
+                              >
+                              <label class="custom-control-label" for="customSwitch23">Define Rebate (<span class="text-danger">*</span>)</label>
+                            </div>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td colspan="3">Eligibility for Rebate is taxable Value <span class="text-danger">*</span></td>
+                      <td colspan="3">
+                          <div class="form-check">
+                              <label class="form-check-label"  style="width: 104px;">
+                                <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value" id="gridRadios3" value="higher">
+                                Higher than </label>
+                                <label class="form-check-label">
+                                <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value" id="gridRadios4" value="lower">
+                                Lower than</label>
+                              
+                            </div>
+                      </td>
+                      <td colspan="3">
+                          <input type="text" class="form-control" placeholder="Taxable Value(*)" formControlName="eligibility_for_rebate_is_taxable_amount">
+                          <p class="error-element" *ngIf="tdsForm['controls']['eligibility_for_rebate_is_taxable_amount'].errors?.min"> This Field not a negetive Value</p>
+
+                      </td>
+                      
+                  </tr>
+                  <tr>
+                      <td colspan="5">
+                          <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="customSwitch24" 
+                              [checked]="tdsForm.value.define_hra_deduction_limits!=null"
+                              >
+                              <label class="custom-control-label" for="customSwitch24"> DefineHRA Deduction limits   ---   Consider  Higher <span class="text-danger">*</span></label>
+                            </div>
+                      </td>
+                      <td colspan="5">
+                          <div class="form-check">
+                              <label class="form-check-label"  style="width: 104px;">
+                                <input class="form-check-input radio-inline" type="radio" formControlName="define_hra_deduction_limits" id="gridRadios5" value="higher">
+                                Higher</label>
+                                <label class="form-check-label">
+                                <input class="form-check-input radio-inline" type="radio" formControlName="define_hra_deduction_limits" id="gridRadios6" value="lower">
+                                Lower</label>
+                              
+                            </div>
+                      </td>
+                  </tr>
+                  <ng-container formGroupName="actual_hra_earned_metro">
+                      <tr>
+                          <td colspan="2">Actual HRA earned (Metro)</td>
+                          <td colspan="2">
+                            <input type="text" placeholder="Actual HRAearned (Metro)" class="form-control" formControlName="percentage">
+                            <p class="error-element" *ngIf="tdsForm.get('actual_hra_earned_metro').controls.percentage.errors?.min"> This Field not a negetive Value</p>
+                          </td>
+                          <td colspan="2">Of Basic</td>
+                          <td colspan="2">
+                              Or Actual declared HRA whichever is <span class="text-danger">*</span>
+                          </td>
+                          <td colspan="2">
+                              <div class="form-check">
+                                  <label class="form-check-label"  style="width: 104px;">
+                                    <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios55" value="higher">
+                                    Higher</label>
+                                    <label class="form-check-label">
+                                    <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios66" value="lower">
+                                    Lower</label>
+                                  
+                                </div>
+                          </td>
+                      </tr>
+                  </ng-container>
+                  <ng-container formGroupName="actual_hra_earned_non_metro">
+                      <tr>
+                          <td colspan="2">Actual HRA (earned) Non-Metro</td>
+                          <td colspan="2">
+                            <input type="text" placeholder="Actual HRA (earned) Non-Metro" class="form-control" formControlName="percentage">
+                            <p class="error-element" *ngIf="tdsForm.get('actual_hra_earned_non_metro').controls.percentage.errors?.min"> This Field not a negetive Value</p>
+
+                          
+                          </td>
+                          <td colspan="2">Of Basic</td>
+                          <td colspan="2">
+                              Or Actual declared HRA whichever is <span class="text-danger">*</span>
+                          </td>
+                          <td colspan="2">
+                              <div class="form-check">
+                                  <label class="form-check-label"  style="width: 104px;">
+                                    <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios7" value="higher">
+                                    Higher</label>
+                                    <label class="form-check-label">
+                                    <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios8" value="lower">
+                                    Lower</label>
+                                  
+                                </div>
+                          </td>
+                      </tr>
+                  </ng-container>
+      
+                  <ng-container formGroupName="actual_rent_declared">
+                      <tr>
+                          <td colspan="2">Actual rent Declared</td>
+                          <td colspan="2">Less 
+                            <input type="text" class="form-control" placeholder="Less" formControlName="percentage">
+                            <p class="error-element" *ngIf="tdsForm.get('actual_rent_declared').controls.percentage.errors?.min"> This Field not a negetive Value</p>
+
+                          </td>
+                          <td colspan="6">Of Basic</td>
+                         
+                      </tr>
+                  </ng-container>
+                  <tr>
+                      <td colspan="10">
+                          <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="p_tax_chapter_vi_deduction_limits" 
+                              [checked]="tdsForm.value.define_p_tax_chapter_vi_deduction_limits=='yes'"  (click)="definerebate($event,'define_p_tax_chapter_vi_deduction_limits')" 
+                              >
+                              <label class="custom-control-label" for="p_tax_chapter_vi_deduction_limits"> Define P.TAX & Chapter VI Deduction limits</label>
+                            </div>
+                      </td>
+                  </tr>
+                  <tr>
+                   
+                 
+                      <tr>
+                          <td colspan="5">Deduction Items</td>
+                          <td colspan="5">UPPER LIMIT</td>
+                      </tr>
+                          
+                      <ng-container formArrayName="deduction_items">
+                      <ng-container *ngFor="let deductDataControl of deductionRows(); let i = index" [formGroupName]="i">
+                        
+                          <ng-container formArrayName="children">
+                            <ng-container *ngIf="deductionSubItems(i).controls.length>0;else no_children">
+                              
+                              <tr *ngFor="let subItem of deductionSubItems(i).controls; let j=index" [formGroupName]="j">
+                                <td colspan="5" [ngClass]="{'text-center': !deductionSubItems(i).controls[j]?.value?.is_parent}"  >
+                                   <label>{{deductionSubItems(i).controls[j]?.value?.label  }}</label> 
+      
+                                    <br/>
+                                      <div class="custom-control custom-switch inline_custom_chk" >
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch{{i}}{{j}}_na" 
+                                        (click)="duductCheckbox($event,i,j)" 
+                                        value="NA"
+
+                                        [checked]="deductionSubItems(i).controls[j]?.value?.type=='NA'"
+
+                                        [disabled]="deductionSubItems(i).controls[j]?.value?.type=='no_limit'"
+                                        >
+                                        <label class="custom-control-label" for="customSwitch{{i}}{{j}}_na">N/A</label>
+                                      </div>
+                                      <div class="custom-control custom-switch inline_custom_chk" >
+      
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch{{i}}{{j}}_limit" 
+      
+                                        [disabled]="deductionSubItems(i).controls[j]?.value?.type=='NA'"
+                                       
+                                        (click)="duductCheckbox($event,i,j)" 
+                                        
+                                        value="no_limit"
+                            
+                                        [checked]="deductionSubItems(i).controls[j]?.value?.type=='no_limit'"
+                                        
+                                        >
+                                        <label class="custom-control-label" for="customSwitch{{i}}{{j}}_limit">No Limit</label>
+      
+                                      </div>
+                                </td>
+                                <td colspan="5">
+      
+                                    <input type="text" class="form-control" placeholder="Amount"  [readOnly]="deductionSubItems(i).controls[j]?.value?.type!='' && deductionSubItems(i).controls[j]?.value?.type!='limit'" formControlName="amount">
+
+                                    <p class="error-element" *ngIf="deductionSubItems(i).controls[j].controls.amount.errors?.min"> This Field not a negetive Value</p>
+
+                                </td>
+                              </tr>   
+                            
+      
+                            </ng-container>
+                          
+      
+                           
+                           </ng-container>
+                            
+                        </ng-container>
+                        </ng-container>
+                </ng-container>
+
+              </td>
+            </tr>
+            <tr>
+              <td colspan="5" class="tds_accordian" data-toggle="collapse" href="#new_regime">New Regime</td>
+            </tr>
+            <tr>
+              <td colspan="5" id="new_regime" class="panel-collapse " style="width: 100%;">
+                
+                <ng-container >
+                  <tr>
+                      <td colspan="5">
+                          <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="customSwitch26" 
+                              [checked]="tdsForm.value.define_standard_deduction_new_regime=='yes'" (click)="definerebate($event,'define_standard_deduction_new_regime')"
+                              >
+                              <label class="custom-control-label" for="customSwitch26"> Define Standard Deduction</label>
+                      </div>
+                  </td>
+                  </tr>
+                  <tr>
+                      <td colspan="5">Standard Deduction for the FY <span class="text-danger"> * </span></td>
+                      <td colspan="5">
+                        
+                        <input type="text" formControlName="standard_deduction_amount_new_regime" placeholder="Standard Deduction for the FY" class="form-control">
+                        <p class="error-element" *ngIf="tdsForm['controls']['standard_deduction_amount_new_regime'].errors?.min"> This Field not a negetive Value</p>
+
+                      
+                      </td>
+                  </tr>
+                  <tr>
+                      <td colspan="5">
+                        
+                      
+
+                        <div class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" id="Define_Rebate_Chk" 
+                          [checked]="tdsForm.value.define_rebate_new_regime=='yes'" 
+                          (click)="definerebate($event,'define_rebate_new_regime')"
+                          >
+                          <label class="custom-control-label" for="Define_Rebate_Chk">Define Rebate <span class="text-danger">*</span></label>
+                        </div>
+                      
+                      
+                      </td>
+                  </tr>
+                  <tr>
+                      <td colspan="5">Eligibility for Rebate is taxable Value (<span class="text-danger">*</span>)</td>
+                      <td colspan="5">
+                          <div class="form-check">
+                              <label class="form-check-label" style="width: 100px;">
+                                <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value_new_regime" id="gridRadios17" value="higher">
+                                Higher than </label>
+                                <label class="form-check-label">
+                                <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value_new_regime" id="gridRadios18" value="lower">
+                                Lower than</label>
+                              
+                            </div>
+                            <td>
+                              <input type="text" class="form-control" placeholder="Amount(*)" formControlName="eligibility_for_rebate_is_taxable_amount_new_regime">
+                              <p class="error-element" *ngIf="tdsForm['controls']['eligibility_for_rebate_is_taxable_amount_new_regime'].errors?.min"> This Field not a negetive Value</p>
+
+                            </td>
+  
+                  </tr>
+              </ng-container>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        <!-- </div> -->
+        <div class="text-center">
+         
+
+          <ng-container *ngIf="!editActionId && Global.checkCompanyModulePermission({
+            company_module: 'company_rules_2',
+            company_sub_module: 'tds_rules',
+            company_sub_operation: ['add'],
+            company_strict: true
+          })">
+            <button type="button" (click)="add($event)" [disabled]="!tdsForm.valid"  class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150">
+              <span>Save</span>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="editActionId && Global.checkCompanyModulePermission({
+            company_module: 'company_rules_2',
+            company_sub_module: 'tds_rules',
+            company_sub_operation: ['edit'],
+            company_strict: true
+          })">
+            <button type="button" (click)="add($event)" [disabled]="!tdsForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150">
+              <span>Update</span>
+            </button>
+          </ng-container>
+        </div>
+      </form>    
+     
+    </div>
+
+    <div class="card-body px-0 bd-t-0 pt-0 rounded-bottom">
+      <div class="table-responsive">
+        <app-custom-tableoption
+        [searchable]="false"
+        (onFilterChanged)="paginationOptions.limit = +$event?.length ; fetch(1)"
+      ></app-custom-tableoption>
+          <table class="table nowrap wd-100p table-bordered">
+              <thead>
+                  <tr>
+                      <th class="text-center">SL</th>
+
+                      <th class="text-center">Status</th>
+                      <th class="text-center">Financial year</th>
+
+                      <th *ngIf="Global.checkCompanyModulePermission({
+                        company_module: 'company_rules_2',
+                        company_sub_module: 'tds_rules',
+                        company_sub_operation: ['edit'],
+                        company_strict: true
+                      })" class="text-center">Action</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of tdsData;let i=index">
+                  <td class="text-center">{{
+                    Global.getTableSerialNumber(
+                      i,
+                      paginationOptions.limit,
+                      paginationOptions.page
+                    )
+                  }}</td>
+                  <td class="text-center">{{item?.status | titlecase}}</td>
+                  <td class="text-center">{{item?.define_deductions_rebate_financial_year}}</td>
+                  <td *ngIf="Global.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: 'tds_rules',
+                    company_sub_operation: ['edit'],
+                    company_strict: true
+                  })" class="text-center">
+                    <button (click)="getEdit(item?._id)"  class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Edit" >
+                      <div style="width:25px; height:25px;"><i class="fa fa-pen"></i></div>
+                  </button>
+
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+      </div>
+      <app-custom-pagination *ngIf="tdsData.length>0" [rows]="tdsData" [paginationOptions]="paginationOptions" (onPageClicked)="fetch($event)"></app-custom-pagination>
+
+  </div>
+
+
+    
+  </div>
+
+  
+  <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+  <div id="librarymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content tx-size-sm">
+              <div class="modal-header pd-x-20">
+                  <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body pd-20">
+                  <div class="table-responsive">
+                    <table class="table nowrap wd-100p table-bordered">
+                      <thead>
+                          <tr>
+                              <th class="text-center">SL</th>
+                              <th class="text-center">Action</th>
+
+                              <th class="text-center">Status</th>
+                              <th class="text-center">Financial year</th>
+        
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of tdsLibrary;let i=index">
+                          <td class="text-center">{{
+                            Global.getTableSerialNumber(
+                              i,
+                              paginationOptions.limit,
+                              paginationOptions.page
+                            )
+                          }}</td>
+                          <td class="text-center">
+                            <button   class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" (click)="getEdit(id,'add')" data-placement="top" title="Copy" >
+                              <div style="width:25px; height:25px;"><i class="fa fa-copy"></i></div>
+                          </button>
+        
+                          </td>
+                          <td class="text-center">{{item?.status | titlecase}}</td>
+                          <td class="text-center">{{item?.define_deductions_rebate_financial_year}}</td>
+                         
+                        </tr>
+                      </tbody>
+                  </table>     
+                  </div>
+                  <app-custom-pagination *ngIf="tdsLibrary.length>0" [rows]="tdsLibrary" [paginationOptions]="paginationOptions" (onPageClicked)="fetchtdsLibrary($event)"></app-custom-pagination>
+
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  
+  
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,87 @@
+.table td {
+    vertical-align: initial !important;
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.define-leave-rule-table ngx-select-dropdown {
+    width: 200px;
+    padding: 4px;
+}
+
+table.nowrap th,
+table.nowrap td {
+    white-space: nowrap;
+    vertical-align: middle !important;
+}
+
+.form-control.ng-touched.ng-valid {
+    border-color: inherit !important;
+}
+
+.from-pf,
+.bd_rightside {
+    width: 450px;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    right: 0;
+    display: none;
+    background: #fff;
+    box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -webkit-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -moz-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -o-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+}
+
+.from-pf .form-group label,
+.bd_rightside .form-group label,
+.from-pf .form-group span.select2,
+.bd_rightside .form-group span.select2,
+.from-pf .form-group .form-control,
+.bd_rightside .form-group .form-control {
+    width: 100% !important;
+}
+
+.c-table thead tr{
+  font-size: 12px !important;
+  background-color: #EDF2F2;
+  border-bottom:1px solid #dee2e6;
+
+}
+
+.c-table tbody tr{
+  background-color: #fff;
+  color: #000;
+  font-size: 12px;
+}
+
+.c-table tbody tr:nth-child(even){
+  background-color: #f5f5f5;
+}
+.c-table td, th{
+  border: none;
+  padding: 13px ;
+  border-left:1px solid #dee2e6;
+  border-collapse: collapse;
+}
+.c-table td:first-child{
+  border: none;
+}
+
+.c-table tr:last-child{
+  border-bottom:1px solid #dee2e6;
+}
+
+.c-table th{
+  padding: 6px 12px ;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+.disabled{
+  pointer-events: none !important;
+  background-color: gray !important;
+  }

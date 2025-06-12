@@ -1,0 +1,180 @@
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { CompanyuserService } from 'src/app/services/companyuser.service';
+import * as Global from 'src/app/globals';
+import swal from 'sweetalert2';
+import { DatePipe } from '@angular/common';
+import { AppComponent } from 'src/app/app.component';
+
+@Component({
+  selector: 'companyuser-employee-form-extracurriculum',
+  templateUrl: './employee-extracurriculum.component.html',
+  styleUrls: ['./employee-extracurriculum.component.css']
+})
+
+export class CMPEmployeeExtracurriculumFormComponent implements OnInit {
+  Global = Global;
+  operation: any;
+  employee_id: any;
+  extracurriculum_id: any;
+  employee_details: any;
+
+  employeeExtraCurriculumForm: FormGroup;
+
+  constructor(
+    public formBuilder: FormBuilder,
+    private titleService: Title,
+    private toastr: ToastrService,
+    private router: Router,
+    private companyuserService: CompanyuserService,
+    private spinner: NgxSpinnerService,
+    private activatedRoute: ActivatedRoute,
+    private datePipe: DatePipe,
+    private AppComponent: AppComponent
+  ) {
+    this.employeeExtraCurriculumForm = formBuilder.group({
+      date: [null, Validators.compose([Validators.required])],
+      extracurriculum_name: [null, Validators.compose([])],
+      description: [null, Validators.compose([])],
+      comments: [null, Validators.compose([])],
+
+      extracurriculum_file_image: [null, Validators.compose([])],
+      extracurriculum_file_image_file: [null, Validators.compose([])],
+    });
+
+    this.extracurriculum_id = "";
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle("Employees - " + Global.AppName);
+
+    this.activatedRoute.params.subscribe(
+      params => this.employee_id = params['employee_id'] ?? null
+    )
+
+    if (!this.employee_id) {
+      this.operation = 'add';
+      $('#current-address-fields').hide(500);
+    } else {
+      let r = this.router.url.split('/')
+      if (r[4] == 'view') {
+        this.operation = 'view';
+        $('input').attr('disabled', 'true')
+      } else if (r[4] == 'edit') {
+        this.operation = 'edit';
+      }
+
+      this.fetchEmployeeDetails();
+    }
+
+    if (!this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'employee_extra_curriculr_details', 'staff_operation': [this.operation], 'company_strict': true })) {
+      const _this = this;
+      setTimeout(function () {
+        _this.router.navigate(['company/errors/unauthorized-access'], { skipLocationChange: true })
+      }, 500);
+      return;
+    }
+  }
+
+  updateEmployeeExtraCurriculumDetails(event: any) {
+    this.employeeExtraCurriculumForm.markAllAsTouched();
+    setTimeout(function () {
+      let $_errFormControl = document.querySelectorAll("p.error-element");
+      if ($_errFormControl.length > 0) {
+        const firstErr: Element = $_errFormControl[0];
+        firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100)
+
+    if (this.employeeExtraCurriculumForm.valid) {
+      event.target.classList.add('btn-loading');
+
+      this.companyuserService.updateEmployeeExtraCurriculumDetails({
+        'date': this.employeeExtraCurriculumForm.value.date ?? "",
+        'extracurriculum_name': this.employeeExtraCurriculumForm.value.extracurriculum_name ?? "",
+        'description': this.employeeExtraCurriculumForm.value.description ?? "",
+        'comments': this.employeeExtraCurriculumForm.value.comments ?? "",
+        'extracurriculum_file_image': this.employeeExtraCurriculumForm.value.extracurriculum_file_image_file ?? "",
+        'employee_id': this.employee_id,
+        'extra_curri_id': this.extracurriculum_id,
+      }).subscribe(res => {
+        if (res.status == 'success') {
+          this.toastr.success(res.message);
+          this.fetchEmployeeDetails();
+
+          if (!this.extracurriculum_id) {
+            this.cancelEntry();
+          }
+        } else if (res.status == 'val_err') {
+          this.toastr.error(Global.showValidationMessage(res.val_msg));
+        } else {
+          this.toastr.error(res.message);
+        }
+
+        event.target.classList.remove('btn-loading');
+      }, (err) => {
+        event.target.classList.remove('btn-loading');
+        this.toastr.error(Global.showServerErrorMessage(err));
+      });
+    }
+  }
+
+  onFileChanged(event: any, formGroup: FormGroup, file: any, target: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      formGroup.patchValue({
+        [target]: file
+      });
+    }
+  }
+
+  fetchEmployeeDetails() {
+    this.spinner.show();
+    this.companyuserService.getEmployeeDetails({ employee_id: this.employee_id })
+      .subscribe((res: any) => {
+        if (res.status == 'success') {
+          this.employee_details = res.employee_det
+        } else {
+          this.toastr.error(res.message);
+        }
+
+        this.spinner.hide();
+      }, (err) => {
+        this.spinner.hide();
+        this.toastr.error(Global.showServerErrorMessage(err));
+      });
+  }
+
+  cancelEntry() {
+    this.employeeExtraCurriculumForm.reset();
+    this.extracurriculum_id = "";
+
+    for (const key in this.employeeExtraCurriculumForm.controls) {
+      if (Object.prototype.hasOwnProperty.call(this.employeeExtraCurriculumForm.controls, key)) {
+        const element = this.employeeExtraCurriculumForm.controls[key];
+
+        element.markAsUntouched();
+        element.markAsPristine();
+      }
+    }
+  }
+
+  getEdit(item: any) {
+    this.extracurriculum_id = item._id;
+    this.employeeExtraCurriculumForm.patchValue({
+      date: item.date,
+      extracurriculum_name: item.extracurriculum_name,
+      description: item.description,
+      comments: item.comments,
+    });
+
+    $('html, body').animate({
+      'scrollTop': $("#extracurriculum-submit-section").position().top
+    });
+  }
+}
+

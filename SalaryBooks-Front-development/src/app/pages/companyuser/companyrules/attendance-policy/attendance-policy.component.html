@@ -1,0 +1,379 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">Attendance Policy Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Attendance Policy Rule</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div *ngIf="Global.checkCompanyModulePermission({
+        company_module:'company_rules_1',
+        company_sub_module: 'attendance_policy_',
+        company_sub_operation: ['add', 'edit'],
+        company_strict: true
+      })" class="br-pagebody pd-x-20 pd-sm-x-30" id="policy-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define Attendance Policy Rule
+
+                <button (click)="openTemplateLibrary()" class="btn btn-primary btn-sm float-right"><i class="fa fa-book"></i> Template Library</button>
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Attendance Policy Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="attendancePolicyForm">
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Template Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="template_name">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.template_name.hasError('required') && ( attendancePolicyForm.controls.template_name.dirty || attendancePolicyForm.controls.template_name.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            Cut off Date
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Last Date of the month&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="policy-last-day-of-month" (click)="fieldsChanged('policy-last-day-of-month')">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <div class="cut-off-day-custom-fields" style="display: none;">
+                                Cut Off Date Custom&nbsp;<span class="text-danger">*</span>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="cut-off-day-custom-fields" style="display: none;">
+                                <ngx-select-dropdown formControlName="cut_off_day_custom" [options]="calendarDaysMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                                <p class="error-element" *ngIf="attendancePolicyForm.controls.cut_off_day_custom.hasError('required') && ( attendancePolicyForm.controls.cut_off_day_custom.dirty || attendancePolicyForm.controls.cut_off_day_custom.touched )">This field is required</p>
+                                <p class="error-element" *ngIf="attendancePolicyForm.controls.cut_off_day_custom.hasError('pattern') && ( attendancePolicyForm.controls.cut_off_day_custom.dirty || attendancePolicyForm.controls.cut_off_day_custom.touched )">The value should be numeric</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            No of Late (day)
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="no_of_days">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.no_of_days.hasError('required') && ( attendancePolicyForm.controls.no_of_days.dirty || attendancePolicyForm.controls.no_of_days.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.no_of_days.hasError('pattern') && ( attendancePolicyForm.controls.no_of_days.dirty || attendancePolicyForm.controls.no_of_days.touched )">The value should be numeric</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.no_of_days.hasError('min') && ( attendancePolicyForm.controls.no_of_days.dirty || attendancePolicyForm.controls.no_of_days.touched )">The minimum value allowed is 1</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.no_of_days.hasError('max') && ( attendancePolicyForm.controls.no_of_days.dirty || attendancePolicyForm.controls.no_of_days.touched )">The minimum value allowed is 28</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Absent
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="absent">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.absent.hasError('required') && ( attendancePolicyForm.controls.absent.dirty || attendancePolicyForm.controls.absent.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.absent.hasError('pattern') && ( attendancePolicyForm.controls.absent.dirty || attendancePolicyForm.controls.absent.touched )">The value should be numeric</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.absent.hasError('min') && ( attendancePolicyForm.controls.absent.dirty || attendancePolicyForm.controls.absent.touched )">The minimum value allowed is 1</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.absent.hasError('max') && ( attendancePolicyForm.controls.absent.dirty || attendancePolicyForm.controls.absent.touched )">The minimum value allowed is 28</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Grace Period (miniute)
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="grace_period">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.grace_period.hasError('required') && ( attendancePolicyForm.controls.grace_period.dirty || attendancePolicyForm.controls.grace_period.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.grace_period.hasError('pattern') && ( attendancePolicyForm.controls.grace_period.dirty || attendancePolicyForm.controls.grace_period.touched )">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Register Type&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label class="rdiobox" *ngFor="let item of registerTypes">
+                                <input formControlName="register_type" type="radio" value="{{item.value}}" (change)="fieldsChanged('register-types')"><span>{{item.description}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3 full-day-max-hours-fields" style="display: none;">
+                            Minimum Hours for Full day (hours)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3 full-day-max-hours-fields" style="display: none;">
+                            <input class="form-control" type="number" formControlName="full_day_max_hours">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.full_day_max_hours.hasError('required') && ( attendancePolicyForm.controls.full_day_max_hours.dirty || attendancePolicyForm.controls.full_day_max_hours.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.full_day_max_hours.hasError('pattern') && ( attendancePolicyForm.controls.full_day_max_hours.dirty || attendancePolicyForm.controls.full_day_max_hours.touched )">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst half-day-max-hours-fields" style="display: none;">
+                            Minimum Hours for Half day (hours)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3 half-day-max-hours-fields" style="display: none;">
+                            <input class="form-control" type="number" formControlName="half_day_max_hours">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.half_day_max_hours.hasError('required') && ( attendancePolicyForm.controls.half_day_max_hours.dirty || attendancePolicyForm.controls.half_day_max_hours.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.half_day_max_hours.hasError('pattern') && ( attendancePolicyForm.controls.half_day_max_hours.dirty || attendancePolicyForm.controls.half_day_max_hours.touched )">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            Define Month Days
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Full Month Days
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="policy-full-month-days" (click)="fieldsChanged('policy-full-month-days')">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <div class="custom-days-fields" style="display: none;">
+                                Custom Days&nbsp;<span class="text-danger">*</span>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="custom-days-fields" style="display: none;">
+                                <ngx-select-dropdown formControlName="custom_days" [options]="calendarDaysTwoMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                                <p class="error-element" *ngIf="attendancePolicyForm.controls.custom_days.hasError('required') && ( attendancePolicyForm.controls.custom_days.dirty || attendancePolicyForm.controls.custom_days.touched )">This field is required</p>
+                                <p class="error-element" *ngIf="attendancePolicyForm.controls.custom_days.hasError('pattern') && ( attendancePolicyForm.controls.custom_days.dirty || attendancePolicyForm.controls.custom_days.touched )">The value should be numeric</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Reporting Time&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="time" formControlName="reporting_time">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.reporting_time.hasError('required') && ( attendancePolicyForm.controls.reporting_time.dirty || attendancePolicyForm.controls.reporting_time.touched )">This field is required</p>
+                        </div>
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Closing Time&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <!-- atp-time-picker -->
+                            <input class="form-control" type="time" formControlName="closing_time">
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.closing_time.hasError('required') && ( attendancePolicyForm.controls.closing_time.dirty || attendancePolicyForm.controls.closing_time.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            Additional Details
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Comp Off
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="comp-off">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3">
+                            Sandwich Leave
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="sandwich-leave">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="attendancePolicyForm.controls.publish_status.hasError('required') && (attendancePolicyForm.controls.publish_status.dirty || attendancePolicyForm.controls.publish_status.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div> -->
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <!-- [disabled]="!attendancePolicyForm.valid" -->
+                            <button class="btn btn-info" (click)="create($event)" type="submit" *ngIf="Global.checkCompanyModulePermission({
+                                company_module:'company_rules_1',
+                                company_sub_module: 'attendance_policy_',
+                                company_sub_operation: ['add'],
+                                company_strict: true
+                              }) && editActionId == '';">
+                                <span>SAVE</span>
+                            </button>
+
+                            <div *ngIf="Global.checkCompanyModulePermission({
+                                company_module:'company_rules_1',
+                                company_sub_module: 'attendance_policy_',
+                                company_sub_operation: ['edit'],
+                                company_strict: true
+                              }) && editActionId">
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE RULE</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Attendance Templates</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Status</th>
+                            <th class="">Action</th>
+                            <th class="">Template</th>
+                            <th class="">Cut off date</th>
+                            <th class="">No of Late</th>
+                            <th class="">Absent</th>
+                            <th class="">Grace Period</th>
+                            <th class="">Register Type</th>
+                            <th class="">Full day@</th>
+                            <th class="">Half day@</th>
+                            <th class="">Open Time</th>
+                            <th class="">Close Time</th>
+                            <th class="">Comp Off</th>
+                            <th class="">Sandwich Leave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Template</th>
+                                <th class="">Cut off date</th>
+                                <th class="">No of Late</th>
+                                <th class="">Absent</th>
+                                <th class="">Grace Period</th>
+                                <th class="">Register Type</th>
+                                <th class="">Full day@</th>
+                                <th class="">Half day@</th>
+                                <th class="">Open Time</th>
+                                <th class="">Close Time</th>
+                                <th class="">Comp Off</th>
+                                <th class="">Sandwich Leave</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+    <div id="librarymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="table-responsive">
+                        <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                            <thead>
+                                <tr>
+                                    <th class="">SL No</th>
+                                    <th class="">Action</th>
+                                    <th class="">Template</th>
+                                    <th class="">Cut off date</th>
+                                    <th class="">No of Late</th>
+                                    <th class="">Absent</th>
+                                    <th class="">Grace Period</th>
+                                    <th class="">Register Type</th>
+                                    <th class="">Full day@</th>
+                                    <th class="">Half day@</th>
+                                    <th class="">Open Time</th>
+                                    <th class="">Close Time</th>
+                                    <th class="">Comp Off</th>
+                                    <th class="">Sandwich Leave</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

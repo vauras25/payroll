@@ -1,0 +1,966 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">Arrear Slip Template</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Arrear Slip Template</h4>
+            <p class="mg-b-0">
+              <!-- Lorem Ipsum is simply dummy text of the printing and typesetting -->
+              Check/ Uncheck as per preference to customise 
+            </p>
+        </div>
+    </div>
+
+    <div *ngIf="Global.checkCompanyModulePermission({
+      company_module: 'company_rules_2',
+      company_sub_module: 'arrear_slip_template',
+      company_sub_operation: ['add', 'edit'],
+      company_strict: true
+    })" class="br-pagebody" id="rule-submit-section">
+        <div class="br-section-wrapper">
+
+            <h6 *ngIf="editActionId == ''; else editHeader" class="br-section-label mb-3">
+                Define Arrear Slip Template <button (click)="openTemplateLibrary()" class="btn btn-primary btn-sm float-right"><i  class="fa fa-book"></i> Template Library</button>
+            </h6>
+
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Arrear Slip Template</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="arrearSlipForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(arrearSlipForm, 'template_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="template_name" type="text">
+
+                            <p class="error-element" *ngIf="arrearSlipForm.controls.template_name.hasError('required') && ( arrearSlipForm.controls.template_name.dirty || arrearSlipForm.controls.template_name.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Logo&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(arrearSlipForm, 'arrear_slip_temp_company_logo', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="arrear_slip_temp_company_logo" type="file" accept="image/*" (change)="onFileChanged($event, arrearSlipForm, 'arrear_slip_temp_company_logo', 'arrear_slip_temp_company_logo_file')">
+                            <p class="info-element" *ngIf="arrearSlipForm.value.logo_status == 'unchanged'">Using Default Library Logo</p>
+                            <p class="error-element" *ngIf="arrearSlipForm.controls.arrear_slip_temp_company_logo.hasError('required') && ( arrearSlipForm.controls.arrear_slip_temp_company_logo.dirty || arrearSlipForm.controls.arrear_slip_temp_company_logo.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Name <br> Address <br> Phone No&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(arrearSlipForm, 'company_info', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="company_info" rows="3" cols="100%"></textarea>
+
+                            <p class="error-element" *ngIf="arrearSlipForm.controls.company_info.hasError('required') && ( arrearSlipForm.controls.company_info.dirty || arrearSlipForm.controls.company_info.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="employeeDetailsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-10 col-sm-10">
+                                Employee's Details
+                            </div>
+                            <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                              <label for="employeeDetailsAll" class="ckbox mb-0">
+                                 <input [checked]="true" type="checkbox" name="employeeDetailsAll" id="employeeDetailsAll" (change)="checkSectionAllCheckBox('employee_details[]', $event?.target)">
+                                 <span>
+                                     Select All
+                                 </span>
+                              </label>
+                         </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of employeeDetailsMaster">
+                                <label class="ckbox mb-0">
+                              <input [checked]="true" type="checkbox" name="employee_details[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!-- <ng-container *ngIf="earningHeadsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Earning Heads
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of earningHeadsMaster">
+                                <label class="ckbox mb-0">
+                              <input type="checkbox" name="earning_head[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container> -->
+
+                    <ng-container *ngIf="salaryDeductionsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-10 col-sm-10">
+                                Salary Deductions
+                            </div>
+                            <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                              <label for="salaryDeductionsAll" class="ckbox mb-0">
+                                 <input [checked]="true" type="checkbox" name="salaryDeductionsAll" id="salaryDeductionsAll" (change)="checkSectionAllCheckBox('statutory_deduction[]', $event?.target)">
+                                 <span>
+                                     Select All
+                                 </span>
+                              </label>
+                         </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of salaryDeductionsMaster">
+                                <label class="ckbox mb-0">
+                            <input [checked]="true" type="checkbox" name="statutory_deduction[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="salaryContributionsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-10 col-sm-10">
+                                Salary Contributions
+                            </div>
+                            <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                              <label for="salaryContributionsAll" class="ckbox mb-0">
+                                 <input [checked]="true" type="checkbox" name="salaryContributionsAll" id="salaryContributionsAll" (change)="checkSectionAllCheckBox('statutory_contribution[]', $event?.target)">
+                                 <span>
+                                     Select All
+                                 </span>
+                              </label>
+                         </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of salaryContributionsMaster">
+                                <label class="ckbox mb-0">
+                            <input [checked]="true" type="checkbox" name="statutory_contribution[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="otherPaymentMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-10 col-sm-10">
+                                Other Payments
+                            </div>
+                            <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                              <label for="otherPaymentsAll" class="ckbox mb-0">
+                                 <input [checked]="true" type="checkbox" name="otherPaymentsAll" id="otherPaymentsAll" (change)="checkSectionAllCheckBox('other_payment[]', $event?.target)">
+                                 <span>
+                                     Select All
+                                 </span>
+                              </label>
+                         </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of otherPaymentMaster">
+                                <label class="ckbox mb-0">
+                            <input [checked]="true" type="checkbox" name="other_payment[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="otherDeductionMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-10 col-sm-10">
+                                Other Deductions
+                            </div>
+                            <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                              <label for="otherDeductionsAll" class="ckbox mb-0">
+                                 <input [checked]="true" type="checkbox" name="otherDeductionsAll" id="otherDeductionsAll" (change)="checkSectionAllCheckBox('other_deduction[]', $event?.target)">
+                                 <span>
+                                     Select All
+                                 </span>
+                              </label>
+                         </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of otherDeductionMaster">
+                                <label class="ckbox mb-0">
+                            <input [checked]="true" type="checkbox" name="other_deduction[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Signature Message Box&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(arrearSlipForm, 'signature_message', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="signature_message" rows="3" cols="100%"></textarea>
+
+                            <p class="error-element" *ngIf="arrearSlipForm.controls.signature_message.hasError('required') && ( arrearSlipForm.controls.signature_message.dirty || arrearSlipForm.controls.signature_message.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info" (click)="create($event)" *ngIf="editActionId == '' && Global.checkCompanyModulePermission({
+                              company_module: 'company_rules_2',
+                              company_sub_module: 'arrear_slip_template',
+                              company_sub_operation: ['add'],
+                              company_strict: true
+                            })"><span>Save Template</span></button>
+                        </div>
+
+                        <div *ngIf="editActionId && Global.checkCompanyModulePermission({
+                          company_module: 'company_rules_2',
+                          company_sub_module: 'arrear_slip_template',
+                          company_sub_operation: ['edit'],
+                          company_strict: true
+                        })">
+                            <button type="button" (click)="cancelEntry()" class="btn btn-danger mg-r-5">
+                              <span>Cancel</span>
+                          </button>
+                            <button type="submit" (click)="update($event)" class="btn btn-info">
+                              <span>Update Template</span>
+                          </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-5">Arrear Slip Template</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Template Name</th>
+                            <th class="wd-15p">Company Logo</th>
+                            <th class="wd-15p">Company Info</th>
+                            <th class="wd-15p">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+    <div id="librarymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="table-responsive">
+                        <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                            <thead>
+                                <tr>
+                                    <th class="wd-15p">SL</th>
+                                    <th class="wd-25p text-center">Action</th>
+                                    <th class="wd-15p">Template Name</th>
+                                    <th class="wd-15p">Company Logo</th>
+                                    <th class="wd-15p">Company Info</th>
+                                    <th class="wd-15p">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button
+    id="viewTemplate"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#viewTemplateModel"
+  ></button>
+  <div id="viewTemplateModel" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <div
+            class="tablemain"
+            style="
+              width: 800px;
+              margin: 0 auto;
+              border: solid 1px #333;
+              padding: 32px;
+            "
+          >
+          <table style="width: 100%; margin-bottom: 10px">
+            <tr>
+              <th colspan="4">
+                <table style="margin-bottom: 10px">
+                  <tr>
+                    <th style="width:20%">
+                      <img width="100%"
+                      style="aspect-ratio: 5/4;object-fit: cover;"
+                        [src]="Global.BACKEND_URL +'/'+templateData.company_logo ||'https://via.placeholder.com/150x80.png'"
+                        alt="logo"
+                      />
+                    </th>
+                    <th
+                      style="
+                        text-align: center;
+                        font-size: 14px;
+                        line-height: 22px;
+                        font-weight: 800;
+                        padding-bottom: 20px;
+                        width: 80%;
+                      "
+                    >
+                      {{ templateData.company_info }}<br />
+                      <!-- 46C, CHOWRINGEE ROAD, KOL-71<br>
+                            Pay Slip for the month of Oct/2021 -->
+                    </th>
+                    <!-- <th style="text-align: center; width: 25%;">
+                            <img [src]="'https://via.placeholder.com/150x80.png'" alt="logo">
+                          </th> -->
+                  </tr>
+                </table>
+              </th>
+            </tr>
+            <tr>
+              <td class="row mt-2" style="width: 100%">
+                <div
+                  *ngFor="
+                    let field of templateData.employee_details;
+                    let i = index
+                  "
+                  class="col-6"
+                >
+                  {{ field | titlecase }}:
+                </div>
+              </td>
+              <!-- <td style="width: 35%;">C095010053</td>
+                <td style="width: 15%;">Employee Name:</td>
+                <td style="width: 35%;">Satnam Singh</td> -->
+            </tr>
+          </table>
+          <table style="width: 100%; border: solid 1px #000">
+            <tr>
+              <td
+                style="
+                  width: 20%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  font-weight: 800;
+                  text-align: center;
+                "
+              >
+                Earnings
+              </td>
+              <td
+                style="
+                  width: 20%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  font-weight: 800;
+                  text-align: center;
+                "
+              >
+                Rate
+              </td>
+              <td
+                style="
+                  width: 20%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  font-weight: 800;
+                  text-align: center;
+                "
+              >
+                Amount
+              </td>
+              <td
+                style="
+                  width: 20%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  font-weight: 800;
+                  text-align: center;
+                "
+              >
+                Deductions
+              </td>
+              <td
+                style="
+                  width: 20%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  font-weight: 800;
+                  text-align: center;
+                "
+              >
+                Amount
+              </td>
+            </tr>
+            <tr>
+              <td style="width: 20%; border-right: solid 1px #000">
+                <div *ngFor="let head of templateData.statutory_contribution">
+                    {{ head?.full_name || head }}
+                </div>
+              </td>
+              <td
+                class="text-right"
+                style="width: 20%; border-right: solid 1px #000"
+              >
+                <div *ngFor="let head of templateData.statutory_contribution">
+                    {{ head?.rate || '00.00' }}
+                </div>
+              </td>
+              <td
+                class="text-right"
+                style="width: 20%; border-right: solid 1px #000"
+              >
+                <div *ngFor="let head of templateData.statutory_contribution">
+                    {{ head?.amount || '00.00'}}
+                </div>
+              </td>
+              <td style="width: 20%; border-right: solid 1px #000">
+                <div *ngFor="let head of templateData.statutory_deduction">
+                    {{ head?.full_name || head }}
+                  </div>
+              </td>
+              <td
+                class="text-right"
+                style="width: 20%; border-right: solid 1px #000"
+              >
+                <div *ngFor="let head of templateData.statutory_deduction">
+                    {{ head?.amount || '00.00' }}
+                </div>
+              </td>
+            </tr>
+              <tr>
+                <td style="width: 20%; border-right: solid 1px #000; border-top: solid 1px #000; font-weight: 800;">Total</td>
+                <td style="width: 20%; border-right: solid 1px #000; border-top: solid 1px #000; font-weight: 800; text-align: right;">00.00</td>
+                <td style="width: 20%; border-right: solid 1px #000; border-top: solid 1px #000; font-weight: 800; text-align: right;">00.00</td>
+                <td style="width: 20%; border-right: solid 1px #000; border-top: solid 1px #000; font-weight: 800;">Total</td>
+                <td style="width: 20%; border-right: solid 1px #000; border-top: solid 1px #000; font-weight: 800; text-align: right;">00.00</td>
+              </tr>
+              <tr>
+                <td style="width: 20%; border-top: solid 1px #000; font-weight: 800;">Net Pay</td>
+                <td style="width: 20%; border-top: solid 1px #000; font-weight: 800; text-align: right;">00.00 </td>
+                <td style="width: 20%; border-top: solid 1px #000; font-weight: 800;" colspan="3"></td>
+              </tr>
+              <tr>
+                <td style="width: 20%; font-weight: 800;">In Words </td>
+                <td style="width: 20%; font-weight: 800;" colspan="4">Zero</td>
+              </tr>
+              <tr>
+                <td style="width: 20%; font-weight: 800; text-align: right; padding: 10px 50px;" colspan="5">Signature</td>
+              </tr>
+          </table>
+            <table style="width: 100%; margin-top: 20px">
+              <tr>
+                <td
+                  style="
+                    width: 50%;
+                    padding: 0;
+                    padding-right: 10px;
+                    padding-bottom: 15px;
+                  "
+                >
+                  <table style="width: 100%; border: solid 1px #000">
+                    <tr>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Lev.Type
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Op. Bal
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Allot.
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Avail.
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Encash.
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Adj.
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Cl. Bal
+                      </th>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: center;
+                        "
+                      >
+                        CL
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        2.5
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        1.25
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        0
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        0
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        0
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        3.75
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: center;
+                        "
+                      >
+                        PL
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        7.5
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        1.25
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        0
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        0
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        0
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        8.75
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td
+                  style="
+                    width: 50%;
+                    padding: 0;
+                    padding-left: 10px;
+                    padding-bottom: 15px;
+                  "
+                >
+                  <table style="width: 100%; border: solid 1px #000">
+                    <tr>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: center;
+                        "
+                      >
+                        Reim Name
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Op. Bal
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Alloted
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Claimed
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Cl. Bal
+                      </th>
+                    </tr>
+                    <!-- <tr>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: center;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                    </tr> -->
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    width: 50%;
+                    padding: 0;
+                    padding-right: 10px;
+                    padding-bottom: 15px;
+                  "
+                >
+                  <table style="width: 100%; border: solid 1px #000">
+                    <tr>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: center;
+                        "
+                      >
+                        Loan
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Taken
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Op. Bal
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        EMI/Rct.
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Cl. Bal
+                      </th>
+                    </tr>
+                    <!-- <tr>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: center;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                      <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+                    </tr> -->
+                  </table>
+                </td>
+                <td
+                  style="
+                    width: 50%;
+                    padding: 0;
+                    padding-left: 10px;
+                    padding-bottom: 15px;
+                  "
+                >
+                  <table style="width: 100%; border: solid 1px #000">
+                    <tr>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: center;
+                        "
+                      >
+                        Advance
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Taken
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Op. Bal
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        EMI/Rct.
+                      </th>
+                      <th
+                        style="
+                          font-weight: 800;
+                          font-size: 11px;
+                          border: solid 1px #000;
+                        "
+                      >
+                        Cl. Bal
+                      </th>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: center;
+                        "
+                      >
+                        Salary
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        30000
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        24000
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        3000
+                      </td>
+                      <td
+                        style="
+                          font-size: 11px;
+                          border: solid 1px #000;
+                          text-align: right;
+                        "
+                      >
+                        21000
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="text-align: center">
+                  {{templateData.signature_message}}
+                  <!-- This is a System Generated Payslip No Signature Required -->
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

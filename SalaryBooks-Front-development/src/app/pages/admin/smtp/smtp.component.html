@@ -1,0 +1,199 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">SMTP</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-email"></i>
+        <div>
+            <h4>SMTP</h4>
+          <p class="mg-b-0">Manage SMTP</p>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="policy-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Define Attendance Rule</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Attendance Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="smtpForm">
+                   
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            SMTP Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="smtp_name">
+                            <p class="error-element" *ngIf="smtpForm.controls.smtp_name.hasError('required') && ( smtpForm.controls.smtp_name.dirty || smtpForm.controls.smtp_name.touched )">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Host Address&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="host_address">
+                            <p class="error-element" *ngIf="smtpForm.controls.host_address.hasError('required') && ( smtpForm.controls.host_address.dirty || smtpForm.controls.host_address.touched )">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Username&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="username">
+                            <p class="error-element" *ngIf="smtpForm.controls.username.hasError('required') && ( smtpForm.controls.username.dirty || smtpForm.controls.username.touched )">This field is required</p>
+
+                        </div>
+                    </div>
+                    
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Password&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="password">
+                            <p class="error-element" *ngIf="smtpForm.controls.password.hasError('required') && ( smtpForm.controls.password.dirty || smtpForm.controls.password.touched )">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Form Email&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="from_email_address">
+                            <p class="error-element" *ngIf="smtpForm.controls.from_email_address.hasError('required') && ( smtpForm.controls.from_email_address.dirty || smtpForm.controls.from_email_address.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="smtpForm.controls.from_email_address.hasError('email') && ( smtpForm.controls.username.dirty || smtpForm.controls.username.touched )">Enter a valid email address.</p>
+
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Method&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <select class="form-control" formControlName="smtp_method">
+                                <option value="">Method</option>
+                                <option value="SSL">SSL</option>
+                                <option value="TLS">TLS</option>
+                            </select>
+                            <p class="error-element" *ngIf="smtpForm.controls.smtp_method.hasError('required') && ( smtpForm.controls.smtp_method.dirty || smtpForm.controls.smtp_method.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Port&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <input class="form-control" type="text" formControlName="port">
+                            <p class="error-element" *ngIf="smtpForm.controls.port.hasError('required') && ( smtpForm.controls.port.dirty || smtpForm.controls.port.touched )">This field is required</p>
+                        </div>
+                    </div>
+                 
+
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <!-- [disabled]="!smtpForm.valid" -->
+                            <button class="btn btn-info" (click)="create($event)" type="submit" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>SAVE</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE RULE</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">SMTP</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable" >
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Status</th>
+                            <th class="">Action</th>
+                            <th class="">Name</th>
+                            <th class="">Host</th>
+                            <th class="">Username</th>
+                            <th class="">Form Email</th>
+                            <th class="">Password</th>
+                            <th class="">Method</th>
+                            <th class="">Port</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Template</th>
+                                <th class="">Cut off date</th>
+                                <th class="">No of Late</th>
+                                <th class="">Absent</th>
+                                <th class="">Grace Period</th>
+                                <th class="">Register Type</th>
+                                <th class="">Full day@</th>
+                                <th class="">Half day@</th>
+                                <th class="">Open Time</th>
+                                <th class="">Close Time</th>
+                                <th class="">Comp Off</th>
+                                <th class="">Sandwich Leave</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>
+

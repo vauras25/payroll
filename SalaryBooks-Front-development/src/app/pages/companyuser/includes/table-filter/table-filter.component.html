@@ -1,0 +1,533 @@
+<div class="card mb-2">
+  <form [formGroup]="filterForm">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-12">
+          <div class="row align-items-end">
+            <div class="col-md-12">
+              <div class="row">
+
+                <ng-content select="[extraFilter]"></ng-content>
+
+                <div *ngIf="isBankAccount" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="bank_id"
+                    [options]="bankAccounts"
+                    class="form-control p-1"
+                    [multiple]="true"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Select Bank Account',
+                      displayKey:'label'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+
+
+                <div
+                class="col-sm-3 col-12 mb-3"
+                *ngIf="searchKeyFilter == true"
+              >
+                <input
+                  type="text"
+                  formControlName="searchkey"
+                  class="form-control"
+                  placeholder="Search..."
+                />
+              </div>
+                <div *ngIf="reportType" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    (change)="chnagereportType($event)"
+                    #reportType
+                    formControlName="report_type"
+                    [options]="reportTypeMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      displayKey: 'description',
+                      placeholder: 'Report Type'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div class="col-sm-3 col-12 mb-3" *ngIf="monthFilter == true">
+                  <ngx-select-dropdown
+                    formControlName="month"
+                    [options]="monthMaster"
+                    class="form-control p-1"
+                    [config]="{ search: true, placeholder: 'Select Month' }"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div class="col-sm-3 col-12 mb-3" *ngIf="yearFilter == true">
+                  <ngx-select-dropdown
+                    formControlName="year"
+                    [options]="yearMaster"
+                    class="form-control p-1"
+                    [config]="{ search: true, placeholder: 'Select Year' }"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div
+                  class="col-sm-3 col-12 mb-3"
+                  *ngIf="attendanceTypeFilter == true"
+                >
+                  <ngx-select-dropdown
+                    formControlName="attendance_type"
+                    [options]="attendanceTypeMaster"
+                    class="form-control p-1"
+                    [config]="{ search: true, placeholder: 'Attendance Type' }"
+                  ></ngx-select-dropdown>
+                </div>
+              
+                <div
+                  class="col-sm-3 col-12 mb-3"
+                  *ngIf="dateFromFilter == true"
+                >
+                  <input
+                    formControlName="date_from"
+                    class="form-control p-1 px-2"
+                    type="month"
+                    placeholder="MM/YYYY"
+                    [max]="curruntYear + '-0' + curruntMonth"
+                    (change)="getDateFromToMaxValidation(filterForm.get('date_from')?.value)"
+                  />
+                </div>
+                <div class="col-sm-3 col-12 mb-3" *ngIf="dateToFilter == true">
+                  <input
+                    #dateToFilterInput
+                    formControlName="date_to"
+                    class="form-control p-1 px-2"
+                    type="month"
+                    [placeholder]="'MM/YYYY'"
+                    [min]="filterForm.get('date_from')?.value || curruntYear + '-0' + curruntMonth"
+                    [max]="getMaxDateTo(filterForm.get('date_from')?.value)|| curruntYear + '-0' + (curruntMonth)"
+                  />
+                </div>
+
+                <!-- <div></div> -->
+
+          
+
+                <!-- <div class="col-sm-3 col-12 mb-3" *ngIf="empDetailsFilter == true">
+                                    <input type="text" formControlName="emp_first_name" class="form-control" placeholder="First Name">
+                                </div> -->
+
+                <!-- <div class="col-sm-3 col-12 mb-3" *ngIf="empDetailsFilter == true">
+                                    <input type="text" formControlName="emp_last_name" class="form-control" placeholder="Last Name">
+                                </div> -->
+
+                <!-- <div class="col-sm-3 col-12 mb-3" *ngIf="empDetailsFilter == true">
+                                    <input type="text" formControlName="emp_email_id" class="form-control" placeholder="Email ID">
+                                </div> -->
+                <div *ngIf="empNameFilter" class="col-sm-3 mb-2 col-12">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Name"
+                    formControlName="emp_name"
+                  />
+                </div>
+
+                <div *ngIf="empIdFilter" class="col-sm-3 mb-2 col-12">
+                  <input
+                    type="text"
+                    class="form-control mg-t-10 mg-md-t-0"
+                    placeholder="Search Employee ID"
+                    formControlName="emp_id"
+                  />
+                </div>
+
+                <ng-container *ngIf="basicFilter == true">
+                  <div *ngIf="isClient" class="col-sm-3 col-12 mb-3">
+                    <ngx-select-dropdown
+                      formControlName="client_id"
+                      [options]="clientMaster"
+                      class="form-control p-1"
+                      [config]="{ search: true, placeholder: 'Select Client' }"
+                      [multiple]="true"
+                    ></ngx-select-dropdown>
+                  </div>
+
+                  <div class="col-sm-3 col-12 mb-3" >
+                    <ngx-select-dropdown
+                      formControlName="branch_id"
+                      [options]="branchMaster"
+                      class="form-control p-1"
+                      [config]="{ search: true, placeholder: 'Select Branch' }"
+                      [multiple]="isBranchMultiple"
+                    ></ngx-select-dropdown>
+                  </div>
+
+                  <div class="col-sm-3 col-12 mb-3">
+                    <ngx-select-dropdown
+                      formControlName="department_id"
+                      [options]="departmentMaster"
+                      class="form-control p-1"
+                      [config]="{
+                        search: true,
+                        placeholder: 'Select Department'
+                      }"
+                      [multiple]="true"
+                    ></ngx-select-dropdown>
+                  </div>
+
+                  <div class="col-sm-3 col-12 mb-3">
+                    <ngx-select-dropdown
+                      formControlName="designation_id"
+                      [options]="designationMaster"
+                      class="form-control p-1"
+                      [config]="{
+                        search: true,
+                        placeholder: 'Select Designation'
+                      }"
+                      [multiple]="true"
+                    ></ngx-select-dropdown>
+                  </div>
+
+                  <div *ngIf="isHod" class="col-sm-3 col-12 mb-3">
+                    <ngx-select-dropdown
+                      formControlName="hod_id"
+                      [options]="hodMaster"
+                      class="form-control p-1"
+                      [config]="{ search: true, placeholder: 'Select HOD' }"
+                      [multiple]="true"
+                    ></ngx-select-dropdown>
+                  </div>
+                  <div *ngIf="is_approval_status" class="col-sm-3 col-12 mb-3">
+                    <ngx-select-dropdown
+                      formControlName="approval_status"
+                      [options]="statusMaster"
+                      class="form-control p-1"
+                      [config]="{ search: true, placeholder: 'Select Status' }"
+                      [multiple]="false"
+                    ></ngx-select-dropdown>
+                  </div>
+
+                </ng-container>
+                <div class="col-sm-3 col-12 mb-3" *ngIf="rivisionreport_type==true">
+                  <label
+                 
+                  for="Effective_Dt"
+                  class="mb-0"
+                >
+                  <input
+                    type="radio"
+                    formControlName="search_type"
+                    value="effective_date"
+                    id="Effective_Dt"
+                  />&nbsp;Effective Dt
+                </label>  
+                &nbsp;&nbsp;
+        
+                <label
+                 
+                  for="Revision_Dt"
+                  class="mb-0"
+                >
+                  <input
+                    type="radio"
+                    value="revision_date"
+                    id="Revision_Dt"
+                    formControlName="search_type"
+                  />&nbsp;Revision Dt
+                </label>
+                </div>
+                <div
+                  class="col-sm-3 col-12 mb-3"
+                  *ngIf="empDetailsFilter == true"
+                >
+                  <ngx-select-dropdown
+                    formControlName="emp_status"
+                    [options]="empStatusMaster"
+                    class="form-control p-1"
+                    [config]="{ search: true, placeholder: 'Select Status' }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="frequencyFilter" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="disbursement_frequency"
+                    [options]="frequencyMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      displayKey: 'description',
+                      placeholder: 'Select Bonus Type'
+                    }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="disburesmentFilter" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="disbursement_type"
+                    [options]="disburesmentMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      displayKey: 'description',
+                      placeholder: 'Select Disbursement'
+                    }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="complianceStatus" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="compliance_status"
+                    [options]="['Pending', 'Ready', 'Generated']"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Status'
+                    }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="salarySheet" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="salary_sheet"
+                    [options]="salarySheetMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+
+                      displayKey: 'description',
+                      placeholder: 'Salary Sheet'
+                    }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="challanType" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="challan_type"
+                    [options]="challanTypeMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      displayKey: 'description',
+                      placeholder: 'Challan Type'
+                    }"
+                    [multiple]="true"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="registerType" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="register_type"
+                    [options]="challanTypeMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      displayKey: 'description',
+                      placeholder: 'Register Type'
+                    }"
+                    [multiple]="true"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="salaryTypeFilter" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="salary_type"
+                    [options]="['Salary', 'Supplement', 'Earning']"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Salary Type'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+
+                <div *ngIf="bankInstStatus" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="bankinst_status"
+                    [options]="bankInstStatusMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Salary Payment Status'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+                
+                <div *ngIf="bankInstPayType" class="col-sm-3 col-12 mb-3">
+                  <ngx-select-dropdown
+                    formControlName="bankinst_pay_type"
+                    [options]="bankInstPayTypeMaster"
+                    class="form-control p-1"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Salary Challan Type'
+                    }"
+                  ></ngx-select-dropdown>
+                </div>
+              </div>
+              
+            
+              <div class="row" *ngIf="advanceFilter == true">
+                <div class="col-sm-12 col-12">
+                  <!-- <hr> -->
+                  <label for="advance-filter">
+                    <input
+                      type="checkbox"
+                      id="advance-filter"
+                      formControlName="advance_filter"
+                    />&nbsp;Advance Filter
+                  </label>
+                </div>
+
+                <ng-container
+                  *ngIf="filterForm?.get('advance_filter')?.value == true"
+                >
+                  <div class="col-sm-12 col-12">
+                    <table
+                      class="table table-bordered"
+                      style="border: 1px solid #dee2e6 !important"
+                    >
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Age</span>
+                              </div>
+                              <input
+                                type="text"
+                                class="form-control"
+                                formControlName="age_from"
+                                placeholder="From"
+                                style="width: 25px"
+                              />
+                              <input
+                                type="text"
+                                class="form-control"
+                                formControlName="age_to"
+                                placeholder="To"
+                                style="width: 25px"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <ngx-select-dropdown
+                              formControlName="gender"
+                              [options]="Global.getGenderMaster()"
+                              class="form-control p-1"
+                              [config]="{
+                                search: true,
+                                placeholder: 'Select Gender'
+                              }"
+                            ></ngx-select-dropdown>
+                          </td>
+                          <td>
+                            <ngx-select-dropdown
+                            formControlName="religion" 
+                              [options]="religionMaster"
+                              class="form-control p-1"
+                              [config]="{
+                                search: true,
+                                placeholder: 'Select Religion',
+                                displayKey:'description'
+                              }"
+                            ></ngx-select-dropdown>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b class="text-uppercase">Date of Joining</b>
+                          </td>
+                          <td>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">From</span>
+                              </div>
+                              <input
+                                type="date"
+                                class="form-control"
+                                formControlName="doj_from"
+                                placeholder="From"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">To</span>
+                              </div>
+                              <input
+                                type="date"
+                                class="form-control"
+                                formControlName="doj_to"
+                                placeholder="To"
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <b class="text-uppercase">Date of Exit</b>
+                          </td>
+                          <td>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">From</span>
+                              </div>
+                              <input
+                                type="date"
+                                class="form-control"
+                                formControlName="doe_from"
+                                placeholder="From"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">To</span>
+                              </div>
+                              <input
+                                type="date"
+                                class="form-control"
+                                formControlName="doe_to"
+                                placeholder="To"
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="card-body">
+
+        </div> -->
+    <div class="card-footer">
+      <div class="row">
+        <div *ngIf="isFilterBtnHidden" class="col-sm-2 col-12">
+          <button
+            (click)="filter()"
+            type="submit"
+            class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            [disabled]="!filterForm.valid || isFilterBtnDisable"
+          >
+            Filter
+          </button>
+        </div>
+        <ng-content select="[addOn_btn1]"></ng-content>
+        <ng-content select="[addOn_btn2]"></ng-content>
+        <ng-content select="[addOn_btn3]"></ng-content>
+        <ng-content select="[addOnBtns]"></ng-content>
+
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,158 @@
+<subadmin-app-dashboard-header></subadmin-app-dashboard-header>
+
+<div class="br-mainpanel br-profile-page">
+    <div class="card shadow-base bd-0 rounded-0 widget-4">
+        <div class="card-header ht-75">
+            <div class="hidden-xs-down">
+                <!-- <a href="" class="mg-r-10"><span class="tx-medium">498</span> Followers</a> -->
+                <!-- <a href=""><span class="tx-medium">498</span> Following</a> -->
+            </div>
+            <div class="tx-24 hidden-xs-down">
+                <a data-toggle="modal" data-target="#profPicModal" class="mg-r-10" style="cursor: pointer;"><i class="icon ion-ios-camera-outline"></i></a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card-profile-img">
+                <img *ngIf="userDetails.profile_pic" src="{{BACKEND_URL}}/{{userDetails.profile_pic}}" alt="">
+                <!-- <img src="http://themepixels.me/demo/bracketplus1.4/app/img/img1.jpg" alt=""> -->
+                <!-- <button class="img-upload-btn"><i class="fa fa-camera"></i></button> -->
+            </div>
+            <h4 class="tx-normal tx-roboto tx-white text-capitalize">{{userDetails.first_name}} {{userDetails.last_name}}</h4>
+            <p class="mg-b-25">{{userDetails.email_id}}</p>
+        </div>
+    </div>
+
+    <div class="ht-70 bg-gray-100 pd-x-20 d-flex align-items-center justify-content-center shadow-base">
+        <ul class="nav nav-outline active-info align-items-center flex-row" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#basicdetails" role="tab">Update Details</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#changepassword" role="tab">Change Password</a></li>
+        </ul>
+    </div>
+
+    <div class="tab-content br-profile-body">
+        <div class="tab-pane fade active show" id="basicdetails">
+            <div class="br-pagebody m-0 p-0">
+                <div class="br-section-wrapper">
+                    <!-- <h6 class="br-section-label mb-3">Edit Basic Details</h6> -->
+
+                    <div class="form-layout form-layout-2">
+                        <form [formGroup]="basicDetailsForm">
+                            <div class="row no-gutters">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">First name: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="text" formControlName="first_name" placeholder="Enter First Name">
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.first_name.hasError('required') && (basicDetailsForm.controls.first_name.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Last name: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="text" formControlName="last_name" placeholder="Enter Last Name">
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.last_name.hasError('required') && (basicDetailsForm.controls.last_name.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Email ID: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="text" formControlName="email_id" placeholder="Enter Email Address">
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.email_id.hasError('required') && (basicDetailsForm.controls.email_id.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Phone Number: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="text" formControlName="phone_no" placeholder="Enter Phone Number">
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.phone_no.hasError('required') && (basicDetailsForm.controls.phone_no.dirty)">This field is required</p>
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.phone_no.hasError('pattern') && (basicDetailsForm.controls.phone_no.dirty)">This field should contain only numeric value</p>
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.phone_no.hasError('minlength') && (basicDetailsForm.controls.phone_no.dirty)">The value should be 10 Digits</p>
+                                        <p class="error-element" *ngIf="basicDetailsForm.controls.phone_no.hasError('maxlength') && (basicDetailsForm.controls.phone_no.dirty)">The value should be 10 Digits</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-layout-footer bd pd-20 bd-t-0">
+                                <button type="submit" [disabled]="!basicDetailsForm.valid" (click)="updateBaicDetails($event)" class="btn btn-info">
+                                    <span>Update Profile</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="changepassword">
+            <div class="br-pagebody m-0 p-0">
+                <div class="br-section-wrapper">
+                    <!-- <h6 class="br-section-label mb-3">Update Account Password</h6> -->
+
+                    <div class="form-layout form-layout-2">
+                        <form [formGroup]="passwordUpdateForm">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Old Password: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="password" formControlName="old_password" placeholder="Enter your current password">
+                                        <p class="error-element" *ngIf="passwordUpdateForm.controls.old_password.hasError('required') && (passwordUpdateForm.controls.old_password.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">New Password: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="password" formControlName="password" placeholder="Enter new password">
+                                        <p class="error-element" *ngIf="passwordUpdateForm.controls.password.hasError('required') && (passwordUpdateForm.controls.password.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Password Confirmation: <span class="tx-danger">*</span></label>
+                                        <input class="form-control" type="password" formControlName="password_confirmation" placeholder="Renter new passowrd">
+                                        <p class="error-element" *ngIf="passwordUpdateForm.controls.password_confirmation.hasError('required') && (passwordUpdateForm.controls.password_confirmation.dirty)">This field is required</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-layout-footer bd pd-20 bd-t-0">
+                                <button type="submit" [disabled]="!passwordUpdateForm.valid" (click)="updateAccountPassword($event)" class="btn btn-info">
+                                    <span>Update Password</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Picture Modal -->
+    <div id="profPicModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Upload Profile Picture</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="profilePicUploadForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg">
+                                <input class="form-control" type="file" accept="image/*" formControlName="image" (change)="onPofPicChanged($event)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer ">
+                        <button type="button " [disabled]="!profilePicUploadForm.valid " (click)="updateAccountPic($event) " class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ">
+                            <span>Update</span>
+                        </button>
+                        <button type="button " class="btn btn-secondary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium " data-dismiss="modal ">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <subadmin-app-dashboard-footer></subadmin-app-dashboard-footer>
+</div>

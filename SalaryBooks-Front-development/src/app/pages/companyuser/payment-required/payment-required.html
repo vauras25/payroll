@@ -1,0 +1,66 @@
+<div class="m-auto d-flex align-items-center justify-content-center w-100 h-100">
+    <div *ngIf="!creditPurchasing" class="card text-center p-4 py-5">
+        <img width="120" height="120" src="../../../../../assets/img/suspended_users.svg" alt="">
+        <div class="mt-4">
+            <h2 class="text-dark" >Payment Required!</h2>
+            <p class="mt-2 text-dark">Your account has been suspended due to insufficient credit balance.</p>
+        </div>
+        <button  (click)="initCreditPurchase()" class="btn btn-info mt-4">Purchase Credits</button>
+    </div>
+    <div *ngIf="creditPurchasing" class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Purchase Credit</h6>
+            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button> -->
+        </div>
+        <form [formGroup]="creditForm">
+            <div class="modal-body pd-25">
+                <div class="row">
+                    <div class="col-lg-12 mb-3">
+                        <label>Credit Amount&nbsp;<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="credit_amount" (input)="calculatePayableTotal('credit_amount')">
+
+                        <p class="mt-1 text-danger" *ngIf="creditForm.controls.credit_amount.hasError('required') && ( creditForm.controls.credit_amount.dirty || creditForm.controls.credit_amount.touched )">This field is required</p>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label>Credit Token&nbsp;<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="credit_coupon" (input)="calculatePayableTotal('credit_coupon')">
+
+                        <p class="mt-1 text-danger" *ngIf="creditForm.controls.credit_coupon.hasError('required') && ( creditForm.controls.credit_coupon.dirty || creditForm.controls.credit_coupon.touched )">This field is required</p>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label>Coupon Code</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" formControlName="coupon_code" [readonly]="appliedCoupon != null">
+                            <div class="input-group-append">
+                                <ng-container *ngIf="!appliedCoupon; else removeCouponBlock">
+                                    <button type="button" (click)="applyCouponCode($event)" [disabled]="!creditForm.valid || !creditForm.value.coupon_code" class="input-group-text btn btn-info bg-info text-white bd-info"><span>Apply Coupon</span></button>
+                                </ng-container>
+
+                                <ng-template #removeCouponBlock>
+                                    <button type="button" (click)="removeCouponCode()" class="input-group-text btn btn-info bg-danger text-white bd-danger"><span>Remove Coupon</span></button>
+                                </ng-template>
+                            </div>
+                        </div>
+
+                        <p *ngIf="appliedCoupon" class="mt-1 mb-0 text-center text-success">Extra <b class="text-info">{{appliedCoupon?.coupon_amount}} Credits</b> will be added</p>
+
+                        <p class="mt-1 text-danger" *ngIf="creditForm.controls.coupon_code.hasError('required') && ( creditForm.controls.coupon_code.dirty || creditForm.controls.coupon_code.touched )">This field is required</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: block; float: left; width: 100%; padding: 15px 26px;">
+                <span *ngIf="this.creditForm.value.payable_amount" class="payableamount text-primary">
+                    &#8377;{{this.creditForm.value.payable_amount}}&nbsp;<small>(Inc. GST)</small>
+                </span>
+
+                <button type="button" (click)="purchaseCredit($event)" [disabled]="!creditForm.valid" type="button" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium" style="float: right;">
+                    <span>Purchase</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

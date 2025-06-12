@@ -1,0 +1,46 @@
+.row-child div {
+  background: transparent;
+  border: 0px;
+}
+
+.c-table {
+  /* margin:10px  0px; */
+  /* box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+    1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset; */
+}
+
+.c-table .c-tr .c-td,
+.c-th {
+    border: 1px solid #ced4da ;;
+  padding: 5px 20px !important;
+  width: 100%;
+  /* display: inline-block; */
+  vertical-align: middle;
+}
+
+.c-th {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  background-color: #f8f9fa;
+  border-top:1px solid #ced4da ;
+}
+
+.c-table .c-tr label {
+  margin: 0px;
+  display: flex;
+}
+
+.c-table .rmStyle {
+  margin: 0px;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none !important;
+  background-color: transparent !important;
+  
+}
+

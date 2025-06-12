@@ -1,0 +1,231 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item active">Promotion Management</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-flag"></i>
+        <div>
+            <h4>Promotion Management</h4>
+          <p class="mg-b-0">Create/Manage Promotion</p>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="promotion-submit-section">
+        <div class="br-section-wrapper">
+
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Create Promotion Code</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit Promotion Code</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="promotionForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Promo code (Alpha-numeric)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" formControlName="coupon_code" type="text" oninput="this.value = this.value.toUpperCase()">
+                            <p class="error-element" *ngIf="promotionForm.controls.coupon_code.hasError('required') && (promotionForm.controls.coupon_code.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Type&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="coupon_type" [options]="couponTypeMaster" class="form-control" [config]="{placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="promotionForm.controls.coupon_type.hasError('required') && (promotionForm.controls.coupon_type.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Extra Coupon {{promotionForm.value.coupon_type?.value == 'percentage' ? 'Percentage (%)' : ''}}&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" formControlName="coupon_amount" type="number">
+                            <p class="error-element" *ngIf="promotionForm.controls.coupon_amount.hasError('required') && (promotionForm.controls.coupon_amount.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="promotionForm.controls.coupon_amount.hasError('pattern') && (promotionForm.controls.coupon_amount.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Expiration&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <dp-date-picker [config]="{'disableKeypress': true, 'format': 'MM/DD/YYYY'}" formControlName="coupon_expire" theme="dp-material" attachTo=".mat-input-wrapper"></dp-date-picker>
+                            <p class="error-element" *ngIf="promotionForm.controls.coupon_expire.hasError('required') && (promotionForm.controls.coupon_expire.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Multi use
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary" id="multiuse-toggle">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            <div class="minpurchase-field" style="display: none;">
+                                Minimun Purchase&nbsp;<span class="text-danger">*</span>
+                            </div>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="minpurchase-field" style="display: none;">
+                                <input class="form-control" formControlName="min_purchase" type="number">
+                                <p class="error-element" *ngIf="promotionForm.controls.min_purchase.hasError('required') && (promotionForm.controls.min_purchase.dirty)">This field is required</p>
+                                <p class="error-element" *ngIf="promotionForm.controls.min_purchase.hasError('pattern') && (promotionForm.controls.min_purchase.dirty)">The value should be numeric</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button type="submit" [disabled]="!promotionForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>Save</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel Editing</span>
+                                </button>
+                                <button type="submit" [disabled]="!promotionForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Promo code list</h6>
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th>SL No</th>
+                            <th>Promo Code</th>
+                            <th>Value</th>
+                            <th>Min Purchase</th>
+                            <th>Free Extra</th>
+                            <th>Status</th>
+                            <th>Redemption count</th>
+                            <th>Purchased Credit</th>
+                            <th>Free Credit</th>
+                            <th>Expiry Date</th>
+                            <th>Activate / Deactivate</th>
+                            <th>Action</th>
+                            <!-- <th>Redeemed</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <button id="redeemedListModalButton" [hidden]="true" data-toggle="modal" data-target="#redeemedListModal"></button>
+    <div id="redeemedListModal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Redeemed History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped bd mb-0">
+                            <thead class="bg-info text-white">
+                                <th>    
+                                    <label class="d-flex align-items-center mb-0" for="select-all">
+                                        <input
+                                            class="mb-0 mr-1"
+                                            id="select-all"
+                                            [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="couponRedeemed.length>0"
+                                            type="checkbox"
+                                        />
+                                        SL No.
+                                        </label>  
+
+                                </th>
+                                <th>Date</th>
+                                <th>Credit Purchased</th>
+                                <th>Free Credit</th>
+                                <th>Purchase Amount</th>
+                                <th>Order Id</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of couponRedeemed; let i = index">
+                                    <td>
+
+                                        <label
+                                    class="d-flex align-items-center"
+                                    [for]="'checkrow-' + (i + 1)"
+                                    >
+                                <input
+                                    type="checkbox"
+                                    class="mr-2"
+                                    [attr.checked]="item?.checked == true ? 'checked' : null"
+                                    id="checkrow-{{ i + 1 }}"
+                                    [attr.data-checkbox-id]="item?._id"
+                                    (click)="rowCheckBoxChecked($event, item)"
+                                    
+                                />
+                                {{
+                                    Global.getTableSerialNumber(
+                                      i,
+                                      paginationOptions.limit,
+                                      paginationOptions.page
+                                    )
+                                  }}
+                               
+                            </label>
+
+                                    </td>
+                                    <td>{{item?.date?(item?.date | date:'dd/MM/YYYY'):'N/A'}}</td>
+                                    <td>{{item?.credit_qty ?? '-'}}</td>
+                                    <td>{{item?.free_credit ?? 'N/A'}}</td>
+
+                                    <td>{{item?.credit_amount ?? '-'}}</td>
+
+                                    <td>{{item?.razorpay_order_id ?? '-'}}</td>
+                                </tr>
+                                <tr *ngIf="couponRedeemed.length == 0">
+                                    <td colspan="100%" class="text-center">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <app-custom-pagination [rows]="couponRedeemed" [paginationOptions]="paginationOptions" (onPageClicked)="fetchAllCoupons($event)"></app-custom-pagination>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" *ngIf="couponRedeemed.length>0" [disabled]="!anyRowsChecked()" class="btn btn-info" (click)="exportPromotion();">Export</button>
+
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

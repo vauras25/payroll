@@ -1,0 +1,660 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Reports</a>
+      <a class="breadcrumb-item active">Run Payroll</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Run Payroll</h4>
+      
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [monthFilter]="true"
+        [isBankAccount]="true"
+        [yearFilter]="true"
+        [searchKeyFilter]="true"
+        (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+      ></companyuser-app-table-filter>
+
+      <div>
+        <div class="d-flex align-items-center">
+          <div
+            class="d-flex justify-content-start flex-1 btn btn-info-border px-0"
+          >
+            <ng-container
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'salary',
+                  company_operation: 'run_payroll',
+                  company_sub_module: 'run_payroll',
+                  company_sub_operation: ['Run']
+                })
+              "
+            >
+              <button
+                [disabled]="
+                  rowCheckedAll == false &&
+                  checkedRowIds.length == 0 &&
+                  uncheckedRowIds.length == 0
+                "
+                class="btn btn-info tx-11 tx-spacing-2"
+                (click)="generateReport()"
+              >
+                RUN PAYROLL
+              </button>
+            </ng-container>
+          </div>
+          <div
+            class="d-flex justify-content-end flex-1 btn btn-info-border px-0"
+          >
+            <ng-container
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'salary',
+                  company_operation: 'hold_salary',
+                  company_sub_module: 'hold_salary',
+                  company_sub_operation: ['view']
+                })
+              "
+            >
+              <button
+                (click)="getHoldSalaries({ openmodal: true, page: 1 })"
+                class="btn btn-outline-info tx-11 tx-spacing-2"
+              >
+                HOLD LIST
+              </button>
+            </ng-container>
+          </div>
+        </div>
+
+        <app-custom-tableoption (onFilterChanged)="fetchEmployees({page: 1, options: $event})" [searchable]="false"></app-custom-tableoption>
+
+        <div class="table-wrapper">
+          
+          <table class="table display responsive nowrap wd-100p employee-table">
+            <thead>
+              <tr>
+                <th>
+                  <label class="d-flex align-items-center mb-0" for="all">
+                    <input
+                      type="checkbox"
+                      class="mr-2"
+                      [value]="rowCheckedAll"
+                      (change)="allRowsCheckboxChecked($event)"
+                      *ngIf="employees.length > 0"
+                    />
+                    SL No.
+                  </label>
+                </th>
+                <th>Status</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Attendance record</th>
+                <th>Client</th>
+                <th>Branch</th>
+                <th>Department</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of employees; let i = index">
+                <td>
+                  <label class="d-flex align-items-center" [for]="i">
+                    <ng-container
+                      *ngIf="
+                        getSheetGenerationStatus(employee)?.checkbox == true
+                      "
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          employee.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="employee._id"
+                        (click)="rowCheckBoxChecked($event, employee)"
+                      />
+                    </ng-container>
+                    {{
+                      Global.getTableSerialNumber(
+                        i,
+                        employeePaginationOptions.limit,
+                        employeePaginationOptions.page
+                      )
+                    }}
+                  </label>
+                </td>
+                <td>{{ getSheetGenerationStatus(employee).label }}</td>
+                <td>{{ employee.emp_id }}</td>
+                <td>
+                  {{ employee.emp_first_name }} {{ employee.emp_last_name }}
+                </td>
+                <td>
+                  {{ employee.attendance_summaries[0]?.paydays ?? 0 }} /
+                  {{ this.employeeListFilter?.month?.days }}
+                </td>
+                <td>
+                  <ng-container *ngIf="employee?.client">
+                    {{ employee?.client?.client_name }}
+                    <small class="font-weight-bold">{{
+                      employee?.client?.client_code
+                    }}</small>
+                  </ng-container>
+                  <ng-container *ngIf="!employee?.client">N/A</ng-container>
+                </td>
+                <td>{{ employee?.branch?.branch_name ?? "N/A" }}</td>
+                <td>{{ employee?.department?.department_name ?? "N/A" }}</td>
+                <td class="text-center">
+                  <ng-container
+                    *ngIf="
+                      Global.checkCompanyModulePermission({
+                        company_sub_module: 'run_payroll',
+                        company_sub_operation: ['edit'],
+                        company_strict: true
+                      })
+                    "
+                  >
+                  </ng-container>
+
+                  <button
+                    *ngIf="
+                      employee?.employee_monthly_reports
+                        ?.bank_instruction_status === 'confirm';
+                      else salaryHoldOption
+                    "
+                    class="actionBtn ml-2"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Supplementary"
+                    (click)="initSupplementarySalary(employee)"
+                  >
+                    <i style="font-size: 12px" class="fa">&#xf01e;</i>
+                  </button>
+
+                  <ng-template #salaryHoldOption>
+                    <!-- // company_sub_module:'hold_salary',
+                    // company_sub_operation:['view'] -->
+                    <ng-container
+                      *ngIf="
+                        Global.checkCompanyModulePermission({
+                          company_module: 'salary',
+                          company_operation: 'hold_salary'
+                        }) &&
+                        ['', null, undefined].includes(
+                          employee?.employee_monthly_reports
+                            ?.bank_ins_referance_id
+                        )
+                      "
+                    >
+                      <ng-container
+                        *ngIf="
+                          !employee?.hold_salary_emps;
+                          else editSalaryHoldBlock
+                        "
+                      >
+                        <button
+                          *ngIf="
+                            Global.checkCompanyModulePermission({
+                              company_module: 'salary',
+                              company_sub_module: 'hold_salary',
+                              company_sub_operation: ['add'],
+                              company_strict: true
+                            })
+                          "
+                          (click)="initHoldSalary(employee)"
+                          class="actionBtn"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Hold Salary"
+                        >
+                          <i style="font-size: 12px" class="fa fa-pause"></i>
+                        </button>
+                      </ng-container>
+
+                      <ng-template #editSalaryHoldBlock>
+                        <button
+                          *ngIf="
+                            Global.checkCompanyModulePermission({
+                              company_module: 'salary',
+                              company_sub_module: 'hold_salary',
+                              company_sub_operation: ['edit'],
+                              company_strict: true
+                            })
+                          "
+                          (click)="initHoldSalary(employee)"
+                          class="actionBtn"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Edit Hold Salary"
+                        >
+                          <i style="font-size: 12px" class="fa fa-edit"></i>
+                        </button>
+                      </ng-template>
+                    </ng-container>
+                  </ng-template>
+                </td>
+              </tr>
+              <tr *ngIf="employees.length == 0">
+                <td
+                  colspan="100%"
+                  class="text-center"
+                  style="background-color: #f7f7f7"
+                >
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <app-custom-pagination
+          [rows]="employees"
+          [paginationOptions]="employeePaginationOptions"
+          (onPageClicked)="fetchEmployees({ page: $event })"
+        ></app-custom-pagination>
+      </div>
+    </div>
+  </div>
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+
+<button
+  id="salaryHoldModalEmpOpen"
+  [hidden]="true"
+  data-toggle="modal"
+  data-target="#salaryHoldModalEmp"
+></button>
+<div
+  id="salaryHoldModalEmp"
+  tabindex="-1"
+  class="modal fade effect-slide-in-right"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content tx-size-sm">
+      <div class="modal-header pd-x-20">
+        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Hold List</h6>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body pd-20">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover table-striped">
+                <thead class="thead-colored thead-info">
+                  <tr>
+                    <th class="text-center">
+                      <input
+                        type="checkbox"
+                        [value]="salaryHold_rowCheckedAll"
+                        (change)="salaryHold_allRowsCheckboxChecked($event)"
+                        *ngIf="holdedEmpSalaries.length > 0"
+                      />
+                    </th>
+                    <th>Emp ID</th>
+                    <th>Full Name</th>
+                    <!-- <th>Wage Type</th> -->
+                    <th>Hold Type</th>
+                    <th>Wage Month</th>
+                    <th>Wage Year</th>
+                    <th *ngIf=" Global.checkCompanyModulePermission({
+                      company_module: 'salary',
+                      company_sub_module: 'hold_salary',
+                      company_sub_operation: ['edit'],
+                      company_strict: true
+                    })" class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let employee of holdedEmpSalaries; let i = index">
+                    <td class="text-center">
+                      <input
+                        type="checkbox"
+                        [attr.checked]="
+                          employee.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="employee._id"
+                        (click)="
+                          salaryHold_rowCheckBoxChecked($event, employee)
+                        "
+                      />
+                    </td>
+                    <td>{{ employee.employees.emp_id }}</td>
+                    <td>
+                      {{ employee.employees.emp_first_name }}
+                      {{ employee.employees.emp_last_name }}
+                    </td>
+                    <!-- <td class="text-uppercase">{{ employee?.employee_details?.template_data?.attendance_temp_data?.register_type ?? "-" }}</td> -->
+                    <td class="">
+                      <ng-container [ngSwitch]="employee?.hold_type">
+                        <ng-container *ngSwitchCase="'salary'"
+                          >Salary</ng-container
+                        >
+                        <ng-container *ngSwitchCase="'salaryWithCom'"
+                          >Salary with Compliance</ng-container
+                        >
+                        <ng-container *ngSwitchDefault>{{
+                          employee?.hold_salary_emp?.hold_type
+                        }}</ng-container>
+                      </ng-container>
+                    </td>
+                    <td>{{ employee.wage_month + 1 }}</td>
+                    <td>{{ employee.wage_year }}</td>
+                    <td *ngIf=" Global.checkCompanyModulePermission({
+                      company_module: 'salary',
+                      company_sub_module: 'hold_salary',
+                      company_sub_operation: ['edit'],
+                      company_strict: true
+                    })" class="text-center">
+                      <button
+                        (click)="initHoldSalary(employee)"
+                        class="actionBtn"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Edit Hold Salary"
+                      >
+                        <i style="font-size: 12px" class="fa fa-edit"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="holdedEmpSalaries.length == 0">
+                    <td class="text-center" colspan="100%">No records found</td>
+                  </tr>
+                </tbody>
+                <tfoot *ngIf=" Global.checkCompanyModulePermission({
+                  company_module: 'salary',
+                  company_sub_module: 'hold_salary',
+                  company_sub_operation: ['edit'],
+                  company_strict: true
+                })">
+                  <tr>
+                    <td
+                      colspan="100%"
+                      class="text-left"
+                      style="border-bottom: 1px solid #eee"
+                    >
+                      <button
+                        class="btn btn-sm btn-dark text-uppercase"
+                        (click)="revokeHoldSalary('multiple')"
+                      >
+                        Revoke Hold
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <app-custom-pagination
+              [rows]="holdedEmpSalaries"
+              [paginationOptions]="holdedSalaryPaginationOptions"
+              (onPageClicked)="getHoldSalaries({ page: $event })"
+            ></app-custom-pagination>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn text-uppercase btn-secondary tx-size-xs"
+          data-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button
+  id="salaryHoldModalOpen"
+  [hidden]="true"
+  data-toggle="modal"
+  data-target="#salaryHoldModal"
+></button>
+<div
+  id="salaryHoldModal"
+  tabindex="-1"
+  class="modal fade effect-slide-in-right"
+>
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content tx-size-sm">
+      <div class="modal-header pd-x-20">
+        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+          Hold Salary
+          <small
+            >{{
+              this.empSalaryHoldForm.get("emp_details")?.value?.emp_first_name
+            }}
+            {{
+              this.empSalaryHoldForm.get("emp_details")?.value?.emp_last_name
+            }}</small
+          >
+        </h6>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="empSalaryHoldForm" [formGroup]="empSalaryHoldForm">
+        <div class="modal-body pd-20">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <label>Hold Type <span class="text-danger">*</span></label>
+
+                  <ngx-select-dropdown
+                    formControlName="hold_type"
+                    [options]="holdTypeMaster"
+                    class="form-control p-1"
+                    [config]="{ search: true, placeholder: 'Select One' }"
+                  ></ngx-select-dropdown>
+
+                  <p
+                    class="mt-1 text-danger"
+                    *ngIf="
+                      empSalaryHoldForm.controls.hold_type.hasError(
+                        'required'
+                      ) &&
+                      (empSalaryHoldForm.controls.hold_type.dirty ||
+                        empSalaryHoldForm.controls.hold_type.touched)
+                    "
+                  >
+                    This field is required
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn text-uppercase btn-secondary tx-size-xs"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+
+          <ng-container
+            *ngIf="
+              this.empSalaryHoldForm.get('emp_details')?.value?.hold_salary_emps
+            "
+          >
+            <button
+              (click)="
+                revokeHoldSalary(
+                  this.empSalaryHoldForm.get('emp_details')?.value
+                    ?.hold_salary_emps
+                )
+              "
+              type="button"
+              class="btn text-uppercase btn-danger tx-size-xs ml-1"
+            >
+              Revoke Hold
+            </button>
+          </ng-container>
+
+          <button
+            type="submit"
+            class="btn text-uppercase btn-primary tx-size-xs"
+            (click)="submitEmpSalaryHold($event)"
+          >
+            <span>Submit</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<button
+  id="supplementaryModalOpen"
+  [hidden]="true"
+  data-toggle="modal"
+  data-target="#supplementaryModal"
+></button>
+<div
+  id="supplementaryModal"
+  tabindex="-1"
+  class="modal fade effect-slide-in-right"
+>
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content tx-size-sm">
+      <div class="modal-header pd-x-20">
+        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+          Supplementary
+          <small
+            >{{
+              this.empSalaryHoldForm.get("emp_details")?.value?.emp_first_name
+            }}
+            {{
+              this.empSalaryHoldForm.get("emp_details")?.value?.emp_last_name
+            }}</small
+          >
+        </h6>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="supplementaryForm" [formGroup]="supplementaryForm">
+        <div class="modal-body pd-20">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <label>Adjust Days <span class="text-danger">*</span></label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="supplement_adjust_day"
+                  />
+
+                  <p
+                    class="mt-1 text-danger"
+                    *ngIf="
+                      supplementaryForm.controls.supplement_adjust_day.hasError(
+                        'required'
+                      ) &&
+                      (supplementaryForm.controls.supplement_adjust_day.dirty ||
+                        supplementaryForm.controls.supplement_adjust_day
+                          .touched)
+                    "
+                  >
+                    This field is required
+                  </p>
+
+                  <p
+                    class="mt-1 text-danger"
+                    *ngIf="
+                      supplementaryForm.controls.supplement_adjust_day.hasError(
+                        'pattern'
+                      ) &&
+                      (supplementaryForm.controls.supplement_adjust_day.dirty ||
+                        supplementaryForm.controls.supplement_adjust_day
+                          .touched)
+                    "
+                  >
+                    Please enter a valid number
+                  </p>
+
+                  <p
+                    class="mt-1 text-danger"
+                    *ngIf="
+                      supplementaryForm.controls.supplement_adjust_day.hasError(
+                        'max'
+                      ) &&
+                      (supplementaryForm.controls.supplement_adjust_day.dirty ||
+                        supplementaryForm.controls.supplement_adjust_day
+                          .touched)
+                    "
+                  >
+                    The value cannot be more than Total LOP, i.e.,
+                    {{
+                      this.supplementaryForm.get("emp_details")?.value
+                        ?.attendance_summaries[0]?.total_lop
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn text-uppercase btn-secondary tx-size-xs"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            class="btn text-uppercase btn-primary tx-size-xs"
+            (click)="submitEmpSalarySupplementary($event)"
+          >
+            <span>Submit</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

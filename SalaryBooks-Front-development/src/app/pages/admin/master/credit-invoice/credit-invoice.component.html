@@ -1,0 +1,137 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Master</a>
+            <a class="breadcrumb-item active">Credit Invoice</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-home"></i>
+        <div>
+            <h4>Credit Invoice</h4>
+            <p class="mg-b-0">Design invoice format</p>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="creditinvoice-submit-section">
+        <div class="br-section-wrapper">
+            <div class="d-flex align-items-center justify-content-between">
+                <h6 class="br-section-label">Credit Invoice Template</h6>
+                <button [disabled]="!templateData" (click)="viewCurrTemplate($event)" class="btn btn-info" >
+                    <span>View Invoice Template</span>
+                </button>
+            </div>
+
+            <form [formGroup]="creditInvoiceForm" class="mt-3">
+                <div class="bg-gray-100 bd pd-y-20 pd-x-20">
+                    <div class="row">
+                        <div class="col-sm-4 col-12 form-group upload-image-sec ">
+                            <h3 class="upload-text">
+                                Upload Logo
+                                <a class="btn btn-danger float-right btn-sm mb-1" *ngIf="currentInvoice?.credit_inv_logo" href="{{Global.BACKEND_URL}}/{{currentInvoice?.credit_inv_logo}}" target="_blank">View Current Logo</a>
+                            </h3>
+                            <input type="file" class="form-control" formControlName="credit_inv_logo" (change)="onImageChanged($event)">
+                        </div>
+                    </div>
+
+                    <div class="form-row row flex-wrap align-items-center">
+                        <div class="col-sm-4 col-12 form-group">
+                            <ckeditor [editor]="Editor" formControlName="com_address" data-placeholder="Address"></ckeditor>
+                        </div>
+
+                        <div class="col-sm-4 col-12 form-group">
+                            <input type="text" formControlName="com_state_code" class="form-control mg-t-10 mg-md-t-0 mb-2" placeholder="State Code">
+                            <input type="text" formControlName="com_state_name" class="form-control mg-t-10 mg-md-t-0" placeholder="State Name">
+                        </div>
+
+                        <div class="col-sm-4 col-12 form-group">
+                            <input type="text" formControlName="invoice_prefix" class="form-control mg-t-10 mg-md-t-0 mb-2" placeholder="Invoice Prefix">
+                            <span class="form-control mg-t-10 mg-md-t-0" style="visibility: hidden;"></span>
+                        </div>
+
+                        <div class="col-sm-4 col-12 form-group">
+                            <input type="text" class="form-control mg-t-10 mg-md-t-0" formControlName="mode_of_pay" placeholder="Mode of terms">
+                        </div>
+
+                        <div class="col-sm-4 col-12 form-group">
+                            <input type="text" class="form-control mg-t-10 mg-md-t-0" formControlName="terms_of_delivery" placeholder="Terms of delivery">
+                        </div>
+
+                        <div class="col-sm-4 col-12 form-group">
+                            <input type="text" class="form-control mg-t-10 mg-md-t-0" formControlName="entity_name" placeholder="Entity Name">
+                        </div>
+
+                        <div class="col-sm-6 col-12 form-group">
+                            <textarea class="form-control mg-t-10 mg-md-t-0" formControlName="entity_description" placeholder="Entity Description"></textarea>
+                        </div>
+
+                        <div class="col-sm-6 col-12 form-group">
+                            <input type="text" class="form-control mg-t-10 mg-md-t-0" formControlName="hsn_sac" placeholder="HSN/SAC">
+                            <input type="text" class="form-control mt-2 mg-t-10 mg-md-t-0" formControlName="com_pan" placeholder="Company Pan No">
+                        </div>
+
+                        <div class="col-sm-6 col-12 form-group">
+                            <textarea class="form-control mg-t-10 mg-md-t-0" formControlName="declaration" placeholder="Declaration"></textarea>
+                        </div>
+
+                        <div class="col-sm-6 col-12 form-group">
+                            <ckeditor [editor]="Editor" formControlName="com_bank_details" data-placeholder="Company Bank Details"></ckeditor>
+                        </div>
+
+                        <div class="col-sm-12 col-12 form-group">
+                            <input type="text" formControlName="footer_text" class="form-control mg-t-10 mg-md-t-0" placeholder="This is a computer generated invoice">
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="mt-0">
+                        </div>
+
+                        <div class="col-sm-12 col-12 text-center ">
+                            <button (click)="submitTemplate($event)" class="submit-block tx-spacing-2 btn btn-info" [disabled]="!creditInvoiceForm.valid">
+                                <span>Submit</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+
+    <button
+    id="viewTemplateModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#changeStatusModal"
+  ></button>
+  <div id="changeStatusModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form>
+          <div class="modal-body pd-25">
+            <credit-invoice-view [templateData]="templateData"></credit-invoice-view>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

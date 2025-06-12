@@ -1,0 +1,97 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">{{ reportType | uppercase }} Summary Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>{{ reportType | uppercase }} Summary Report</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        (onFiltered)="
+          employeeListFilter = $event;
+          reportType == 'pf'
+            ? fetchPFSummaryReportListing()
+            : fetchESICSummaryReportListing()
+        "
+      >
+      </companyuser-app-table-filter>
+
+      <!-- <div class="row">
+        <div class="col-4">
+          <ngx-select-dropdown
+            [options]="['Master Template']"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'SELECT TEMPLATE'
+            }"
+            [multiple]="false"
+          ></ngx-select-dropdown>
+        </div>
+        <div class="col-2 pl-0">
+          <button
+            id="TemplateModalOpen"
+            data-toggle="modal"
+            data-target="#settingsTemplateModal"
+            class="btn btn-info tx-11 tx-spacing-2 h-100"
+          >
+            <span style="font-size: 20px" class="fa align-middle"
+              >&#xf013;</span
+            >
+            <i class="fa-regular fa-gear"></i>
+          </button>
+        </div>
+      </div> -->
+      <div class="mt-3">
+       
+        <pf-summary-report
+        *ngIf="reportType == 'pf'"
+          (onChecked)="fetchPFSummaryReportListing($event)"
+          (downloadReport)="downloadSummaryReport($event)"
+          [reportPaginationOptions]="reportPaginationOptions"
+          [pfChallansListing]="pfChallansListing"
+        ></pf-summary-report>
+        <esic-summary-report
+          (onChecked)="fetchESICSummaryReportListing($event)"
+          (downloadReport)="downloadSummaryReport($event)"
+          *ngIf="reportType == 'esic'"
+          [reportPaginationOptions]="reportPaginationOptions"
+          [reportTableFilterOptions]="reportTableFilterOptions"
+          [esicChallansListing]="esicChallansListing"
+        ></esic-summary-report>
+      </div>
+      <app-custom-pagination
+        *ngIf="reportType == 'pf'"
+        [rows]="pfChallansListing"
+        [paginationOptions]="reportPaginationOptions"
+        (onPageClicked)="reportPaginationOptions.page = $event; fetchPFSummaryReportListing()"
+      ></app-custom-pagination>
+
+      <app-custom-pagination
+        *ngIf="reportType == 'esic'"
+        [rows]="esicChallansListing"
+        [paginationOptions]="reportPaginationOptions"
+        (onPageClicked)="reportPaginationOptions.page = $event; fetchESICSummaryReportListing()"
+      ></app-custom-pagination>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

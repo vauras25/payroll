@@ -1,0 +1,140 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Client Ledeger</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-ios-list"></i>
+        <div>
+            <h4>Client Ledeger Management</h4>
+            <p class="mg-b-0">Client transaction ledger</p>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" *ngIf="!bulkAction">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Search User</h6>
+
+            <div class="card" style="border:0px;">
+                <form [formGroup]="subscriptionUserSearchForm">
+                    <div class="card-block pd-0">
+                        <div class="row row-sm mg-t-20">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">From</label>
+                                    <input class="form-control" type="date" formControlName="wage_from_date">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">To</label>
+                                    <input class="form-control" type="date" formControlName="wage_to_date">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Reseller</label>
+                                    <ngx-select-dropdown
+                                    formControlName="reseller_id"
+                                    [options]="resellerMaster"
+                                    [multiple]="true"
+                                    class="form-control"
+                                    (change)="setReseller();"
+                                    [config]="{ search: true, placeholder: 'Select Reseller' }"
+                                   
+                                  ></ngx-select-dropdown>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Corporate ID</label>
+                                    <input type="text" formControlName="corporate_id" class="form-control tx-14">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button (click)="searchSubmit($event)" class="btn btn-info tx-11 tx-spacing-1 tx-uppercase tx-semibold tx-mont pd-y-12 pd-x-30 mg-t-30">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+       
+        
+        <div class="br-section-wrapper">
+            
+                <h6 class="br-section-label">Client Ledger List
+                </h6>
+                <ng-container *ngIf="!bulkAction">
+                <button
+                type="button"
+                class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                style="float: right;"
+                [disabled]="
+                    !anyRowsChecked()
+                  "
+                  (click)="exportData();"
+              >
+                <span
+                  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                  >Bulk Action</span
+                >
+                </button>
+                
+                <div class="table-wrapper mt-1">
+    
+                  
+    
+                    <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                        <thead>
+                            <tr>
+                                <th class=""><input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"></th>
+                                <th class="">SL No</th>
+                                <th class="">Reseller</th>
+                                <th class="">Sub-Seller</th>
+                                <th class="">Branch</th>
+                                <th class="">Corp Id</th>
+                                <th class="">Establishment Name</th>
+                                <th class="">Qty</th>
+                                <th class="">Taxable Value</th>
+                                <th class="">Total GST</th>
+                                <th class="">TDS</th>
+                                <th class="">Inv Value</th>
+                                <th class="">Gateway</th>
+                                <th class="">Action</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+    
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="bulkAction">
+            <app-ledger-detail (resetFilter)="resetFilter();"  [filterOptions]="filterOptions"></app-ledger-detail> 
+            </ng-container>
+            
+           
+        </div>
+    </div>
+  
+  
+
+   
+
+  
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

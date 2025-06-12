@@ -1,0 +1,122 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item active">Revision Management</a>
+            <a class="breadcrumb-item">Report</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>Update Revision</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+    
+    <div class="br-pagebody">
+       
+     
+        <div class="br-section-wrapper pd-10">
+           
+            <div class="card bd-0">
+                
+                <div #btns  class="container text-right py-3">
+                    <a >
+                        <button
+                        (click)="closeWindow();"
+                        class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+                      >
+                        Cancel
+                      </button>
+                    </a>
+                   
+                    <button
+                      (click)="printDoc(btns)"
+                      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+                    >
+                      Print
+                    </button>
+                  </div>
+            
+
+                <div class="card-body px-0 bd-t-0 rounded-bottom" id="sectionToPrint">
+
+                    <div class="table-responsive mb-3">
+                        <table class="table nowrap dataTable dtr-inline" style="width: 100%;">
+                            <thead class="">
+                                <tr>
+                                    <th colspan="9">Revision History for Emp Id {{employees[0]?.emp_id}} Name {{employees[0]?.emp_first_name}} {{employees[0]?.emp_last_name}}</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">
+                                        Sl No
+                                    </th>
+                                    <th>Revision No</th>
+                                    <th>Date of revision</th>
+                                    <th>Effective from</th>
+                                    <th>Prev Gross</th>
+                                    <th>Perv Sal Template</th>
+                                    <th>Rev Gross</th>
+                                    <th>Rev Sal Template</th>
+                                    <th>Revised By</th>
+
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let employee of employees[0]?.revision_logs; let i = index">
+                                    <td class="text-center">{{i+1}}</td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{ (employee?.revision_year + '-' + employee?.revision_month + '-01')  | date:'MMM - YYYY'}}</td>
+                                    <td>{{ employee?.effect_from | date:'dd/MM/YYYY' }}</td>
+                                    <td>{{ employee?.prev_gross_salary ?? 'N/A' }}</td>
+                                    <td class="text-center">
+                                        <a href="javascript:;" (click)="viewSalaryTemplate(employee?.prev_template_data?.salary_temp_data)" class="btn btn-info btn-icon mg-r-5" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                                            <div >
+                                                <i class="fa fa-eye"></i>
+                                            </div>
+                                        </a>    
+                                       
+                                        {{ employee?.prev_template_data?.salary_temp_data?.template_name ?? 'N/A' }} 
+                                    </td>
+
+                                    <td>{{ employee?.gross_salary ?? 'N/A' }}</td>
+                                    <td class="text-center">
+                                    <a href="javascript:;" (click)="viewSalaryTemplate(employee?.template_data?.salary_temp_data)" class="btn btn-info btn-icon mg-r-5" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                                        <div >
+                                            <i class="fa fa-eye"></i>
+                                        </div>
+                                    </a>    
+                                        
+                                        {{ employee?.template_data?.salary_temp_data?.template_name ?? 'N/A' }} 
+                                    </td>
+                                    <td></td>
+                                   
+                                   
+                                </tr>
+
+                                <tr *ngIf="employees.length == 0">
+                                    <td class="text-center" colspan="100%">No records found</td>
+                                </tr>
+                            </tbody>
+                          
+                        </table>
+                    </div>
+
+                    <!-- <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="fetchEmployees({'page' : $event})"></app-custom-pagination> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-salary-template-details-modal
+    [salaryTempateDetails]="salaryTempateDetails"
+  ></companyuser-app-salary-template-details-modal>
+
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

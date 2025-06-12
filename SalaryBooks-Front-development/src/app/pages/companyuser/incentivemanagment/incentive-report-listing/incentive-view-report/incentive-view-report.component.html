@@ -1,0 +1,344 @@
+<div class="table-wrapper mt-3" *ngIf="employees?.length > 1">
+  <div class="table-responsive">
+    <table
+      class="table table-bordered cust-table table-striped cust-reporting-table"
+    >
+    <thead>
+      <tr class="title-sec">
+        <th [colSpan]="personal_details.length + (other_details_series.length * other_details.length)" class="text-center column-title">INCENTIVE 
+        </th>
+      </tr>
+      <tr class="title-sec">
+        <th [colSpan]="personal_details.length" class="column-title"></th>
+        <ng-container *ngFor="let sub_head of wages_series; let i = index">
+          <th [colSpan]="other_details.length" class="text-cente column-title">{{sub_head + '-' + (i + 1)}}</th>
+        </ng-container>
+      </tr>
+      <tr class="title-sec">
+        <th *ngFor="let personal_detail of personal_details" class="column-title">
+          {{personal_detail?.title ?? 'N/A'}}
+        </th>
+        <ng-container *ngFor="let other_details of other_details_series">
+          <th *ngFor="let other_detail  of other_details" class="column-title">
+            {{other_detail?.title ?? 'N/A'}}
+          </th>
+        </ng-container>
+      </tr>
+    </thead>
+    <thead>
+      <tr *ngFor="let employee of employees; let i = index">
+        <td *ngIf="hasSlug(personal_details,'sl_no')">{{i + 1}}</td>
+        <td *ngIf="hasSlug(personal_details,'emp_id')">{{employee?.emp_id}}</td>
+        <td *ngIf="hasSlug(personal_details,'emp_name')">{{employee?.emp_first_name}} {{employee?.emp_last_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'department')">{{employee?.department?.department_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'designation')">{{employee?.designation?.designation_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'client')">{{employee?.client?.client_code}}</td>
+        <td *ngIf="hasSlug(personal_details,'branch')">{{employee?.branch?.branch_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'hod')">{{employee?.hod?.first_name}} {{employee?.hod?.last_name}}</td>
+        <ng-container *ngFor="let incentive of employee?.incentive_modules;let i = index">
+        <!-- {{startMonth?.month()}}{{endMonth?.month()}} -->
+        <!-- <ng-container *ngIf="!isIncentiveMonth(incentive._id, incentive.incentive_g_year)">
+          <td [colSpan]="employee?.incentive_modules.length"></td>
+        </ng-container> -->
+
+        <!-- <ng-container *ngIf="isIncentiveMonth(incentive._id, incentive.incentive_g_year)"> -->
+          <td *ngIf="hasSlug(other_details,'incentive_Accumulated')">{{incentive?.incentive_value ?? 0}}</td> <!--INCENTIVE ACCUMULATED-->
+          <td *ngIf="incentive?.advance_module">{{incentive?.advance_module?.advance_amount ?? 0}}</td><!-- SETTELED doubt -->
+          <td *ngIf="!incentive?.advance_module && !incentive?.incentive_report?.bank_ins_referance_id">0</td><!-- SETTELED doubt -->
+          <td *ngIf="!incentive?.advance_module && incentive?.incentive_report?.bank_ins_referance_id">{{incentive?.incentive_report?.gross_earning ?? 0}}</td><!-- SETTELED doubt -->
+          <td *ngIf="hasSlug(other_details,'advance_Paid')">{{incentive?.advance_module?.advance_amount ?? 0}}</td> <!--PAID-->
+          <td *ngIf="hasSlug(other_details,'advance_Recovered')">{{incentive?.advance_module?.advance_amount - incentive?.advance_module?.remaining_amount ?? 0}}</td> <!--RECOVERED-->
+          <td *ngIf="hasSlug(other_details,'tds')">{{incentive?.incentive_report?.total_tds_wages ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'er_pf')">{{incentive?.incentive_report?.pf_data?.emoloyer_pf_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'ee_pf')">{{incentive?.incentive_report?.pf_data?.emoloyee_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'er_esic')">{{incentive?.incentive_report?.esic_data?.emoloyer_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'ee_esic')">{{incentive?.incentive_report?.esic_data?.emoloyee_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'net_pay')">{{incentive?.incentive_report?.ctc ?? 0}}</td>
+        </ng-container>
+      
+      <!-- </ng-container> -->
+    </tr>
+    </thead>
+      <!-- <thead>
+        <ng-container *ngFor="let module of generatedReportTemplate">
+          <tr class="title-sec">
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields[0]?.personal_details?.length + module.fields[0]?.other_details?.fields?.length"
+            >
+              {{ module?.module_title }}
+            </th>
+          </tr>
+          <tr class="title-sec">
+
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields[0]?.personal_details?.length">
+
+            </th>
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields[0]?.other_details?.fields?.length"
+            >
+              <ng-container *ngFor="let oth_detail of module.fields[0]?.other_details.fields; let i = index">
+                {{module.fields[0]?.other_details?.sub_slug}} - {{i+1}}
+              </ng-container>
+            </th>
+          </tr>
+          <tr class="headings">
+            <ng-container *ngFor="let field of module?.fields">
+              <ng-container *ngFor="let per_detail of field?.personal_details">
+                <th class="column-title">
+                  {{ per_detail?.title }}
+                </th>
+              </ng-container>
+              <ng-container *ngFor="let oth_detail of field?.other_details?.fields">
+                <th class="column-title">
+                  {{ oth_detail?.title }}
+                </th>
+              </ng-container>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </thead> -->
+      <!-- <tbody>
+        <tr *ngFor="let employee of employees; let employeeIndex = index">
+          <ng-container *ngFor="let module of generatedReportTemplate">
+            <ng-container *ngFor="let field of module.fields[0].personal_details">
+
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'sl_no'">
+                  <td>{{ employeeIndex + 1 }}</td>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  <td>
+                    {{ getReportTdValue(employee, field) ?? "N/A" }}
+                  </td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngFor="let field of module.fields[0].other_details?.fields">
+
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'sl_no'">
+                  <td>{{ employeeIndex + 1 }}</td>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  <td>
+                    {{ getReportTdValue(employee, field) ?? "N/A" }}
+                  </td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </tr>
+        <tr *ngIf="employees?.length == 0">
+          <td colspan="100%" class="text-center">No records found</td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+</div>
+<div class="table-wrapper mt-3" *ngIf="employees?.length == 1">
+  <div class="table-responsive">
+    <table
+      class="table table-bordered cust-table table-striped cust-reporting-table"
+    >
+    <thead>
+      <tr class="title-sec">
+        <th [colSpan]="personal_details.length + other_details.length + 1" class="text-center column-title">INCENTIVE 1</th>
+      </tr>
+      <!-- <tr class="title-sec">
+        <th [colSpan]="personal_details.length" class="column-title"></th>
+        <ng-container *ngFor="let sub_head of wages_series; let i = index">
+          <th [colSpan]="other_details.length" class="text-cente column-title">{{sub_head + '-' + (i + 1)}}</th>
+        </ng-container>
+      </tr> -->
+      <tr class="title-sec">
+        <th *ngFor="let personal_detail of personal_details" class="column-title">
+        {{personal_detail?.title ?? 'N/A'}}
+        </th>
+        <th class="column-title">Wage Month</th>
+        <!-- <ng-container *ngFor="let other_details of other_details_series"> -->
+          <th *ngFor="let other_detail  of other_details" class="column-title">
+          {{other_detail?.title ?? 'N/A'}}
+          </th>
+        <!-- </ng-container> -->
+      </tr>
+    </thead>
+    <thead>
+      <ng-container *ngFor="let employee of employees; let i = index">
+        <tr>
+        <td *ngIf="hasSlug(personal_details,'sl_no')">{{i + 1}}</td>
+        <td *ngIf="hasSlug(personal_details,'emp_id')">{{employee?.emp_id}}</td>
+        <td *ngIf="hasSlug(personal_details,'emp_name')">{{employee?.emp_first_name}} {{employee?.emp_last_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'department')">{{employee?.department?.department_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'designation')">{{employee?.designation?.designation_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'client')">{{employee?.client?.client_code}}</td>
+        <td *ngIf="hasSlug(personal_details,'branch')">{{employee?.branch?.branch_name}}</td>
+        <td *ngIf="hasSlug(personal_details,'hod')">{{employee?.hod?.first_name}} {{employee?.hod?.last_name}}</td>
+        <ng-container *ngFor="let incentive of employee?.incentive_modules |slice:0:1">
+          <td>{{getMonthDetails(incentive._id)}}-{{incentive.incentive_g_year}}</td>
+          <td *ngIf="hasSlug(other_details,'incentive_Accumulated')">{{incentive?.incentive_value ?? 0}}</td> <!--INCENTIVE ACCUMULATED-->
+          <td *ngIf="incentive?.advance_module">{{incentive?.advance_module?.advance_amount ?? 0}}</td><!-- SETTELED doubt -->
+          <td *ngIf="!incentive?.advance_module && !incentive?.incentive_report?.bank_ins_referance_id">0</td><!-- SETTELED doubt -->
+          <td *ngIf="!incentive?.advance_module && incentive?.incentive_report?.bank_ins_referance_id">{{incentive?.incentive_report?.gross_earning ?? 0}}</td><!-- SETTELED doubt -->
+          <td *ngIf="hasSlug(other_details,'advance_Paid')">{{incentive?.advance_module?.advance_amount ?? 0}}</td> <!--PAID-->
+          <td *ngIf="hasSlug(other_details,'advance_Recovered')">{{incentive?.advance_module?.advance_amount - incentive?.advance_module?.remaining_amount ?? 0}}</td> <!--RECOVERED-->
+          <td *ngIf="hasSlug(other_details,'tds')">{{incentive?.incentive_report?.total_tds_wages ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'er_pf')">{{incentive?.incentive_report?.pf_data?.emoloyer_pf_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'ee_pf')">{{incentive?.incentive_report?.pf_data?.emoloyee_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'er_esic')">{{incentive?.incentive_report?.esic_data?.emoloyer_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'ee_esic')">{{incentive?.incentive_report?.esic_data?.emoloyee_contribution ?? 0}}</td>
+          <td *ngIf="hasSlug(other_details,'net_pay')">{{incentive?.incentive_report?.ctc ?? 0}}</td>
+        </ng-container>
+      </tr>
+      <tr *ngFor="let incentive of employee?.incentive_modules |slice:1">
+        <td [colSpan]="personal_details.length"></td>
+        <td>{{getMonthDetails(incentive._id)}}-{{incentive.incentive_g_year}}</td>
+        <td *ngIf="hasSlug(other_details,'incentive_Accumulated')">{{incentive?.incentive_value ?? 0}}</td> <!--INCENTIVE ACCUMULATED-->
+        <td *ngIf="incentive?.advance_module">{{incentive?.advance_module?.advance_amount ?? 0}}</td><!-- SETTELED doubt -->
+        <td *ngIf="!incentive?.advance_module && !incentive?.incentive_report?.bank_ins_referance_id">0</td><!-- SETTELED doubt -->
+        <td *ngIf="!incentive?.advance_module && incentive?.incentive_report?.bank_ins_referance_id">{{incentive?.incentive_report?.gross_earning ?? 0}}</td><!-- SETTELED doubt -->
+        <td *ngIf="hasSlug(other_details,'advance_Paid')">{{incentive?.advance_module?.advance_amount ?? 0}}</td> <!--PAID-->
+        <td *ngIf="hasSlug(other_details,'advance_Recovered')">{{incentive?.advance_module?.advance_amount - incentive?.advance_module?.remaining_amount ?? 0}}</td> <!--RECOVERED-->
+        <td *ngIf="hasSlug(other_details,'tds')">{{incentive?.incentive_report?.total_tds_wages ?? 0}}</td>
+        <td *ngIf="hasSlug(other_details,'er_pf')">{{incentive?.incentive_report?.pf_data?.emoloyer_pf_contribution ?? 0}}</td>
+        <td *ngIf="hasSlug(other_details,'ee_pf')">{{incentive?.incentive_report?.pf_data?.emoloyee_contribution ?? 0}}</td>
+        <td *ngIf="hasSlug(other_details,'er_esic')">{{incentive?.incentive_report?.esic_data?.emoloyer_contribution ?? 0}}</td>
+        <td *ngIf="hasSlug(other_details,'ee_esic')">{{incentive?.incentive_report?.esic_data?.emoloyee_contribution ?? 0}}</td>
+        <td *ngIf="hasSlug(other_details,'net_pay')">{{incentive?.incentive_report?.ctc ?? 0}}</td>
+      </tr>
+      </ng-container>
+   
+    </thead>
+      <!-- <thead>
+        <ng-container *ngFor="let module of generatedReportTemplate">
+          <tr class="title-sec">
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields[0]?.personal_details?.length + module.fields[0]?.other_details?.fields?.length"
+            >
+              {{ module?.module_title }}
+            </th>
+          </tr>
+          <tr class="title-sec">
+
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields[0]?.personal_details?.length">
+
+            </th>
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields[0]?.other_details?.fields?.length"
+            >
+              <ng-container *ngFor="let oth_detail of module.fields[0]?.other_details.fields; let i = index">
+                {{module.fields[0]?.other_details?.sub_slug}} - {{i+1}}
+              </ng-container>
+            </th>
+          </tr>
+          <tr class="headings">
+            <ng-container *ngFor="let field of module?.fields">
+              <ng-container *ngFor="let per_detail of field?.personal_details">
+                <th class="column-title">
+                  {{ per_detail?.title }}
+                </th>
+              </ng-container>
+              <ng-container *ngFor="let oth_detail of field?.other_details?.fields">
+                <th class="column-title">
+                  {{ oth_detail?.title }}
+                </th>
+              </ng-container>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </thead> -->
+      <!-- <tbody>
+        <tr *ngFor="let employee of employees; let employeeIndex = index">
+          <ng-container *ngFor="let module of generatedReportTemplate">
+            <ng-container *ngFor="let field of module.fields[0].personal_details">
+
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'sl_no'">
+                  <td>{{ employeeIndex + 1 }}</td>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  <td>
+                    {{ getReportTdValue(employee, field) ?? "N/A" }}
+                  </td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngFor="let field of module.fields[0].other_details?.fields">
+
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'sl_no'">
+                  <td>{{ employeeIndex + 1 }}</td>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  <td>
+                    {{ getReportTdValue(employee, field) ?? "N/A" }}
+                  </td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </tr>
+        <tr *ngIf="employees?.length == 0">
+          <td colspan="100%" class="text-center">No records found</td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+</div>
+<!-- <div class="table-wrapper mt-3" *ngIf="employees.length == 1">
+  <div class="table-responsive">
+    <table
+      class="table table-bordered cust-table table-striped cust-reporting-table"
+    >
+      <thead>
+        <ng-container *ngFor="let module of generatedReportTemplate">
+          <tr class="title-sec">
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields.length">
+              {{ module?.module_title }}
+            </th>
+          </tr>
+          <tr class="headings">
+            <th class="column-title" *ngFor="let field of module.fields">
+              {{ field.title }}
+            </th>
+          </tr>
+        </ng-container>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees; let employeeIndex = index">
+          <ng-container *ngFor="let module of generatedReportTemplate">
+            <ng-container *ngFor="let field of module.fields">
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'sl_no'">
+                  <td>{{ employeeIndex + 1 }}</td>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  <td>
+                    {{ getReportTdValue(employee, field) ?? "N/A" }}
+                  </td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </tr>
+        <tr *ngIf="employees?.length == 0">
+          <td colspan="100%" class="text-center">No records found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->

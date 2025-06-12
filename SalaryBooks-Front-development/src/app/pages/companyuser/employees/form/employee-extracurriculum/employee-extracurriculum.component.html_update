@@ -1,0 +1,119 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Extra Curriculum Details</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">Employee Extra Curriculum Details</h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section" *ngIf="operation == 'edit'" id="extracurriculum-submit-section">
+                <form [formGroup]="employeeExtraCurriculumForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Extra Curriculum Date&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'date', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="date" formControlName="date">
+
+                            <p class="error-element" *ngIf="employeeExtraCurriculumForm.controls.date.hasError('required') && ( employeeExtraCurriculumForm.controls.date.dirty || employeeExtraCurriculumForm.controls.date.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Description&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'description', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="description"></textarea>
+
+                            <p class="error-element" *ngIf="employeeExtraCurriculumForm.controls.description.hasError('required') && ( employeeExtraCurriculumForm.controls.description.dirty || employeeExtraCurriculumForm.controls.description.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Comment&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'comments', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="comments"></textarea>
+
+                            <p class="error-element" *ngIf="employeeExtraCurriculumForm.controls.comments.hasError('required') && ( employeeExtraCurriculumForm.controls.comments.dirty || employeeExtraCurriculumForm.controls.comments.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Extra Curriculum File Image&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'extracurriculum_file_image', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="operation == 'edit'">
+                                <input class="form-control" type="file" accept="image/*" formControlName="extracurriculum_file_image" (change)="onFileChanged($event, employeeExtraCurriculumForm, 'extracurriculum_file_image', 'extracurriculum_file_image_file')">
+
+                                <p class="error-element" *ngIf="employeeExtraCurriculumForm.controls.extracurriculum_file_image.hasError('required') && ( employeeExtraCurriculumForm.controls.extracurriculum_file_image.dirty || employeeExtraCurriculumForm.controls.extracurriculum_file_image.touched )">This field is required</p>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-danger mr-2" (click)="cancelEntry()">Cancel</button>
+                            <button type="submit" class="btn btn-info" (click)="updateEmployeeExtraCurriculumDetails($event)">
+                              <span *ngIf="extracurriculum_id; else addExtraCurriculumSpanBlock">Update Extra Curriculum</span>
+                              <ng-template #addExtraCurriculumSpanBlock>
+                                <span>Add Extra Curriculum</span>
+                              </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bd bd-gray-300 rounded table-responsive mt-5">
+                <table class="table table-striped mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Extra Curriculum Date</th>
+                            <th>Description</th>
+                            <th>Comments</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="employee_details?.emp_det?.extra_curricular?.length > 0; else noTableFound">
+                        <tr *ngFor="let item of employee_details?.emp_det?.extra_curricular; let i = index">
+                            <th scope="row">{{ i+1 }}</th>
+                            <td>{{ item.date | date:'longDate' }}</td>
+                            <td>{{ item.description ? item.description : 'N/A' }}</td>
+                            <td>{{ item.comments ? item.comments : 'N/A' }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-info mr-2" *ngIf="item.extracurriculum_file_image" (click)="Global.imageViewer(Global.BACKEND_URL + '/' + item.extracurriculum_file_image)" data-toggle="tooltip" data-placement="top" title="View ExtraCurriculum Image File"><i class="fa fa-file"></i></button>
+                                <button class="btn btn-sm btn-primary" (click)="getEdit(item)" data-toggle="tooltip" data-placement="top" title="Edit ExtraCurriculum"><i class="fa fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-template #noTableFound>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">No Extra Curriculums Found</td>
+                            </tr>
+                        </tbody>
+                    </ng-template>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,77 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Leave Ledger Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Leave Ledger Report</h4>
+      <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <div class="card bd-0">
+
+        <div class="card-header">
+          <div class="row">
+           
+
+            <div class="col-12 d-none">
+              <hr />
+            </div>
+
+
+          </div>
+        </div>
+
+        <companyuser-app-table-filter
+        #tableFilter
+        [reportType]="false" 
+        [yearFilter]="false"
+        [monthFilter]="false"
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        [basicFilter]="true"
+        [isClient]="true"
+        [searchKeyFilter]="true"
+        (onFiltered)="generateMasterSheet({page: 1, options:$event})"
+      ></companyuser-app-table-filter>
+
+    
+
+        <div class="card-body px-0 bd-t-0 rounded-bottom">
+          
+          <!-- <app-custom-tableoption (onFilterChanged)="generateMasterSheet({page: 1, options: $event})"></app-custom-tableoption> -->
+         
+          
+          <app-detail-report  [employeeListFilter]="employeeListFilter"></app-detail-report>
+         
+        
+
+          <ng-container *ngIf="this.reportType == 'master'">
+            <!-- <app-custom-pagination
+              [rows]="empReportData"
+              [paginationOptions]="paginationOptions"
+              (onPageClicked)="generateMasterSheet({ page: $event })"
+            ></app-custom-pagination> -->
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

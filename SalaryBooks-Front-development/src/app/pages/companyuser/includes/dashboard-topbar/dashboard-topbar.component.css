@@ -1,0 +1,22 @@
+.dbpick-icon {
+    cursor: pointer;
+    background: #17a2b8;
+    color: #fff;
+    font-size: smaller;
+    padding: 8px 11px;
+    position: absolute;
+    left: 135px;
+    top: 0;
+    border-radius: 100px;
+    border: 1px solid #1d2939;
+}
+
+span.payableamount {
+    font-size: 28px;
+    font-weight: 500;
+}
+
+span.payableamount small {
+    font-size: 14px;
+    color: #878787;
+}

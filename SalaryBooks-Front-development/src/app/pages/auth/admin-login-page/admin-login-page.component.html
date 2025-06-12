@@ -1,0 +1,57 @@
+<div class="row no-gutters flex-row-reverse ht-100v">
+    <div class="col-md-6 bg-gray-200 d-flex align-items-center justify-content-center">
+        <form [formGroup]="loginForm">
+            <div class="login-wrapper wd-250 wd-xl-350 mg-y-30">
+                <h4 class="tx-inverse tx-center">Admin Sign In</h4>
+                <p class="tx-center mg-b-20">Welcome back! Please sign in.</p>
+                <!-- <div class="form-group">
+                    <input type="email" class="form-control" formControlName="email" placeholder="Enter email address">
+                    <span *ngIf="loginForm.controls.email.hasError('required') && (loginForm.controls.email.dirty)" class="error">The email field is required</span>
+                    <span *ngIf="loginForm.controls.email.hasError('email') && (loginForm.controls.email.dirty)" class="error">Please enter a valid email address</span>
+                </div> -->
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="corporate_id" placeholder="Enter Corporate Id">
+                    <span *ngIf="loginForm.controls.corporate_id.hasError('required') && (loginForm.controls.corporate_id.dirty)" class="error">The Corporate Id field is required</span>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="userid" placeholder="Enter User Id">
+                    <span *ngIf="loginForm.controls.userid.hasError('required') && (loginForm.controls.userid.dirty)" class="error">The User Id field is required</span>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" formControlName="password" placeholder="Enter your password">
+                    <span *ngIf="loginForm.controls.password.hasError('required') && (loginForm.controls.password.dirty)" class="error">The password field is required</span>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label class="ckbox">
+                                <input type="checkbox">
+                                <span>Remember Me</span>
+                            </label>
+                        </div>
+
+                        <div class="col-lg-6 text-right">
+                            <!-- <a href="javascript:;" class="tx-info tx-12 d-block">Forgot password?</a> -->
+                        </div>
+
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="!loginForm.valid" (click)="login($event)" class="btn btn-info btn-block">
+                    <span>Sign In <i class="fa fa-arrow-right"></i></span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6 bg-br-primary d-flex align-items-center justify-content-center">
+        <div class="wd-250 wd-xl-450 mg-y-30">
+            <div class="signin-logo tx-28 tx-bold tx-white"><a routerLink=""><span class="tx-normal"></span> <span class="text-white">PAYROLL </span> <span class="tx-info">SOFTWARE</span> <span class="tx-normal"></span></a></div>
+            <div class="tx-white mg-b-60">&nbsp;</div>
+
+            <h5 class="tx-white">Why payroll?</h5>
+            <p class="tx-white-6">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+
+            <p class="tx-white-6 mg-b-60">when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.</p>
+        </div>
+    </div>
+</div>

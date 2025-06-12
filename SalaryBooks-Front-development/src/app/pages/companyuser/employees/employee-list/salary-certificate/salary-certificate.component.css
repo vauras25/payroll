@@ -1,0 +1,109 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+.header .title {
+    font-size: 1.5rem;
+}
+
+.content {
+    flex: 1;
+    padding: 1rem;
+}
+
+.information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.information img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.information .name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.information .details {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.table th,
+.table td {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #eee;
+}
+
+.earnings,
+.deductions {
+    margin-bottom: 1rem;
+}
+
+.total {
+    font-weight: bold;
+}
+
+.signature {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.signature img {
+    width: 50px;
+    height: 20px;
+}
+
+.footer {
+    background-color: #ddd;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.bg-white {
+    background-color: #fff;
+}
+.footer .weather {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+}
+.mr{
+    margin-right: 20px;
+}
+.footer .weather img {
+    width: 15px;
+    height: 15px;
+    margin-right: 0.5rem;
+}
+
+.footer .time {
+    font-size: 0.8rem;
+}

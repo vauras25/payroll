@@ -1,0 +1,403 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Bulk Kyc Upload File</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Bulk Kyc Upload File</h4>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        (onFiltered)="employeeListFilter = $event; fetchEmployees()"
+      >
+      </companyuser-app-table-filter>
+
+      <div class="mt-3">
+        
+        <ng-container *ngIf="!isReportView">
+          <div class="text-right">
+            <div>
+              <button
+              (click)="viewReport()"
+                [disabled]="!anyRowsChecked()"
+                type="button"
+                class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+              >
+                <span
+                  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                  >View Report</span
+                >
+              </button>
+              <!-- <button
+              (click)="exportForm()"
+                [disabled]="!anyRowsChecked()"
+                type="button"
+                class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+              >
+                <span
+                  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                  >Download</span
+                >
+              </button> -->
+            </div>
+          </div>
+        <div *ngIf="viewMode=='listing'" class="table-responsive mt-3 employee-table">
+          <app-custom-tableoption
+          [searchable]="true"
+          (onFilterChanged)="paginationOptions.limit = +$event?.length ;employeeTableFilterOptions.searchkey = $event.searchkey; fetchEmployees()"
+        ></app-custom-tableoption>
+          <table class="w-100 c-table">
+            <colgroup span="3"></colgroup>
+            <thead>
+              <tr>
+                <th>
+                  <label class="d-flex align-items-center mb-0"  for="srNo">
+                    <input
+                      class="mb-0 mr-1"
+                      (change)="allRowsCheckboxChecked($event)"
+                      type="checkbox"
+                      name="item"
+                      id="srNo"
+                    />
+                    SL No.
+                  </label>
+                </th>
+                <th >Employee ID</th>
+                <th >Employee Name</th>
+                <th >UAN No</th>
+                <th >HOD</th>
+                <th >Branch</th>
+                <th class="text-center">All</th>
+                <th class="text-center">Bank</th>
+                <th class="text-center">Pan</th>
+                <th class="text-center">Addhar</th>
+                <th class="text-center">Passport</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of employees; let i = index">
+                <td>
+                  <label
+                    class="d-flex align-items-center"
+                    [for]="'checkrow-' + (i + 1)"
+                  >
+                    <input
+                      type="checkbox"
+                      class="mr-2"
+                      [attr.checked]="
+                        employee?.checked == true ? 'checked' : null
+                      "
+                      id="checkrow-{{ i + 1 }}"
+                      [attr.data-checkbox-id]="employee?._id"
+                      (change)="rowCheckBoxChecked($event, employee)"
+                    />
+                    {{
+                      Global.getTableSerialNumber(
+                        i,
+                        paginationOptions?.limit,
+                        paginationOptions?.page
+                      )
+                    }}
+                  </label>
+                </td>
+
+                <td>{{ employee?.emp_id ?? 'N/A' }}</td>
+                <td>
+                  {{ employee?.emp_first_name }} {{ employee?.emp_last_name }}
+                </td>
+                <td>
+                  {{ employee?.uan_no || 'N/A' }}
+                </td>
+                <td>
+                  <ng-container *ngIf="employee?.hod?.first_name || employee?.hod?.last_name">
+                    {{ employee?.hod?.first_name }} {{ employee?.hod?.last_name }}
+                  </ng-container>
+                  <ng-container  *ngIf="!employee?.hod?.first_name && !employee?.hod?.last_name">
+                    N/A
+                  </ng-container>
+                </td>
+                <td>
+                  {{employee?.branch?.branch_name || 'N/A'}}
+                </td>
+                <td class="text-center">
+                  <input
+                    #all
+                    [disabled]="!employee?.isB && !employee?.isP && !employee?.isA && !employee?.isT"
+                    [checked]="employee?.isB && employee?.isP && employee?.isA && employee?.isT"
+                    [class]="'emp=' + employee?.emp_id "
+                    type="checkbox"
+                    name="all"
+                    (change)="
+                      multiSelectDocs($event.target, employee?._id, employee);
+                      b.checked = all.checked;
+                      p.checked = all.checked;
+                      a.checked = all.checked;
+                      t.checked = all.checked
+                    "
+                    [id]="employee?.emp_id + '-ALL'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #b
+                    [checked]="employee?.isB"
+                    [disabled]="!employee?.isB"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="B"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-B'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #p
+                    [checked]="employee?.isP"
+                    [disabled]="!employee?.isP"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="P"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-P'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #a
+                    [checked]="employee?.isA"
+                    [disabled]="!employee?.isA"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="A"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-A'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #t
+                    [checked]="employee?.isT"
+                    [disabled]="!employee?.isT"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="T"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-T'"
+                  />
+                </td>
+              </tr>
+              <tr *ngIf="!employees?.length">
+                <td colspan="8" class="w-100 text-center">No data Found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="viewMode=='report'" class="table-responsive mt-3">
+          <table class="w-100 c-table">
+            <thead>
+              <tr>
+                <th>
+                  <label class="d-flex align-items-center mb-0" for="srNo">
+                    <input
+                      class="mb-0 mr-1"
+                      (change)="allRowsCheckboxChecked($event)"
+                      type="checkbox"
+                      name="item"
+                      id="srNo"
+                    />
+                    SL No.
+                  </label>
+                </th>
+                <th >Employee ID</th>
+                <th >Employee Name</th>
+                <th >UAN No</th>
+                <th >HOD</th>
+                <th >Branch</th>
+                <th class="text-center">All</th>
+                <th class="text-center">Bank</th>
+                <th class="text-center">Pan</th>
+                <th class="text-center">Addhar</th>
+                <th class="text-center">Passport</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of employees; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{ employee?.emp_id ?? 'N/A' }}</td>
+                <td>{{ employee?.emp_first_name }} {{ employee?.emp_last_name }}</td>
+                <td>{{ employee?.uan_no || 'N/A' }} </td>
+                <td>
+                  <ng-container *ngIf="employee?.hod?.first_name || employee?.hod?.last_name">
+                    {{ employee?.hod?.first_name }} {{ employee?.hod?.last_name }}
+                  </ng-container>
+                  <ng-container  *ngIf="!employee?.hod?.first_name && !employee?.hod?.last_name">
+                    N/A
+                  </ng-container>
+                </td>
+                <td>
+                  {{employee?.branch?.branch_name || 'N/A'}}
+                </td>
+                <td class="text-center">
+                  <input
+                    #all
+                    [disabled]="!employee?.isB && !employee?.isP && !employee?.isA && !employee?.isT"
+                    [checked]="employee?.isB && employee?.isP && employee?.isA && employee?.isT"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="all"
+                    (change)="
+                      multiSelectDocs($event.target, employee?._id, employee);
+                      b.checked = all.checked;
+                      p.checked = all.checked;
+                      a.checked = all.checked;
+                      t.checked = all.checked
+                    "
+                    [id]="employee?.emp_id + '-ALL'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #b
+                    [checked]="employee?.isB"
+                    [disabled]="!employee?.isB"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="B"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-B'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #p
+                    [checked]="employee?.isP"
+                    [disabled]="!employee?.isP"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="P"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-P'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #a
+                    [checked]="employee?.isA"
+                    [disabled]="!employee?.isA"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="A"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-A'"
+                  />
+                </td>
+                <td class="text-center">
+                  <input
+                    #t
+                    [checked]="employee?.isT"
+                    [disabled]="!employee?.isT"
+                    [class]="'emp=' + employee?.emp_id"
+                    type="checkbox"
+                    name="T"
+                    (change)="multiSelectDocs($event.target, employee?._id, employee)"
+                    [id]="employee?.emp_id + '-T'"
+                  />
+                </td>
+              </tr>
+              <tr *ngIf="!employees?.length">
+                <td colspan="8" class="w-100 text-center">No data Found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isReportView">
+        <div class="text-right">
+          <button type="button"
+          (click)="exportForm()"
+                  class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+            <span><i style="font-size: 12px"
+                 class="mr-1 fa fa-download"></i>Export</span>
+          </button>
+
+          <button (click)="cancelGenerateReport()"
+                  type="button"
+                  class="btn btn-danger tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+            <span><i style="font-size: 12px"
+                 class="mr-1 fa fa-times"></i>Cancel</span>
+          </button>
+        </div>
+        <div class="table-wrapper mt-3">
+          <div class="table-responsive">
+            <table class="table table-bordered cust-table table-striped cust-reporting-table">
+              <thead>
+                <ng-container *ngFor="let module of generatedReportTemplate">
+                  <tr class="title-sec">
+                    <!-- <label for="">{{module?.module_title}}</label> -->
+                    <!-- <label for="">dfd sd</label> -->
+                    <th class="column-title text-center"
+                        [attr.colspan]="module.fields?.length">
+                      {{ module?.module_title }}
+                    </th>
+                  </tr>
+                  <tr class="headings">
+                    <th class="column-title"
+                        *ngFor="let field of module.fields">
+                      {{ field.title }}
+                    </th>
+                  </tr>
+                </ng-container>
+              </thead>
+              <tbody>
+                <tr *ngFor="
+                    let employee of viewEmpDoc;
+                    let employeeIndex = index
+                  ">
+                  <ng-container *ngFor="let module of generatedReportTemplate">
+                    <ng-container *ngFor="let field of module.fields">
+                      <ng-container [ngSwitch]="field.slug">
+                        <ng-container *ngSwitchCase="'sl_no'">
+                          <td>{{ employeeIndex + 1 }}</td>
+                        </ng-container>
+
+                        <ng-container *ngSwitchDefault>
+                          <td>
+                            {{ getReportTdValue(employee, field) ?? "N/A" }}
+                          </td>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+                <tr >
+                  <td colspan="100%"
+                      class="text-center">No records found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      </div>
+      <app-custom-pagination
+      [rows]="employees"
+      [paginationOptions]="paginationOptions"
+      (onPageClicked)=" paginationOptions.page = $event;
+      fetchEmployees()"
+      ></app-custom-pagination>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,671 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Reports</a>
+      <a class="breadcrumb-item active">Salary Sheet Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Salary Sheet Report</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [hidden]="isViewSalaryReport"
+        [monthFilter]="true"
+        [yearFilter]="true"
+        [isClient]="false"
+        [isFilterBtnDisable]="isViewSalaryReport"
+        [salaryTypeFilter]="true"
+        [isBankAccount]="true"
+        (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+      ></companyuser-app-table-filter>
+
+      <div class="mt-3">
+        <div class="d-flex" [class.justify-content-end]="isViewSalaryReport">
+          <form
+            [hidden]="isViewSalaryReport"
+            class="flex-1 pr-4"
+            [formGroup]="tableOperationForm"
+          >
+            <div class="d-flex align-items-center">
+              <div class="flex-1">
+                <label
+                  *ngIf="
+                    Global.checkCompanyModulePermission({
+                      company_module: 'salary',
+                      company_operation: 'payment_instructions',
+                      company_sub_module: 'payment_instructions',
+                      company_sub_operation: ['view']
+                    })
+                  "
+                  style="font-size: 12px"
+                  for="payout_process"
+                  class="mr-3 mb-0"
+                >
+                  <!-- (change)="isViewSalaryReport = false" -->
+                  <input
+                    class="mr-2"
+                    type="checkbox"
+                    formControlName="payout_process"
+                    id="payout_process"
+                    (change)="cancelExcelExport()"
+                  />Process payout
+                </label>
+              </div>
+
+              <ng-container
+                *ngIf="
+                  tableOperationForm.get('payout_process')?.value == true &&
+                  Global.checkCompanyModulePermission({
+                    company_module: 'salary',
+                    company_operation: 'payment_instructions',
+                    company_sub_module: 'payment_instructions',
+                    company_sub_operation: ['view']
+                  })
+                "
+              >
+                <ngx-select-dropdown
+                  formControlName="payout_bankid"
+                  [options]="bankMaster"
+                  class="form-control p-1"
+                  style="flex: 3"
+                  [config]="{
+                    search: true,
+                    placeholder: 'Employee Bank',
+                    displayKey: 'template_name'
+                  }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  tableOperationForm.get('payout_process')?.value != true &&
+                  Global.checkCompanyModulePermission({
+                    company_module: 'salary',
+                    company_operation: 'salary_earning_report',
+                    company_sub_module: 'salary_report',
+                    company_sub_operation: ['view', 'edit']
+                  })
+                "
+              >
+                <ngx-select-dropdown
+                  formControlName="report_template"
+                  [options]="sheetTemplateMaster"
+                  class="form-control p-1"
+                  style="flex: 3"
+                  [config]="{
+                    search: true,
+                    placeholder: 'SELECT TEMPLATE',
+                    displayKey: 'template_name'
+                  }"
+                  [multiple]="false"
+                ></ngx-select-dropdown>
+
+                <button
+                  *ngIf="
+                    tableOperationForm.get('payout_process')?.value != true &&
+                    Global.checkCompanyModulePermission({
+                      company_module: 'salary',
+                      company_operation: 'salary_earning_report',
+                      company_sub_module: 'salary_report',
+                      company_sub_operation: ['edit']
+                    }) 
+                    && this.tableOperationForm.get('report_template')?.value?.template_name !== 'Form B'
+                  "
+                  class="btn btn-info tx-11 tx-spacing-2 h-100 ml-2"
+                  (click)="openSettingsTemplateModal()"
+                  >
+                  <!-- id="TemplateModalOpen"
+                  data-toggle="modal"
+                  data-target="#settingsTemplateModal" -->
+                  <span style="font-size: 20px" class="fa align-middle"
+                    >&#xf013;</span
+                  >
+                  <i class="fa-regular fa-gear"></i>
+                </button>
+              </ng-container>
+            </div>
+          </form>
+
+          <div>
+            <div class="d-flex h-100">
+              <ng-container
+                *ngIf="
+                  tableOperationForm.get('payout_process')?.value == true &&
+                  Global.checkCompanyModulePermission({
+                    company_module: 'salary',
+                    company_operation: 'payment_instructions',
+                    company_sub_module: 'payment_instructions',
+                      company_sub_operation: ['add', 'edit']
+                  })
+                "
+              >
+                <button
+                  [hidden]="isViewSalaryReport"
+                  [disabled]="
+                    !tableOperationForm.get('payout_bankid')?.valid ||
+                    !anyRowsChecked() ||
+                    isViewSalaryReport
+                  "
+                  (click)="generateBankInstruction($event)"
+                  type="button"
+                  class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                >
+                  <span
+                    ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                    >GENERATE BANK INSTRUCTION</span
+                  >
+                </button>
+                <button
+                  (click)="generateBankInstruction($event, true)"
+                  [hidden]="isViewSalaryReport"
+                  [disabled]="
+                    !tableOperationForm.get('payout_bankid')?.valid ||
+                    !anyRowsChecked() ||
+                    isViewSalaryReport
+                  "
+                  type="button"
+                  class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                >
+                  <span
+                    ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                    >GENERATE CASH VOUCHER</span
+                  >
+                </button>
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  tableOperationForm.get('payout_process')?.value != true &&
+                  Global.checkCompanyModulePermission({
+                    company_module: 'salary',
+                    company_operation: 'salary_earning_report',
+                    company_sub_module: 'salary_report',
+                    company_sub_operation: ['view']
+                  })
+                "
+              >
+                <button
+                  [hidden]="isViewSalaryReport"
+                  [disabled]="!anyRowsChecked() || isViewSalaryReport"
+                  (click)="generateTemplateReport()"
+                  type="button"
+                  class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                >
+                  <span
+                    ><i style="font-size: 12px" class="mr-1 fa fa-file"></i>VIEW
+                    SALARY REPORT</span
+                  >
+                </button>
+                <button
+                *ngIf="Global.checkCompanyModulePermission({
+                  company_module: 'salary',
+                  company_sub_module: 'pay_slip',
+                  company_sub_operation: ['generate'],
+                  company_strict:true
+                })"
+                  [hidden]="
+                    isViewSalaryReport || reportFilter?.salary_type !== 'earning'
+                  "
+                  [disabled]="!anyRowsChecked() || isViewSalaryReport"
+                  type="button"
+                  class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  (click)="generateEmployeePayslip($event)"
+                >
+                  <span
+                    ><i style="font-size: 12px" class="mr-1 fa fa-receipt"></i
+                    >GENERATE SLIP</span
+                  >
+                </button>
+                <button
+                  [hidden]="!isViewSalaryReport"
+                  [disabled]="!isViewSalaryReport"
+                  type="button"
+                  class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  (click)="excelExport()"
+                >
+                  <span>
+                    <i style="font-size: 12px" class="fa fa-file-export"></i>
+                    <!-- <i style="font-size: 12px" class="mr-1 fa fa-receipt"></i> -->
+                    EXPORT</span
+                  >
+                </button>
+                <button
+                  [hidden]="!isViewSalaryReport"
+                  [disabled]="!isViewSalaryReport"
+                  type="button"
+                  class="btn btn-dark tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                  (click)="cancelExcelExport()"
+                >
+                  <span>
+                    <!-- <i style="font-size: 12px" class="mr-1 fa fa-receipt"></i> -->
+                    CANCEL</span
+                  >
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isViewSalaryReport" class="table-wrapper mt-3">
+          <app-custom-tableoption
+          [searchable]="true"
+          (onFilterChanged)="this.reportTableFilterOptions.length = +$event.length ;fetchEmployees({ page: this.reportPaginationOptions.page, options: $event })"
+        ></app-custom-tableoption>
+          <table class="table display responsive nowrap wd-100p employee-table">
+            <thead>
+              <tr>
+                <th>
+                  <label
+                    class="d-flex align-items-center mb-0"
+                    for="select-all"
+                  >
+                    <input
+                      type="checkbox"
+                      class="mr-2"
+                      id="select-all"
+                      [value]="rowCheckedAll"
+                      (change)="allRowsCheckboxChecked($event)"
+                      [checked]="rowCheckedAll"
+                      *ngIf="reports.length > 0"
+                    />
+                    SL No.
+                  </label>
+                </th>
+                <th>Bk Inst Status</th>
+                <th>Note</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Emp Bank</th>
+                <th>Earned Gross</th>
+                <th>Total PF</th>
+                <th>Total ESI</th>
+                <th>PT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let report of reports; let i = index">
+                <tr>
+                  <td
+                    [attr.rowspan]="
+                      Global.checkEmptyObject(report.suply_salary_report)
+                        ? 1
+                        : 2
+                    "
+                  >
+                    <label
+                      class="d-flex align-items-center"
+                      [for]="'checkrow-' + (i + 1)"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          report.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="report._id"
+                        (click)="rowCheckBoxChecked($event, report)"
+                        *ngIf="employeeCheckBoxIsVisible(report) == true"
+                      />
+                      {{
+                        Global.getTableSerialNumber(
+                          i,
+                          reportPaginationOptions.limit,
+                          reportPaginationOptions.page
+                        )
+                      }}
+                    </label>
+                  </td>
+                  <td
+                    [attr.rowspan]="
+                      Global.checkEmptyObject(report.suply_salary_report)
+                        ? 1
+                        : 2
+                    "
+                  >
+                    <label class="d-flex align-items-center mb-0">
+                      <!-- <ng-container *ngIf="report?.UAN_no"> -->
+                        <ng-container
+                          *ngIf="report?.salary_report?.bank_ins_referance_id"
+                          >Generated</ng-container
+                        >
+                        <ng-container
+                          *ngIf="!report?.salary_report?.bank_ins_referance_id"
+                          >Ready</ng-container
+                        >
+                      <!-- </ng-container> -->
+
+                      <!-- <ng-container *ngIf="!report?.UAN_no"
+                        >Pending</ng-container
+                      > -->
+                    </label>
+                  </td>
+                  <td class="text-capitalize">
+                    {{ this.reportFilter?.salary_type ?? "salary" }}
+                  </td>
+                  <td
+                    [attr.rowspan]="
+                      Global.checkEmptyObject(report.suply_salary_report)
+                        ? 1
+                        : 2
+                    "
+                  >
+                    {{ report?.emp_id ?? "N/A" }}
+                  </td>
+                  <td
+                    [attr.rowspan]="
+                      Global.checkEmptyObject(report.suply_salary_report)
+                        ? 1
+                        : 2
+                    "
+                  >
+                    {{ report.emp_first_name }} {{ report.emp_last_name }}
+                  </td>
+                  <td
+                    [attr.rowspan]="
+                      Global.checkEmptyObject(report.suply_salary_report)
+                        ? 1
+                        : 2
+                    "
+                  >
+                    {{ report?.bank_details?.bank_name ?? "N/A" }}
+                  </td>
+                  <ng-container *ngIf="reportFilter.salary_type == 'salary'">
+                    <td>
+                      {{
+                        report?.salary_report?.gross_earning?.toFixed(2) ?? "-"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        report?.salary_report?.total_pf_wages?.toFixed(2) ?? "-"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        report?.salary_report?.total_esic_wages?.toFixed(2) ??
+                          "-"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        report?.salary_report?.pt_amount?.toFixed(2) ?? "-"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="reportFilter.salary_type == 'earning'">
+                    <td>
+                      {{
+                        report?.total_report?.total_earning?.toFixed(2) ?? "-"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        report?.total_report?.total_pf_wages?.toFixed(2) ?? "-"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        report?.total_report?.total_esic_wages?.toFixed(2) ??
+                          "-"
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        report?.total_report?.total_pt_amount?.toFixed(2) ?? "-"
+                      }}
+                    </td>
+                  </ng-container>
+                </tr>
+                <tr
+                  *ngIf="!Global.checkEmptyObject(report.suply_salary_report)"
+                >
+                  <td>Suply Salary</td>
+                  <td>
+                    {{
+                      report?.suply_salary_report?.gross_earning?.toFixed(2) ??
+                        "-"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      report?.suply_salary_report?.total_pf_wages?.toFixed(2) ??
+                        "-"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      report?.suply_salary_report?.total_esic_wages?.toFixed(
+                        2
+                      ) ?? "-"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      report?.suply_salary_report?.total_pt_wages?.toFixed(2) ??
+                        "-"
+                    }}
+                  </td>
+                </tr>
+              </ng-container>
+
+              <tr *ngIf="reports.length == 0">
+                <td
+                  colspan="100%"
+                  class="text-center"
+                  style="background-color: #f7f7f7"
+                >
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="isViewSalaryReport" class="mt-3">
+          <app-companyuser-master-sheet-report
+            [sheetTemplate]="selectedSheetTemplate || sheetTemplate"
+            [empReportData]="empReportData"
+          >
+          </app-companyuser-master-sheet-report>
+        </div>
+        <app-custom-pagination
+          *ngIf="!isViewSalaryReport"
+          [rows]="reports"
+          [paginationOptions]="reportPaginationOptions"
+          (onPageClicked)="fetchEmployees({ page: $event })"
+        ></app-custom-pagination>
+      </div>
+    </div>
+  </div>
+
+  <button id="TemplateModalOpen" [hidden]="true" data-toggle="modal" data-target="#settingsTemplateModal"></button>
+
+  <div
+    id="settingsTemplateModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            {{isSheetTemplateEdit ? 'Update' : 'Create New'}} Template
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="clearFormData()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="settingsTemplateForm" [formGroup]="templateForm">
+          <div class="modal-body pd-20">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <input
+                      type="text"
+                      class="form-control error"
+                      placeholder="Enter Template Name"
+                      formControlName="template_name"
+                    />
+
+                    <p
+                      class="mt-1 text-danger"
+                      *ngIf="
+                        templateForm.controls.template_name.hasError(
+                          'required'
+                        ) &&
+                        (templateForm.controls.template_name.dirty ||
+                          templateForm.controls.template_name.touched)
+                      "
+                    >
+                      This field is required
+                    </p>
+                  </div>
+                </div>
+
+                <ng-container *ngFor="let row of sheetTemplate">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h5 class="text-uppercase mg-t-10 text-center">
+                        {{ row.main_title }}
+                      </h5>
+                    </div>
+                    <div class="col-12">
+                      <div
+                        class="c-table my-3"
+                        *ngFor="let module of row.modules"
+                      >
+                        <div class="c-tr">
+                          <div class="c-th">
+                            <h5 class="m-0 mr-2">{{ module.module_title }}</h5>
+                            <label
+                              class="mb-0"
+                              [for]="row.main_slug + '-' + module.module_slug"
+                            >
+                              <input
+                                class="mr-1"
+                                type="checkbox"
+                                (change)="
+                                  adjustTemplateFields(module.fields, $event);
+                                  rowSelecion($event)
+                                "
+                                name="fields[{{ module.module_slug }}]"
+                                [id]="
+                                  row.main_slug + '-' + module.module_slug
+                                "
+                                [checked]="
+                                  isDefaultChecked(module.module_slug, [
+                                    'personal_details',
+                                    'master_breakup',
+                                    'breakup'
+                                  ])
+                                "
+                                (click)="
+                                  isDefaultChecked(module.module_slug, [
+                                    'personal_details',
+                                    'master_breakup',
+                                    'breakup'
+                                  ])
+                                    ? perventUnCheck($event)
+                                    : null
+                                "
+                              />
+                              Select All
+                            </label>
+                          </div>
+                          <div
+                            class="c-td"
+                            *ngFor="let field of module.fields; let i = index"
+                          >
+                            <label
+                              (change)="
+                                adjustTemplateFields([field.slug], $event)
+                              "
+                              class="d-flex align-items-center"
+                              
+                              [for]="
+                                row.main_slug +
+                                '-' +
+                                module.module_slug +
+                                '-' +
+                                field.slug "
+                            >
+                              <input
+                                class="mr-1"
+                                type="checkbox"
+                                #innerInput
+                                name="fields[{{ module.module_slug }}]"
+                                [id]="row.main_slug +'-' + module.module_slug + '-'+ field.slug"
+                                [value]="field.slug"
+                                
+                                [checked]="
+                                  isDefaultChecked(module.module_slug, [
+                                    'personal_details',
+                                    'master_breakup',
+                                    'breakup'
+                                  ])  || this.tableOperationForm.get('report_template')?.value?.length <= 0
+                                "
+                                (click)="
+                                  isDefaultChecked(module.module_slug, [
+                                    'personal_details',
+                                    'master_breakup',
+                                    'breakup'
+                                  ])
+                                    ? perventUnCheck($event)
+                                    : null
+                                "
+                              />
+                              {{ field.title ?? "N/A"  }}
+                              <small *ngIf="field.abbreviation"
+                                >({{ field.abbreviation }})</small
+                              >
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn text-uppercase btn-secondary tx-size-xs"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              class="btn text-uppercase btn-primary tx-size-xs"
+              type="button"
+              (click)="!isSheetTemplateEdit ? createSheetTemplate($event) : updateSheetTemplate($event)"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

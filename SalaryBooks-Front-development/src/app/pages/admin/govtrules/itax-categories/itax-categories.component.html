@@ -1,0 +1,119 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Government Rules</a>
+            <a class="breadcrumb-item active">Income Tax Categories</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon icon ion-card"></i>
+        <div>
+            <h4>Income Tax Categories</h4>
+            <p class="mg-b-0">Define Category</p>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="category-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add Category</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit Category</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-7">
+                <form [formGroup]="categoryForm">
+                    <div class="row no-gutters">
+                        <div class="col-5 col-sm-4">
+                            Category Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-7 col-sm-8">
+                            <input class="form-control" type="text" formControlName="category_name" placeholder="Enter Category Name">
+                            <p class="error-element" *ngIf="categoryForm.controls.category_name.hasError('required') && (categoryForm.controls.category_name.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-5 col-sm-4">
+                            Age Lower Limit&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-7 col-sm-8">
+                            <input class="form-control" type="text" formControlName="age_lower_limit" placeholder="Enter Age Lower Limit">
+                            <p class="error-element" *ngIf="categoryForm.controls.age_lower_limit.hasError('required') && (categoryForm.controls.age_lower_limit.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="categoryForm.controls.age_lower_limit.hasError('pattern') && (categoryForm.controls.age_lower_limit.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-5 col-sm-4">
+                            Age Upper Limit&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-7 col-sm-8">
+                            <input class="form-control" type="text" formControlName="age_upper_limit" placeholder="Enter Age Upper Limit">
+                            <p class="error-element" *ngIf="categoryForm.controls.age_upper_limit.hasError('required') && (categoryForm.controls.age_upper_limit.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="categoryForm.controls.age_upper_limit.hasError('pattern') && (categoryForm.controls.age_upper_limit.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-5 col-sm-4">
+                            Gender&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-7 col-sm-8">
+                            <ngx-select-dropdown formControlName="gender" [options]="genderMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="categoryForm.controls.gender.hasError('required') && (categoryForm.controls.gender.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-5 col-sm-4"></div>
+
+                        <div class="col-7 col-sm-8">
+                            <button type="submit" [disabled]="!categoryForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>Add Category</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel Editing</span>
+                                </button>
+                                <button type="submit" [disabled]="!categoryForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Category</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Category List</h6>
+
+            <div class="table-wrapper">
+                <!-- <div class="table-responsive"> -->
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Category</th>
+                            <th class="wd-15p">Age From</th>
+                            <th class="wd-15p">Age to</th>
+                            <th class="wd-15p">Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

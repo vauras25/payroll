@@ -1,0 +1,322 @@
+<div class="br-sideleft sideleft-scrollbar">
+    <label class="sidebar-label pd-x-10 mg-t-20 op-3">Navigation</label>
+    <ul class="br-sideleft-menu">
+        <li class="br-menu-item">
+            <a routerLink="/company" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-speedometer-outline tx-24"></i>
+                <span class="menu-item-label">Dashboard</span>
+            </a>
+        </li>
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'company_profile', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a routerLink="/company/profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'company_profile', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+                <i class="menu-item-icon icon ion-ios-home-outline tx-24"></i>
+                <span class="menu-item-label">Company Profile</span>
+            </a>
+        </li> -->
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'staff', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/staff/manage'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-personadd-outline tx-20"></i>
+                <span class="menu-item-label">Staff Members</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/company/staff/manage" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">Management</a></li>
+            </ul>
+        </li> -->
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'role', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/role-access/manage-roles'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-people-outline tx-20"></i>
+                <span class="menu-item-label">Role Based Access</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/company/role-access/manage-roles" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">Roles Management</a></li>
+            </ul>
+        </li> -->
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'master_template', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a class="br-menu-link with-sub" href="#" [class.active]="['/company/master/department', '/company/master/designation', '/company/master/dispensary'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-cog tx-20"></i>
+                <span class="menu-item-label">Master</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a routerLink="/company/master/department" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                      Department
+                  </a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/company/master/designation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                      Designation
+                  </a>
+                </li>
+
+                <li class="sub-item d-none">
+                    <a routerLink="/company/master/dispensary" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                      Dispensary
+                  </a>
+                </li>
+            </ul>
+        </li> -->
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_pf_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_pf_rule', 'staff_operation': ['add','edit','view','delete'] }) || this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_esic_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_esic_rule', 'staff_operation': ['add','edit','view','delete'] }) || this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_bonus_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_bonus_rule', 'staff_operation': ['add','edit','view','delete'] }) || this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_gratuity_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_gratuity_rule', 'staff_operation': ['add','edit','view','delete'] })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/govt-rules/epfo-rules', '/company/govt-rules/esic-rules', '/company/govt-rules/bonus-rules', '/company/govt-rules/gratuity-rules'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-card tx-20"></i>
+                <span class="menu-item-label">Government Rules</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_pf_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_pf_rule', 'staff_operation': ['add','edit','view','delete'] })">
+                    <a routerLink="/company/govt-rules/epfo-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">EPFO Rule</a>
+                </li>
+
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_esic_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_esic_rule', 'staff_operation': ['add','edit','view','delete'] })">
+                    <a routerLink="/company/govt-rules/esic-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">ESIC Rule</a>
+                </li>
+
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_bonus_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_bonus_rule', 'staff_operation': ['add','edit','view','delete'] })">
+                    <a routerLink="/company/govt-rules/bonus-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">Bonus Rule</a>
+                </li>
+
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_gratuity_rule', 'company_operation': ['customizable','default'], 'staff_module': 'gov_gratuity_rule', 'staff_operation': ['add','edit','view','delete'] })">
+                    <a routerLink="/company/govt-rules/gratuity-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">Gratuity Rule</a>
+                </li>
+            </ul>
+        </li> -->
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_tds_rule', 'company_operation': ['customizable','default'], 'staff_module': 'company_rule', 'staff_operation': ['add','edit','view','delete'] }) || this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_ptax_rule', 'company_operation': ['customizable','default'], 'staff_module': 'company_rule', 'staff_operation': ['add','edit','view','delete'] })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/company-rules/tds-rule', '/company/company-rules/ptax-rule', '/company/company-rules/attendance-policy', '/company/company-rules/incentive-policy', '/company/company-rules/bonus-policy', '/company/company-rules/overtime-policy', '/company/company-rules/payslip-template', '/company/company-rules/bonusslip-template', '/company/company-rules/arrearslip-template', '/company/company-rules/leave-policy/heads', '/company/company-rules/leave-policy/template-defination', '/company/company-rules/leave-policy/define-rule', '/company/company-rules/lwf-rule'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-briefcase-outline tx-20"></i>
+                <span class="menu-item-label">Company Rules</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/attendance-policy" routerLinkActive="active" class="sub-link">Attendance Policy Rule</a>
+                </li>
+
+                <li class="sub-item br-menu-item ">
+                    <a class="sub-link with-sub with-multi-sub" [class.active]="['/company/company-rules/leave-policy/heads', '/company/company-rules/leave-policy/template-defination', '/company/company-rules/leave-policy/define-rule'].includes(this.router.url)">Leave Policy Rule</a>
+                    <ul class="multi-sub-menu br-menu-sub d-block">
+                        <li class="sub-item d-none"><a routerLinkActive="active" routerLink="/company/company-rules/leave-policy/heads" class="sub-link">Leave Heads Manager</a></li>
+                        <li class="sub-item d-none"><a routerLinkActive="active" routerLink="/company/company-rules/leave-policy/template-defination" class="sub-link">Leave Template Definition</a></li>
+                        <li class="sub-item"><a routerLinkActive="active" routerLink="/company/company-rules/leave-policy/define-rule" class="sub-link">Define Leave Rule</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/incentive-policy" routerLinkActive="active" class="sub-link">Incentive Policy Template</a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/bonus-policy" routerLinkActive="active" class="sub-link">Bonus Policy Template</a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/overtime-policy" routerLinkActive="active" class="sub-link">Over Time Policy Rule</a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/payslip-template" routerLinkActive="active" class="sub-link">Pay Slip Template</a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/bonusslip-template" routerLinkActive="active" class="sub-link">Bonus Slip Template</a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/arrearslip-template" routerLinkActive="active" class="sub-link">Arrear Slip Template</a>
+                </li>
+
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_tds_rule', 'company_operation': ['customizable','default'], 'staff_module': 'company_rule', 'staff_operation': ['add','edit','view','delete'] })">
+                    <a routerLink="/company/company-rules/tds-rule" routerLinkActive="active" class="sub-link">TDS Rule</a>
+                </li>
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'gov_ptax_rule', 'company_operation': ['customizable','default'], 'staff_module': 'company_rule', 'staff_operation': ['add','edit','view','delete'] })">
+                    <a routerLink="/company/company-rules/ptax-rule" routerLinkActive="active" class="sub-link">P-TAX Rule</a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/company/company-rules/lwf-rule" routerLinkActive="active" class="sub-link">LWF Rule</a>
+                </li>
+            </ul>
+        </li> -->
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'employee_details', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a routerLink="/company/employees" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-people-outline tx-24"></i>
+                <span class="menu-item-label">Employees</span>
+            </a>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/attendance-management/weekly-holiday', '/company/attendance-management/yearly-holiday', '/company/attendance-management/configuration', '/company/attendance-management/edit', '/company/attendance-management/register-type', '/company/attendance-management/daily-details'].includes(this.router.url)">
+                <i class="menu-item-icon icon icon ion-calendar tx-20"></i>
+                <span class="menu-item-label">Attendance Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a routerLink="/company/attendance-management/weekly-holiday" routerLinkActive="active" class="sub-link">Weekly Holiday</a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/company/attendance-management/yearly-holiday" routerLinkActive="active" class="sub-link">Yearly Holiday</a>
+                </li>
+                <!-- <li class="sub-item">
+                    <a routerLink="/company/attendance-management/configuration" routerLinkActive="active" class="sub-link">Attendance Configuration</a>
+                </li> -->
+                <!-- <li class="sub-item">
+                    <a routerLink="/company/attendance-management/register-type" routerLinkActive="active" class="sub-link">Attendance Register Type</a>
+                </li> -->
+                <li class="sub-item">
+                    <!-- <a routerLink="/company/attendance-management/daily-details" routerLinkActive="active" class="sub-link">Attendance Details Daily</a> -->
+                    <a routerLink="/company/attendance-management/daily-details" routerLinkActive="active" class="sub-link">Attendance Summary</a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/company/attendance-management/edit" routerLinkActive="active" class="sub-link">Edit Attendance</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub"
+                *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'shift_management', 'company_operation': ['setup_shift', 'manage_shift_rate', 'employee_shift_add'] })"
+                [class.active]="['/company/shift-management/setup', '/company/shift-management/add', '/company/shift-management/rate', '/company/shift-management/batch'].includes(this.router.url)"
+                >
+                <i class="menu-item-icon icon icon ion-clock tx-20"></i>
+                <span class="menu-item-label">Shift Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'shift_management', 'company_operation': 'setup_shift' })">
+                    <a routerLink="/company/shift-management/setup" routerLinkActive="active" class="sub-link">Setup Shift</a>
+                </li>
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'shift_management', 'company_operation': 'manage_shift_rate' })">
+                    <a routerLink="/company/shift-management/rate" routerLinkActive="active" class="sub-link">Manage Shift Rate</a>
+                </li>
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'shift_management', 'company_operation': 'employee_shift_add' })">
+                    <a routerLink="/company/shift-management/add" routerLinkActive="active" class="sub-link">Employee Shift Add</a>
+                </li>
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'shift_management', 'company_operation': 'setup_shift' })">
+                    <a routerLink="/company/shift-management/batch" routerLinkActive="active" class="sub-link">Shift Batch</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/bonus-management/applied'].includes(this.router.url)">
+                <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+                <span class="menu-item-label">Bonus Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a routerLink="/company/bonus-management/applied" routerLinkActive="active" class="sub-link">Bonus Applied</a>
+                </li>
+
+                <!-- <li class="sub-item">
+                    <a routerLink="/company/bonus-management/report" routerLinkActive="active" class="sub-link">Bonus Report</a>
+                </li> -->
+            </ul>
+        </li>
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'incentive', 'company_operation': ['add_incentive', 'list_incentive'] })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/incentive-management/list'].includes(this.router.url)">
+                <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+                <span class="menu-item-label">Incentive Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'incentive', 'company_operation': ['add_incentive', 'list_incentive'] })">
+                    <a routerLink="/company/incentive-management/list" routerLinkActive="active" class="sub-link">Incentive List</a>
+                </li>
+
+                <!-- <li class="sub-item">
+                    <a routerLink="/company/bonus-management/report" routerLinkActive="active" class="sub-link">Bonus Report</a>
+                </li> -->
+            </ul>
+        </li>
+
+        <li class="br-menu-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'advance_management', 'company_operation': ['advance'] })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/advance-management/manage'].includes(this.router.url)">
+                <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+                <span class="menu-item-label">Advance Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'company_module': 'advance_management', 'company_operation': 'advance' })">
+                    <a routerLink="/company/advance-management/manage" routerLinkActive="active" class="sub-link">Advance</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/revision-management/manage', '/company/revision-management/run'].includes(this.router.url)">
+                <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+                <span class="menu-item-label">Revision Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a routerLink="/company/revision-management/manage" routerLinkActive="active" class="sub-link">Manage</a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/company/revision-management/run" routerLinkActive="active" class="sub-link">Run</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [ngClass]="{ 'active': reportsalarysheet.isActive || reportmastersheet.isActive || reportarrearreport.isActive || reportinstructionreport.isActive || reportpfchallan.isActive || reportesicchallan.isActive }">
+                <i class="menu-item-icon icon icon ion-document-text tx-20"></i>
+                <span class="menu-item-label">Reports & Sheets</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a #reportsalarysheet="routerLinkActive" routerLink="/company/reports/salary-sheet" routerLinkActive="active" class="sub-link">Run Payroll</a>
+                </li>
+
+                <li class="sub-item">
+                    <a #reportmastersheet="routerLinkActive" routerLink="/company/reports/master-sheet" routerLinkActive="active" class="sub-link">Salary Sheet</a>
+                </li>
+
+                <li class="sub-item">
+                    <a #reportarrearreport="routerLinkActive"  routerLink="/company/reports/arrear-report" routerLinkActive="active" class="sub-link">Arrear Report</a>
+                </li>
+
+                <li class="sub-item">
+                    <a #reportinstructionreport="routerLinkActive"  routerLink="/company/reports/instruction-report" routerLinkActive="active" class="sub-link">Instruction Report</a>
+                </li>
+
+                <li class="sub-item">
+                    <a #reportpfchallan="routerLinkActive" routerLink="/company/reports/pf-challan-report" routerLinkActive="active" class="sub-link">PF Challan Report</a>
+                </li>
+
+                <li class="sub-item">
+                    <a #reportesicchallan="routerLinkActive"  routerLink="/company/reports/esic-challan-report" routerLinkActive="active" class="sub-link">ESIC Challan Report</a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'package', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/company/package/employee-packages'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-list-outline tx-20"></i>
+                <span class="menu-item-label">Packages</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/company/package/employee-packages" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">Employee Packages</a></li>
+            </ul>
+        </li> -->
+
+        <!-- <li class="br-menu-item d-none" *ngIf="this.AppComponent.checkCompanyModulePermission({ 'staff_module': 'salary', 'staff_operation': ['add','edit','view','delete'], 'company_strict': true })">
+            <a routerLink="/company/salary-template" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-list-outline tx-20"></i>
+                <span class="menu-item-label">Salary Template</span>
+            </a>
+        </li> -->
+
+        <li class="br-menu-item">
+            <a routerLink="/company/salary-calculator" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-calculator-outline tx-20"></i>
+                <span class="menu-item-label">Salary BreakUp</span>
+            </a>
+        </li>
+
+        <li class="br-menu-item">
+            <a routerLink="/company/employee/extra-deduction" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-wand tx-20"></i>
+                <span class="menu-item-label">Extra Earning Deduction</span>
+            </a>
+        </li>
+    </ul>
+</div>

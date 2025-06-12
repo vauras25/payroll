@@ -1,0 +1,59 @@
+name: Deploy AngularJS to cPanel
+
+on:
+  push:
+    branches:
+      - development  # Change this to your deployment branch if different
+jobs:
+  build:
+    environment: non_prod
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x] 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.20.0'  # Use the version of Node.js that your project requires
+          
+      - name: Install Python 2 for node-gyp
+        run: sudo apt-get install python2
+
+      # Add Python 2 to alternatives
+      - name: Set Python 2 as default for node-gyp
+        run: sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+
+      - name: Install dependencies
+        run: npm i --force
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+
+      - name: Fix binding issues (optional step if using custom bindings)
+        run: |
+          # Use node-gyp to rebuild the binding in a way compatible with Node.js 14
+          npm rebuild node-sass --force
+
+      # - name: Lint code
+      #   run: |
+      #     npm run lint
+
+      - name: Build AngularJS project
+        #run: npm run build # Adjust the build command as per your project's configuration
+        run: npm run build -- --c development --base-href=/payroll/payroll_frontend/ --aot --output-hashing=all --output-path=dist   # Adjust the build command as per your project's configuration
+
+      - name: Deploy to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ vars.FTP_HOST }}
+          username: ${{ vars.FTP_USERNAME }}
+          password: ${{ vars.FTP_PASSWORD }}
+          local-dir: dist/  # Adjust this path to your build output directory
+          server-dir: ${{ vars.SERVER_DIR }}  # Adjust this path to your cPanel server's public directory
+
+      - name: Clean up
+        run: rm -rf build  # Clean up build files if needed

@@ -1,0 +1,63 @@
+export const _bonusReportTempMasterNew: any[] = [
+    {
+        main_title: "",
+        main_slug: "",
+        // bg_color: "rgb(131 0 0 / 47%)",
+        // text_color: 'black',
+        modules: [
+            {
+                module_title: "Bonus",
+                module_slug: "bonus",
+                fields: [
+                    { slug: "sl_no", title: "SL. No.", abbreviation: "", mapping: "" },
+                    { slug: "emp_id", title: "Emp ID", abbreviation: "", mapping: "emp_id" },
+                    { slug: "emp_name", title: "Name", abbreviation: "", mapping: ["emp_first_name", "emp_last_name"] },
+                    { slug: "department", title: "Department", abbreviation: "", mapping: "department.department_name" },
+                    { slug: "designation", title: "Designation", abbreviation: "", mapping: "designation.designation_name" },
+                    { slug: "client", title: "Client", abbreviation: "", mapping: "client.client_code" },
+                    { slug: "branch", title: "Branch", abbreviation: "", mapping: "branch.branch_name" },
+                    { slug: "hod", title: "HOD", abbreviation: "", mapping: ["hod.first_name", 'hod.last_name'] },
+                    { slug: "no_of_days_worked_in_bonus_period", title: "NOD worked in Bonus Period", abbreviation: "", mapping: "no_of_days_worked_in_bonus_period" },
+                    { slug: "master_bonus_wage", title: "Master Bonus Wage", abbreviation: "", mapping: "bonus_wage_master" },
+                    { slug: "earned_bonus_wage", title: "Earned Bonus Wage", abbreviation: "", mapping: "bonus_wage_earned" },
+                    { slug: "bonus_rate", title: "Bonus Rate", abbreviation: "", mapping: "bonus_rate" },
+                    { slug: "amount_percent", title: "Amount / %", abbreviation: "", mapping: "amount" },
+                    { slug: "bonus_amount", title: "Bonus Amount", abbreviation: "", mapping: "bonus_amount" },
+                    { slug: "tds", title: "TDS", abbreviation: "", mapping: "tds" },
+                    { slug: "bonus_payable", title: "Bonus Payable", abbreviation: "", mapping: "bonus_payable" },
+                    { slug: "ee_pf", title: "EE PF", abbreviation: "", mapping: "ee_pf" },
+                    { slug: "er_pf", title: "ER PF", abbreviation: "", mapping: "er_pf" },
+                    { slug: "ee_esi", title: "EE ESI", abbreviation: "", mapping: "ee_esi" },
+                    { slug: "opening_advance_vs_bonus", title: "Opening Advance vs Bonus", abbreviation: "", mapping: "opening_advance_vs_bonus" },
+                    { slug: "amount_remitted", title: "Amount Remitted", abbreviation: "", mapping: "amount_remitted" },
+                    { slug: "bank_name", title: "Bank Name", abbreviation: "", mapping: "bank" },
+                    { slug: "account_no", title: "Account No", abbreviation: "", mapping: "account_number" },
+                    { slug: "ifsc", title: "IFSC", abbreviation: "", mapping: "ifsc" },
+                    { slug: "payment_mode", title: "Payment Mode", abbreviation: "", mapping: "payment_mode" },
+                    { slug: "signature", title: "Signature", abbreviation: "", mapping: "signature" },
+
+                    // { slug: "Sl. No.", title: "Sl. No.", abbreviation: "", mapping: "" },
+                    // { slug: "Name of the employee	", title: "Name of the employee", abbreviation: "", mapping: "" },
+                    // { slug: "Father’s name	", title: "Father’s name", abbreviation: "", mapping: "" },
+                    // { slug: "Whether he has completed 15 years of age at the beginning of the accounting year	", title: "Whether he has completed 15 years of age at the beginning of the accounting year", abbreviation: "", mapping: "" },
+                    // { slug: "Designation	", title: "Designation", abbreviation: "", mapping: "" },
+                    // { slug: "No. of days worked in the year	", title: "No. of days worked in the year	", abbreviation: "", mapping: "" },
+                    // { slug: "Total salary or wage in respect of the accounting year	", title: "Total salary or wage in respect of the accounting year	", abbreviation: "", mapping: "" },
+                    // { slug: "Amount of bonus payable under section 10 or section 11 as the case may be	", title: "Amount of bonus payable under section 10 or section 11 as the case may be	", abbreviation: "", mapping: "" },
+                    // { slug: "Puja bonus or other customary bonus during the accounting year	", title: "Puja bonus or other customary bonus during the accounting year	", abbreviation: "", mapping: "" },
+                    // { slug: "Interim bonus of bonus paid advance	", title: "Interim bonus of bonus paid advance	", abbreviation: "", mapping: "" },
+                    // { slug: "_ftn1	", title: "_ftn1	", abbreviation: "", mapping: "" },
+                    // { slug: "Deduction on account of financial loss, if any, caused by misconduct of employee	", title: "Deduction on account of financial loss, if any, caused by misconduct of employee	", abbreviation: "", mapping: "" },
+                    // { slug: "[Total sum deducted under columns 9, 10, 10A and 11]	", title: "[Total sum deducted under columns 9, 10, 10A and 11]	", abbreviation: "", mapping: "" },
+                    // { slug: "Net Amount Payable (Column 8 minus Column 12)", title: "Net Amount Payable (Column 8 minus Column 12)", abbreviation: "", mapping: "" },
+                    // { slug: "Amount actually paid	", title: "Amount actually paid	", abbreviation: "", mapping: "" },
+                    // { slug: "Date on which paid	", title: "Date on which paid	", abbreviation: "", mapping: "" },
+                    // { slug: "Signature/thumb impression of the employee", title: "Signature/thumb impression of the employee", abbreviation: "", mapping: "" },
+                    
+
+                ],
+            },
+        ]
+    },
+
+];

@@ -1,0 +1,59 @@
+#arrear-report-table .title-sec th.column-title {
+    background: #1D2939;
+    color: #fff;
+}
+
+#arrear-report-table .headings th {
+    background: #3d4755;
+    color: #fff;
+}
+
+#arrear-report-table th,
+#arrear-report-table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.table-responsive>.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.card-header {
+    border-color: #dee2e6;
+    border: 1px solid #dee2e6;
+}
+
+
+.c-table {
+  /* margin:10px  0px; */
+  box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+    1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+}
+
+.c-table .c-tr .c-td,
+.c-th {
+  box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+    1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+  padding: 6px 12px;
+  width: 25%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c-th {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  background-color: rgba(179, 179, 179, 0.822);
+}
+.c-td {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.c-table .c-tr label {
+  margin: 0px;
+  display: flex;
+}
+

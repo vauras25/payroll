@@ -1,0 +1,210 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" href="javascript:void(0)">Expense Management</a>
+
+            
+
+            <a class="breadcrumb-item active">Extra Earning Deduction</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-wand"></i>
+        <div>
+            <h4>Extra Earning Deduction</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">
+                Extra Earning Deduction Templates
+                <button (click)="initEarningHeadEntry()" class="btn btn-info pull-right" style="float:right;clear: both;" data-toggle="modal" data-target="#modaldemo3"> <i class="fa fa-plus"></i> Add Heads</button>
+            </h6>
+
+            <br>
+
+            <form [formGroup]="filterForm">
+                <div class="row align-items-end bg-gray-100 bd pd-x-20 pd-t-20 mg-x-0">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-sm-3 col-12 mb-4">
+                                
+                                <input
+                                type="text"
+                                formControlName="searchkey"
+                                class="form-control"
+                                placeholder="Search..."
+                              />                            </div>
+                            <div class="col-sm-3 col-12 mb-4">
+                                
+                                <ngx-select-dropdown formControlName="month" [options]="monthMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Month *'}"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-sm-3 col-12 mb-4">
+                                <ngx-select-dropdown formControlName="year" [options]="yearMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Year *'}"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-sm-3 col-12 mb-4">
+                                <ngx-select-dropdown formControlName="department" [options]="departmentMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Department'}" [multiple]="true"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-sm-3 col-12 mb-4">
+                                <ngx-select-dropdown formControlName="designation" [options]="designationMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Designation'}" [multiple]="true"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-sm-3 col-12 mb-4">
+                                <ngx-select-dropdown formControlName="branch" [options]="branchMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Branch'}" [multiple]="true"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-sm-2 col-12 text-right pull-right">
+                                <button [disabled]="!this.filterForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block" (click)="filterDataTable()">Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- <companyuser-app-table-filter
+            [searchKeyFilter]="true"
+            [monthFilter]="false"
+            [yearFilter]="false"
+            (onFiltered)="fetch({ page: 1, filter: $event })"
+          >
+          </companyuser-app-table-filter> -->
+
+            <div class="table-wrapper mt-5">
+                <app-custom-tableoption
+                [searchable]="false"
+                (onFilterChanged)="paginationOptions.limit = +$event?.length ; fetch(1,$event.searchkey)"
+              ></app-custom-tableoption>
+                <div class="table-responsive">
+                    <table class="table nowrap wd-100p table-bordered" style="border: 1px solid #eee;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">SL</th>
+                                <th class="text-center">Action</th>
+                                <th class="">Emp Code</th>
+                                <th class="">Emp Name</th>
+                                <th class="text-center">Head</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Defined Amount</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <ng-container *ngFor="let employee of employees; let empInd = index">
+                                <ng-container *ngIf="(employee?.extra_earnings ?? []).length == 0">
+                                    <tr>
+                                        <td class="text-center"><b>{{ (empInd+1) }}</b></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-primary btn-sm" (click)="initEmployeeExpenseAdd(employee)">
+                                                <i class="fa fa-plus"></i> Add New
+                                            </button>
+                                        </td>
+                                        <td>{{ employee.emp_id }}</td>
+                                        <td>{{ employee.emp_first_name }} {{ employee.emp_last_name }}</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                    </tr>
+                                </ng-container>
+
+                                <ng-container *ngIf="(employee?.extra_earnings ?? []).length > 0">
+                                    <ng-container *ngFor="let earning of employee?.extra_earnings; let earningIndex = index">
+                                        <tr>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length" class="text-center"><b>{{ (empInd+1) }}</b></td>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length" class="text-center">
+                                                <button (click)="initEmployeeExpenseAdd(employee)" class="btn btn-primary btn-sm mx-1 my-1">
+                                                    <i class="fa fa-plus"></i> Add New
+                                                </button>
+
+                                                <button class="btn btn-info btn-sm mx-1 my-1" (click)="employeeExpenseUpdate(employee)">
+                                                    <i class="fa fa-edit"></i> Update
+                                                </button>
+                                            </td>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length">{{ employee.emp_id }}</td>
+                                            <td *ngIf="earningIndex == 0" [attr.rowspan]="(employee?.extra_earnings ?? []).length">{{ employee.emp_first_name }} {{ employee.emp_last_name }}</td>
+                                            <td class="text-center" id="emp-earningfield-head-{{earning._id}}">
+                                                <div class="input-group">
+                                                    <select class="form-control" id="{{employee.emp_id}}-{{earningIndex}}-earninghead">
+                                                        <option value="">Select One</option>
+                                                        <ng-container *ngFor="let earningHead of earningHeadsMaster">
+                                                            <option [selected]="earningHead._id == earning.head_id" value="{{ earningHead._id }}">{{ earningHead.head_name }}</option>
+                                                        </ng-container>
+                                                        
+                                                        <!-- <ng-container *ngFor="let earningHead of (employee?.employee_details?.annual_earnings ?? [])">
+                                                            <ng-container *ngIf="['earning'].includes(earningHead.earning_category.toLowerCase())">
+                                                                <option [selected]="earningHead._id == earning.head_id" value="{{ earningHead._id }}">{{ earningHead.earning_head }}</option>
+                                                            </ng-container>
+                                                        </ng-container> -->
+                                                    </select>
+                                                    <button type="button" (click)="updateEarningValue( employee.emp_id+'-'+earningIndex+'-earninghead', employee.emp_id, 'head_id', earning)" class="btn btn-primary input-group-addon"><i class="fa fa-save tx-16 lh-0 op-6"></i></button>
+                                                </div>
+                                                <!-- {{ earning.head_id }} -->
+                                            </td>
+                                            <td class="text-center" id="emp-earningfield-amount-{{earning._id}}">
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" placeholder="Enter Amount" value="{{ earning.amount }}" id="{{employee.emp_id}}-{{earningIndex}}-earningamount">
+                                                    <button type="button" (click)="updateEarningValue( employee.emp_id+'-'+earningIndex+'-earningamount', employee.emp_id, 'amount', earning)" class="btn btn-primary input-group-addon"><i class="fa fa-save tx-16 lh-0 op-6"></i></button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">{{ getDefinedEarningAmount(employee, earning.head_id)?.earning_amount ?? '-' }}</td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+
+                            <tr *ngIf="employees.length == 0">
+                                <td class="text-center" colspan="100%">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="fetch($event)"></app-custom-pagination>
+        </div>
+    </div>
+
+    <!-- Add New Expense Modal -->
+    <button id="addEmployeeExpenseModalButton" [hidden]="true" data-toggle="modal" data-target="#addEmployeeExpenseModal"></button>
+    <div id="addEmployeeExpenseModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Expense <small>{{ addEmployeeExpenseForm.value?.emp_id }}</small></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form [formGroup]="addEmployeeExpenseForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg-12 mb-3">
+                                <ngx-select-dropdown formControlName="head_id" [options]="earningHeadsMaster.concat(employeeEarningHeadMaster)" class="form-control p-1" [config]="{search:true, placeholder: 'Select One', displayKey: 'head_name'}"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-lg-12 mb-3">
+                                <input class="form-control" type="number" placeholder="Enter Amount" formControlName="amount">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!addEmployeeExpenseForm.valid" (click)="addEmployeeExpense($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                          <span>Update</span>
+                      </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-extra-deduction-headmaster [initEarningHeadEntry]="extraDeductionHeadMasterEventSubject.asObservable()" [earningStatusMaster]="earningStatusMaster" (headMasterSubmitted)="fetchEarningHeads()"></companyuser-extra-deduction-headmaster>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,45 @@
+export const _overtimeReportTempMasterNew: any[] = [
+    {
+        main_title: "",
+        main_slug: "",
+        // bg_color: "rgb(131 0 0 / 47%)",
+        // text_color: 'black',
+        modules: [
+            {
+                module_title: "Over Time",
+                module_slug: "over_time",
+                fields: [
+                    { slug: "sl_no", title: "SL. No.", abbreviation: "", mapping: "" },
+                    { slug: "emp_id", title: "Emp ID", abbreviation: "", mapping: "emp_id" },
+                    { slug: "emp_name", title: "Name", abbreviation: "", mapping: ["emp_first_name", "emp_last_name"] },
+                    { slug: "department", title: "Department", abbreviation: "", mapping: "emp_data.department.department_name" },
+                    { slug: "designation", title: "Designation", abbreviation: "", mapping: "emp_data.designation.designation_name" },
+                    { slug: "client", title: "Client", abbreviation: "", mapping: "emp_data.client.client_name" },
+                    { slug: "branch", title: "Branch", abbreviation: "", mapping: "emp_data.branch.branch_name" },
+                    { slug: "hod", title: "HOD", abbreviation: "", mapping: "emp_data.hod" },
+                    { slug: "ot_hours", title: "OT Hours", abbreviation: "", mapping: "" },
+                    { slug: "ot_days", title: "OT Days", abbreviation: "", mapping: "" },
+                    { slug: "ot_wage", title: "OT Wage", abbreviation: "", mapping: "ot_report.overtime_wages" },
+                    { slug: "ot_hour_amt", title: "OT Hour Amt", abbreviation: "", mapping: "" },
+                    { slug: "ot_days_amt", title: "OT Days Amt", abbreviation: "", mapping: "" },
+                    { slug: "openin_advance", title: "Opening Advance", abbreviation: "", mapping: "" },
+                    { slug: "ot_advance_recovered", title: "OT Advance Recovered", abbreviation: "", mapping: "" },
+                    { slug: "closin_advance_vs_ot", title: "Closing Advance vs OT", abbreviation: "", mapping: "" },
+                    { slug: "tds", title: "TDS", abbreviation: "", mapping: "" },
+                    { slug: "ee_pf", title: "EE PF", abbreviation: "", mapping: "ot_report.pf_data.emoloyee_contribution" },
+                    { slug: "er_pf", title: "ER PF", abbreviation: "", mapping: "ot_report.pf_data.emoloyer_pf_contribution" },
+                    { slug: "ee_esi", title: "EE ESI", abbreviation: "", mapping: "ot_report.esic_data.emoloyee_contribution" },
+                    { slug: "er_esic", title: "ER ESIC", abbreviation: "", mapping: "ot_report.esic_data.emoloyer_contribution" },
+                    { slug: "amt_payable", title: "Amt Payable", abbreviation: "", mapping: "" },
+                    { slug: "amt_remitted", title: "Amt Remitted", abbreviation: "", mapping: "" },
+                    { slug: "bank_name", title: "Bank Name", abbreviation: "", mapping: "bank_details.bank_name" },
+                    { slug: "account_no", title: "Account No", abbreviation: "", mapping: "bank_details.account_no" },
+                    { slug: "ifsc", title: "IFSC", abbreviation: "", mapping: "bank_details.ifsc_code" },
+                    { slug: "payment_mode", title: "Payment Mode", abbreviation: "", mapping: "" },
+                    { slug: "signature", title: "Signature", abbreviation: "", mapping: "" },
+                ],
+            },
+        ]
+    },
+
+];

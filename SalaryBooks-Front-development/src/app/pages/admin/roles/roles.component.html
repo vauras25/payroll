@@ -1,0 +1,140 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item active">Team Management</a>
+            <a class="breadcrumb-item">Roles Access</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-people"></i>
+        <div>
+            <h4>Roles Management</h4>
+            <p class="mg-b-0">Create, assign, edit, view rights</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="role-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add Role</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit Role</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-7">
+                <form [formGroup]="roleForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Role Name:
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" type="text" formControlName="role_name" placeholder="Enter Role Name">
+                            <p class="error-element" *ngIf="roleForm.controls.role_name.hasError('required') && (roleForm.controls.role_name.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Role Activity:
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="role_activity" placeholder="Enter Role Activity" rows="4"></textarea>
+                            <p class="error-element" *ngIf="roleForm.controls.role_activity.hasError('required') && (roleForm.controls.role_activity.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Role Status:
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <div class="role-status-name br-toggle br-toggle-rounded br-toggle-primary on">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Module Access:
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <div class="d-flex">
+                                <label class="ckbox wd-30p d-flex">
+								                  Module
+                                </label>
+                                <label class="ckbox wd-20p d-flex">
+                                    <input type="checkbox" (change)="moduleCheckboxChanged($event, 'selectall')" id="module-all-select"><span>Select All</span>
+                                </label>
+                            </div>
+                            <div class="d-flex" *ngFor="let permission of permissions">
+                                <label class="ckbox wd-30p d-flex">
+                                    {{permission.module_name}}
+                                </label>
+                                <label class="ckbox wd-10p d-flex">
+                                    <input type="checkbox" (change)="moduleCheckboxChanged($event, 'selectmodule', permission.module_id_name)" id="module-{{permission.module_id_name}}-select"><span>All</span>
+                                </label>
+                                <label class="ckbox wd-15p d-flex" *ngFor='let item of permission.access; index as i;'>
+                                    <input type="checkbox" (change)="moduleCheckboxChanged($event)" name="modules[{{permission.module_id_name}}]" value="{{item}}"><span class="text-capitalize">{{item}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3"></div>
+                        <div class="col-9 col-sm-9">
+                            <button type="submit" [disabled]="!roleForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>Add Role</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel Editing</span>
+                                </button>
+                                <button type="submit" [disabled]="!roleForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Role</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-people"></i>
+        <div>
+            <h4>Roles</h4>
+            <p class="mg-b-0">List of predefined role templates</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <th class="wd-15p text-center">Status</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p text-center">Approval</th>
+                            <th class="wd-15p">Role Name</th>
+                            <!-- <th class="wd-15p">Role Slug</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

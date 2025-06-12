@@ -1,0 +1,78 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.form-group {
+    margin-bottom: 1rem;
+    margin-left: 400px;
+}
+
+.otp-container {
+  background: #fff;
+    font-family: Arial, sans-serif;
+  height: 100vh;
+  /* width: 500px; */
+  /* margin-left: 600px; */
+   justify-content: center;
+   align-items: center;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+/* .input {
+  width: 30px;
+} */
+
+/* .otp-title {
+  margin-bottom: 0.5rem;
+}
+
+.otp-description {
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.otp-input {
+  width: 200px;
+  height: 40px;
+  font-size: 18px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.otp-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.otp-button-wrapper {
+  margin-top: 10px;
+}
+ */
+.otp-button {
+  padding: 10px 20px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.otp-button:hover {
+  background: #0056b3;
+}

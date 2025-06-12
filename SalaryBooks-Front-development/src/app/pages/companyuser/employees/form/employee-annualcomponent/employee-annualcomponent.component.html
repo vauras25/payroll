@@ -1,0 +1,149 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Annual Component</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+
+            <h5 class="text-uppercase mb-3">
+                Employee Annual Compopnent
+
+                <button (click)="initEarningHeadEntry()" class="btn btn-info pull-right btn-sm" style="margin-left: 10px;" data-toggle="modal" data-target="#modaldemo3"> <i class="fa fa-plus"></i> Add Heads</button>
+
+                <a class="float-right"
+                    *ngIf="['edit'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'annualcomponent'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section" *ngIf="operation == 'edit'" id="annualcomponent-submit-section">
+                <form [formGroup]="employeeAnnualComponentForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Category&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAnnualComponentForm, 'earning_category', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="earning_category" [options]="categoryMaster" class="form-control" [config]="{search:false, placeholder: 'Select One'}" [multiple]="false"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="employeeAnnualComponentForm.controls.earning_category.hasError('required') && ( employeeAnnualComponentForm.controls.earning_category.dirty || employeeAnnualComponentForm.controls.earning_category.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Head&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAnnualComponentForm, 'earning_head_id', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="earning_head_id" [options]="earningHeadSelectMaster" class="form-control" [config]="{search:false, placeholder: 'Select One', displayKey: 'head_name'}" [multiple]="false"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="employeeAnnualComponentForm.controls.earning_head_id.hasError('required') && ( employeeAnnualComponentForm.controls.earning_head_id.dirty || employeeAnnualComponentForm.controls.earning_head_id.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Amount&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAnnualComponentForm, 'earning_amount', 'required')" class="text-danger">*</span>
+                        </div>
+
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="earning_amount">
+
+                            <p class="error-element" *ngIf="employeeAnnualComponentForm.controls.earning_amount.hasError('required') && ( employeeAnnualComponentForm.controls.earning_amount.dirty || employeeAnnualComponentForm.controls.earning_amount.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit' && Global.checkCompanyModulePermission({
+                        company_module: 'employee',
+                        company_sub_module: 'annual_component',
+                        company_sub_operation: ['add', 'edit'],
+                        company_strict: true
+                      })">
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-danger mr-2" (click)="cancelEntry()">Cancel</button>
+                            <button type="submit" class="btn btn-info" (click)="updateEmployeeAnnualCompDetails($event)">
+                              <span *ngIf="annual_earnings_id && Global.checkCompanyModulePermission({
+                                company_module: 'employee',
+                                company_sub_module: 'annual_component',
+                                company_sub_operation: ['edit'],
+                                company_strict: true
+                              })">Update</span>
+                              <ng-container *ngIf="!annual_earnings_id && Global.checkCompanyModulePermission({
+                                company_module: 'employee',
+                                company_sub_module: 'annual_component',
+                                company_sub_operation: ['add'],
+                                company_strict: true
+                              })">
+                                <span>Add New</span>
+                              </ng-container>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bd bd-gray-300 rounded table-responsive mt-5">
+                <table class="table table-striped mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Head</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th *ngIf="Global.checkCompanyModulePermission({
+                                company_module: 'employee',
+                                company_sub_module: 'annual_component',
+                                company_sub_operation: ['edit'],
+                                company_strict: true
+                              })"  class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="employee_details?.emp_det?.annual_earnings?.length > 0; else noTableFound">
+                        <tr *ngFor="let item of employee_details?.emp_det?.annual_earnings; let i = index">
+                            <th scope="row">{{ i+1 }}</th>
+                            <td>{{ item.earning_head_id ? getHeadDetails(item.earning_head_id)?.head_name ?? 'N/A' : 'N/A' }}</td>
+                            <td>{{ item.earning_category ? item.earning_category : 'N/A' }}</td>
+                            <td>{{ item.earning_amount ? item.earning_amount : 'N/A' }}</td>
+                            <td *ngIf="Global.checkCompanyModulePermission({
+                                company_module: 'employee',
+                                company_sub_module: 'annual_component',
+                                company_sub_operation: ['edit'],
+                                company_strict: true
+                              })" class="text-center">
+                                <button class="btn btn-sm btn-primary" (click)="getEdit(item)" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-template #noTableFound>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">No Annual Components Found</td>
+                            </tr>
+                        </tbody>
+                    </ng-template>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-extra-deduction-headmaster [initEarningHeadEntry]="extraDeductionHeadMasterEventSubject.asObservable()" [earningStatusMaster]="earningStatusMaster" (headMasterSubmitted)="fetchEarningHeads()"></companyuser-extra-deduction-headmaster>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

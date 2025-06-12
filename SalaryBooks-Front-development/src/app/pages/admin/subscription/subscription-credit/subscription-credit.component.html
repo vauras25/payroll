@@ -1,0 +1,80 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Subscription Management</a>
+            <a class="breadcrumb-item active">Credit Management</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-ios-list"></i>
+        <div>
+            <h4>Credit Management</h4>
+            <p class="mg-b-0">Define price per credit</p>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Update Credit Value</h6>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="creditForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Number of Credits&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="credit_value">
+                            <p class="error-element" *ngIf="creditForm.controls.credit_value.hasError('required') && (creditForm.controls.credit_value.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="creditForm.controls.credit_value.hasError('pattern') && (creditForm.controls.monthly_rental_date.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Credit Amount&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="credit_amount">
+                            <p class="error-element" *ngIf="creditForm.controls.credit_amount.hasError('required') && (creditForm.controls.credit_amount.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="creditForm.controls.credit_amount.hasError('pattern') && (creditForm.controls.monthly_rental_date.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            GST Percentage&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="gst_amount">
+                            <p class="error-element" *ngIf="creditForm.controls.gst_amount.hasError('required') && (creditForm.controls.gst_amount.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="creditForm.controls.gst_amount.hasError('pattern') && (creditForm.controls.monthly_rental_date.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Payable Amount
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="payable_amount">
+                            <p class="error-element" *ngIf="creditForm.controls.payable_amount.hasError('required') && (creditForm.controls.payable_amount.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="creditForm.controls.payable_amount.hasError('pattern') && (creditForm.controls.monthly_rental_date.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!creditForm.valid" (click)="update($event)" type="submit">
+                                <span>SAVE</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

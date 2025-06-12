@@ -1,0 +1,191 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Assets</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Assets
+
+                <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'employeeassets'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section" *ngIf="operation == 'edit'" id="Asset-submit-section">
+                <form [formGroup]="employeeAssetForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Asset Details&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_details', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="asset_details"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_details', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Asset No&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_no', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input type="text" class="form-control" formControlName="asset_no">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_no', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Asset Value&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_value', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input type="text" class="form-control" formControlName="asset_value">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_value', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Asset Quantity&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_qty', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input type="number" class="form-control" formControlName="asset_qty">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_qty', 'required')">This field is required</p>
+                        </div>                        
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Asset Issue Date&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_issue_date', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input type="date" class="form-control" formControlName="asset_issue_date">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_issue_date', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+
+                        <!-- <div class="col-3 col-sm-3 sameasfirst">
+                            Asset Recieve Date&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_receive_date', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input type="date" class="form-control" formControlName="asset_receive_date">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_receive_date', 'required')">This field is required</p>
+                        </div> -->
+                    </div>
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Asset Recieved By&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeAssetForm, 'asset_receive_by', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input type="text" class="form-control" formControlName="asset_receive_by">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAssetForm, 'asset_receive_by', 'required')">This field is required</p>
+                        </div>
+                    </div> -->
+
+                    <div  class="row no-gutters bd-1" *ngIf="operation == 'edit' &&  Global.checkCompanyModulePermission({
+                        company_module: 'employee',
+                        company_operation: 'employee_assest',
+                        company_sub_module: 'asset_management',
+                        company_sub_operation: ['add','edit']
+                      })">
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-danger mr-2" (click)="cancelEntry()">Cancel</button>
+                            <button type="submit" class="btn btn-info" (click)="updateEmployeeAssetDetails($event)">
+                              <span *ngIf="asset_id && Global.checkCompanyModulePermission({
+                                company_module: 'employee',
+                                company_operation: 'employee_assest',
+                                company_sub_module: 'asset_management',
+                                company_sub_operation: ['edit']
+                              })">Update Asset</span>
+                              <ng-container *ngIf="!asset_id && Global.checkCompanyModulePermission({
+                                company_module: 'employee',
+                                company_operation: 'employee_assest',
+                                company_sub_module: 'asset_management',
+                                company_sub_operation: ['add']
+                              })">
+                                <span>Add Asset</span>
+                              </ng-container>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bd bd-gray-300 rounded table-responsive mt-5">
+                <table class="table table-striped mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Details</th>
+                            <th>No</th>
+                            <th>Value</th>
+                            <th>QTY</th>
+                            <th>Issue Date</th>
+                            <th>Recieved Date</th>
+                            <th>Recieved By</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="employee_details?.emp_det?.assets?.length > 0; else noTableFound">
+                        <tr *ngFor="let item of employee_details?.emp_det?.assets; let i = index">
+                            <th scope="row">{{ i+1 }}</th>
+                            <td>{{ item.asset_details ? item.asset_details : 'N/A' }}</td>
+                            <td>{{ item.asset_no ? item.asset_no : 'N/A' }}</td>
+                            <td>{{ item.asset_value ? item.asset_value : 'N/A' }}</td>
+                            <td>{{ item.asset_qty ? item.asset_qty : 'N/A' }}</td>
+                            <td>{{ item.asset_issue_date ? item.asset_issue_date : 'N/A' }}</td>
+                            <td>{{ item.asset_receive_date ? item.asset_receive_date : 'N/A' }}</td>
+                            <td>{{ item.asset_receive_by ? item.asset_receive_by : 'N/A' }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-info mr-2" *ngIf="item.Asset_file_image" (click)="Global.imageViewer(Global.BACKEND_URL + '/' + item.Asset_file_image)" data-toggle="tooltip" data-placement="top" title="View Asset Image File"><i class="fa fa-file"></i></button>
+                                <button *ngIf="Global.checkCompanyModulePermission({
+                                    company_module: 'employee',
+                                    company_operation: 'employee_assest',
+                                    company_sub_module: 'asset_management',
+                                    company_sub_operation: ['edit']
+                                  })" class="btn btn-sm btn-primary" (click)="getEdit(item)" data-toggle="tooltip" data-placement="top" title="Edit Asset"><i class="fa fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-template #noTableFound>
+                        <tbody>
+                            <tr>
+                                <td colspan="100%" class="text-center">No Assets Found</td>
+                            </tr>
+                        </tbody>
+                    </ng-template>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

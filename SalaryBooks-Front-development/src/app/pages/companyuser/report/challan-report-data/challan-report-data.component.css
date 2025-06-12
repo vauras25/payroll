@@ -1,0 +1,22 @@
+.switch{
+  border: 1px solid #dcdcdc;
+  padding: 8px 12px;
+  background: #fff;
+}
+.active-tab{
+  background: #F8F9F9 ;
+  color: #000;
+}
+
+input[type=radio]{
+  accent-color: #17A3B4;
+}
+
+.btn-custom{
+  background-color: #F6F6F9 ;
+  border: 1px solid #868994;
+}
+
+input[type=checkbox]{
+  accent-color: #17a3ba;
+}

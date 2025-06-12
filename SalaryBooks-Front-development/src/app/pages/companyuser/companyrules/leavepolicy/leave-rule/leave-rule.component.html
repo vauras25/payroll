@@ -1,0 +1,757 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item" routerLink="/company/settings"
+        >Company Settings</a
+      >
+      <a
+        class="breadcrumb-item"
+        routerLink="/company/settings"
+        [queryParams]="{ active: 'comprules' }"
+        >Company Rules</a
+      >
+      <a class="breadcrumb-item active">Leave Policy Rule</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-briefcase"></i>
+    <div>
+      <h4>Define Leave Policy Rule</h4>
+      <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+    </div>
+  </div>
+
+  <div
+    *ngIf="
+      Global.checkCompanyModulePermission({
+        company_module: 'company_rules_1',
+        company_sub_module: 'leave_policy',
+        company_sub_operation: ['add', 'edit'],
+        company_strict: true
+      })
+    "
+    class="br-pagebody"
+  >
+    <div class="br-section-wrapper" id="leave-rule-form">
+      <div class="d-flex align-items-center justify-content-end mg-b-10">
+        <div class="d-md-flex pd-y-20 pd-md-y-0">
+          <!-- <button (click)="addLeaveHead()" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2">Add Leave Heads</button> -->
+          <!-- <button class="btn btn-primary pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-book"></i> Library</button> -->
+        </div>
+      </div>
+
+      <form [formGroup]="leaveRuleForm">
+        <h6 class="br-section-label mb-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <ng-container *ngIf="!editActionId; else updateHeadingText"
+              >Define Leave Policy Rule: Standard for
+              administration</ng-container
+            >
+            <ng-template #updateHeadingText>
+              Update Leave Policy Rule: Standard for administration
+            </ng-template>
+            <div>
+              <button
+                type="button"
+                (click)="openTemplateLibrary($event)"
+                class="btn btn-info pull-right ml-2"
+              >
+                <span> <i class="fa fa-book"></i> Template Library </span>
+              </button>
+            </div>
+          </div>
+        </h6>
+
+        <div class="form-layout form-layout-6">
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Template Name&nbsp;<span class="text-danger">*</span>
+            </div>
+            <div class="col-9 col-sm-9">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="template_name"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  leaveRuleForm.controls.template_name.hasError('required') &&
+                  (leaveRuleForm.controls.template_name.dirty ||
+                    leaveRuleForm.controls.template_name.touched)
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-bordered define-leave-rule-table">
+          <ng-container formArrayName="template_data">
+            <tbody>
+              <tr
+                *ngFor="
+                  let templateDataControl of getTemplateRows('template_data');
+                  let i = index
+                "
+                [formGroupName]="i"
+              >
+                <td>
+                  <label class="tx-medium"
+                    >Leave Type&nbsp;<span class="text-danger">*</span></label
+                  >
+                  <ngx-select-dropdown
+                    formControlName="leave_type"
+                    [options]="leaveHeadMaster"
+                    (change)="changeLeave($event, i)"
+                    class="form-control"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Choose One',
+                      height: '200px'
+                    }"
+                    (change)="templateLeaveTypeChanged(i)"
+                  >
+                  </ngx-select-dropdown>
+
+                  <label class="tx-medium mt-3"
+                    >Restriction on Availment&nbsp;<span class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <div class="d-flex flex-wrap">
+                    <div class="col-sm-6 col-12 p-0">
+                      <label class="rdiobox">
+                        <input
+                          type="radio"
+                          formControlName="restriction_on_availment"
+                          (click)="validationChange(i)"
+                          value="yes"
+                        />
+                        <span>Yes</span>
+                      </label>
+                    </div>
+
+                    <div class="col-sm-6 col-12 p-0">
+                      <label class="rdiobox">
+                        <input
+                          type="radio"
+                          formControlName="restriction_on_availment"
+                          (click)="validationChange(i)"
+                          value="no"
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span id="workingdays-field-{{ i }}" style="display: none">
+                    <label class="tx-medium"
+                      >Number of Working Days&nbsp;<span class="text-danger"
+                        >*</span
+                      ></label
+                    >
+                    <input
+                      type="number"
+                      formControlName="no_of_working_day"
+                      class="form-control wd-200"
+                      placeholder="Number of Working Days"
+                    />
+                  </span>
+
+                  <label class="tx-medium mt-3"
+                    >Number of Days&nbsp;<span class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <input
+                    type="number"
+                    formControlName="no_of_day"
+                    class="form-control wd-200"
+                    placeholder="Days"
+                  />
+
+                  <label class="tx-medium mt-3"
+                    >Restriction Tenure &nbsp;<span *ngIf="isRequired(i,'restriction_tenure')" class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <ngx-select-dropdown
+                    formControlName="restriction_tenure"
+                    [options]="tenureMaster"
+                    [disabled]="!isRequired(i,'restriction_tenure')"
+                    class="form-control"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Select Option',
+                      height: '200px'
+                    }"
+                  ></ngx-select-dropdown>
+                </td>
+
+                <td>
+                  <label class="tx-medium"
+                    >Leave Tenure&nbsp;<span class="text-danger">*</span></label
+                  >
+                  <ngx-select-dropdown
+                    formControlName="leave_tenure"
+                    [options]="tenureMaster"
+                    class="form-control"
+                    [config]="{
+                      search: true,
+                      placeholder: 'Select Option',
+                      height: '200px'
+                    }"
+                  ></ngx-select-dropdown>
+
+                  <label class="tx-medium mt-3"
+                    >Restriction Days &nbsp;<span *ngIf="isRequired(i,'restriction_days')" class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <input 
+                    type="number"
+                    formControlName="restriction_days"
+                    [readOnly]="!isRequired(i,'restriction_days')"
+                    class="form-control wd-200"
+                    placeholder="Days"
+                  />
+                </td>
+
+                <td style="width: 150px">
+                  <label class="tx-medium"
+                    >Carry Forward&nbsp;<span class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <div class="d-flex flex-wrap">
+                    <div class="col-sm-6 col-12 p-0">
+                      <label class="rdiobox">
+                        <input
+                          formControlName="carry_forward"
+                          type="radio"
+                          value="yes"
+                        />
+                        <span>Yes</span>
+                      </label>
+                    </div>
+                    <div class="col-sm-6 col-12 p-0">
+                      <label class="rdiobox">
+                        <input
+                          formControlName="carry_forward"
+                          type="radio"
+                          value="no"
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <label class="tx-medium mt-3"
+                    >Cashable&nbsp;<span class="text-danger">*</span></label
+                  >
+                  <div class="d-flex flex-wrap">
+                    <div class="col-sm-6 col-12 p-0">
+                      <label class="rdiobox">
+                        <input
+                          formControlName="cashable"
+                          type="radio"
+                          value="yes"
+                        />
+                        <span>Yes</span>
+                      </label>
+                    </div>
+                    <div class="col-sm-6 col-12 p-0">
+                      <label class="rdiobox">
+                        <input
+                          formControlName="cashable"
+                          type="radio"
+                          value="no"
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <label class="tx-medium">Carry Forward Years</label>
+                  <input
+                    type="number"
+                    [readOnly]="templateDataControl.get('carry_forward')?.value == 'no'"
+                    formControlName="carry_forward_years"
+                    class="form-control wd-150"
+                    placeholder="Years"
+                  />
+
+                  <label class="tx-medium mt-3"
+                    >Effective Form&nbsp;<span class="text-danger"
+                      >*</span
+                    ></label
+                  >
+                  <input
+                    type="date"
+                    formControlName="effective_form"
+                    class="form-control wd-150"
+                    placeholder="Effective Form"
+                  />
+                </td>
+
+                <td
+                  class="text-center"
+                  style="vertical-align: middle !important; white-space: nowrap"
+                >
+                  <button
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Add New"
+                    type="button"
+                    (click)="addTemplateRows('template_data')"
+                    class="btn btn-primary btn-icon mg-r-5"
+                    *ngIf="getTemplateRows('template_data').length - 1 == i"
+                  >
+                    <div style="width: 25px; height: 25px">
+                      <i class="fa fa-plus"></i>
+                    </div>
+                  </button>
+
+                  <button
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Remove"
+                    type="button"
+                    (click)="removeTemplateRow('template_data', i)"
+                    class="btn btn-danger btn-icon"
+                    *ngIf="getTemplateRows('template_data').length > 1"
+                  >
+                    <div style="width: 25px; height: 25px">
+                      <i class="fa fa-trash"></i>
+                    </div>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </ng-container>
+        </table>
+
+        <div class="text-center">
+          <button
+            type="button"
+            (click)="cancelEntry()"
+            class="btn btn-danger pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150 mg-r-5"
+          >
+            <span>Cancel</span>
+          </button>
+
+          <ng-container
+            *ngIf="
+              !editActionId &&
+              Global.checkCompanyModulePermission({
+                company_module: 'company_rules_1',
+                company_sub_module: 'leave_policy',
+                company_sub_operation: ['add'],
+                company_strict: true
+              })
+            "
+          >
+            <button
+              type="button"
+              (click)="add($event)"
+              [disabled]="!leaveRuleForm.valid"
+              class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"
+            >
+              <span>Save</span>
+            </button>
+          </ng-container>
+          <ng-container
+            *ngIf="
+              editActionId &&
+              Global.checkCompanyModulePermission({
+                company_module: 'company_rules_1',
+                company_sub_module: 'leave_policy',
+                company_sub_operation: ['edit'],
+                company_strict: true
+              })
+            "
+          >
+            <button
+              type="button"
+              (click)="edit($event)"
+              [disabled]="!leaveRuleForm.valid"
+              class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"
+            >
+              <span>Update</span>
+            </button>
+          </ng-container>
+        </div>
+      </form>
+
+      <div
+        class="bd_rightside animate__animated animate__slideInRight"
+        id="leavehead-form-modal"
+      >
+        <div class="pd-20 pd-xs-40 mg-t-40" style="width: 100%">
+          <h6 class="tx-gray-800 tx-uppercase tx-bold">
+            Add Leave Heads &nbsp;<button class="btn btn-primary btn-sm d-none">
+              <i class="fa fa-copy"></i> Heads Library
+            </button>
+            <button
+              (click)="cancelLeaveHeadEntry()"
+              class="btn btn-info pull-right"
+              style="float: right; clear: both"
+            >
+              <i class="fa fa-times"></i>
+            </button>
+          </h6>
+
+          <form [formGroup]="leaveHeadForm">
+            <div class="form-group">
+              <label>Leave Type&nbsp;<span class="text-danger">*</span></label>
+
+              <!-- <input type="text" class="form-control" placeholder="Enter Full Name" formControlName="head_type" [class.error]="leaveHeadForm.controls.head_type.dirty || leaveHeadForm.controls.head_type.touched"> -->
+
+              <ngx-select-dropdown
+                style="padding: 4px"
+                formControlName="head_type"
+                [options]="leaveHeadTypeMaster"
+                class="form-control"
+                [config]="{
+                  search: true,
+                  placeholder: 'Select One',
+                  height: '200px'
+                }"
+                [class.error]="
+                  leaveHeadForm.controls.head_type.dirty ||
+                  leaveHeadForm.controls.head_type.touched
+                "
+              ></ngx-select-dropdown>
+
+              <p
+                class="mt-1 text-danger"
+                *ngIf="
+                  leaveHeadForm.controls.head_type.hasError('required') &&
+                  (leaveHeadForm.controls.head_type.dirty ||
+                    leaveHeadForm.controls.head_type.touched)
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label>Full Name&nbsp;<span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Full Name"
+                formControlName="full_name"
+                [class.error]="
+                  leaveHeadForm.controls.full_name.dirty ||
+                  leaveHeadForm.controls.full_name.touched
+                "
+              />
+
+              <p
+                class="mt-1 text-danger"
+                *ngIf="
+                  leaveHeadForm.controls.full_name.hasError('required') &&
+                  (leaveHeadForm.controls.full_name.dirty ||
+                    leaveHeadForm.controls.full_name.touched)
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label
+                >Abbreviation&nbsp;<span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Abbreviation"
+                formControlName="abbreviation"
+                [class.error]="
+                  leaveHeadForm.controls.abbreviation.dirty ||
+                  leaveHeadForm.controls.abbreviation.touched
+                "
+              />
+
+              <p
+                class="mt-1 text-danger"
+                *ngIf="
+                  leaveHeadForm.controls.abbreviation.hasError('required') &&
+                  (leaveHeadForm.controls.abbreviation.dirty ||
+                    leaveHeadForm.controls.abbreviation.touched)
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <button
+              (click)="submitLeaveHead($event)"
+              class="btn btn-info btn-block pd-y-10 mg-b-30"
+            >
+              <span>Add</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-4">All Leave Rules</h6>
+
+      <div class="table-wrapper">
+        <app-custom-tableoption
+        [searchable]="false"
+        (onFilterChanged)="paginationOptions.limit = +$event?.length ; fetch(1)"
+      ></app-custom-tableoption>
+        <div class="table-responsive">
+          <!-- <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable"> -->
+          <table class="table nowrap wd-100p table-bordered">
+            <thead>
+              <tr>
+                <th class="">SL</th>
+                <th class="text-center">Action</th>
+                <th>Template Name</th>
+                <th>Effective Form</th>
+                <th>Leave Type</th>
+                <th>Leave Type Tenure</th>
+                <th>Num Of Days</th>
+                <th>Carry Forward</th>
+                <th>Carry Forward Years</th>
+                <th>Restriction Availment</th>
+                <th>Restriction Tenure</th>
+                <th>Restriction Days</th>
+                <th>Is Cashable</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container
+                *ngFor="let template of templateRows; let i = index"
+              >
+                <tr *ngFor="let item of template.template_data; let ri = index">
+                  <td
+                    [attr.rowspan]="template.template_data.length"
+                    *ngIf="ri == 0"
+                  >
+                    {{ i + 1 }}
+                  </td>
+
+                  <td
+                    [attr.rowspan]="template.template_data.length"
+                    *ngIf="ri == 0"
+                  >
+                    <button
+                      *ngIf="
+                        Global.checkCompanyModulePermission({
+                          company_module: 'company_rules_1',
+                          company_sub_module: 'leave_policy',
+                          company_sub_operation: [
+                            'edit',
+                          ],
+                          company_strict: true
+                        })
+                      "
+                      (click)="getEdit(template)"
+                      class="btn btn-primary btn-icon mx-1"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Edit"
+                      id="editButton-` + meta.row + `"
+                    >
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-pen"></i>
+                      </div>
+                    </button>
+
+                    <button
+                      *ngIf="
+                        Global.checkCompanyModulePermission({
+                          company_module: 'company_rules_1',
+                          company_sub_module: 'leave_policy',
+                          company_sub_operation: [
+                            'delete'
+                          ],
+                          company_strict: true
+                        })
+                      "
+                      (click)="deleteItem(template)"
+                      class="btn btn-danger btn-icon mx-1"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Delete"
+                      id="deleteButton-`+ meta.row + `"
+                    >
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-trash"></i>
+                      </div>
+                    </button>
+                  </td>
+
+                  <td
+                    [attr.rowspan]="template.template_data.length"
+                    *ngIf="ri == 0"
+                  >
+                    {{ template.template_name }}
+                  </td>
+                  <td>
+                    {{
+                      item.effective_form
+                        ? (item.effective_form | date : "mediumDate")
+                        : "N/A"
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      item.leave_type
+                        ? getLeaveTypeDetails(item.leave_type, "description")
+                        : "N/A"
+                    }}
+                  </td>
+                  <td>{{ item.leave_tenure ?? "N/A" }}</td>
+                  <td>{{ item.no_of_day ?? "N/A" }}</td>
+                  <td class="text-capitalize">
+                    {{ item.carry_forward ?? "N/A" }}
+                  </td>
+                  <td>{{ item.carry_forward_years ?? "N/A" }}</td>
+                  <td class="text-capitalize">
+                    {{ item.restriction_on_availment ?? "N/A" }}
+                  </td>
+                  <td>{{ item.restriction_tenure ?? "N/A" }}</td>
+                  <td>{{ item.restriction_days ?? "N/A" }}</td>
+                  <td class="text-capitalize">{{ item.cashable ?? "N/A" }}</td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="templateRows.length == 0">
+                <td colspan="13" class="text-center">No records found</td>
+              </tr>
+            </tbody>
+
+            <!-- <tbody>
+                            <tr *ngFor="let template of templateRows; let i = index">
+                                <td>{{i+1}}</td>
+                                <td>
+                                    <button (click)="getEdit(template)" class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Edit" id="editButton-` + meta.row + `">
+                                      <div style="width:25px; height:25px;"><i class="fa fa-pen"></i></div>
+                                  </button>
+                                    <button (click)="deleteItem(template)" class="btn btn-danger btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Delete" id="deleteButton-`+ meta.row + `">
+                                      <div style="width:25px; height:25px;"><i class="fa fa-trash"></i></div>
+                                  </button>
+                                </td>
+                                <td colspan="10" class="p-0">
+                                    <table class="w-100">
+                                        <tr *ngFor="let item of template.template_data">
+                                            <td>{{item.effective_form ?? "N/A"}}</td>
+                                            <td>{{item.leave_type ? getLeaveTypeDetails(item.leave_type, 'description') : "N/A"}}</td>
+                                            <td>{{item.leave_tenure ?? "N/A"}}</td>
+                                            <td>{{item.no_of_day ?? "N/A"}}</td>
+                                            <td class="text-capitalize">{{item.carry_forward ?? "N/A"}}</td>
+                                            <td>{{item.carry_forward_years ?? "N/A"}}</td>
+                                            <td class="text-capitalize">{{item.restriction_on_availment ?? "N/A"}}</td>
+                                            <td>{{item.restriction_tenure ?? "N/A"}}</td>
+                                            <td>{{item.restriction_days ?? "N/A"}}</td>
+                                            <td class="text-capitalize">{{item.cashable ?? "N/A"}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr *ngIf="templateRows.length == 0">
+                                <td colspan="13" class="text-center">No records found</td>
+                            </tr>
+                        </tbody> -->
+          </table>
+        </div>
+      </div>
+
+      <app-custom-pagination
+        [rows]="templateRows"
+        [paginationOptions]="paginationOptions"
+        (onPageClicked)="fetch($event)"
+      ></app-custom-pagination>
+    </div>
+  </div>
+
+  <button
+    id="librarymmodalbutton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#librarymodal"
+  ></button>
+  <div id="librarymodal" tabindex="-1" class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            View Template Library
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pd-20">
+          <div class="table-responsive">
+            <table class="table display responsive nowrap wd-100p c-table">
+              <thead>
+                <tr>
+                  <th>SL</th>
+                  <th>Action</th>
+                  <th>Template Name</th>
+                  <th>Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let temp of leaveTemplatesLibraryList; let i = index"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <button
+                      (click)="cloneTemp(temp)"
+                      class="btn btn-primary btn-icon mx-1"
+                    >
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-copy"></i>
+                      </div>
+                    </button>
+                  </td>
+                  <td>{{ temp?.template_name }}</td>
+                  <td>{{ temp?.created_at | date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn text-uppercase btn-secondary tx-size-xs"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

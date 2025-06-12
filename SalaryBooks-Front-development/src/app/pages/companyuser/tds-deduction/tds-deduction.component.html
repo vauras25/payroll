@@ -1,0 +1,252 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item"
+               routerLink="/company">Dasboard</a>
+            <a class="breadcrumb-item"
+               href="javascript:void(0)">Approval</a>
+
+            <a class="breadcrumb-item active">TDS Deduction</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-wand"></i>
+        <div>
+            <h4>TDS Deduction</h4>
+
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+
+            <br>
+            <companyuser-app-table-filter [searchKeyFilter]="true"
+                                          [dateFromFilter]="true"
+                                          [dateToFilter]="true"
+                                          [is_approval_status]="true">
+            </companyuser-app-table-filter>
+
+            <div class="table-wrapper mt-5">
+                <div class="table-responsive">
+                    <!-- <app-custom-tableoption
+                    [searchable]="false"
+                    (onFilterChanged)="paginationOptions.limit = +$event?.length ;fetch()"
+                  > -->
+                    <app-custom-tableoption [searchable]="false">
+                    </app-custom-tableoption>
+                    <table class="table nowrap wd-100p table-bordered"
+                           style="border: 1px solid #eee;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">SL</th>
+                                <th class="text-center">Action</th>
+                                <th class="">Emp Code</th>
+                                <th class="">Emp Name</th>
+                                <th class="text-center">Head</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Upload</th>
+                                <th class="text-center">Approave</th>
+                                <!-- <th class="text-center">Defined Amount</th> -->
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- <tr *ngFor="let employee of employees; let i = index"> -->
+                            <tr>
+                                <td class="text-center">aman</td>
+                                <td class="text-center">
+                                    <button (click)="initEmployeeExpenseAdd()"
+                                            class="btn btn-primary btn-sm mx-1 my-1">
+                                        <i class="fa fa-plus"></i> Add New
+                                    </button>
+
+                                    <button class="btn btn-info btn-sm mx-1 my-1">
+                                        <i class="fa fa-edit"></i> Update
+                                    </button>
+                                </td>
+                                <td></td>
+                                <td>aman akshat abir rahul sandeep</td>
+                                <td class="text-center">
+                                    <div class="input-group mt-2">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Enter Head">
+
+                                    </div>
+                                </td>
+                                <td class="text-center ">
+                                    <div class="input-group mt-2">
+                                        <input type="number"
+                                               class="form-control"
+                                               placeholder="Enter Amount">
+
+                                    </div>
+
+                                </td>
+                                <td class="text-center">
+                                    <button (click)="upload()"
+                                            class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa fa-upload"></i>
+                                    </button>
+                                    <button (click)="viewUploadedPDF()"
+                                            class="btn btn-sm"
+                                            title="View PDF">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                     <button class="btn btn-info btn-sm mx-1 my-1">
+                                        <i class="fa fa-edit"></i> Approave
+                                    </button>
+                                </td>
+                            </tr>
+
+
+                            <!-- <tr *ngIf="employees.length == 0">
+                                <td class="text-center" colspan="100%">No records found</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="paginationOptions.page = $event; fetch()"></app-custom-pagination> -->
+
+            <button id="addEmployeeExpenseModalButton"
+                    [hidden]="true"
+                    data-toggle="modal"
+                    data-target="#addEmployeeExpenseModal"></button>
+            <div id="addEmployeeExpenseModal"
+                 tabindex='-1'
+                 class="modal fade">
+                <div class="modal-dialog modal-dialog-centered modal-md"
+                     role="document">
+                    <div class="modal-content bd-0 tx-14">
+                        <div class="modal-header pd-y-20 pd-x-25">
+                            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Reimbursement </h6>
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="addEmployeeReimbursementForm">
+                            <div class="modal-body pd-25">
+                                <div class="row">
+                                    <!-- <div class="col-lg-12 mb-3">
+                                <ngx-select-dropdown formControlName="head_id" [options]="earningHeadsMaster.concat(employeeEarningHeadMaster)" class="form-control p-1" [config]="{search:true, placeholder: 'Select One', displayKey: 'head_name'}"></ngx-select-dropdown>
+                            </div> -->
+
+                                    <div class="col-lg-12 mb-3">
+                                        <input class="form-control"
+                                               type="text"
+                                               placeholder="Enter Head"
+                                               formControlName="head_id">
+                                    </div>
+                                    <div class="col-lg-12 mb-3">
+                                        <input class="form-control"
+                                               type="number"
+                                               placeholder="Enter Amount"
+                                               formControlName="amount">
+                                    </div>
+
+                                    <div class="col-lg-12 mb-3 d-flex align-items-center">
+                                        <!-- Upload Icon (using Font Awesome) -->
+                                        <label class="btn btn-outline-primary btn-sm mb-0 mr-2">
+                                            <i class="fa fa-upload"></i> Upload PDF
+                                            <input type="file"
+                                                   accept="application/pdf"
+                                                   (change)="onFileSelected($event)"
+                                                   hidden>
+                                        </label>
+
+                                        <!-- File name display -->
+                                        <span *ngIf="uploadedFileName">{{ uploadedFileName }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" modal-footer">
+                                <!-- <button type="button" [disabled]="!addEmployeeReimbursementForm.valid" (click)="addEmployeeReimbursement($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"> -->
+                                <button type="button">
+                                    <span>Add</span>
+                                </button>
+                                <!-- <button type="button" [disabled]="!addEmployeeReimbursementForm.valid" (click)="addEmployeeReimbursement($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                          <span>Update</span>
+                      </button> -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <button id="addEmployeeExpenseModalButton1"
+                    [hidden]="true"
+                    data-toggle="modal"
+                    data-target="#uploadModal"></button>
+            <div id="uploadModal"
+                 tabindex='-1'
+                 class="modal fade">
+                <div class="modal-dialog modal-dialog-centered modal-md"
+                     role="document">
+                    <div class="modal-content bd-0 tx-14">
+                        <div class="modal-header pd-y-20 pd-x-25">
+                            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Reimbursement </h6>
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="uploadform">
+                            <div class="modal-body pd-25">
+                                <div class="row">
+                                    <!-- <div class="col-lg-12 mb-3">
+                                <ngx-select-dropdown formControlName="head_id" [options]="earningHeadsMaster.concat(employeeEarningHeadMaster)" class="form-control p-1" [config]="{search:true, placeholder: 'Select One', displayKey: 'head_name'}"></ngx-select-dropdown>
+                            </div> -->
+
+
+
+                                    <div class="col-lg-12 mb-3 d-flex align-items-center">
+                                        <!-- Upload Icon (using Font Awesome) -->
+                                        <label class="btn btn-outline-primary btn-sm mb-0 mr-2">
+                                            <i class="fa fa-upload"></i> Upload PDF
+                                            <input type="file"
+                                                   accept="application/pdf"
+                                                   (change)="onFileSelected($event)"
+                                                   hidden>
+                                        </label>
+
+                                        <!-- File name display -->
+                                        <span *ngIf="uploadedFileName">{{ uploadedFileName }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" modal-footer">
+                                <!-- <button type="button" [disabled]="!addEmployeeReimbursementForm.valid" (click)="addEmployeeReimbursement($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"> -->
+                                <button type="button">
+                                    <span>Add</span>
+                                </button>
+                                <!-- <button type="button" [disabled]="!addEmployeeReimbursementForm.valid" (click)="addEmployeeReimbursement($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                          <span>Update</span>
+                      </button> -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>

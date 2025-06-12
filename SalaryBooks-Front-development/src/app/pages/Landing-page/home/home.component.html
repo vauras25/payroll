@@ -1,0 +1,302 @@
+<div class="bg-white">
+  <section class="h-bg">
+    <div class="container">
+      <div class="banner-text">
+        <h1>{{ homePageData?.page_title }}</h1>
+        <p>{{ homePageData?.page_content }}</p>
+      </div>
+      <div class="banner-form d-flex">
+        <input
+          type="text"
+          placeholder="Enter your email address"
+          class="b-input"
+        />
+        <input
+          type="submit"
+          value="Get Started"
+          name="Get Started"
+          class="b-submit"
+        />
+      </div>
+      <div class="b-img">
+        <div class="l-wrap">
+          <img src="assets/img/landing-page/c-img.png" alt="" />
+          <div class="l-inner">
+            <img
+            #img
+              style="width: 100%; height: 100%; object-fit: cover"
+              (error)="img.src = 'assets/img/landing-page/laptop-inner.jpg'"
+              [src]="
+                Global.BACKEND_URL + '/' + homePageData?.page_img ||
+                'assets/img/landing-page/laptop-inner.jpg'
+              "
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="brand-area bg-white">
+    <div class="container">
+      <ul style="overflow-x: auto" class="d-flex align-items-center">
+        <ng-container *ngFor="let data of homePostData">
+          <li class="mx-2" *ngIf="data.category === 'brands'">
+            <img
+              width="100px"
+              [src]="Global.BACKEND_URL + '/' + data?.post_img"
+              alt=""
+            />
+          </li>
+        </ng-container>
+        <!-- <li><img src="assets/img/landing-page/brand-2.png" alt="" alt=""/></li>
+            <li><img src="assets/img/landing-page/brand-3.png" alt="" alt=""/></li>
+            <li><img src="assets/img/landing-page/brand-4.png" alt="" alt=""/></li>
+            <li><img src="assets/img/landing-page/brand-5.png" alt="" alt=""/></li>
+            <li><img src="assets/img/landing-page/brand-6.png" alt="" alt=""/></li> -->
+      </ul>
+    </div>
+  </section>
+
+  <section class="review-area bg-white">
+    <div class="container">
+      <div class="review-border">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h3>More than 13,000 teams <br />use Payroll platform</h3>
+            <p>
+              Lorem ipsum dolor sit amet, consetetur sadipscing diam nonumy
+              eirmod
+            </p>
+          </div>
+          <div class="col-lg-3">
+            <h2>4.8</h2>
+            <div class="review-star">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+            </div>
+            <p>Google</p>
+          </div>
+          <div class="col-lg-3">
+            <h2>4.8</h2>
+            <div class="review-star">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+            </div>
+            <p>Linkedin</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-area bg-white">
+    <div class="container">
+      <div class="features-title">
+        <span class="badge">FEATURES</span>
+        <h2>Explore our amazing features</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+          sed diam
+        </p>
+      </div>
+
+      <div
+        *ngFor="let data of homePostData; let i = index"
+        class="row align-items-center feature-list"
+      >
+        <ng-container *ngIf="data.category === 'features'">
+          <div
+            class="col-lg-6"
+            [ngClass]="{ 'order-r': i % 2 === 0, 'order-l': i % 2 !== 0 }"
+          >
+            <img
+              [src]="
+                Global.BACKEND_URL + '/' + data?.post_img ||
+                'assets/img/landing-page/image-1.png'
+              "
+              alt=""
+            />
+          </div>
+          <div
+            class="col-lg-6"
+            [ngClass]="{ 'order-l': i % 2 === 0, 'order-r': i % 2 !== 0 }"
+            [innerHTML]="data?.content"
+          >
+            <!-- <div class="features-content">
+                  <h4>We make it <br/>effortless to track all user analytics</h4>
+                  <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                      no sea takimata sanctus est. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
+                  <hr>
+                  <ul>
+                      <li>Organize your data</li>
+                      <li>Work with your team</li>
+                      <li>Business analytics</li>
+                      <li>Always in sync</li>
+                      <li>Embedded analytics</li>
+                  </ul>
+              </div> -->
+          </div>
+        </ng-container>
+      </div>
+      <!-- <div class="row align-items-center feature-list">
+        <div class="col-lg-6 order-l">
+          <img src="assets/img/landing-page/image-2.png" alt="" />
+        </div>
+        <div class="col-lg-6 order-r">
+          <div class="features-content">
+            <h4>
+              Optimize your Time<br />
+              & Attendance in sync
+            </h4>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet
+              clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum
+              dolor sit amet, consetetur sadipscing elitr.
+            </p>
+            <hr />
+            <ul>
+              <li>Track attendance with ease</li>
+              <li>Schedule shifts effortlessly</li>
+              <li>Track days off efficiently</li>
+              <li>Always in sync</li>
+              <li>Convert time to timesheets</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row align-items-center feature-list">
+        <div class="col-lg-6 order-l">
+          <img src="assets/img/landing-page/image-3.png" alt="" />
+        </div>
+        <div class="col-lg-6 order-r">
+          <div class="features-content">
+            <h4>
+              Performance<br />
+              management at its best
+            </h4>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet
+              clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum
+              dolor sit amet, consetetur sadipscing elitr.
+            </p>
+            <hr />
+            <ul>
+              <li>Continuous reviews</li>
+              <li>Performance appraisals</li>
+              <li>360-degree feedback</li>
+              <li>Identify performance gaps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row align-items-center feature-list">
+        <div class="col-lg-6 order-l">
+          <img src="assets/img/landing-page/image-4.png" alt="" />
+        </div>
+        <div class="col-lg-6 order-r">
+          <div class="features-content">
+            <h4>Reimagine learning and development</h4>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet
+              clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum
+              dolor sit amet, consetetur sadipscing elitr.
+            </p>
+            <hr />
+            <ul>
+              <li>Blended learning</li>
+              <li>Centralized course management</li>
+              <li>Quiz and assessments</li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </section>
+
+  <section class="testimonials-area bg-white">
+    <div class="container">
+      <div class="row testimonials-title align-items-center">
+        <div class="col-lg-6">
+          <h2>We love our customers and they love us too</h2>
+        </div>
+        <div class="col-lg-6">
+          <a routerLink="/testimonials" class="btn">See All</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <ng-container *ngFor="let data of homePostData">
+          <div *ngIf="data?.category === 'testimonial'" class="col-lg-4">
+            <div class="client-box">
+              <div class="c-content" [innerHTML]="data?.content">
+                <!-- {{data?.content}} -->
+                <!-- Really good. Payroll has completely surpassed our expectations.
+                I'd be lost without Payroll. Payroll was worth a fortune to my
+                company. -->
+              </div>
+              <div class="t-client d-flex align-items-center">
+                <img src="assets/img/landing-page/client.png" alt="" />
+                <div class="c-text">
+                  <h5>Daisy Phelps</h5>
+                  <p>Lorem Ipsum, Designation</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <!-- <div class="col-lg-4">
+          <div class="client-box">
+            <div class="c-content">
+              Really good. Payroll has completely surpassed our expectations.
+              I'd be lost without Payroll. Payroll was worth a fortune to my
+              company.
+            </div>
+            <div class="t-client d-flex align-items-center">
+              <img src="assets/img/landing-page/client.png" alt="" />
+              <div class="c-text">
+                <h5>Daisy Phelps</h5>
+                <p>Lorem Ipsum, Designation</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="client-box">
+            <div class="c-content">
+              Really good. Payroll has completely surpassed our expectations.
+              I'd be lost without Payroll. Payroll was worth a fortune to my
+              company.
+            </div>
+            <div class="t-client d-flex align-items-center">
+              <img src="assets/img/landing-page/client.png" alt="" />
+              <div class="c-text">
+                <h5>Daisy Phelps</h5>
+                <p>Lorem Ipsum, Designation</p>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <section class="call-area">
+    <div class="container">
+      <h3>Get started with Payroll today!</h3>
+      <p>
+        Simplify your HR operations, retain talent, and build a high-performing
+        workforce while putting employee experience first.
+      </p>
+      <a href="javascript:void(0)" class="btn">Get Started Now</a>
+      <a href="javascript:void(0)" class="btn">Request Registration</a>
+    </div>
+  </section>
+</div>

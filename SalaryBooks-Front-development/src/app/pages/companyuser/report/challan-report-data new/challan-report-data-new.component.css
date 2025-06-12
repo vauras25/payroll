@@ -1,0 +1,65 @@
+/* .btn {
+  min-width: 120px;
+} */
+
+thead tr{
+  font-size: 12px !important;
+  background-color: #EDF2F2;
+  border-bottom: 1px solid grey;
+}
+
+tbody tr{
+  background-color: #fff;
+  color: #000;
+  font-size: 12px;
+}
+tbody tr:nth-child(even){
+  background-color: #f5f5f5;
+}
+td, th{
+  border: none;
+  padding: 13px !important;
+  border-left:1px solid #dee2e6;
+  border-collapse: collapse;
+}
+td:first-child{
+  border: none;
+}
+th{
+  color: #000;
+}
+
+.actionBtn{
+  border: 1px solid #E3E3EE;
+  border-radius: 4px;
+  background: #F6F6F9;
+  padding: 10px;
+}
+
+tr:last-child{
+  border-bottom:1px solid #dee2e6;
+}
+
+
+.switch{
+  border: 1px solid #dcdcdc;
+  padding: 8px 12px;
+  background: #fff;
+}
+.active-tab{
+  background: #F8F9F9 ;
+  color: #000;
+}
+
+input[type=radio]{
+  accent-color: #17A3B4;
+}
+
+.btn-custom{
+  background-color: #F6F6F9 ;
+  border: 1px solid #868994;
+}
+
+input[type=checkbox]{
+  accent-color: #17a3ba;
+}

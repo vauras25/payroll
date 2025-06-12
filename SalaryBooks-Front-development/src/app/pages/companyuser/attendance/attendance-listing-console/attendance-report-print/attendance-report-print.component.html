@@ -1,0 +1,614 @@
+<div class="mx-4">
+  <div class="table-responsive">
+    <div class="table-wrapper mt-3">
+      <!-- <app-form-d *ngIf="newreport_type=='form_d'" [employeeListFilter]="employeeListFilter"></app-form-d> -->
+      <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='form_d'">
+        <thead>
+          <tr >
+            <th class="text-center" [attr.colspan]="employeeListFilter?.month?.days + 5">FORM D</th>
+          </tr>
+          <tr>
+            <th class="text-center" [attr.colspan]="employeeListFilter?.month?.days + 5">FORMAT OF ATTENDANCE REGISTER</th>
+          </tr>
+         <tr >       
+          <th  rowspan="2">SL No</th>
+           <th  rowspan="2">Employee Code</th>
+           <th  rowspan="2">Name</th>
+           <th  rowspan="2">Date of Joining</th>
+           <th  [attr.colspan]="employeeListFilter?.month?.days" class="text-center">
+             {{ employeeListFilter.month.description }}-{{
+               employeeListFilter?.wage_year_from
+             }}
+           </th>
+           <th  rowspan="2">Summary No. Of Days</th>
+         </tr>
+         <tr >
+           <th  *ngFor="let day of days">{{ day }}</th>
+         </tr>
+        </thead>
+         <tbody>
+           
+           <tr
+            
+             *ngFor="let item of empReportData; let i = index"
+           >
+            
+             <td >
+              
+                {{i+1}}
+              
+             </td>
+             <td >{{ item?.emp_id }}</td>
+             <td class="s9">{{ item?.emp_first_name }} {{ item?.emp_last_name }}</td>
+             <td >
+               {{
+                 item?.employee_details[0]?.employment_hr_details?.date_of_join
+                   | date : "MM/dd/YYYY"
+               }}
+             </td>
+             <td  *ngFor="let subItem of item?.attendance">
+               {{ subItem?.attendance_stat }}
+             </td>
+     
+             <td ></td>
+           </tr>
+           <tr *ngIf="empReportData.length <= 0">
+             <td [attr.colspan]="days.length + 9" style="text-align: center">
+               No Record(s) Found
+             </td>
+           </tr>
+         </tbody>
+       </table>
+        
+       <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='monthly_late_report'">
+        <thead>
+         
+         <tr>
+              
+           <th>
+            SL No.
+           
+          
+          </th>
+           <th>Emp ID</th>
+           <th>Name</th>
+           <th>Department</th>
+           <th>Designation</th>
+           <th>Branch</th>
+           <th>Client</th>
+           <th>HOD</th>
+           <th  *ngFor="let item of days">Dt {{item}}</th>
+  
+           <th >No Of Instances</th>
+           <th >Total Late Hours</th>
+           <th >LOP Deducted</th>
+        </tr>
+        </thead>
+        <tbody>
+  
+           <tr  *ngFor="let item of empReportData;let i=index">
+              
+              <td>{{i+1}}</td>
+              <td>{{item?.emp_id}}</td>
+              <td>{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+              <td>{{item?.department[0]?.department_name}}</td>
+              <td>{{item?.designation[0]?.designation_name}}</td>
+              <td>{{item?.branch[0]?.name}}</td>
+              <td>{{item?.client[0]?.client_code}}</td>
+              <td>{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+              <td  *ngFor="let subItem of item.attendance">
+                {{subItem?.attendance_stat}}
+              </td>
+  
+              <td></td>
+              <td>{{item?.attendance_summ[0]?.total_late}}</td>
+              <td>{{item?.attendance_summ[0]?.total_lop}}</td>
+           </tr>
+  
+           <tr *ngIf="empReportData.length<=0">
+             <td  [attr.colspan]="days.length+11" style="text-align:center;">No Record(s) Found </td>
+           </tr>
+  
+  
+        </tbody>
+       </table>
+       <table class="table display responsive nowrap wd-100p employee-table"  *ngIf="newreport_type=='late_summary_report'">
+        <thead>
+           <tr >
+              
+              <th  rowspan="2">
+                SL No.
+              
+              </th>
+              <th  rowspan="2">Emp ID</th>
+              <th  rowspan="2">Name</th>
+              <th  rowspan="2">Department</th>
+              <th  rowspan="2">Designation</th>
+              <th  rowspan="2">Branch</th>
+              <th  rowspan="2">Client</th>
+              <th  rowspan="2">HOD</th>
+              <th  colspan="2" *ngFor="let item of days" class="text-center">{{item | date:'MM-YYYY'}}</th>
+              <th  colspan="2">Total</th>
+              
+           </tr>
+           <tr >
+              
+              <ng-container *ngFor="let item of days">
+              <th class="text-center">
+                 <div class="softmerge-inner" style="width:57px;left:-1px">Instances</div>
+              </th>
+              <th class="text-center">Hours</th>
+             </ng-container>
+             <th class="text-center">
+                <div class="softmerge-inner" style="width:57px;left:-1px">Instances</div>
+             </th>
+             <th class="text-center">Hours</th>
+  
+           </tr>
+        </thead>
+        <tbody>
+  
+           
+           <tr  *ngFor="let item of empReportData; let i=index">
+              
+              <td >
+               {{i+1}}
+              </td>
+              <td >{{item?.emp_id}}</td>
+              <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+              <td >{{item?.department[0]?.department_name}}</td>
+              <td >{{item?.designation[0]?.designation_name}}</td>
+              <td >{{item?.branch[0]?.name}}</td>
+              <td >{{item?.client[0]?.client_code}}</td>
+              <td >{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+              <ng-container *ngFor="let subItem of item?.attendance_summ">
+              <td >{{subItem?.total_instances}}</td>
+              <td >{{subItem?.total_late_hour!='N/A'?(subItem?.total_late_hour | number : '1.2-2'):'N/A'}}</td>
+  
+              </ng-container>
+              <td >0</td>
+              <td >{{item?.rowTotal!='N/A'?(item?.rowTotal | number : '1.2-2'):'N/A'}}</td>
+           </tr>
+           <tr *ngIf="empReportData.length<=0">
+             <td  [attr.colspan]="(3+(days.length*2))" style="text-align: center;">No Record(s) Found</td>
+           </tr>
+  
+        </tbody>
+       </table>   
+      <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='month_wise_summary'">
+      <thead>
+        <tr >
+           <th colspan="8"></th>
+           <th colspan="10" *ngFor="let item of days" class="text-center">Wage Month {{item | date:'MM'}}</th>
+           <th colspan="12" class="text-center">Total</th>
+        </tr>
+        <tr >
+  
+           <th >
+            SL No.
+           </th>
+           <th >Emp ID</th>
+           <th >Name</th>
+           <th >Client</th>
+           <th >
+              <div class="softmerge-inner">Branch</div>
+           </th>
+           <th >
+              <div class="softmerge-inner">Department </div>
+           </th>
+           <th >
+              <div class="softmerge-inner">Designation</div>
+           </th>
+           <th >HOD</th>
+           <ng-container *ngFor="let item of days">
+           <th >
+              <div class="softmerge-inner">Month Days</div>
+           </th>
+           <th >
+              <div class="softmerge-inner">Persent Days</div>
+           </th>
+           <th >
+              <div class="softmerge-inner">Pay days</div>
+           </th>
+           <th>WO</th>
+           <th >H</th>
+           <th>SL</th>
+           <th >PL</th>
+           <th >EL</th>
+           <th>OT</th>
+           <th>LOP etc</th>
+          </ng-container>
+          <th >
+             <div class="softmerge-inner" >Month Days</div>
+          </th>
+          <th >
+             <div class="softmerge-inner" >Persent Days</div>
+          </th>
+          <th >
+             <div class="softmerge-inner" >Pay days</div>
+          </th>
+          <th  >WO</th>
+          <th  >H</th>
+          <th  >SL</th>
+          <th  >PL</th>
+          <th  >EL</th>
+          <th  >OT</th>
+          <th  >LOP etc</th>
+        </tr>
+      </thead>
+      <tbody>
+  
+        
+         <tr style="height: 18px" *ngFor="let item of empReportData;let i=index">
+  
+            <td>
+             {{i+1}}
+            </td>
+            <td>{{item?.emp_id}}</td>
+            <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+            <td>{{item?.client[0]?.client_code}}</td>
+            <td>{{item?.branch[0]?.name}}</td>
+            <td>{{item?.department[0]?.department_name}}</td>
+            <td>{{item?.designation[0]?.designation_name}}</td>
+            <td>{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+            <ng-container *ngFor="let subItem of item?.attendance_summ">
+  
+            <td>{{subItem.total_days}}</td>
+            <td>{{subItem.total_present}}</td>
+            <td>{{subItem.paydays}}</td>
+            <td>{{subItem.total_wo}}</td>
+            <td>{{subItem.holiday}}</td>
+            <td>{{subItem.total_SKL}}</td>
+            <td>{{subItem.total_PVL}}</td>
+            <td>{{subItem.total_ERL}}</td>
+            <td>{{subItem.total_overtime!='N/A'?(subItem.total_overtime |  number:'1.2-2'):''}}</td>
+            <td>{{subItem.total_lop}}</td>
+            </ng-container>
+            <td>{{item?.summary_days}}</td>
+  
+            <td>{{item?.summary_present}}</td>
+  
+            <td>{{item?.summary_paydays}}</td>
+  
+            <td>{{item?.summary_wo}}</td>
+  
+            <td>{{item?.summary_ho}}</td>
+  
+            <td>{{item?.summary_skl}}</td>
+  
+            <td>{{item?.summary_pvl}}</td>
+  
+            <td>{{item?.summary_erl}}</td>
+  
+            <td>{{item?.summary_ot | number:'1.2-2'}}</td>
+  
+            <td>{{item?.summary_lop}}</td>
+         </tr>
+  
+      </tbody>
+      </table> 
+      <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='summary'">
+        <thead>
+           <tr >
+  
+              <th  colspan="8">Attendance Summary for the period</th>
+              <th >
+                 <div class="softmerge-inner" style="width:72px;left:-1px">Month Days</div>
+              </th>
+              <th >
+                 <div class="softmerge-inner" style="width:77px;left:-1px">Persent Days</div>
+              </th>
+              <th >
+                 <div class="softmerge-inner" style="width:52px;left:-1px">Pay days</div>
+              </th>
+              <th >WO</th>
+              <th >H</th>
+              <th >SL</th>
+              <th >PL</th>
+              <th >EL</th>
+              <th >OT</th>
+              <th >LOP etc</th>
+  
+           </tr>
+           <tr >
+  
+              <th >
+                SL No.
+              </th>
+              <th >Emp ID</th>
+              <th >Name</th>
+              <th >Client</th>
+              <th >
+                 <div class="softmerge-inner" >Branch</div>
+              </th>
+              <th >
+                 <div class="softmerge-inner" >Department </div>
+              </th>
+              <th >
+                 <div class="softmerge-inner" >Designation</div>
+              </th>
+              <th >HOD</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+  
+  
+           </tr>
+        </thead>
+        <tbody>
+  
+           <tr  *ngFor="let item of empReportData;let i=index">
+  
+             <td >
+             {{i+1}}
+             </td>
+             <td >{{item?.emp_id}}</td>
+             <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+             <td >{{item?.client[0]?.client_code}}</td>
+             <td >
+                <div class="softmerge-inner" style="width:42px;left:-1px">{{item?.branch[0]?.branch_name}}</div>
+             </td>
+             <td >
+                <div class="softmerge-inner" style="width:76px;left:-1px">{{item?.department[0]?.department_name}} </div>
+             </td>
+             <td >
+                <div class="softmerge-inner" style="width:70px;left:-1px">{{item?.designation[0]?.designation_name}}</div>
+             </td>
+             <td >{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+             <td>{{item?.summary_days | number}}</td>
+             <td>{{item?.summary_present | number}}</td>
+             <td>{{item?.summary_paydays | number}}</td>
+             <td>{{item?.summary_wo | number}}</td>
+             <td>{{item?.summary_ho | number}}</td>
+             <td>{{item?.summary_skl | number}}</td>
+             <td>{{item?.summary_pvl | number}}</td>
+             <td>{{item?.summary_erl | number}}</td>
+             <td>{{item?.summary_ot | number:'1.2-2'}}</td>
+             <td>{{item?.summary_lop | number}}</td>
+  
+  
+  
+          </tr>
+          <tr *ngIf="empReportData.length<=0">
+             <td colspan="18">No Record(s) Found</td>
+          </tr>
+        </tbody>
+     </table>
+     <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='attendance_register' && attendance_type=='halfday'">
+      <thead>
+        <tr >
+  
+         
+          <th [attr.colspan]="days.length+3" class="text-center">{{start_date | date:"MMM"}}/{{start_date | date:"YY"}}</th>
+          
+          <th colspan="5" class="text-center">
+            <div class="softmerge-inner" >Month Days</div>
+          </th>
+          
+          <th  colspan="5" class="text-center">{{days.length}}</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+   
+        <tr >
+  
+          <td >
+            SL No.
+          
+          </td>
+          <td >Emp. ID</td>
+          <td >Name</td>
+          <td  *ngFor="let item of days;let i=index">{{i+1}}</td>
+  
+          <td >Present</td>
+          <td >W/Off &amp; H/Off</td>
+          <td >PL</td>
+          <td >Absent/LWP</td>
+          <td >Total</td>
+          <td >Total Payable Days</td>
+          <td >L E</td>
+          <td >LATE</td>
+          <td >Remarks Ded. for {{current_date | date:'MMM'}} {{current_date | date:'YY'}}</td>
+        </tr>
+  
+        <tr style="height: 19px" *ngFor="let item of empReportData;let i=index">
+  
+          <td class="s8">
+            {{i+1}}
+          </td>
+          <td class="s9">{{item?.emp_id}}</td>
+          <td class="s9">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+          <td class="{{(subItem?.first_half=='WO' || subItem?.second_half=='WO')?'s11':'s10'}}" *ngFor="let subItem of item?.attendance">{{subItem?.first_half}} - {{subItem?.second_half}}</td>
+  
+          <td class="s12">{{item?.total_attendance | number:'1.2'}} </td>
+          <td class="s12">{{item?.total_wo | number:'1.2'}} </td>
+          <td class="s12">{{item?.total_pl | number:'1.2'}} </td>
+          <td class="s12">{{item?.total_absent | number:'1.2'}} </td>
+          <td class="s12">{{days.length | number:'1.2'}} </td>
+          <td class="s12">31.0 </td>
+          <td class="s12">0.0 </td>
+          <td class="s12">{{item?.total_late | number:'1.2'}} </td>
+          <td class="s10"></td>
+        </tr>
+        <tr *ngIf="empReportData.length<=0">
+          <td [attr.colspan]="days.length+13">No Record(s) Found</td>
+        </tr>
+  
+      </tbody>
+    </table> 
+    <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='attendance_register' && attendance_type=='wholeday'">
+      <thead>
+        <tr >
+  
+        
+          <th [attr.colspan]="days.length+3" class="text-center">{{start_date | date:'MMM'}}/{{start_date | date:'YY'}}</th>
+          
+          <th class="s2 softmerge" colspan="5" class="text-center">
+            <div class="softmerge-inner" style="width:94px;left:-1px">Month Days</div>
+          </th>
+          
+          <th colspan="5" class="text-center">{{days.length}}</th>
+       
+        </tr>
+        <tr >
+  
+          <th >
+            SL No.
+           </th>
+          <th >Emp. ID</th>
+          <th >Name</th>
+          <th  *ngFor="let item of days;let i=index;">{{i+1}}</th>
+  
+          <th >Present</th>
+          <th >W/Off &amp; H/Off</th>
+          <th >PL</th>
+          <th >Absent/LWP</th>
+          <th >Total</th>
+          <th >Total Payable Days</th>
+          <th >L E</th>
+          <th >LATE</th>
+          <th >Remarks Ded. for {{current_date | date:'MMM'}} {{current_date | date:'YY'}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+  
+        <tr  *ngFor="let item of empReportData;let i=index">
+  
+          <td class="s8">
+            {{i+1}}
+          </td>
+          <td >{{item?.emp_id}}</td>
+          <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+          <td class="{{subItem?.attendance_stat=='WO'?'s11':'s10'}}" *ngFor="let subItem of item?.attendance">{{subItem?.attendance_stat}}</td>
+  
+          <td >{{item?.total_attendance | number:'1.2'}} </td>
+          <td >{{item?.total_wo | number:'1.2'}} </td>
+          <td >{{item?.total_pl | number:'1.2'}} </td>
+          <td >{{item?.total_absent | number:'1.2'}} </td>
+          <td >{{days.length | number:'1.2'}} </td>
+          <td >31.0 </td>
+          <td >0.0 </td>
+          <td >{{item?.total_late | number:'1.2'}} </td>
+          <td class="s10"></td>
+        </tr>
+        <tr *ngIf="empReportData.length<=0">
+          <td [attr.colspan]="days.length+13">No Record(s) Found</td>
+        </tr>
+  
+      </tbody>
+    </table>
+    <table class="table display responsive nowrap wd-100p employee-table" *ngIf="newreport_type=='attendance_register' && attendance_type=='time'">
+      <thead>
+        <tr >
+  
+         
+          <th class="s0">Date Range</th>
+          <th class="freezebar-cell"></th>
+          <th class="s1">From</th>
+          <th class="s1"></th>
+          <th class="s1">To</th>
+          
+        </tr>
+        <tr >
+  
+        
+          <th class="s2" colspan="2">{{start_date | date:'MM/dd/YYYY'}}</th>
+          <th class="s2" colspan="2">{{end_date | date:'MM/dd/YYYY'}}</th>
+         
+        </tr>
+        <tr>
+  
+          <th class="s2" colspan="5"></th>
+          <th class="text-center" colspan="2" *ngFor="let item of days">{{item | date:'dd/MM'}}</th>
+          <th colspan="7" class="text-center">Total</th>
+          
+        </tr>
+      </thead>
+      
+      <tr >
+  
+        <th class="s5">
+          SL No.
+        </th>
+        <th class="s5">Emp. ID</th>
+        <th class="s5">Name</th>
+        <th class="freezebar-cell"></th>
+        <th class="s5">Shift</th>
+        <th class="s5">In Time</th>
+        <th class="s5">Out Time</th>
+        <ng-container *ngFor="let item of days">
+          <th class="s5">Actual In Time</th>
+          <th class="s5">Actual Out Time</th>
+        </ng-container>
+  
+  
+        <th class="s5">Total Working Hours</th>
+        <th class="s5">Extra Working Hours</th>
+        <th class="s5">Total Present</th>
+        <th class="s5">Total Absent</th>
+        <th class="s5" style="border-right: 1px SOLID #000000;">Total WO/HO</th>
+      </tr>
+      <tbody>
+  
+        
+        <tr style="height: 19px" *ngFor="let item of empReportData;let i=index">
+  
+          <td class="s6">
+           {{i+1}}
+          </td>
+          <td class="s7">{{item?.emp_id}}</td>
+          <td class="s7">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+          <td class="freezebar-cell"></td>
+          <td class="s7">{{item?.shift_data?.shift_name}}</td>
+          <td class="s8">{{item?.shift_data?.shift1_start_time}}</td>
+          <td class="s8">{{item?.shift_data?.shift1_end_time}}</td>
+          <ng-container *ngFor="let subItem of item?.attendance">
+  
+          <td class="s8">{{subItem.login_time}}</td>
+          <td class="s8">{{subItem.logout_time}}</td>
+  
+        </ng-container>
+          <td class="s7">{{item?.attendance_summ[0]?.total_working_hours | number:'1.2-2'}}</td>
+          <td class="s7">{{item?.attendance_summ[0]?.total_overtime | number:'1.2-2'}}</td>
+          <td class="s9">{{item?.attendance_summ[0]?.total_present}}</td>
+          <td class="s6">{{item?.attendance_summ[0]?.total_absent}}</td>
+          <td class="s6">{{item?.attendance_summ[0]?.total_wo}}</td>
+      </tr>
+      <tr *ngIf="empReportData.length<=0">
+        <td [attr.colspan]="12+(days.length*2)" >No Recod(s) Found</td>
+      </tr>
+      </tbody>
+    </table>
+  
+    </div>
+    
+  
+  </div>
+  <div #btns *ngIf="empReportData.length ||  newreport_type" class="text-right py-3">
+    <a routerLink="/company/attendance-management/attendance-listing-console">
+      <button
+      (click)="closeWindow()"
+       class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+     >
+       Cancel
+     </button>
+    </a>
+   
+    <button
+  
+      (click)="printDoc(btns)"
+      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+    >
+      download
+    </button>
+  </div>
+</div>

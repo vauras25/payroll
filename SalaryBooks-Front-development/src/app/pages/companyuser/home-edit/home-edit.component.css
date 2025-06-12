@@ -1,0 +1,34 @@
+.image-button-container {
+    display: flex;
+    align-items: center; /* vertically align image and button */
+    gap: 20px; /* space between image and button */
+  }
+  
+  .side-button {
+    white-space: nowrap; /* keeps text on one line */
+  }
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .eye-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .dimmed {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-wrapper img {
+    transition: opacity 0.3s ease;
+  }
+      

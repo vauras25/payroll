@@ -1,0 +1,136 @@
+<subadmin-app-dashboard-header></subadmin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/sub-admin">Dashboard</a>
+            <a class="breadcrumb-item active">Client Package</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'client_package_master', 'add') || (this.AppComponent.checkModulePermission('subadmin', 'client_package_master', 'edit') && editActionId != '')">
+        <i class="icon icon ion-grid"></i>
+        <div>
+            <h4>Client Package</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="clientpackage-submit-section" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'client_package_master', 'add') || (this.AppComponent.checkModulePermission('subadmin', 'client_package_master', 'edit') && editActionId != '')">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add Client Package</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit Client Package</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="packageForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Client Package Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="package_name">
+                            <p class="error-element" *ngIf="packageForm.controls.package_name.hasError('required') && (packageForm.controls.package_name.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Gratuity Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="gratuity_rule" [options]="gratuityRulesMaster" class="form-control" [config]="{search:true, placeholder: 'Select Gratuity Rule'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="packageForm.controls.gratuity_rule.hasError('required') && (packageForm.controls.gratuity_rule.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            PF Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="pf_rule" [options]="pfRulesMaster" class="form-control" [config]="{search:true, placeholder: 'Select PF Rule'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="packageForm.controls.pf_rule.hasError('required') && (packageForm.controls.pf_rule.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            ESIC Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="esic_rule" [options]="esicRulesMaster" class="form-control" [config]="{search:true, placeholder: 'Select ESIC Rule'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="packageForm.controls.esic_rule.hasError('required') && (packageForm.controls.esic_rule.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <div class="card-columns column-count-4 mg-t-10">
+                                <div class="card shadow-base widget-11" *ngFor="let item of permissionMaster">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <label class="ckbox">
+                                                <input type="checkbox" (change)="permissionCheckboxChanged($event, 'selectpermission', item._id)" id="permission-{{item._id}}-select">
+                                                <span>{{item.name}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mg-b-0">
+                                            <li *ngFor="let permission of item.permission">
+                                                <label class="ckbox">
+                                                    <input type="checkbox" name="permission[{{item._id}}]" value="{{permission.key}}" (change)="permissionCheckboxChanged($event)">
+                                                    <span>{{permission.value}}</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <button type="submit" [disabled]="!packageForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="editActionId == ''; else editButtonSection">
+                            <span>Save</span>
+                        </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                <span>Cancel Editing</span>
+                            </button>
+                                <button type="submit" [disabled]="!packageForm.valid" (click)="update($event)" class="btn btn-info">
+                                <span>Update Package</span>
+                            </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'client_package_master', 'view')">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Client Package List</h6>
+            <div class="table-wrapper">
+                <!-- <div class="table-responsive"> -->
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">Sl No</th>
+                            <th class="">Package Name</th>
+                            <th class="">Created On</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+
+    <subadmin-app-dashboard-footer></subadmin-app-dashboard-footer>
+</div>

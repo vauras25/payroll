@@ -1,0 +1,249 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'mastersettings'}">Master</a>
+            <a class="breadcrumb-item active">Bank Payment</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-home"></i>
+        <div>
+            <h4>Bank Payment</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="letterwriting-submit-section">
+        <div *ngIf="Global.checkCompanyModulePermission({
+            company_module: 'master',
+            company_sub_module:'bank_payment',
+            company_sub_operation: ['add', 'edit'],
+            company_strict: true
+          })" class="br-section-wrapper">
+            <form [formGroup]="bankPaymentForm">
+                <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add Template</h6>
+                <ng-template #editHeader>
+                    <h6 class="br-section-label mb-3">Edit Template</h6>
+                </ng-template>
+
+                <div class="align-items-center justify-content-center bg-gray-100 bd pd-x-20">
+                    <div class="form-row pd-y-20 pb-1">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-sm-12 col-12 form-group">
+                                    <input type="text" formControlName="template_name" class="form-control" placeholder="Template Name">
+                                </div>
+                            </div>
+
+                            <div class="row" *ngIf="!editActionId">
+                                <div class="col-sm-12">
+                                    <hr class="mt-0">
+                                </div>
+
+                                <ng-container formArrayName="staticdropdown_value">
+                                    <div class="col-sm-3 col-12 form-group" *ngFor="let item of getTemplateRows('staticdropdown_value'); let i = index" [formGroupName]="i">
+                                        <input type="text" class="form-control mg-t-10 mg-md-t-0 static-fields" placeholder="{{item.value.column_lable}}" formControlName="column_value" (input)="initForm('refreshlabelvalues')">
+                                    </div>
+                                </ng-container>
+
+                                <ng-container formArrayName="dropdown_value">
+                                    <div class="col-sm-3 col-12 form-group" *ngFor="let item of getTemplateRows('dropdown_value'); let i = index" [formGroupName]="i">
+                                        <input type="text" class="form-control mg-t-10 mg-md-t-0 static-fields" placeholder="{{item.value.column_lable}}" formControlName="column_value" (input)="initForm('refreshlabelvalues')">
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!editActionId" class="d-flex align-items-center justify-content-center bg-gray-100 bd pd-x-20 pd-y-10">
+                    <div class="col-sm-9 col-12">
+                        <p class="m-0 text-danger text-uppercase"><b>On updating the above fields, the column value will be reset</b></p>
+                    </div>
+                    <div class="col-sm-3 col-12 pull-right">
+                        <button type="button" class="btn btn-info w-100 pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2" (click)="initDropdownFieldCreate()"><i class="fa fa-plus"></i> Add New Field</button>
+                    </div>
+                </div>
+
+                <div class="row align-items-center mb-3 mt-4">
+                    <div class="col-md-6">
+                        <h6 class="br-section-label mb-md-0 font-20">Payment Sheet Template</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-end">
+                            <!-- <button type="button" class="btn btn-info tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-upload"></i> Upload Converter</button> -->
+                            <!-- <button type="button" class="btn ml-2 btn-danger tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-trash"></i> Delete Column</button> -->
+                            <button type="button" (click)="addTemplateRows('column_list')" class="btn ml-2 btn-success tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-plus"></i> Add Column</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="table-responsive custom-tbl">
+                    <table class="table table-bordered">
+                        <thead class="thead-colored thead-info">
+                            <tr>
+                                <th *ngFor="let item of getTemplateRows('column_list'); let i = index" style="vertical-align: middle !important;">
+                                    Column {{i+1}}
+
+                                    <button type="button" *ngIf="(getTemplateRows('column_list') ?? []).length > 1" (click)="removeTemplateRow('column_list', i)" class="btn btn-sm btn-light float-right px-2 py-0"><i class="fa fa-trash text-danger"></i></button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr formArrayName="column_list">
+                                <td *ngFor="let item of getTemplateRows('column_list'); let i = index" [formGroupName]="i" style="min-width: 260px !important;">
+                                    <div class="form-group mb-0">
+                                        <ngx-select-dropdown formControlName="option" [options]="columnDropdownMaster" class="form-control p-2" [config]="{search: false, placeholder: 'Select One', 'height': '200px', 'displayKey': 'label'}"></ngx-select-dropdown>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> -->
+
+                <div class="table-responsive-none">
+                    <table class="table table-bordered" style="border: 1px solid #ced4da !important">
+                        <thead class="thead-colored thead-info text-white">
+                            <tr>
+                                <td>Sl</td>
+                                <td>Option</td>
+                                <td class="text-center">Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="getTemplateRows('column_list').length > 0; else noColumnFound" formArrayName="column_list">
+                                <tr *ngFor="let item of getTemplateRows('column_list'); let i = index" [formGroupName]="i" style="min-width: 260px !important;">
+                                    <td>
+                                        {{i+1}}
+                                    </td>
+                                    <td>
+                                        <div class="form-group mb-0">
+                                            <ngx-select-dropdown formControlName="option" [options]="columnDropdownMaster" class="form-control p-2" [config]="{search: false, placeholder: 'Select One', 'height': '200px', 'displayKey': 'label'}"></ngx-select-dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" *ngIf="(getTemplateRows('column_list') ?? []).length > 1" (click)="removeTemplateRow('column_list', i)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-template #noColumnFound>
+                                <tr>
+                                    <td colspan="100%" class="text-center">No records found</td>
+                                </tr>
+                            </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="w-100 text-center mt-3">
+                    <button type="button" class="btn btn-danger pd-y-13 pd-x-20 bd-0 mg-r-5 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2" (click)="cancelEdit()"><span>Cancel</span></button>
+
+                    <ng-container *ngIf="!editActionId && Global.checkCompanyModulePermission({
+                        company_module: 'master',
+                        company_sub_module:'bank_payment',
+                        company_sub_operation: ['add'],
+                        company_strict: true
+                      })">
+                        <button [disabled]="!bankPaymentForm.valid" type="submit" class="btn btn-info pd-y-13 pd-x-20 bd-0  mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2" (click)="create($event)"><span>Create Payment Bank</span></button>
+                    </ng-container>
+
+                    <ng-container  *ngIf="editActionId && Global.checkCompanyModulePermission({
+                        company_module: 'master',
+                        company_sub_module:'bank_payment',
+                        company_sub_operation: ['edit'],
+                        company_strict: true
+                      })">
+                        <button [disabled]="!bankPaymentForm.valid" type="submit" class="btn btn-info pd-y-13 pd-x-20 bd-0  mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2" (click)="update($event)"><span>Update Payment Bank</span></button>
+                    </ng-container >
+                </div>
+            </form>
+
+            <!-- <div class="bg-gray-100 bd pd-y-20 pd-x-20">
+                <form [formGroup]="bankPaymentForm">
+                    <div class="form-row row flex-wrap align-items-center">
+                        <div class="col-sm-12 col-12 form-group">
+                            <input formControlName="template_name" type="text" class="form-control mg-t-10 mg-md-t-0 mb-2" placeholder="Template Name">
+                        </div>
+                        <div class="col-sm-12 col-12 form-group">
+                            <ckeditor [editor]="Editor" formControlName="msg_box"></ckeditor>
+                        </div>
+
+                        <ul class="suggest-text">
+                            <li class="mx-1" *ngFor="let item of shortCodeMaster" (click)="this.copyToClpboard(item.value)">{{item.description}}</li>
+                        </ul>
+
+                        <div class="col-12">
+                            <hr class="mt-0">
+                        </div>
+
+                        <div class="col-sm-12 col-12 text-center">
+                            <ng-container *ngIf="editActionId == ''; else editButtonSection">
+                                <button type="submit" class="submit-block btn btn-info" (click)="create($event)" [disabled]="!bankPaymentForm.valid"><span>Submit</span></button>
+                            </ng-container>
+                            <ng-template #editButtonSection>
+                                <button type="submit" class="submit-block btn btn-info" (click)="update($event)" [disabled]="!bankPaymentForm.valid"><span>Update</span></button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div> -->
+        </div>
+
+        <div *ngIf="Global.checkCompanyModulePermission({
+            company_module: 'master',
+            company_sub_module:'bank_payment',
+            company_sub_operation: ['view'],
+            company_strict: true
+          })" class="br-section-wrapper mt-5">
+            <h6 class="br-section-label mb-1 mt-1">Template List</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <!-- <th class="wd-15p text-center">Status</th> -->
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Template Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="open-example-modal" class="d-none" data-toggle="modal" data-target="#example-modal"></button>
+    <div class="modal fade mdlcustom" id="example-modal" tabindex="-1" role="dialog" aria-labelledby="example-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Payment Bank Field</h5>
+                    <button type="button" class="btn cls btn-info" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="dropdownValueForm">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" formControlName="column_lable" class="form-control" placeholder="Add Field Label">
+                        </div>
+                        <div class="form-group mb-0">
+                            <input type="text" formControlName="column_value" class="form-control" placeholder="Add Field Value">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" [disabled]="!dropdownValueForm.valid" (click)="addDropdownValue($event)" class="btn btn-info btn-primary tx-uppercase tx-11"><span>Add Fields</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

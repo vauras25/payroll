@@ -1,0 +1,41 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Summary Briefcase </a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Summary Briefcase</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [dateFromFilter]="true"
+        [isFilterBtnHidden]="count < 1 || !isDownloadable"
+        [dateToFilter]="true"
+        (onFiltered)="employeeListFilter = $event;count < 1 ? null :  isDownloadable = true; increase_count()"
+      >
+      <div *ngIf="isDownloadable" addOn_btn1 class="col-sm-2 col-12">
+        <button
+          (click)="downloadSummaryBriefcase($event); isDownloadable = false"
+          type="submit"
+          class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+        >
+          Download
+        </button>
+      </div>
+      </companyuser-app-table-filter>
+    </div>
+  </div>
+</div>

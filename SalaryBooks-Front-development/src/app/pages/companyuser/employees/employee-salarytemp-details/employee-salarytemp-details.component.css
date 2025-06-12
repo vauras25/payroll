@@ -1,0 +1,83 @@
+.bd_title {
+    font-size: 18px;
+    color: #212529;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.define-leave-rule-table tr:first-child td {
+    vertical-align: middle;
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.define-leave-rule-table table tr td {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+.define-leave-rule-table table tr:last-child td {
+    border-top: 1px solid #dee2e6;
+    border-bottom: none;
+}
+
+.define-leave-rule-table table {
+    background-color: transparent !important;
+}
+
+.leave-status {
+    width: fit-content;
+    display: block;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    /* border-radius: 20px; */
+    text-align: center;
+    margin: 0 auto;
+}
+
+.leave-status.leave-new {
+    background: #0866C6;
+    color: #fff;
+    border-color: #0866C6;
+}
+
+.leave-status.leave-declined {
+    background: #DC3545;
+    color: #fff;
+    border-color: #DC3545;
+}
+
+.leave-status.leave-approved {
+    background: #23BF08;
+    color: #fff;
+    border-color: #23BF08;
+}
+
+.contribution-per {
+    width: fit-content;
+    text-align: center;
+    background: transparent;
+    float: right;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.contribution-per.p-green {
+    color: #23BF08;
+}
+
+.contribution-per.p-ghray {
+    color: #0866C6;
+}
+
+span.badge-lg {
+    font-size: 100%;
+    padding: 0.55em 1em;
+    /* line-height: 1.0; */
+    /* border-radius: 50px; */
+    font-weight: initial;
+}

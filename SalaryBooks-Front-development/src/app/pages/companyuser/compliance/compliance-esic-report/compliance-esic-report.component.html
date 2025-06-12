@@ -1,0 +1,207 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">ESIC Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>ESIC Report</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <div class="card bd-0">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-12 d-none">
+              <hr />
+            </div>
+          </div>
+        </div>
+
+        <companyuser-app-table-filter
+          [monthFilter]="true"
+          [yearFilter]="true"
+          [searchKeyFilter]="true"
+          [empDetailsFilter]="true"
+          #tableFilter
+          (onFiltered)="
+            employeeListFilter = $event;
+            fetchPFReport({ page: 1, options: $event })
+          "
+        ></companyuser-app-table-filter>
+
+        <div class="d-flex justify-content-end mt-3">
+          <div class="d-flex h-100">
+            <button
+              [disabled]="!anyRowsChecked()"
+              (click)="downloadPFReport($event)"
+              type="button"
+              class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            >
+              <span
+                ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                >DOWNLOAD</span
+              >
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body px-0 bd-t-0 rounded-bottom">
+          <div class="table-responsive">
+            <app-custom-tableoption
+              [searchable]="false"
+              (onFilterChanged)="
+                reportPaginationOptions.limit = +$event?.length;
+                fetchPFReport({ page: reportPaginationOptions.page })
+              "
+            ></app-custom-tableoption>
+            <table
+              class="table table-bordered cust-table table-striped w-100 c-table"
+              id="salarysheet-report-table"
+            >
+              <thead>
+                <tr class="title-sec">
+                  <th>
+                    <input
+                      type="checkbox"
+                      [value]="rowCheckedAll"
+                      (change)="allRowsCheckboxChecked($event)"
+                    />
+                    SL No.
+                  </th>
+                  <th>Client</th>
+                  <th>Estt. Code</th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>ESI No.</th>
+                  <th>Branch</th>
+                  <th>Designation</th>
+                  <th>Department</th>
+                  <th>D.O.J</th>
+                  <th>Status</th>
+                  <th>ESIC Wages</th>
+                  <th>Non ESIC Wages</th>
+                  <th>ESIC Variable</th>
+                  <th>Non ESIC Variable</th>
+                  <th>Paid Days</th>
+                  <th>Employees Contribution</th>
+                  <th>Employers Contribution</th>
+                  <th>Total Contribution</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let item of employeeReportListing; let i = index">
+                  <td>
+                    <label
+                      class="d-flex align-items-center"
+                      [for]="'checkrow-' + (i + 1)"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          item?.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="item?._id"
+                        (click)="rowCheckBoxChecked($event, item)"
+                      />
+                      {{
+                        Global.getTableSerialNumber(
+                          i,
+                          reportPaginationOptions.limit,
+                          reportPaginationOptions.page
+                        )
+                      }}
+                    </label>
+                  </td>
+                  <td>{{ item?.company_name || "N/A" }}</td>
+                  <td>
+                    {{ item?.branch?.esic_registration_no || "N/A" }}
+                  </td>
+                  <td>{{ item?.emp_id || "N/A" }}</td>
+                  <td>
+                    {{ item?.emp_first_name || "N/A" }}
+                    {{ item?.emp_last_name || "N/A" }}
+                  </td>
+                  <td>{{ item?.esic_no || "N/A" }}</td>
+                  <td>{{ item?.branch?.branch_name || "N/A" }}</td>
+                  <td>{{ item?.designation || "N/A" }}</td>
+                  <td>{{ item?.department || "N/A" }}</td>
+                  <td>{{ item?.doj || "N/A" }}</td>
+                  <td>
+                    <span *ngIf="item?.esic_covered == 'no'">
+                      Out of Coverage
+                    </span>
+                    <span *ngIf="item?.esic_covered == 'yes'"> Covered </span>
+                  </td>
+                  <td>
+                    <span *ngIf="item?.esic_covered == 'no'"> 0 </span>
+                    <span *ngIf="item?.esic_covered == 'yes'">
+                      {{ item?.esic_wages || "0" }}
+                    </span>
+                  </td>
+                  <td>
+                    <span *ngIf="item?.esic_covered == 'no'"> 0 </span>
+                    <span *ngIf="item?.esic_covered == 'yes'"> 0 </span>
+                  </td>
+                  <td>
+                    <span *ngIf="item?.esic_covered == 'no'"> 0 </span>
+                    <span *ngIf="item?.esic_covered == 'yes'">
+                      {{ item?.esic_wages }}
+                    </span>
+                  </td>
+                  <td>
+                    <span *ngIf="item?.esic_covered == 'no'"> 0 </span>
+                    <span *ngIf="item?.esic_covered == 'yes'">
+                      {{ item?.total_esic_bucket - item?.esic_wages }}
+                    </span>
+                  </td>
+                  <td>{{ item?.paydays || "N/A" }}</td>
+                  <td>
+                    {{ item?.ee_esic_amount || "0" }}
+                  </td>
+                  <td>
+                    {{ item?.er_esic_amount || "0" }}
+                  </td>
+                  <td>
+                    {{ item?.ee_esic_amount + item?.er_esic_amount ?? 0 }}
+                  </td>
+                </tr>
+                <tr *ngIf="employeeReportListing.length == 0">
+                  <td
+                    colspan="100%"
+                    class="text-center"
+                    style="background-color: #f7f7f7"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <app-custom-pagination
+          [rows]="employeeReportListing"
+          [paginationOptions]="reportPaginationOptions"
+          (onPageClicked)="fetchPFReport()"
+        ></app-custom-pagination>
+      </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+  </div>
+</div>

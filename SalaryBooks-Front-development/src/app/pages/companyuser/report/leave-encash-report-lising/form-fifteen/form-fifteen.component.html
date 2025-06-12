@@ -1,0 +1,172 @@
+<div class="table-responsive" *ngFor="let item_main of rows">
+    <div class="table-wrapper mt-3">
+        <table  class="table display responsive nowrap wd-100p employee-table" >
+         <thead >
+            <tr >
+               
+               <th >Name : </th>
+               <th  colspan="3">{{item_main?.emp_first_name}} {{item_main?.emp_last_name}}</th>
+               <th  colspan="13"></th>
+              
+            </tr>
+            <tr >
+               
+               <th class="s20 softmerge" >
+                  <div class="softmerge-inner">Department : </div>
+               </th>
+               <th  colspan="3">{{item_main?.department?.department_name}}</th>
+               <th class="s22"></th>
+               <th class="text-center" colspan="6" rowspan="2">Register of Leave with Wages<br>
+
+                  (Prescribed under Rule 88 of the West Bengal Factories Rules, 1958)
+
+               </th>
+               <th></th>
+               <th class="s24 softmerge">
+                  <div class="softmerge-inner" style="width:156px;left:-1px">Date of Discharge or dismissal :</div>
+               </th>
+               <th>{{(item_main?.last_working_date | date:'dd/MM/yyyy') ?? "N/A"}}</th>
+               <th colspan="13">RESIGNED</th>
+            </tr>
+            <tr >
+               
+               <th class="s20 softmerge">
+                  <div class="softmerge-inner" >Serial No. in the Register of</div>
+               </th>
+               <th class="s30" colspan="3"></th>
+               <th class="s13"></th>
+               <th></th>
+               <th class="s24 softmerge">
+                  <div class="softmerge-inner" >Date &amp; Amount of payment made in lieu of leave due</div>
+               </th>
+               <th class="s31"></th>
+               <th class="s32" colspan="13"></th>
+              
+            </tr>
+            <tr>
+               
+               <th class="s14 softmerge">
+                  <div class="softmerge-inner" style="width:87px;left:-1px">Adult/Child Workers : </div>
+               </th>
+               <th  colspan="5">Future Consumars 44010017</th>
+               <th ></th>
+               <th></th>
+               <th></th>
+               <th class="s35 softmerge">
+                  <div class="softmerge-inner" ></div>
+               </th>
+               <th></th>
+               <th></th>
+               <th class="s24 softmerge">
+                  <div class="softmerge-inner" >Amount of payment made</div>
+               </th>
+               <th class="s25"></th>
+               <th class="s38" colspan="13"></th>
+              
+            </tr>
+            <tr >
+               
+               <th class="s20 softmerge">
+                  <div class="softmerge-inner">Date of entry into Service : </div>
+               </th>
+               <th class="s41" colspan="3">26.02.2021</th>
+               <th></th>
+               <th></th>
+               <th></th>
+               <th></th>
+               <th></th>
+               <th></th>
+               <th></th>
+               <th></th>
+               <th class="s24 softmerge">
+                  Date of payment
+               </th>
+               <th class="s25"></th>
+               <th class="s38" colspan="13"></th>
+               
+            </tr>
+         </thead>
+         <tbody>
+            
+            <tr >
+              
+              
+               <th class="s45" rowspan="6">Calendar year</th>
+               <th class="s46" rowspan="6">No. of days leave earned in the immediately preceding calendar year</th>
+               <th class="s45" rowspan="6">No. of days leave brought forward (from previous year or years)</th>
+               <th class="text-center" colspan="5">Date of absence</th>
+               <th class="s45" rowspan="6">Actual No. of days worked during the calendar year shown in col.1</th>
+               <th class="s45" colspan="2" rowspan="3">Date from which the worker is allowed leave (shown in col.2 &amp; 3) and No. of days allowed<br><br></th>
+               <th class="s45" colspan="2" rowspan="3">Rate of wages for the period of leave</th>
+               <th class="s45" colspan="2" rowspan="3">Amount of wages for the period of leave</th>
+               <th class="s45" rowspan="6">Date of payment</th>
+               <th class="s45" rowspan="6">Remarks</th>
+            </tr>
+            <tr >
+              
+               <th class="s45" rowspan="5">Lay off</th>
+               <th class="s45" rowspan="5">Maternity leave (Female worker)</th>
+               <th class="s45" rowspan="5">Leave earned in the immediately preceding calendar year and enjoyed during the year</th>
+               <th class="s48" colspan="2">Others</th>
+            </tr>
+            <tr >
+               
+               <th class="s49" rowspan="4">From</th>
+               <th class="s49" rowspan="4">To</th>
+            </tr>
+            <tr >
+               
+               <th class="s49" rowspan="3">Date</th>
+               <th class="s45" rowspan="3">No. of days allowed</th>
+               <th class="s45" rowspan="3">Rs.</th>
+               <th class="s50" rowspan="3">P.</th>
+               <th class="s51" rowspan="3" >Rs.</th>
+               <th class="s51" rowspan="3" colspan="5">P.</th>
+              
+
+            </tr>
+            <tr >
+               <th class="s45"></th>
+               <th class="s45"></th>
+               
+              
+            </tr>
+            <tr >
+              
+               <th class="s45"></th>
+               <th class="s45"></th>
+            </tr>
+           
+           
+            <tr *ngFor="let item of item_main?.year_data">
+               <td class="s53">{{item?.year}}</td>
+               <td class="s53">{{item?.total_earn_leave}}</td>
+               <td class="s53">{{item?.total_carry_forward}}</td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s53">{{item?.total_days}}</td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s55"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+               <td class="s54"></td>
+            </tr>
+           <tr *ngIf="item_main?.year_data.length<=0">
+            <td colspan="17">No Record(s) Found</td>
+           </tr>
+            
+         </tbody> 
+         
+        </table>  
+    
+    
+    
+    
+    </div>
+    </div>

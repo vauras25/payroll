@@ -1,0 +1,264 @@
+<section class="h-bg">
+  <div class="container">
+    <div class="banner-text">
+      <h1>{{ membershipPageData?.page_title }}</h1>
+      <p>{{ membershipPageData?.page_content }}</p>
+    </div>
+
+    <!-- <div class="b-img mt-4 d-flex align-items-center justify-content-center">
+      <div class="form-check form-switch c-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckChecked"
+        />
+        <label class="form-check-label" for="flexSwitchCheckChecked"
+          >Monthly</label
+        >
+      </div>
+      <div class="discunt-text">Yearly <span>20% Off</span></div>
+    </div> -->
+
+    <div class="main-area plan-area">
+      <div class="container">
+        <div class="p-box c-wrapper d-flex justify-content-center">
+          <div *ngFor="let plan of membershipPlans" class="plan-list">
+            <h5>{{plan?.title}}</h5>
+            <h3>${{plan?.amount}} <span>/ {{plan?.duration}}</span></h3>
+            <div class="p-height">
+              <ul>
+                <li *ngFor="let feature of plan.features">{{feature}}</li>
+              </ul>
+            </div>
+            <div class="p-bottom">
+              <a routerLink="/" class="btn">Get Started</a>
+            </div>
+          </div>
+          <!-- <div class="plan-list">
+            <h5>Enterprise</h5>
+            <h3>$49 <span>/ MO</span></h3>
+            <div class="p-height">
+              <ul>
+                <li>Attendance marking</li>
+                <li>Biometric Integration</li>
+                <li>Shift Scheduling</li>
+                <li>Shift Rotation</li>
+                <li>Overtime Calculation</li>
+                <li>Invoicing Integration</li>
+              </ul>
+            </div>
+            <div class="p-bottom">
+              <a routerLink="/" class="btn">Get Started</a>
+            </div>
+          </div>
+          <div class="plan-list">
+            <h5>People Plus</h5>
+            <h3>Custom</h3>
+            <div class="p-height">
+              <ul>
+                <li>Attendance marking</li>
+                <li>Biometric Integration</li>
+                <li>Shift Scheduling</li>
+                <li>Shift Rotation</li>
+                <li>Overtime Calculation</li>
+                <li>Invoicing Integration</li>
+              </ul>
+            </div>
+            <div class="p-bottom">
+              <a routerLink="/" class="btn">Get Started</a>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-area" style="background-color: #fff;">
+  <div class="container">
+    <div class="features-title">
+      <span class="badge">FAQ'S</span>
+      <h2>Frequently asked questions</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+      </p>
+    </div>
+
+    <div class="faq-list">
+      <div class="accordion" id="accordionExample">
+        <ng-container *ngFor="let post of postData; let i = index">
+          <div *ngIf="post.category == 'faq'" class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button
+                (click)="contentbox.hidden = !contentbox.hidden"
+                class="accordion-button w-100 text-left"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                {{post.title}}
+              </button>
+            </h2>
+            <div
+              [hidden]="true"
+              #contentbox
+              id="collapseOne"
+              class="accordion-collapse collapse show"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body text-left" style="width: 100%;" [innerHTML]="post.content">
+                <!-- {{post.content}} -->
+                <!-- <strong>This is the first item's accordion body.</strong> It is
+                shown by default, until the collapse plugin adds the appropriate
+                classes that we use to style each element. These classes control
+                the overall appearance, as well as the showing and hiding via CSS
+                transitions. You can modify any of this with custom CSS or
+                overriding our default variables. It's also worth noting that just
+                about any HTML can go within the <code>.accordion-body</code>,
+                though the transition does limit overflow. -->
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <!-- <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              Does Payroll People support multiple languages?
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingTwo"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <strong>This is the second item's accordion body.</strong> It is
+              hidden by default, until the collapse plugin adds the appropriate
+              classes that we use to style each element. These classes control
+              the overall appearance, as well as the showing and hiding via CSS
+              transitions. You can modify any of this with custom CSS or
+              overriding our default variables. It's also worth noting that just
+              about any HTML can go within the <code>.accordion-body</code>,
+              though the transition does limit overflow.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            >
+              What types of payment do you accept?
+            </button>
+          </h2>
+          <div
+            id="collapseThree"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingThree"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <strong>This is the third item's accordion body.</strong> It is
+              hidden by default, until the collapse plugin adds the appropriate
+              classes that we use to style each element. These classes control
+              the overall appearance, as well as the showing and hiding via CSS
+              transitions. You can modify any of this with custom CSS or
+              overriding our default variables. It's also worth noting that just
+              about any HTML can go within the <code>.accordion-body</code>,
+              though the transition does limit overflow.
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-area">
+  <div class="container">
+    <div class="row testimonials-title align-items-center">
+      <div class="col-lg-6">
+        <h2>We love our customers and they love us too</h2>
+      </div>
+      <div class="col-lg-6"><a routerLink="/" class="btn">See All</a></div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="client-box">
+          <div class="c-content">
+            Really good. Payroll has completely surpassed our expectations. I'd
+            be lost without Payroll. Payroll was worth a fortune to my company.
+          </div>
+          <div class="t-client d-flex align-items-center">
+            <img src="assets/img/landing-page/client.png" alt="" />
+            <div class="c-text">
+              <h5>Daisy Phelps</h5>
+              <p>Lorem Ipsum, Designation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="client-box">
+          <div class="c-content">
+            Really good. Payroll has completely surpassed our expectations. I'd
+            be lost without Payroll. Payroll was worth a fortune to my company.
+          </div>
+          <div class="t-client d-flex align-items-center">
+            <img src="assets/img/landing-page/client.png" alt="" />
+            <div class="c-text">
+              <h5>Daisy Phelps</h5>
+              <p>Lorem Ipsum, Designation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="client-box">
+          <div class="c-content">
+            Really good. Payroll has completely surpassed our expectations. I'd
+            be lost without Payroll. Payroll was worth a fortune to my company.
+          </div>
+          <div class="t-client d-flex align-items-center">
+            <img src="assets/img/landing-page/client.png" alt="" />
+            <div class="c-text">
+              <h5>Daisy Phelps</h5>
+              <p>Lorem Ipsum, Designation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="call-area">
+  <div class="container">
+    <h3>Get started with Payroll today!</h3>
+    <p>
+      Simplify your HR operations, retain talent, and build a high-performing
+      workforce while putting employee experience first.
+    </p>
+    <a href="javascript:void(0)" class="btn">Get Started Now</a>
+    <a href="javascript:void(0)" class="btn">Request Registration</a>
+  </div>
+</section>

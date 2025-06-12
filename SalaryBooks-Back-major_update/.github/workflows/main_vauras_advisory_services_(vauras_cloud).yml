@@ -1,0 +1,117 @@
+# name: Deploy Backend Application To Varuras GCP Ubuntu VM
+
+# on:
+#   push:
+#     branches:
+#       - main_vauras_advisory_services_(vauras_cloud)  # Change this to your deployment branch if different
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up Node.js
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: '18.20.4'  # Use the version of Node.js that your project requires
+
+#     - name: Prepare SSH key
+#       run: |
+#         echo "${{ secrets.VAURAS_ADVISORY_SSH_KEY }}" > key.pem
+#         chmod 400 key.pem
+
+#     - name: Validate SSH key format
+#       run: |
+#         head -n 1 key.pem
+
+#     - name: Create SSH directory if not exists
+#       run: |
+#         mkdir -p ~/.ssh
+#         touch ~/.ssh/known_hosts
+
+#     - name: Verify SSH connection and add to known_hosts
+#       run: |
+#         ssh-keyscan ${{ vars.VAURAS_ADVISORY_SSH_HOST }} >> ~/.ssh/known_hosts 2>&1 || cat ~/.ssh/known_hosts
+
+  
+#     - name: Add SSH key to agent
+#       env:
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         # Start the SSH agent
+#         eval "$(ssh-agent -a $SSH_AUTH_SOCK)"
+        
+#         # Add the SSH key to the agent, using the passphrase
+#         echo "${{ secrets.VAURAS_ADVISORY_SSH_PASSPHRASE }}" | ssh-add key.pem
+
+#     - name: Test SSH connection  # Added step for debugging
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_ADVISORY_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         echo "${{ secrets.VAURAS_ADVISORY_SSH_PASSPHRASE }}" | ssh-add key.pem
+#         ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}@${{ vars.VAURAS_ADVISORY_SSH_HOST }} 'echo Connection successful'
+
+#     - name: Create or update .env file on server
+#       run: |
+#           eval "$(ssh-agent -s)"
+#           echo "${{ secrets.VAURAS_ADVISORY_SSH_PASSPHRASE }}" | ssh-add key.pem
+#           ssh -v -i key.pem -o StrictHostKeyChecking=no ubuntu@${{ vars.VAURAS_ADVISORY_SSH_HOST }} << 'EOF'
+#             cd ${{vars.VAURAS_ADVISORY_SERVER_DIR_BACKEND}}
+            
+#             # Ensure .env file exists
+#             touch .env
+            
+#             # Update or add each environment variable
+#             {
+#               grep -q '^PORT=' .env && sed -i 's|^PORT=.*$|PORT=8080|' .env || echo 'PORT=8080'
+#               grep -q '^BASEPATH=' .env && sed -i 's|^BASEPATH=.*$|BASEPATH="/"|' .env || echo 'BASEPATH="/"'
+              
+#               grep -q '^MONGODBPATH=' .env && sed -i 's|^MONGODBPATH=.*$|MONGODBPATH="mongodb+srv://${{ vars.VAURAS_ADVISORY_DB_USER }}:${{ secrets.VAURAS_ADVISORY_DB_PASSWORD }}@${{ vars.VAURAS_ADVISORY_DB_HOST }}/${{ vars.VAURAS_ADVISORY_DB_NAME }}"|' .env || echo 'MONGODBPATH="mongodb+srv://${{ vars.VAURAS_ADVISORY_DB_USER }}:${{ secrets.VAURAS_ADVISORY_DB_PASSWORD }}@${{ vars.VAURAS_ADVISORY_DB_HOST }}/${{ vars.VAURAS_ADVISORY_DB_NAME }}"'
+
+#               grep -q '^RAZORPAY_KEY_ID=' .env && sed -i 's|^RAZORPAY_KEY_ID=.*$|RAZORPAY_KEY_ID=${{ vars.VAURAS_ADVISORY_RAZORPAY_KEY_ID }}|' .env || echo 'RAZORPAY_KEY_ID=${{ vars.VAURAS_ADVISORY_RAZORPAY_KEY_ID }}'
+#               grep -q '^RAZORPAY_KEY_SECRET=' .env && sed -i 's|^RAZORPAY_KEY_SECRET=.*$|RAZORPAY_KEY_SECRET=${{ vars.VAURAS_ADVISORY_RAZORPAY_KEY_SECRET }}|' .env || echo 'RAZORPAY_KEY_SECRET=${{ vars.VAURAS_ADVISORY_RAZORPAY_KEY_SECRET }}'
+#               grep -q '^BACKEND_BASE_URL=' .env && sed -i 's|^BACKEND_BASE_URL=.*$|BACKEND_BASE_URL=${{ vars.VAURAS_ADVISORY_BACKEND_BASE_URL }}|' .env || echo 'BACKEND_BASE_URL=${{ vars.VAURAS_ADVISORY_BACKEND_BASE_URL }}'
+#               grep -q '^FRONTEND_BASE_URL=' .env && sed -i 's|^FRONTEND_BASE_URL=.*$|FRONTEND_BASE_URL=${{ vars.VAURAS_ADVISORY_FRONTEND_BASE_URL }}|' .env || echo 'FRONTEND_BASE_URL=${{ vars.VAURAS_ADVISORY_FRONTEND_BASE_URL }}'
+#             } >> .env
+#           EOF
+
+#     - name: Print files to be uploaded
+#       run: |
+#         echo "Files to be uploaded:"
+#         ls -la
+
+#     - name: Deploy to server
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_ADVISORY_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         set -x  # Enable verbose mode
+#         echo "${{ secrets.VAURAS_ADVISORY_SSH_PASSPHRASE }}" | ssh-add key.pem
+#         rsync -avz --delete -e "ssh -i key.pem" ./* ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}@${{ vars.VAURAS_ADVISORY_SSH_HOST }}:${{vars.VAURAS_ADVISORY_SERVER_DIR_BACKEND}}
+
+#     - name: Install dependencies on server
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_ADVISORY_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         ssh -i key.pem ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}@${{ vars.VAURAS_ADVISORY_SSH_HOST }} "cd ${{vars.VAURAS_ADVISORY_SERVER_DIR_BACKEND}} && npm install"
+
+#     - name: Restart Node.js application with Forever
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_ADVISORY_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         ssh -i key.pem ${{ vars.VAURAS_ADVISORY_SSH_USERNAME }}@${{ vars.VAURAS_ADVISORY_SSH_HOST }} "cd ${{vars.VAURAS_ADVISORY_SERVER_DIR_BACKEND}} && forever stop index.js || true && forever start index.js"
+
+#     - name: Clean up
+#       run: |
+#         rm -rf key.pem
+#         pkill ssh-agent

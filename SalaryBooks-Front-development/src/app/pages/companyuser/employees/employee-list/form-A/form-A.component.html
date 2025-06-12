@@ -1,0 +1,153 @@
+<div class="container-fluid">
+  <div class="table-wrapper mt-3">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered cust-table table-striped cust-reporting-table"
+      >
+        <thead>
+          <tr>
+            <th colspan="21">
+              SCHEDULE																														
+            </th>
+          </tr>
+          <tr>
+            <th colspan="21">
+              (See rule 2 (1) )																														
+            </th>
+          </tr>
+          <tr>
+            <th colspan="21">
+              FORM  A																														
+            </th>
+          </tr>
+          <tr>
+            <th colspan="21">
+              FORMAT OF EMPLOYEE REGISTER																														
+            </th>
+          </tr>
+          <tr>
+            <th colspan="21">
+              [Part-A: For all Establishments]																														
+            </th>
+          </tr>
+          <tr>
+            <th colspan="6">
+              	Name of the Establishment: {{companyDetails?.establishment_name }}
+            </th>
+            <th colspan="6">
+                Name of Owner: {{companyDetails?.establishment_name }}	
+            </th>
+            <th colspan="6">
+               LIN:	
+            </th>
+          </tr>
+          <tr>
+            <th>Sr No.</th>
+            <th>Employee Code</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Gender</th>
+            <th>Father’s/Spouse Name</th>
+            <th>Date of Birth</th>
+            <th>Nationality</th>
+            <th>Date of Joining</th>
+            <th>Designation</th>
+            <th>Type of Employment</th>
+            <th>Mobile</th>
+            <th>UAN</th>
+            <th>PAN</th>
+            <th>ESIC IP</th>
+            <th>AADHAAR</th>
+            <th>Bank A/c Number</th>
+            <th>Bank</th>
+            <th>Branch (IFSC)</th>
+            <th>Present Address</th>
+            <th>Permanent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ employee?.emp_id || "N/A"}}</td>
+            <td>
+              {{ employee?.emp_first_name | titlecase }}
+              {{ employee?.emp_last_name }}
+            </td>
+            <td>{{ "N/A" }}</td>
+            <td>{{ employee.sex || "N/A" | titlecase }}</td>
+            <td>{{ employee.emp_father_name || "N/A" | titlecase }}</td>
+            <td *ngIf="employee?.emp_dob">{{ employee?.emp_dob | date }}</td>
+            <td *ngIf="!employee?.emp_dob">{{'N/A' }}</td>
+            <td>{{ employee?.nationality || 'N/A' }}</td>
+            <td *ngIf="employee?.employee_details?.employment_hr_details?.date_of_join">
+              {{
+                employee?.employee_details?.employment_hr_details?.date_of_join | date
+              }}
+            </td>
+            <td *ngIf="!employee?.employee_details?.employment_hr_details?.date_of_join">
+              {{
+               'N/A'
+              }}
+            </td>
+            <td>{{ employee?.designation?.designation_name || "N/A" }}</td>
+            <td>{{ "N/A" }}</td>
+            <td>{{ employee?.mobile_no || "N/A" }}</td>
+            <td>
+              {{
+                employee?.employee_details?.pf_esic_details?.curr_er_epfo_details
+                  ?.uan_no || "N/A"
+              }}
+            </td>
+            <td>{{ employee?.pan_no || "N/A"}}</td>
+            <td>{{ employee?.employee_details?.pf_esic_details?.curr_er_esic_details?.esic_no || "N/A"}}</td>
+            <td>{{ employee?.aadhar_no || "N/A" }}</td>
+            <td>{{ employee?.employee_details?.bank_details?.account_no || "N/A"}}</td>
+            <td>{{ employee?.employee_details?.bank_details?.bank_name || "N/A"}}</td>
+            <td>{{ employee?.employee_details?.bank_details?.ifsc_code || "N/A"}}</td>
+            <td>
+              {{ employee?.employee_details?.emp_curr_address?.resident_no ? employee?.employee_details?.emp_curr_address?.resident_no + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.residential_name ? employee?.employee_details?.emp_curr_address?.residential_name + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.road ? employee?.employee_details?.emp_curr_address?.road + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.locality ? employee?.employee_details?.emp_curr_address?.locality + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.town_village ? employee?.employee_details?.emp_curr_address?.town_village + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.city ? employee?.employee_details?.emp_curr_address?.city + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.district ? employee?.employee_details?.emp_curr_address?.district + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.state ? employee?.employee_details?.emp_curr_address?.state + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.pincode ? employee?.employee_details?.emp_curr_address?.pincode + ',' : '' }}
+              {{ employee?.employee_details?.emp_curr_address?.country ? employee?.employee_details?.emp_curr_address?.country + ',' : '' }}
+            </td>
+            <td>
+              <ng-container *ngIf="
+!employee?.employee_details?.emp_address?.resident_no &&
+!employee?.employee_details?.emp_address?.residential_name &&
+!employee?.employee_details?.emp_address?.road &&
+!employee?.employee_details?.emp_address?.locality &&
+!employee?.employee_details?.emp_address?.town_village &&
+!employee?.employee_details?.emp_address?.city &&
+!employee?.employee_details?.emp_address?.district &&
+!employee?.employee_details?.emp_address?.state &&
+!employee?.employee_details?.emp_address?.pincode &&
+!employee?.employee_details?.emp_address?.country 
+              ">N/A</ng-container>
+              {{ employee?.employee_details?.emp_address?.resident_no ? employee?.employee_details?.emp_address?.resident_no + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.residential_name ? employee?.employee_details?.emp_address?.residential_name + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.road ? employee?.employee_details?.emp_address?.road + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.locality ? employee?.employee_details?.emp_address?.locality + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.town_village ? employee?.employee_details?.emp_address?.town_village + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.city ? employee?.employee_details?.emp_address?.city + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.district ? employee?.employee_details?.emp_address?.district + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.state ? employee?.employee_details?.emp_address?.state + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.pincode ? employee?.employee_details?.emp_address?.pincode + ',': ''  }}
+              {{ employee?.employee_details?.emp_address?.country ? employee?.employee_details?.emp_address?.country + ',': ''  }}
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="text-right py-3 ">
+    <button class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2 " (click)="exportExcel()"> Download </button>
+    <button class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2" routerLink="/company/employees"> Cancel </button>
+  </div>
+</div>

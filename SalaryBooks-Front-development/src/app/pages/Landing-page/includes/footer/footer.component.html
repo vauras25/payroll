@@ -1,0 +1,68 @@
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="f-logo">
+                    <img src="assets/img/landing-page/footer-logo.png" alt="" />
+                </div>
+                <div class="f-content">
+                    <p>
+                      {{footerDynamicData?.description}}
+                    </p>
+                </div>
+                <div class="f-social">
+                  <ng-container *ngFor="let item of footerDynamicData?.social_links">
+                    <a *ngIf="item?.link" [href]="item?.link" target="_blank"><i class="bi bi-{{item.slug_name}}"></i></a>
+                  </ng-container>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a routerLink="/about">About Us</a></li>
+                            <li><a routerLink="/testimonials">Testimonials</a></li>
+                            <li><a routerLink="/contact">Contact us</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <h4>Features</h4>
+                        <ul>
+                            <li><a routerLink="/">Attendance & Shift</a></li>
+                            <li><a routerLink="/">Bonus Management</a></li>
+                            <li><a routerLink="/">Payroll Management</a></li>
+                            <li><a routerLink="/">Reports & Sheets</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <h4>Membership</h4>
+                        <ul>
+                            <li><a routerLink="/">Professional Plan</a></li>
+                            <li><a routerLink="/">Enterprise Plan</a></li>
+                            <li><a routerLink="/">Custom Plan</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <h4>Help Center</h4>
+                        <ul>
+                            <li><a routerLink="/">Community</a></li>
+                            <li><a routerLink="/">Knowledge Base</a></li>
+                            <li><a routerLink="/">Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="b-footer">
+            <div class="row">
+                <div class="col-lg-6">Copyright © 2023 Payroll Software</div>
+                <div class="col-lg-6 text-end">Designed & Developed by <a routerLink="https://www.ivaninfotech.com/" target="_blank">Ivan Infotech</a></div>
+            </div>
+        </div>
+
+    </div>
+</footer>

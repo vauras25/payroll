@@ -1,0 +1,127 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item active">Reports</a>
+            <a class="breadcrumb-item">LWF Report</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>LWF Report</h4>
+            <p class="mg-b-0">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+            </p>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <companyuser-app-table-filter  [monthFilter]="true" [yearFilter]="true" (onFiltered)="fetchLwf({page: 1, filter: $event})"></companyuser-app-table-filter>
+            <div class="text-right">
+                <button [disabled]="!anyRowsChecked()"  (click)="fetchLwf({reportGeneration:true})" type="button" class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                    <span><i style="font-size: 12px" class="mr-1 fa fa-download"></i>Export</span>
+                </button>
+
+              
+            </div>
+            <div class="table-responsive mt-3">
+                <app-custom-tableoption
+                [searchable]="true"
+                (onFilterChanged)="employeePaginationOptions.limit = +$event?.length ; fetchLwf({ page:1,options:$event})"
+              ></app-custom-tableoption>
+                        <table class="w-100 c-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label
+                                          class="d-flex align-items-center"
+                                          for="all-check"
+                                        >
+                                        
+                                        <input id="all-check" type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" />SL No.
+                                        </label>
+                                        
+                                    </th>
+
+                                    <!-- <th>
+                                        SL No.
+                                    </th> -->
+                                    <th>Emp ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>Branch</th>
+                                    <th>Client</th>
+                                    <th>HOD</th>
+                                    <th>Month /Year</th>
+                                    <th>Gender</th>
+                                    <th>Date Of Joining</th>
+                                    <th>EE</th>
+                                    <th>ER</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of employees;let i=index">
+                                    <td>
+                                        <label
+                                          class="d-flex align-items-center"
+                                          [for]="'checkrow-' + (i + 1)"
+                                        >
+                                          <input
+                                            type="checkbox"
+                                            class="mr-2"
+                                            [attr.checked]="
+                                              item?.checked == true ? 'checked' : null
+                                            "
+                                            id="checkrow-{{ i + 1 }}"
+                                            [attr.data-checkbox-id]="item?._id"
+                                            (click)="rowCheckBoxChecked($event, item)"
+                                          />
+                                          {{
+                                            Global.getTableSerialNumber(
+                                              i,
+                                              employeePaginationOptions.limit,
+                                              employeePaginationOptions.page
+                                            )
+                                          }}
+                                        </label>
+                                      </td>
+                                    <!-- <td>{{i+1}}</td> -->
+                                    <td>{{item?.emp_id}}</td>
+                                    <td>{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+                                    <td>{{item?.department?.department_name}}</td>
+                                    <td>{{item?.designation?.designation_name}}</td>
+                                    <td>{{item?.branch?.branch_name ?? 'N/A'}}</td>
+                                    <td>{{item?.client?.client_code}}</td>
+                                    <td>{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+                                    <td>{{this.employeeFilter.month?.index + 1 ?? '--'}}/{{this.employeeFilter.year?.value ?? '----'}}</td>
+                                    <td>{{item?.sex == 'm' ? 'Male' : 'Female'}}</td>
+                                    <td>{{(item?.employee_details?.employment_hr_details?.date_of_join | date:'dd/MM/YYYY') ?? 'N/A'}}</td>
+                                    <td>{{(item?.employee_monthly_reports?.salary_report?.lwf_data?.employee_contribution | number:'1.2-2') ?? 'N/A'}}</td>
+                                    <td>{{(item?.employee_monthly_reports?.salary_report?.lwf_data?.employer_contribution | number:'1.2-2') ?? 'N/A'}}</td>
+                                    <td>{{((item?.employee_monthly_reports?.salary_report?.lwf_data?.employee_contribution + item?.employee_monthly_reports?.salary_report?.lwf_data?.employer_contribution ) | number:'1.2-2') ?? 'N/A'}}</td>
+                                </tr>
+                                <tr *ngIf="employees?.length == 0">
+                                    <td colspan="100%" class="text-center" style="background-color: #f7f7f7;">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+                <app-custom-pagination
+                [rows]="employees ?? []"
+                [paginationOptions]="employeePaginationOptions"
+                (onPageClicked)="fetchLwf({page:$event})"
+                ></app-custom-pagination>
+        </div>
+    </div>
+
+  
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,203 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">Over Time Policy Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Over Time Policy Rule</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div *ngIf="Global.checkCompanyModulePermission({
+        company_module: 'company_rules_1',
+        company_sub_module: 'overtime_policy',
+        company_sub_operation: ['add', 'edit'],
+        company_strict: true
+      })" class="br-pagebody pd-x-20 pd-sm-x-30" id="policy-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define Over Time Policy Rule
+                <button (click)="openTemplateLibrary()" class="btn btn-primary btn-sm float-right"><i class="fa fa-book"></i> Template Library</button>
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Over Time Policy Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="overtimePolicyForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" type="text" formControlName="template_name">
+                            <p class="error-element" *ngIf="overtimePolicyForm.controls.template_name.hasError('required') && (overtimePolicyForm.controls.template_name.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Over-Time Type&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <label class="rdiobox" *ngFor="let item of overTimeMaster">
+                                <input formControlName="overtime_type" type="radio" value="{{item.value}}"><span>{{item.description}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Rate (Rs / %)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" type="number" formControlName="overtime_rate">
+                            <p class="error-element" *ngIf="overtimePolicyForm.controls.overtime_rate.hasError('required') && (overtimePolicyForm.controls.overtime_rate.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="overtimePolicyForm.controls.overtime_rate.hasError('pattern') && (overtimePolicyForm.controls.overtime_rate.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="overtimePolicyForm.controls.publish_status.hasError('required') && (overtimePolicyForm.controls.publish_status.dirty)">This field is required</p>
+                        </div>
+                    </div> -->
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!overtimePolicyForm.valid" (click)="create($event)" type="submit" 
+                            *ngIf="!editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'company_rules_1',
+                                company_sub_module: 'overtime_policy',
+                                company_sub_operation: ['add'],
+                                company_strict: true
+                              }) ">
+                                <span>Save</span>
+                            </button>
+
+                            <div *ngIf="editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'company_rules_1',
+                                company_sub_module: 'overtime_policy',
+                                company_sub_operation: ['edit'],
+                                company_strict: true
+                              }) ">
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel</span>
+                                </button>
+                                <button type="submit" [disabled]="!overtimePolicyForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Rule</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Over time policy template</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Status</th>
+                            <th class="">Action</th>
+                            <th class="">Template</th>
+                            <th class="">OT Type</th>
+                            <th class="">Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Template</th>
+                                <th class="">OT Type</th>
+                                <th class="">Rate</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+    <div id="librarymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="table-responsive">
+                        <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                            <thead>
+                                <tr>
+                                    <th class="">SL No</th>
+                                    <th class="">Action</th>
+                                    <th class="">Template</th>
+                                    <th class="">OT Type</th>
+                                    <th class="">Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

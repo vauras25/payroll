@@ -1,0 +1,28 @@
+.table td {
+    vertical-align: initial !important;
+}
+
+td {
+    border: 1px solid #dee2e6 !important;
+}
+
+.define-lwf-rule-table ngx-select-dropdown {
+    width: 200px;
+    padding: 4px;
+}
+
+table.nowrap th,
+table.nowrap td {
+    white-space: nowrap;
+    vertical-align: middle !important;
+}
+
+.form-control.ng-touched.ng-valid {
+    border-color: inherit !important;
+}
+
+table {
+
+    border-collapse: collapse;
+}
+

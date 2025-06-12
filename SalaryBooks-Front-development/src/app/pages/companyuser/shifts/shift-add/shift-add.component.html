@@ -1,0 +1,139 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashbaord</a>
+            <span class="breadcrumb-item">Shift Management</span>
+            <span class="breadcrumb-item active">Shift Edit</span>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-clock"></i>
+        <div>
+            <h4>Shift Management</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Search Employee</h6>
+            <companyuser-app-table-filter
+            [searchKeyFilter]="true"
+            [empIdFilter]="true"
+            [isHod]="false"
+            (onFiltered)="employeeListFilter = $event; filterDataTable()"
+          ></companyuser-app-table-filter>
+              <!-- <div class="d-flex align-items-center justify-content-center bg-gray-100 bd pd-x-20">
+                  <form [formGroup]="searchForm">
+                      <div class="d-md-flex flex-wrap pd-y-20 justify-content-center">
+                          <div class="col-sm-3 mb-2 col-12">
+                              <input type="text" class="form-control" placeholder="Search Name" formControlName="emp_name">
+                          </div>
+
+                          <div class="col-sm-3 mb-2 col-12">
+                              <input type="text" class="form-control mg-t-10 mg-md-t-0" placeholder="Search Employee ID" formControlName="emp_id">
+                          </div>
+
+                          <div class="col-sm-3 mb-2 col-12">
+                              <ngx-select-dropdown formControlName="department" [options]="departmentMaster" class="form-control p-2" [config]="{search:true, placeholder: 'Select Department'}" [multiple]="true"></ngx-select-dropdown>
+                          </div>
+
+                          <div class="col-sm-3 mb-2 col-12">
+                              <ngx-select-dropdown formControlName="designation" [options]="designationMaster" class="form-control p-2" [config]="{search:true, placeholder: 'Select Designation'}" [multiple]="true"></ngx-select-dropdown>
+                          </div>
+
+                          <div class="col-sm-3 mb-2 col-12">
+                              <ngx-select-dropdown formControlName="branch" [options]="branchMaster" class="form-control p-2" [config]="{search:true, placeholder: 'Select Branch'}" [multiple]="true"></ngx-select-dropdown>
+                          </div>
+
+                          <div class="col-sm-3 mb-2 col-12">
+                              <ngx-select-dropdown formControlName="client" [options]="clientMaster" class="form-control p-2" [config]="{search:true, placeholder: 'Select Client'}" [multiple]="true"></ngx-select-dropdown>
+                          </div>
+
+                          <div class="col-sm-3 mb-2 col-12">
+                              <button class="btn btn-info pd-y-13 pd-x-20 bd-0  mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2" (click)="filterDataTable()">Search</button>
+                          </div>
+                      </div>
+                  </form>
+              </div> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3 d-inline-block">Employee Lists</h6>
+            <button *ngIf="Global.checkCompanyModulePermission({
+                company_module: 'shift_management',
+                company_operation: 'setup_shift',
+                company_sub_module:'allocate_shift',
+                company_sub_operation:['edit']
+              })" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-b-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 float-right" [class.disabled]="rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)" (click)="startEditing('multiple')">Edit Selected</button>
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th>SL No</th>
+                            <th>
+                                <input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)">
+                            </th>
+                            <th>Action</th>
+                            <th>Employee Name</th>
+                            <th>Employee ID</th>
+                            <th>Shift Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Shift Modal -->
+    <button id="editShiftModalButton" [hidden]="true" data-toggle="modal" data-target="#editShiftModal"></button>
+    <div id="editShiftModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Edit Shift</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form [formGroup]="editShiftForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg-12 mb-3">
+                                <label>Shift <span class="text-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="shift_id" [options]="shiftMaster" class="form-control p-2" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-lg-12 mb-3">
+                                <label>Start Date <span class="text-danger">*</span></label>
+                                <input type="date" formControlName="shift_start_date" class="form-control">
+                            </div>
+
+                            <div class="col-lg-12 mb-3">
+                                <label>End Date <span class="text-danger">*</span></label>
+                                <input type="date" formControlName="shift_end_date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!editShiftForm.valid" (click)="updateShift($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                          <span>Update</span>
+                      </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

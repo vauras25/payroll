@@ -1,0 +1,12 @@
+.settings-link {
+    border: 1px solid;
+    text-align: center;
+}
+
+.settings-link i {
+    background: #17a2b8;
+    padding: 15px 18px;
+    /* margin: 80px; */
+    color: white;
+    border-radius: 100%;
+}

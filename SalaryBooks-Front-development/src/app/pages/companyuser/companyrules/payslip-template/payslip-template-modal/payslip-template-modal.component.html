@@ -1,0 +1,520 @@
+<div class="tablemain " style="width: 100%; margin: 0 auto;" >
+    <table class="template-table" style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+        <tr *ngIf="(tempDetails?.employee_details ?? []).includes('company_info')">
+            <th colspan="100%" style="text-align: center; padding: 15px; height: 105px !important;">
+                <ng-container *ngIf="tempDetails?.company_info; else companyInfoNotAvailable">
+                    <p class="mb-0">{{ tempDetails?.company_info }}</p>
+                </ng-container>
+                <ng-template #companyInfoNotAvailable>
+                    <h4 style="text-transform: uppercase; letter-spacing: 5px; color: #000; margin-bottom: 3px;">Company Name</h4>
+                    <p style="margin-bottom: 1px; font-weight: 400; color: #a3a3a3;"><i class="fa fa-map-marker"></i> Downtown Street, Kolkata, India</p>
+                    <p style="margin-bottom: 1px; font-weight: 400; color: #a3a3a3;"><i class="fa fa-phone"></i> (+91) 0000-000-000</p>
+                </ng-template>
+
+                <img style="position: absolute; height: 90px; width: 90px; left: 33px; top: 27px;" [src]="tempDetails?.company_logo ? (Global.BACKEND_URL + '/' + tempDetails?.company_logo) : 'https://via.placeholder.com/90X90.png'"alt="logo" />
+            </th>
+        </tr>
+        <tr *ngIf="(tempDetails?.employee_details ?? []).includes('payslip_period')">
+            <td colspan="100%" style="border-top: 1px solid; padding: 5px 8px;">
+                Pay Slip for the wage month :
+                <b>
+                    {{ wageMonth ? Global.getMonthValue(wageMonth)?.monthLabel : "mm" }}/{{ wageYear ?? "yyyy" }}
+                </b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="100%" style="padding: 0;">
+                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('emp_code')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Employee Code</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_id }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('emp_name')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Employee Name</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_first_name }} {{ empData?.emp_last_name }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('client')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Client</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.client?.client_name || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('branch')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Branch</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.branch?.branch_name || "N/A" }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('department')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Department</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.department?.department_name || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('designation')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Designation</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.designation?.designation_name || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('hod')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">HOD</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.hod ? empData?.hod.first_name + ' ' + empData?.hod.last_name : 'N/A' }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('gender')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Gender</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold; text-transform: uppercase;">{{ empData?.emp_data?.sex || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('dob')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">DOB</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_emp_dob ? (empData?.emp_data?.emp_emp_dob | date) : "" }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('doj')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">DOJ</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.date_of_join ? (empData?.emp_data?.date_of_join | date) : "" }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('email_id')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Email ID</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold; word-break: break-word;">{{ empData?.emp_data?.emp_email_id || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('phone')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Phone</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_mob || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('bank_name')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Bank Name</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_bank_name || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('account_no')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Account Number</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_account_no || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('ifsc_code')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">IFSC Code</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_ifsc_code || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('account_type')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Account Type</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_account_type || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('aadhar_no')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Aadhar No</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_aadhar_no || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('pan_no')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">PAN No</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_pan_no || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('uan_no')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">UAN No</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.emp_uan_no || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('pf_no')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">PF No</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.new_pf_no || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('esic_ip_no')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">ESIC/IP No</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.esic_no || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('month_days')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Month Days</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ wageMonth ? Global.getMonthValue(wageMonth)?.days : "" }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('week_off')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Week Offs</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.attendance_summaries?.total_wo || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('pay_days')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Pay days</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.attendance_summaries?.paydays || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('paid_leave')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Paid Leave</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.attendance_summaries?.total_PDL || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('holidays')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Holidays</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.attendance_summaries?.holiday || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('present_days')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Present Days</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.attendance_summaries?.total_present || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('lop_days')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">LOP Days</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">{{ empData?.emp_data?.attendance_summaries?.total_lop || "N/A"  }}</div>
+                        </div>
+                    </div>
+
+                    <div style="width: 50%;" *ngIf="(tempDetails?.employee_details ?? []).includes('arrear_leave')">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Arrear Period</div>
+                            <div style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">!!!</div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="100%" style="padding: 0;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 33.34%; padding: 0; vertical-align: top;">
+                            <table style="width: 100%; border-bottom: 1px solid;">
+                                <tr>
+                                    <th style="width: 100%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center" colspan="100%">Earnings</th>
+                                </tr>
+                                <ng-container *ngIf="(tempDetails?.payroll_details ?? []).includes('salary_heads')">
+                                    <ng-container *ngFor="let head of empData?.earnings_data?.salary_report_heads ?? []">
+                                        <tr *ngIf="head?.head_type == 'earning'">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.head_title }}</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.amount ?? 0 | number:'1.2-2'}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                                <!-- <ng-container *ngIf="(tempDetails?.payroll_details ?? []).includes('salary_heads')">
+                                    <tr *ngFor="let head of empData?.earnings_data?.salary_report_heads ?? []">
+                                        <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.head_title }}</td>
+                                        <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.amount ?? 0 | number:'1.2-2'}}</td>
+                                    </tr>
+                                </ng-container> -->
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('salary_heads')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Gross</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.earnings_data?.salary_gross_earning ?? 0 |number:'1.2-2' }}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('incentive')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Incentive</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.incentive_total_amount ?? 0 | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('bonus')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Bonus</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.bonus_total_amount ?? 0 | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('ex_gratia')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Ex-gratia</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.ex_gratia_total_amount ?? 0 | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('ot')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">OT</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.ot_total_amount ?? 0 | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('arrear')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Arrear</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.arrear_total_amount ?? 0 | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('leave_encash')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Leave Encashment</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">!!!</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('shift_allowance')">
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Shift Allowance</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.shift_allowance_total_amount}}</th>
+                                </tr>
+                                <tr *ngIf="(tempDetails?.payroll_details ?? []).includes('extra_earnings')">
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Extra Earnings</th>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">!!!</th>
+                                </tr>
+                                <tr>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Sub Total</th>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.earnings_data?.sub_total | number : '1.2-2'}}</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 33.34%; padding: 0; vertical-align: top;" *ngIf="(tempDetails?.payroll_details ?? []).includes('deduction')">
+                            <table style="width: 100%; border-bottom: 1px solid;">
+                                <ng-container *ngIf="(tempDetails?.payroll_details ?? []).includes('salary_heads')">
+                                    <ng-container *ngFor="let head of empData?.earnings_data?.salary_report_heads ?? []">
+                                        <tr *ngIf="head?.head_type == 'deduction'">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.head_title }}</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.amount ?? 0 | number:'1.2-2'}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                                <tr>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">Deductions</th>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">Amt in Rs.</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">EPF</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.deductions_data?.epf_amount ?? 0  | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">VPF</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{empData?.deductions_data?.vpf_amount ?? 0 | number:'1.2-2'}}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">ESIC</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.deductions_data?.esic_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">P TAX</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.deductions_data?.p_tax_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">LWF</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.deductions_data?.tds_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">TDS</td>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.deductions_data?.tds_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 33.34%; padding: 0; vertical-align: top;" *ngIf="(tempDetails?.payroll_details ?? []).includes('er_contri')">
+                            <table style="width: 100%; border-bottom: 1px solid;">
+                                <tr>
+                                    <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">Employer Contr.</th>
+                                    <th style="width: 50%; border-top: 1px solid; padding: 5px 8px; text-align: center">Amt in Rs.</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">EPF</td>
+                                    <th style="width: 50%; border-top: 1px solid; padding: 5px 8px;">{{ empData?.contribution_data?.epf_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">EPS</td>
+                                    <th style="width: 50%; border-top: 1px solid; padding: 5px 8px;">{{ empData?.contribution_data?.eps_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Admin & EDLI</td>
+                                    <th style="width: 50%; border-top: 1px solid; padding: 5px 8px;">{{ empData?.contribution_data?.admin_edli_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">ESIC</td>
+                                    <th style="width: 50%; border-top: 1px solid; padding: 5px 8px;">{{ empData?.contribution_data?.esic_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">LWF</td>
+                                    <th style="width: 50%; border-top: 1px solid; padding: 5px 8px;">{{ empData?.contribution_data?.lwf_amount ?? 0 | number:'1.2-2' }}</th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="100%" style="padding: 0;">
+                <table style="width: 100%; padding: 0;">
+                    <tr>
+                        <ng-container *ngIf="(tempDetails?.payroll_details ?? []).includes('gross')">
+                            <td style="width: 16.67%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Gross Earning</td>
+                            <td style="width: 16.67%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.gross_earning  ?? 00.00 | number:'1.2-2'}}</td>
+                        </ng-container>
+                        <ng-container *ngIf="(tempDetails?.payroll_details ?? []).includes('net_pay')">
+                            <td style="width: 16.67%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Net Pay</td>
+                            <td style="width: 16.67%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ empData?.net_pay ?? 00.00 | number:'1.2-2' }}</td>
+                        </ng-container>
+                        <ng-container *ngIf="(tempDetails?.payroll_details ?? []).includes('ctc')">
+                            <td style="width: 16.67%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">CTC</td>
+                            <td style="width: 16.67%; border-top: 1px solid; padding: 5px 8px;">{{ empData?.ctc ?? 00.00 | number:'1.2-2' }}</td>
+                        </ng-container>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <h5 style="font-weight: 800; color: #000; font-size: 1rem; margin: 0; padding: 5px 0px;">Others [!!!]</h5>
+
+    <table class="template-table" style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+        <tr>
+            <td style="padding: 0; vertical-align: top;" *ngIf="(tempDetails?.other_payment ?? []).includes('advance') || (tempDetails?.other_payment ?? []).includes('reimbursement')">
+                <table style="width: 100%; border-right: 1px solid; border-bottom: 1px solid;">
+                    <tr>
+                        <th style="width: 25%; border-right: 1px solid; padding: 5px 8px;">Payments</th>
+                        <th style="width: 25%; padding: 5px 8px;">Amt in Rs</th>
+                    </tr>
+                    <tr *ngIf="(tempDetails?.other_payment ?? []).includes('advance')">
+                        <td style="width: 25%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Advance Given</td>
+                        <td style="width: 25%; border-top: 1px solid; padding: 5px 8px;">000</td>
+                    </tr>
+                    <tr *ngIf="(tempDetails?.other_payment ?? []).includes('reimbursement')">
+                        <td style="width: 25%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Reimbursement</td>
+                        <td style="width: 25%; border-top: 1px solid; padding: 5px 8px;">000</td>
+                    </tr>
+                </table>
+            </td>
+            <td style="padding: 0; vertical-align: top;">
+                <table style="width: 100%; border-left: 1px solid; border-bottom: 1px solid;">
+                    <tr>
+                        <th style="width: 25%; border-right: 1px solid; padding: 5px 8px;">Deductions</th>
+                        <th style="width: 25%; padding: 5px 8px;">Amt in Rs</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Advance Recovered</td>
+                        <td style="width: 25%; border-top: 1px solid; padding: 5px 8px;">000</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Fine</td>
+                        <td style="width: 25%; border-top: 1px solid; padding: 5px 8px;">000</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Breakage</td>
+                        <td style="width: 25%; border-top: 1px solid; padding: 5px 8px;">000</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Other Deduction</td>
+                        <td style="width: 25%; border-top: 1px solid; padding: 5px 8px;">000</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <ng-container *ngIf="(tempDetails?.other_payment ?? []).includes('leave_details')">
+        <h5 style="font-weight: 800; color: #000; font-size: 1rem; margin: 0; padding: 5px 0px;">Leave Details [!!!]</h5>
+
+        <table class="template-table" style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+            <tr>
+                <th style="width: 20%; border-right:1px solid; padding: 5px 8px; min-height: 32px;"></th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">CL</th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">PL</th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">EL</th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">SL</th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">ML</th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">etc</th>
+                <th style="width: 10%; border-right:1px solid; padding: 5px 8px;">etc</th>
+                <th style="width: 10%; padding: 5px 8px;">etc</th>
+            </tr>
+            <tr>
+                <td style="width: 20%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;">Opening Balance</td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-top: 1px solid; padding: 5px 8px;"></td>
+            </tr>
+            <tr>
+                <td style="width: 20%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;">Availabled</td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-top: 1px solid; padding: 5px 8px;"></td>
+            </tr>
+            <tr>
+                <td style="width: 20%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;">Closing Balance</td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-right:1px solid; border-top: 1px solid; padding: 5px 8px;"></td>
+                <td style="width: 10%; border-top: 1px solid; padding: 5px 8px;"></td>
+            </tr>
+        </table>
+    </ng-container>
+
+
+    <ng-container *ngIf="(tempDetails?.other_payment ?? []).includes('advance_details')">
+        <h5 style="font-weight: 800; color: #000; font-size: 1rem; margin: 0; padding: 5px 0px;">Advance Details [!!!]</h5>
+
+        <table class="template-table" style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+            <tr>
+                <th style="width: 25%; border-right: 1px solid; padding: 5px 8px;">Opening Balance</th>
+                <th style="width: 25%; border-right: 1px solid; padding: 5px 8px;">New Advance</th>
+                <th style="width: 25%; border-right: 1px solid; padding: 5px 8px;">Advance Recovered</th>
+                <th style="width: 25%; border-right: 1px solid; padding: 5px 8px;">Closing Balance</th>
+            </tr>
+            <tr>
+                <td style="width: 25%; border-right: 1px solid; border-top: 1px solid; padding: 5px 8px;">000</td>
+                <td style="width: 25%; border-right: 1px solid; border-top: 1px solid; padding: 5px 8px;">000</td>
+                <td style="width: 25%; border-right: 1px solid; border-top: 1px solid; padding: 5px 8px;">000</td>
+                <td style="width: 25%; border-right: 1px solid; border-top: 1px solid; padding: 5px 8px;">000</td>
+            </tr>
+        </table>
+    </ng-container>
+
+
+    <div style="height: 29.19px"></div>
+
+    <table class="template-table" style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+        <tr>
+            <td style="width: 100%; padding: 5px 8px; height: 60px !important;">
+                {{ tempDetails?.signature_message ?? 'message and foot note signature' }}
+            </td>
+        </tr>
+    </table>
+</div>

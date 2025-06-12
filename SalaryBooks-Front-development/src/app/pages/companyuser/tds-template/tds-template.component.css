@@ -1,0 +1,402 @@
+/* .btn {
+  min-width: 120px;
+} */
+
+thead tr {
+    font-size: 12px !important;
+    background-color: #EDF2F2;
+    border-bottom: 1px solid grey;
+}
+
+
+.earnig-table tbody tr:nth-child(odd){
+  background-color: #f5f5f5 !important;
+}
+.earnig-table tbody tr:nth-child(even){
+  background-color: #fff !important;
+}
+
+thead tr th{
+  margin-left: 10px !important;  
+}
+
+tbody tr {
+    background-color: #fff;
+    color: #000;
+    font-size: 12px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+td {
+    border: none;
+    border-left: 1px solid #dee2e6;
+    border-collapse: collapse;
+}
+
+td:first-child {
+    border: none;
+}
+
+.actionBtn {
+    border: 1px solid #E3E3EE;
+    border-radius: 4px;
+    background: #F6F6F9;
+    padding: 10px;
+}
+
+tr:last-child {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.c-table {
+    /* margin:10px  0px; */
+    box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+        1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+}
+
+.c-table .c-tr .c-td,
+.c-th {
+    box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+        1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+    padding: 6px 12px;
+    width: 25%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.c-th {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    background-color: rgba(20, 20, 20, 0.822);
+    color: #fff;
+}
+
+.c-td {
+    font-size: 13px;
+    white-space: nowrap;
+    color: #000;
+}
+
+.c-table .c-tr label {
+    margin: 0px;
+    display: flex;
+}
+
+input[type=checkbox] {
+    accent-color: #17A3B4;
+}
+
+input[type=checkbox]:read-only {
+    pointer-events: none;
+}
+
+.table.employee-table td {
+    border-bottom: 1px solid #dee2e6 !important;
+    border-left: 1px solid #dee2e6 !important;
+}
+
+.table.employee-table {
+    border-right: 1px solid #dee2e6;
+    border-top: 1px solid #dee2e6;
+}
+.switch{
+    border: 1px solid #dcdcdc;
+    padding: 8px 12px;
+    background: #fff;
+  }
+  .active-tab{
+    background: #F8F9F9 ;
+    color: #000;
+  }
+  
+  input[type=radio]{
+    accent-color: #17A3B4;
+  }
+  
+  .btn-custom{
+    background-color: #F6F6F9 ;
+    border: 1px solid #868994;
+  }
+  
+  input[type=checkbox]{
+    accent-color: #17a3ba;
+  }
+  
+/*  Toggle Switch  */
+
+.toggleSwitch span span {
+    display: none;
+  }
+  
+  @media only screen {
+    .toggleSwitch {
+      display: inline-block;
+      height: 18px;
+      position: relative;
+      overflow: visible;
+      padding: 0;
+      margin-left: 50px;
+      cursor: pointer;
+      width: 40px;
+        user-select: none;
+    }
+    .toggleSwitch * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .toggleSwitch label,
+    .toggleSwitch > span {
+      line-height: 20px;
+      height: 20px;
+      vertical-align: middle;
+    }
+    .toggleSwitch input:focus ~ a,
+    .toggleSwitch input:focus + label {
+      outline: none;
+    }
+    .toggleSwitch label {
+      position: relative;
+      z-index: 3;
+      display: block;
+      width: 100%;
+    }
+    .toggleSwitch input {
+      position: absolute;
+      opacity: 0;
+      z-index: 5;
+    }
+    .toggleSwitch > span {
+      position: absolute;
+      left: -50px;
+      width: 100%;
+      margin: 0;
+      padding-right: 50px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .toggleSwitch > span span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 5;
+      display: block;
+      width: 50%;
+      margin-left: 50px;
+      text-align: left;
+      font-size: 0.9em;
+      width: 100%;
+      left: 15%;
+      top: -1px;
+      opacity: 0;
+    }
+    .toggleSwitch a {
+      position: absolute;
+      right: 50%;
+      z-index: 4;
+      display: block;
+      height: 100%;
+      padding: 0;
+      left: 2px;
+      width: 18px;
+      background-color: #fff;
+      border: 1px solid #CCC;
+      border-radius: 100%;
+      -webkit-transition: all 0.2s ease-out;
+      -moz-transition: all 0.2s ease-out;
+      transition: all 0.2s ease-out;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .toggleSwitch > span span:first-of-type {
+      color: #fff;
+      opacity: 1;
+      left: 45%;
+    }
+    .toggleSwitch > span:before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 50px;
+      top: -2px;
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid #ccc;
+      border-radius: 30px;
+      -webkit-transition: all 0.2s ease-out;
+      -moz-transition: all 0.2s ease-out;
+      transition: all 0.2s ease-out;
+    }
+    .toggleSwitch input:checked ~ a {
+      border-color: #fff;
+      left: 100%;
+      margin-left: -8px;
+    }
+    .toggleSwitch input:checked ~ span:before {
+      border-color: #0866C6;
+      box-shadow: inset 0 0 0 30px #0866C6;
+    }
+    .toggleSwitch input:checked ~ span span:first-of-type {
+      opacity: 0;
+    }
+    .toggleSwitch input:checked ~ span span:last-of-type {
+      opacity: 1;
+      color: #fff;
+    }
+    /* Switch Sizes */
+    .toggleSwitch.large {
+      width: 60px;
+      height: 27px;
+    }
+    .toggleSwitch.large a {
+      width: 27px;
+    }
+    .toggleSwitch.large > span {
+      height: 29px;
+      line-height: 28px;
+    }
+    .toggleSwitch.large input:checked ~ a {
+      left: 41px;
+    }
+    .toggleSwitch.large > span span {
+      font-size: 1.1em;
+    }
+    .toggleSwitch.large > span span:first-of-type {
+      left: 50%;
+    }
+    .toggleSwitch.xlarge {
+      width: 80px;
+      height: 36px;
+    }
+    .toggleSwitch.xlarge a {
+      width: 36px;
+    }
+    .toggleSwitch.xlarge > span {
+      height: 38px;
+      line-height: 37px;
+    }
+    .toggleSwitch.xlarge input:checked ~ a {
+      left: 52px;
+    }
+    .toggleSwitch.xlarge > span span {
+      font-size: 1.4em;
+    }
+    .toggleSwitch.xlarge > span span:first-of-type {
+      left: 50%;
+    }
+  }
+  .nested-th{
+    vertical-align: middle !important;
+    padding: 6px 12px;
+    white-space: nowrap;
+  }
+  
+  .c-table thead tr{
+    font-size: 12px !important;
+    background-color: #EDF2F2;
+    border-bottom:1px solid #dee2e6;
+  
+  }
+  
+  .c-table tbody tr{
+    background-color: #fff;
+    color: #000;
+    font-size: 12px;
+  }
+  
+  .c-table tbody tr:nth-child(even){
+    background-color: #f5f5f5;
+  }
+  .c-table td, th{
+    border: none;
+    padding: 13px ;
+    border-left:1px solid #dee2e6;
+    border-collapse: collapse;
+  }
+  .c-table td:first-child{
+    border: none;
+  }
+  
+  .actionBtn{
+    border: 1px solid #E3E3EE;
+    border-radius: 4px;
+    background: #F6F6F9;
+    padding: 10px;
+  }
+  
+  .c-table tr:last-child{
+    border-bottom:1px solid #dee2e6;
+  }
+  
+  .c-table th{
+    padding: 6px 12px ;
+    border-collapse: collapse;
+    white-space: nowrap;
+  }
+  
+  #salarysheet-report-table .title-sec th.column-title {
+    background: #1D2939;
+    color: #fff;
+  }
+  
+  #salarysheet-report-table .headings th {
+    background: #3d4755;
+    color: #fff;
+  }
+  
+  #salarysheet-report-table th,
+  #salarysheet-report-table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .table-responsive>.table-bordered {
+    border: 1px solid #dee2e6;
+  }
+  
+  .card-header {
+    border-color: #dee2e6;
+    border: 1px solid #dee2e6;
+  }
+  
+  .btn-custom{
+    background-color: #F6F6F9 ;
+    border: 1px solid #868994;
+  }
+  
+  
+  /*  End Toggle Switch  */
+.c-table{
+  all:unset
+}
+  
+.c-table .row{
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 10px;
+  border-right:1px solid #dee2e6;
+  border-bottom:1px solid #dee2e6;
+}
+
+.t-el{
+  padding: 10px;
+  color: #343a40;
+  border-top:1px solid #dee2e6;
+  border-left:1px solid #dee2e6;
+
+}
+
+.t-head{
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.t-data{
+  font-size: 12px;
+}

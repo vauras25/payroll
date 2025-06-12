@@ -1,0 +1,326 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item active">Reports</a>
+            <a class="breadcrumb-item">Over-Time Report Listing</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>Over-Time Report Listing</h4>
+            <!-- <p class="mg-b-0">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+            </p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <companyuser-app-table-filter [isBankAccount]="true" [hidden]="reportGenerated || report_type!=''" [monthFilter]="true" [yearFilter]="true" (onFiltered)="!isProcessPayout ? fetchOvertimeListing({page: 1, filter: $event}) : fetchOvertimeListing({page: 1, filter: $event})"></companyuser-app-table-filter>
+
+            <div class="mt-3">
+               
+                <ng-container *ngIf="reportGenerated == false && report_type==''">
+                    
+                    <div class="d-flex">
+                        <form class="flex-1 pr-4" [formGroup]="tableOperationForm">
+                            <div class="d-flex align-items-center">
+                                <label style="font-size: 12px;" for="payout_process" class="mr-3 mb-0">
+                                    <input class="mr-2" type="checkbox" formControlName="payout_process" id="payout_process">Process payout
+                                </label>
+                               
+
+                                <ng-container *ngIf="tableOperationForm.get('payout_process')?.value == true">
+                                    <ngx-select-dropdown formControlName="payout_bankid" [options]="bankMaster" class="form-control p-1 flex-1" [config]="{ search: true, placeholder: 'Employee Bank', displayKey: 'template_name' }" [multiple]="false"></ngx-select-dropdown>
+                                </ng-container>
+                                <ng-container
+                                *ngIf="tableOperationForm.get('payout_process')?.value != true"
+                              >
+                                <ngx-select-dropdown
+                                  formControlName="report_template"
+                                  [options]="sheetTemplateMaster"
+                                  class="form-control p-1 flex-1"
+                                  [config]="{
+                                    search: true,
+                                    placeholder: 'SELECT TEMPLATE',
+                                    displayKey: 'template_name'
+                                  }"
+                                  [multiple]="false"
+                                ></ngx-select-dropdown>
+                
+                                <button
+                                *ngIf="!this.tableOperationForm.get('report_template')?.value?.default"  
+                                (click)="openSettingsTemplateModal()"
+                                  class="btn btn-info tx-11 tx-spacing-2 h-100 ml-2"
+                                >
+                                  <span style="font-size: 20px" class="fa align-middle"
+                                    >&#xf013;</span
+                                  >
+                                  <i class="fa-regular fa-gear"></i>
+                                </button>
+                              </ng-container>
+                            </div>
+                        </form>
+
+                        <div>
+                            <div class="d-flex h-100">
+                                <ng-container *ngIf="tableOperationForm.get('payout_process')?.value == true">
+                                    <button [disabled]="!tableOperationForm.get('payout_bankid')?.valid || !anyRowsChecked()" (click)="instruction_type='';generateBankInstruction($event)" type="button" class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                                        <span><i style="font-size: 12px;" class="mr-1 fa fa-file"></i>GENERATE BANK INSTRUCTION</span>
+                                    </button>
+                                    <button [disabled]="!tableOperationForm.get('payout_bankid')?.valid || !anyRowsChecked()" type="button" (click)="instruction_type='voucher';generateBankInstruction($event)" class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                                        <span><i style="font-size: 12px;" class="mr-1 fa fa-file"></i>GENERATE CASH VOUCHER</span>
+                                    </button>
+                                </ng-container>
+                                <ng-container *ngIf="tableOperationForm.get('payout_process')?.value == false && 
+                                Global.checkCompanyModulePermission({
+                                  company_module: 'over_time',
+                                  company_sub_module: ['ot_report'],
+                                  company_sub_operation: ['view'],
+                                  company_operation: ['overtime_report']
+                                })
+                              ">
+                                    <button (click)="generateReportNew()" [disabled]="!anyRowsChecked() || tableOperationForm?.value?.report_template==null" type="button" class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                                        <span><i style="font-size: 12px;" class="mr-1 fa fa-file"></i>VIEW OVERTIME REPORT </span>
+                                    </button>
+                                    <button [disabled]="!anyRowsChecked()" type="button" class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                                        <span><i style="font-size: 12px;" class="mr-1 fa fa-receipt"></i>GENERATE SLIP</span>
+                                    </button>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mt-3">
+                        <app-custom-tableoption
+            [searchable]="true"
+            (onFilterChanged)="employeePaginationOptions.limit = +$event?.length ; fetchOvertimeListing({ page:employeePaginationOptions.page,options:$event})"
+          ></app-custom-tableoption>
+                        <table class="table nowrap wd-100p employee-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label class="d-flex align-items-center mb-0" for="select-all">
+                                            <input type="checkbox" class="mr-2" id="select-all" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="employees.length > 0">
+                                            SL No.
+                                        </label>
+                                    </th>
+                                    <th>Employee ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Status Bank Instructions</th>
+                                    <th>Emp Bank</th>
+                                    <th *ngIf="!isProcessPayout">Type</th>
+                                    <th *ngIf="!isProcessPayout">OT Wage</th>
+                                    <th *ngIf="!isProcessPayout">OT Rate</th>
+                                    <th *ngIf="!isProcessPayout">Total Deduction</th>
+                                    <th *ngIf="!isProcessPayout">Net Pay</th>
+
+                                    <th *ngIf="isProcessPayout">EARNED GROSS</th>
+                                    <th *ngIf="isProcessPayout">TOTAL PF</th>
+                                    <th *ngIf="isProcessPayout">TOTAL ESI</th>
+                                    <th *ngIf="isProcessPayout">PT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let employee of employees; let i = index">
+                                    <tr>
+                                        <td>
+                                            <label class="d-flex align-items-center" [for]="'checkrow-' + (i+1)">
+                                                <input type="checkbox" class="mr-2" [attr.checked]="employee.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="employee._id" (click)="rowCheckBoxChecked($event, employee)" *ngIf="employeeCheckBoxIsVisible(employee) == true">
+                                                {{ Global.getTableSerialNumber(i, employeePaginationOptions.limit, employeePaginationOptions.page) }}
+                                            </label>
+                                        </td>
+                                     
+                                        <td>{{ employee?.emp_id }}</td>
+                                        <td>{{ employee?.emp_first_name }} {{ employee?.emp_last_name }}</td>
+                                        <td>
+                                            <label class="d-flex align-items-center mb-0">
+                                                <ng-container *ngIf="employee?.UAN_no">
+                                                    <ng-container *ngIf="employee?.ot_report?.bank_ins_referance_id!='';else not_ready">Generated</ng-container>
+                                                    <ng-template #not_ready>
+                                                     Ready   
+                                                    </ng-template>
+                                                </ng-container>
+
+                                                <ng-container *ngIf="!employee?.UAN_no">Pending</ng-container>
+                                            </label>
+                                        </td>
+                                        <td>{{ employee?.bank_details?.bank_name ?? "N/A" }}</td>
+                                        <td *ngIf="!isProcessPayout" class="text-capitalize">{{formatOvertimeType(employee?.employee_details?.template_data?.overtime_temp_data?.overtime_type)  ?? "N/A" }}</td>
+                                        <td *ngIf="!isProcessPayout">{{ employee?.over_time_moduless?.calculated_wage_value?.toFixed(2) ?? "N/A" }}</td>
+                                        <td *ngIf="!isProcessPayout">{{ employee?.employee_details?.template_data?.overtime_temp_data?.overtime_rate ?? "N/A"}}</td>
+                                        <td *ngIf="!isProcessPayout">{{ employee?.ot_report?.total_deduction?.toFixed(2) ?? "N/A" }}</td>
+                                        <td *ngIf="!isProcessPayout">{{ employee?.ot_report?.total_net_value?.toFixed(2) ?? "N/A" }}</td>
+
+                                        <td *ngIf="isProcessPayout">{{ employee?.ot_report?.gross_earning?.toFixed(2) ?? "N/A" }}</td>
+                                        <td *ngIf="isProcessPayout">{{ employee?.ot_report?.total_pf_wages?.toFixed(2) ?? "N/A" }}</td>
+                                        <td *ngIf="isProcessPayout">{{ employee?.ot_report?.total_esic_wages?.toFixed(2) ?? "N/A" }}</td>
+                                        <td *ngIf="isProcessPayout">{{ employee?.ot_report?.total_pt_wages?.toFixed(2) ?? "N/A" }}</td>
+
+
+                                    </tr>
+                                </ng-container>
+                                <tr *ngIf="employees.length == 0">
+                                    <td colspan="100%" class="text-center" style="background-color: #f7f7f7;">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="reportGenerated == true &&  report_type=='form-twenty-three'">
+                    <div class="text-right">
+                        <button (click)="downloadRegisterReport()" type="button" class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                            <span><i style="font-size: 12px" class="mr-1 fa fa-download"></i>Export</span>
+                        </button>
+
+                        <button (click)="cancelGenerateReport()" type="button" class="btn btn-danger tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                            <span><i style="font-size: 12px" class="mr-1 fa fa-times"></i>Cancel</span>
+                        </button>
+                    </div>
+                    <app-register-form-twentythree [reportFilter]="reportFilter" ></app-register-form-twentythree>
+
+                  
+                </ng-container>
+                <ng-container>
+                <app-ot-individual [reportFilter]="reportFilter" (cancellReport)="cancellIndividual($event)" *ngIf="report_type=='individual-report'"></app-ot-individual>
+                <app-ot-formfour (cancellReport)="cancellIndividual($event)"  [reportFilter]="reportFilter" *ngIf="report_type=='form-four'"></app-ot-formfour>
+                <app-custom-report (cancellReport)="cancellIndividual($event)"  [reportFilter]="reportFilter" *ngIf="report_type=='custom'"></app-custom-report>
+                </ng-container>
+            </div>
+
+            <ng-container *ngIf="reportGenerated == false && report_type==''">
+                <app-custom-pagination [rows]="employees" [paginationOptions]="employeePaginationOptions" (onPageClicked)="fetchEmployees({'page' : $event})"></app-custom-pagination>
+            </ng-container>
+
+        </div>
+    </div>
+
+    <button id="TemplateModalOpen" [hidden]="true" data-toggle="modal" data-target="#settingsTemplateModal"></button>
+
+    <div id="settingsTemplateModal"
+         tabindex="-1"
+         class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-xl modal-dialog-centered"
+             role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        {{ isSheetTemplateEdit ? 'Update' : 'Create New'}} Template
+                    </h6>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            (click)="clearFormData()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="settingsTemplateForm"
+                      [formGroup]="templateForm">
+                    <div class="modal-body pd-20">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="text"
+                                               class="form-control error"
+                                               placeholder="Enter Template Name"
+                                               formControlName="template_name" />
+
+                                        <p class="mt-1 text-danger"
+                                           *ngIf="
+                      templateForm.controls.template_name.hasError(
+                        'required'
+                      ) &&
+                      (templateForm.controls.template_name.dirty ||
+                        templateForm.controls.template_name.touched)
+                    ">
+                                            This field is required
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <ng-container *ngFor="let row of sheetTemplate">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5 class="text-uppercase mg-t-10 text-center">
+                                                {{ row.main_title }}
+                                            </h5>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="c-table my-3"
+                                                 *ngFor="let module of row.modules">
+                                                <div class="c-tr">
+                                                    <div class="c-th">
+                                                        <h5 class=" m-0 mr-2">
+                                                            {{ module.module_title }}
+                                                        </h5>
+                                                        <label class="mb-0"
+                                                               [for]="module.module_title">
+                                                            <input type="checkbox"
+                                                                   (change)="
+                                adjustTemplateFields(module.fields, $event);
+                                rowSelecion($event)
+                              "
+                                                                   name="fields[{{ module.module_slug }}]"
+                                                                   [id]="module.module_title"
+                                                                   [checked]="isDefaultChecked(module.module_slug, ['personal_details', 'master_breakup', 'breakup'])"
+                                                                   class="mr-1"
+                                                                   (click)="module.module_slug === 'personal_details' ? perventUnCheck($event) : null" />
+                                                            Select All
+                                                        </label>
+                                                    </div>
+                                                    <div class="c-td"
+                                                         *ngFor="let field of module.fields">
+                                                        <label (change)="
+                              adjustTemplateFields([field.slug], $event)
+                            "
+                                                               class="d-flex align-items-center"
+                                                               [for]="field.slug">
+                                                            <input #innerInput
+                                                                   type="checkbox"
+                                                                   name="fields[{{ module.module_slug }}]"
+                                                                   [id]="field.slug"
+                                                                   class="mr-1"
+                                                                   [value]="field.slug"
+                                                                   [checked]="isDefaultChecked(module.module_slug, ['personal_details', 'master_breakup', 'breakup'])"
+                                                                   (click)="module.module_slug === 'personal_details' ? perventUnCheck($event) : null" />
+                                                            {{ field.title ?? "N/A"  }}
+                                                            <small *ngIf="field.abbreviation">({{ field.abbreviation }})</small>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn text-uppercase btn-secondary tx-size-xs"
+                                data-dismiss="modal"
+                                (click)="clearFormData()"
+                                >
+                            Close
+                        </button>
+                        <button class="btn text-uppercase btn-primary tx-size-xs"
+                                type="button"
+                                (click)="isSheetTemplateEdit ? updateTemplate($event) : createTemplate($event)"
+                                >
+                            <span>Submit</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

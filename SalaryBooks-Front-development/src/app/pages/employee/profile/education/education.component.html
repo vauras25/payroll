@@ -1,0 +1,186 @@
+<div class="tabheader">
+    <h5>Educational Details</h5>
+    <a class="editicon" href="javascript:;" *ngIf="!isNew" (click)="isNew=!isNew"><i class="fas fa-plus"></i> New</a>
+</div>
+<div class="table-main">
+    <div class="ed-details" *ngIf="isNew">
+      
+        <div class="table-responsive">
+            <form [formGroup]="employeeEducationForm">
+            <table class="table table-hover mb-2">
+                <tbody >
+                    <tr>
+                        <th>Institute</th>
+                        <td>
+                            <input class="form-control" type="text" formControlName="institute">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeEducationForm, 'institute', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                  
+                    <tr>
+                        <th>University</th>
+                        <td>
+                            <input class="form-control" type="text" formControlName="university">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeEducationForm, 'university', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Stream</th>
+                        <td>
+                            <input class="form-control" type="text" formControlName="stream">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeEducationForm, 'stream', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Level</th>
+                        <td>
+                            <input class="form-control" type="text" formControlName="level">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeEducationForm, 'level', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Specialisation</th>
+                        <td>
+                            <input class="form-control" type="text" formControlName="specialisation">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeEducationForm, 'specialisation', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Completion</th>
+                        <td>
+                            <input class="form-control" type="date" formControlName="completion">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeEducationForm, 'completion', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>File</th>
+                        <td>
+                            <input class="form-control" type="file" accept="image/*" formControlName="education_file_image" (change)="onFileChanged($event, employeeEducationForm, 'education_file_image', 'education_file_image_file')">
+                            <p class="error-element" *ngIf="employeeEducationForm.controls.education_file_image.hasError('required') && ( employeeEducationForm.controls.education_file_image.dirty || employeeEducationForm.controls.education_file_image.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                            <p class="error-element" *ngIf="employeeEducationForm.get('education_file_image')?.hasError('fileSize')">File size exceeds {{ employeeEducationForm.get('education_file_image').getError('maxSize') }} KB.</p>
+                        </td>
+                    </tr>
+                </tbody>
+    
+            </table>
+            <div class="text-right">
+                <a class="editicon ml-auto"  href="javascript:void(0)" (click)="isNew=!isNew"> Cancel</a>
+                <a   href="javascript: void(0)" (click)="crteateEmployeeEducationDetails($event)" class="editicon apply-btn">Save</a>   
+            </div>
+         </form>
+        </div>
+      
+    </div>     
+ <ng-container *ngIf="employee_details?.education?.length > 0; else noTableFound">
+    <form [formGroup]="empEducationeditForm">
+    <ng-container formArrayName="template_data">
+    <div class="ed-details" *ngFor="let templateDataControl of getTemplateRows('template_data'); let i = index" [formGroupName]="i">
+        <div class="table-responsive">
+            <table class="table table-hover mb-2" >
+                <tbody >
+                    <tr>
+                        <th>Institute</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext':empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly" type="text" formControlName="institute">
+                        </td>
+                    </tr>
+                  
+                    <tr>
+                        <th>University</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext': empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly" type="text" formControlName="university">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Stream</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext': empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly" type="text" formControlName="stream">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Level</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext': empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly" type="text" formControlName="level">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Specialisation</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext': empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly" type="text" formControlName="specialisation">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Completion</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext': empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly==true}" type="date" [readOnly]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly" formControlName="completion">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>File</th>
+                        <td>
+                            
+                            <input class="form-control" *ngIf="!empEducationeditForm.get('template_data')['controls'][i].value.education_file_image else  education_file_preview"
+                            [disabled]="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly || net_uploaded_size>=max_upload_limit" 
+                            
+                            
+                            type="file" accept="image/*"  (change)="test($event,i)">
+
+                            <ng-container *ngIf="!empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly">
+                                <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                <p class="error-element" *ngIf="empEducationeditForm.controls.template_data.controls[i].controls.education_file_image_file?.hasError('fileSize');">File size exceeds {{empEducationeditForm.controls.template_data.controls[i].controls.education_file_image_file.getError('maxSize') }} KB.</p>
+                            </ng-container>
+
+                            <ng-template #education_file_preview>
+                                <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{empEducationeditForm.get('template_data')['controls'][i].value.education_file_image}}" target="_blank">
+                                    <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                </a>      
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+    
+            </table> 
+        </div>
+        <div class="text-right">
+            <ng-container *ngIf="empEducationeditForm.get('template_data')['controls'][i].value.isReadOnly else save_btn_area">
+            <button class="btn-edtstyle btn editicon" (click)="togglereadOnly(i)">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+            <!-- <button class="btn-edtstyle btn editicon">
+                <i class="fas fa-trash text-danger"></i>
+            </button> -->
+            </ng-container>
+            <ng-template #save_btn_area>
+            <a class="editicon ml-auto" (click)="togglereadOnly(i,true)"> Cancel</a>
+            <a  href="javascript: void(0)" class="editicon apply-btn" (click)="updateEmployeeEducationDetails($event,i)">Save</a>
+            </ng-template>
+        </div>
+    </div>  
+    </ng-container>
+    </form>
+ </ng-container>   
+ <ng-template #noTableFound>
+    <div class="ed-details">
+        <div class="table-responsive">
+            <table class="table table-hover mb-2">
+                <tbody >
+                  
+                    <tr>
+                        <td colspan="100%" class="text-center">No Educations Found</td>
+
+                    </tr>
+                </tbody>
+    
+            </table>
+        </div>
+       
+    </div>    
+ </ng-template>
+</div>

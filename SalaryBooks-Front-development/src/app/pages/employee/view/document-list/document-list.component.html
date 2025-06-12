@@ -1,0 +1,11 @@
+<div class="table-main">
+    <div class="form-row">
+        <div class="col-md-2" *ngFor="let item of rows; let i = index">
+            <a class="folder-box" title="{{item.folder_name}}" href="javascript:;" routerLink="/employee/document/{{item._id}}">
+                <i class="fas fa-folder-open"></i>
+                <h3>{{item.folder_name}}</h3>
+            </a>
+        </div>
+        
+    </div>
+</div>

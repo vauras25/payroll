@@ -1,0 +1,317 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item active">User Management</a>
+            <!-- <a class="breadcrumb-item">Subscription Management</a> -->
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-ios-list"></i>
+        <div>
+            <h4>User Management</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Search User</h6>
+
+            <div class="card" style="border:0px;">
+                <form [formGroup]="subscriptionUserSearchForm">
+                    <div class="card-block pd-0">
+                        <div class="row row-sm mg-t-20">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Name</label>
+                                    <input class="form-control" type="text" formControlName="establishment_name">
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-md-6 col-lg-3 mg-t-10 mg-md-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Package</label>
+                                    <div>
+                                        <ngx-select-dropdown formControlName="package_id" [options]="packageMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Status</label>
+                                    <ngx-select-dropdown formControlName="status" [options]="statusMaster" class="form-control" [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Email</label>
+                                    <input type="email" formControlName="email_id" class="form-control tx-14">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Plan</label>
+                                    <ngx-select-dropdown formControlName="plan_id" [options]="planMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-sm mg-t-20">
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-md-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Mobile</label>
+                                    <div>
+                                        <input type="number" formControlName="phone_no" class="form-control tx-14">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Sort</label>
+                                    <ngx-select-dropdown formControlName="status" [options]="sortingMaster" class="form-control" [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Corporate ID</label>
+                                    <input type="text" formControlName="corporate_id" class="form-control tx-14">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button (click)="searchSubmit($event)" class="btn btn-info tx-11 tx-spacing-1 tx-uppercase tx-semibold tx-mont pd-y-12 pd-x-30 mg-t-30">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label d-flex justify-content-between">
+                <div>User List</div> 
+                <div>
+                    <button [disabled]="!anyRowsChecked()" class="btn btn-info pull-right add-company mr-3" (click)="exportCompanies()" >Download Master</button>
+                    <button class="btn btn-info pull-right add-company" (click)="addCompany()" >Add Company</button>
+                </div>
+            </h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"></th>
+                            <th class="">SL No</th>
+                            <th class="">Action</th>
+                            <th class="">Status</th>
+                            <th class="">Corp Id</th>
+                            <th class="">Establishment Name</th>
+                            <th class="">Plan</th>
+                            <th class="">Credit Bal</th>
+                            <!-- <th class="">Reseller</th> -->
+                            <!-- <th class="">Sub-Seller</th> -->
+                            <!-- <th class="">Branch</th> -->
+                            <!-- <th class="">Address</th> -->
+                            <!-- <th class="">Contact Person</th> -->
+                            <!-- <th class="">Contact No</th> -->
+                            <!-- <th class="">State</th> -->
+                            <!-- <th class="">GST No</th> -->
+                            <!-- <th class="">PAN No</th>  -->
+                            <!-- <th class="">Client Since</th> -->
+                            <!-- <th class="">Last WM Credit Consumption</th> -->
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="company-desc animate__animated animate__slideInRight">
+        <div class="pd-20 pd-xs-40" style="width:100%;">
+            <h6 class="tx-gray-800 tx-uppercase tx-bold">Add Company
+                <button class="btn btn-info pull-right close-earnings" (click)="cancelCompanyEntry()" style="float:right;clear: both;"><i class="fa fa-times"></i></button>
+            </h6>
+            <p class="tx-gray-600 mg-b-30">Add details below</p>
+
+            <form [formGroup]="subscriptionCompanyForm">
+                <div class="form-group">
+                    <label> Establishment Name <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="establishment_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Reseller </label>
+                    <ngx-select-dropdown
+                    formControlName="reseller_id"
+                    [options]="resellerMaster"
+                    class="form-control"
+                  
+                    [config]="{ search: true, placeholder: 'Select Reseller' }"
+                    
+                    ></ngx-select-dropdown>
+                </div>
+                <div class="form-group">
+                    <label> Corporate ID <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="corporate_id" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Master User Name (User ID) <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="userid" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Email Id <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="email_id" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Phone Number <span class="text-danger">*</span></label>
+                    <input [autocomplete]="''" type="text" formControlName="phone_no" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Password <span class="text-danger">*</span></label>
+                    <input type="password" formControlName="password" class="form-control">
+                </div>
+
+                <!-- <div class="form-group">
+                    <label>Package <span class="text-danger">*</span></label>
+                    <ngx-select-dropdown formControlName="package_id" [options]="packageMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                </div> -->
+
+                <div class="form-group">
+                    <label>Plan <span class="text-danger">*</span></label>
+                    <ngx-select-dropdown formControlName="plan_id" [options]="planMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                </div>
+
+                <button class="btn btn-info btn-block pd-y-10 mg-b-30" (click)="createCompany($event)" [disabled]="!subscriptionCompanyForm.valid">
+                    <span>Save</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Credit Update Modal -->
+    <button id="creditUpdateModalButton" [hidden]="true" data-toggle="modal" data-target="#creditUpdateModal"></button>
+    <div id="creditUpdateModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        Update Company Balance <small class="text-capitalize">{{customerCreditForm.value.type}}</small>
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="customerCreditForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="text-danger mb-0">Current Balance <b>&nbsp;{{Global.viewRupeeFormat(customerCreditForm.value.credit_bal ?? 0)}}</b></label>
+                            </div>
+
+                            <div class="col-lg-12 mt-4">
+                                <label class="text-capitalize">{{customerCreditForm.value.type}} Balance <span class="text-danger">*</span></label>
+                                <input class="form-control" type="number" placeholder="Enter Value" formControlName="amount">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!customerCreditForm.valid" (click)="updateCompanyCredit($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Update</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hold Credit Update Modal -->
+    <button id="creditHoldUpdateModalButton" [hidden]="true" data-toggle="modal" data-target="#creditHoldUpdateModal"></button>
+    <div id="creditHoldUpdateModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        Update Company Hold Credit
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="customerHoldCreditForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="text-danger mb-0">Current Hold Credit <b>&nbsp;{{Global.viewRupeeFormat(customerHoldCreditForm.value.hold_bal ?? 0)}}</b></label>
+                                <!-- <input class="form-control" type="number" placeholder="Current Balance" formControlName="hold_bal" readonly> -->
+                            </div>
+
+                            <div class="col-lg-12 mt-4">
+                                <label class="text-capitalize">Type <span class="text-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="type" [options]="holdTypeMaster" class="form-control px-0 py-2" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                            </div>
+
+                            <div class="col-lg-12 mt-4">
+                                <label class="text-capitalize">Amount <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" type="amount" placeholder="Enter Value" formControlName="amount">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!customerHoldCreditForm.valid" (click)="updateCompanyHoldCredit($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Update</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Company Plan Modal  -->
+
+    <button id="companyPlanUpdateModalButton" [hidden]="true" data-toggle="modal" data-target="#planUpdateModal"></button>
+    <div id="planUpdateModal" tabindex='-1' class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        Change Company Plan
+                    </h6>
+                    <button #data_modal_dismiss type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="companyPlan">
+                    <div class="modal-body pd-25">
+                        <!-- <div class="w-100">
+                            <label class="mb-0">Current Plan:- <b>{{companyPlan.get('plan_id')?.value.description}}</b></label>
+                        </div> -->
+                        <div class="form-group ">
+                            <label>Select Plan <span class="text-danger">*</span></label>
+                            <ngx-select-dropdown  formControlName="plan_id" [options]="planMaster" class="form-control h-100" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <button type="button" [disabled]="!companyPlan.valid" (click)="changeCompanyPlan($event,data_modal_dismiss)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Update</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

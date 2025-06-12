@@ -1,0 +1,296 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Incentive Management</a>
+      <a class="breadcrumb-item active">Incentive Applied</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-cash"></i>
+    <div>
+      <h4>Incentive Management</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper">
+      <companyuser-app-table-filter
+        [monthFilter]="true"
+        [yearFilter]="true"
+        (onFiltered)="employeeListFilter = $event; filterDataTable()"
+      >
+      <ng-container addOnBtns>
+        <div class="col-sm-2 col-12">
+          <button
+            [disabled]="
+              rowCheckedAll == false &&
+              checkedRowIds.length == 0 && uncheckedRowIds.length == 0
+            "
+            class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            (click)="openIncentiveEditModal()"
+          >
+            Multi Apply
+          </button>
+        </div>
+        <div class="col-sm-2 col-12">
+          <button
+            [disabled]="
+              rowCheckedAll == false &&
+              checkedRowIds.length == 0 && uncheckedRowIds.length == 0
+            "
+            class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            (click)="incentiveBulkUpdate()"
+          >
+            Multi Update
+          </button>
+        </div>
+        <div class="col-sm-2 col-12">
+          <button
+            [disabled]="
+              rowCheckedAll == false &&
+              checkedRowIds.length == 0 && uncheckedRowIds.length == 0
+            "
+            class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            (click)="runIncentive()"
+          >
+            RUN INCENTIVE
+          </button>
+        </div>
+        <div class="col-sm-2 col-12">
+          <button
+            *ngIf="
+              Global.checkCompanyModulePermission({
+                company_module: 'incentive',
+                company_operation: 'add_incentive',
+                company_sub_module: 'add_apply_incentive',
+                company_sub_operation: ['add'],
+                company_strict:true
+              })
+            "
+            class="btn-block btn btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+            (click)="initDataImport()"
+          >
+            <i class="fa fa-file-import"></i>&nbsp;Import Data
+          </button>
+        </div>
+      </ng-container>
+      </companyuser-app-table-filter>
+      <br />
+
+      <!-- <div class="d-flex justify-content-between btn btn-info-border px-0">
+                <button [disabled]="(rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0))" class="btn btn-info tx-11 tx-spacing-2" (click)="runIncentive()">RUN INCENTIVE</button>
+            </div> -->
+
+      <div class="table-wrapper">
+        <table
+          class="table display responsive nowrap wd-100p employee-table"
+          datatable
+          [dtOptions]="dtOptions"
+          id="my-datatable"
+        >
+          <thead>
+            <tr>
+              <th class="">
+                <input
+                  type="checkbox"
+                  [value]="rowCheckedAll"
+                  (change)="allRowsCheckboxChecked($event)"
+                />
+                SL No
+              </th>
+              <th>Status</th>
+              <th class="">Emp ID</th>
+              <th class="">First Name</th>
+              <th class="">Last Name</th>
+              <th class="">Incentive Template</th>
+              <th class="">Incentive Value</th>
+              <th class="">Auto Disburse</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter Writing Template Modal -->
+  <button
+    id="updateIncentiveModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#updateIncentiveModal"
+  ></button>
+  <div id="updateIncentiveModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Update Incentive
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="incentiveUpdateForm" >
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12 mb-3">
+                <label
+                  >Incentive Value <span class="text-danger">*</span></label
+                >
+
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Incentive Value"
+                  formControlName="incentive_value"
+                />
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    incentiveUpdateForm.controls.incentive_value.hasError(
+                      'required'
+                    ) &&
+                    (incentiveUpdateForm.controls.incentive_value.dirty ||
+                      incentiveUpdateForm.controls.incentive_value.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-12 mb-3">
+                <label>Auto Disburse <span class="text-danger">*</span></label>
+
+                <div class="d-flex">
+                  <div
+                    id="incentive-auto-disburse"
+                    class="br-toggle br-toggle-rounded br-toggle-primary on"
+                  >
+                    <div class="br-toggle-switch"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!incentiveUpdateForm.valid"
+              (click)="updateEmpIncentive('multi',{})"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button
+    id="incentiveImportModalOpen"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#incentiveImportModal"
+  ></button>
+  <div
+    id="incentiveImportModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Import Incentive Data
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="incetiveImportForm">
+          <div class="modal-body pd-20">
+            <div class="row">
+              <div class="col-lg-12">
+                <label>Select File</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  formControlName="file"
+                  accept=".csv"
+                  (change)="
+                    onImportFileChanged(
+                      $event,
+                      incetiveImportForm,
+                      'file',
+                      'file_source'
+                    )
+                  "
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    incetiveImportForm.controls.file.hasError('required') &&
+                    (incetiveImportForm.controls.file.dirty ||
+                      incetiveImportForm.controls.file.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              (click)="getSampleImportCsv()"
+              type="button"
+              class="btn btn-info tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Sample CSV</span>
+            </button>
+
+            <button
+              [disabled]="!incetiveImportForm.valid"
+              type="button"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+              (click)="importData($event)"
+            >
+              <span>Import</span>
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-secondary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,119 @@
+# name: Deploy Angular Application
+
+# on:
+#   push:
+#     branches:
+#       - main_vauras_biztech_(finalpayroll)  # Change this to your deployment branch if different
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Update apt cache
+#       run: sudo apt-get update
+
+#     # - name: Install Python 2 for node-gyp
+#     #   run: |
+#     #     sudo add-apt-repository ppa:deadsnakes/ppa -y
+#     #     sudo apt-get update
+#     #     sudo apt-get install python2 -y
+
+#     # - name: Set Python 2 as default
+#     #   run: sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+
+#     - name: Set up Node.js
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: '14.20.0'
+    
+#     - name: Prepare SSH key
+#       run: |
+#         echo "${{ vars.VAURAS_BIZTECH_SSH_KEY }}" > key.pem
+#         chmod 400 key.pem
+
+#     - name: Validate SSH key format
+#       run: |
+#         head -n 1 key.pem
+
+#     - name: Create SSH directory if not exists
+#       run: |
+#         mkdir -p ~/.ssh
+#         touch ~/.ssh/known_hosts
+
+#     - name: Verify SSH connection and add to known_hosts
+#       run: |
+#         ssh-keyscan ${{ vars.VAURAS_BIZTECH_SSH_HOST }} >> ~/.ssh/known_hosts 2>&1 || cat ~/.ssh/known_hosts
+
+#     - name: Add SSH key to agent
+#       env:
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+#         echo "${{ vars.VAURAS_BIZTECH_SSH_PASSPHRASE }}" | ssh-add key.pem
+
+#     - name: Test SSH connection  # Added step for debugging
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_BIZTECH_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         echo "${{ vars.VAURAS_BIZTECH_SSH_PASSPHRASE }}" | ssh-add key.pem
+#         ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}@${{ vars.VAURAS_BIZTECH_SSH_HOST }} 'echo Connection successful'
+
+#     - name: Install dependencies
+#       run: npm i --force
+#       env:
+#         NODE_OPTIONS: "--max_old_space_size=4096"
+
+#     - name: Build AngularJS project
+#       run: npm run build -- --c production --base-href=/ --aot --output-hashing=all --output-path=dist
+
+#     - name: Verify dist directory
+#       run: ls -la dist
+
+#     - name: Compress build files
+#       run: tar -czvf dist.tar.gz -C dist .
+
+#     - name: Upload compressed files to server
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_BIZTECH_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         scp -i key.pem dist.tar.gz ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}@${{ vars.VAURAS_BIZTECH_SSH_HOST }}:${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}
+
+#     - name: Extract files on server
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_BIZTECH_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         ssh -i key.pem ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}@${{ vars.VAURAS_BIZTECH_SSH_HOST }} "sudo tar -xzvf '${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}/dist.tar.gz' -C '${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}'"
+      
+#     # - name: Remove compressed files from server
+#     #   env:
+#     #     AWS_HOST: ${{ vars.VAURAS_BIZTECH_SSH_HOST }}
+#     #     AWS_USERNAME: ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}
+#     #     SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#     #   run: |
+#     #     ssh -i key.pem ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}@${{ vars.VAURAS_BIZTECH_SSH_HOST }} "sudo rm '${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}/dist.tar.gz'"
+   
+#     - name: Extract files on server
+#       env:
+#         AWS_HOST: ${{ vars.VAURAS_BIZTECH_SSH_HOST }}
+#         AWS_USERNAME: ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}
+#         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+#       run: |
+#         ssh -i key.pem ${{ vars.VAURAS_BIZTECH_SSH_USERNAME }}@${{ vars.VAURAS_BIZTECH_SSH_HOST }} "
+#           sudo tar -xzvf '${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}/dist.tar.gz' -C '${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}' &&
+#           sudo chown -R ubuntu:ubuntu '${{ vars.VAURAS_BIZTECH_SERVER_DIR_FRONTEND }}'
+#         "
+        
+#     - name: Clean up
+#       run: |
+#         rm -rf dist key.pem
+#         pkill ssh-agent

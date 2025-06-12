@@ -1,0 +1,380 @@
+
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Approval</a>
+            <a class="breadcrumb-item active">Advance Request</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-wand"></i>
+        <div>
+            <h4>Advance Request</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            
+            <br>
+            <companyuser-app-table-filter
+            [searchKeyFilter]="true"
+            [monthFilter]="false"
+            [yearFilter]="false"
+            (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+          >
+          </companyuser-app-table-filter>
+          <div class="card bd-0">
+            <div class="card-header">
+              
+                <div  *ngIf="Global.checkCompanyModulePermission({
+                  company_module: 'advance',
+                  company_sub_module: 'approve_advance',
+                  company_sub_operation: ['approve'],
+                  company_strict: true
+                })" class="d-flex justify-content-end">
+                  <button
+
+                    #btn
+                    [disabled]="!anyRowsChecked()"
+                    (click)="bulkAction();"
+                    type="button"
+                    class="btn btn-block btn-info pd-x-12 h-100 mr-3"
+                    style="font-size: 13px; min-width: 120px; max-width: 160px"
+                  >
+                    
+                    Action
+                  </button>
+                 
+                </div>
+              <!-- </div> -->
+            </div>
+    
+            <div class="card-body px-0 bd-t-0 pt-0 rounded-bottom">
+              <!-- <app-custom-tableoption (onFilterChanged)="generateMasterSheet({page: 1, options: $event})"></app-custom-tableoption> -->
+              <app-custom-tableoption
+              [searchable]="false"
+              (onFilterChanged)="paginationOptions.limit = +$event?.length ; fetchEmployees({ page:1})"
+            ></app-custom-tableoption>
+              <div class="table-responsive">
+                <!-- <div class="table-responsive"> -->
+                    <table class="table nowrap wd-100p table-bordered" style="border: 1px solid #eee;">
+                        <thead>
+                            <tr>
+                                <th>
+                                <label class="d-flex align-items-center mb-0" for="srNo">
+                                    <input
+                                      class="mb-0 mr-1"
+                                      (change)="allRowsCheckboxChecked($event)"
+                                      type="checkbox"
+                                      name="item"
+                                      id="srNo"
+                                    />
+                                    SL No.
+                                  </label>
+                                </th>
+                                <th class="">Emp Code</th>
+                                <th class="">Emp Name</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Advance Amount</th>
+                                <th class="text-center">Recovery Frequency</th>
+                                <th class="text-center">Reason</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let employee of employees;let i=index;">
+                                <td  class="text-center">
+                                    <label
+                                      class="d-flex align-items-center"
+                                      [for]="'checkrow-' + (i + 1)"
+                                      *ngIf="employee.status=='pending' else no_check_box"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        class="mr-2"
+                                        [attr.checked]="
+                                        employee?.checked == true ? 'checked' : null
+                                        "
+                                        id="checkrow-{{ i + 1 }}"
+                                        [attr.data-checkbox-id]="employee?._id"
+                                        (click)="rowCheckBoxChecked($event, employee)"
+                                      />
+                                      {{
+                                        Global.getTableSerialNumber(
+                                          i,
+                                          paginationOptions.limit,
+                                          paginationOptions.page
+                                        )
+                                      }}
+                                    </label>
+                                    <ng-template #no_check_box>
+                                      {{
+                                        Global.getTableSerialNumber(
+                                          i,
+                                          paginationOptions.limit,
+                                          paginationOptions.page
+                                        )
+                                      }}
+                                    </ng-template>
+                                  </td>
+                              
+                                <td>{{ employee?.emp_id }}</td>
+                                <td>{{ employee?.emp_data?.emp_first_name }} {{ employee?.emp_data?.emp_last_name }}</td>
+                                <td class="text-center" >{{employee.payment_booking_date | date:'dd/MM/YY'}}</td>
+                                <td class="text-center" >
+                                    {{employee.advance_amount | currency:'₹'}} 
+                                </td>
+                                <td class="text-center">
+                                    {{employee.recovery_frequency | titlecase}} 
+                                </td>
+                                <td class="text-center">
+                                    {{employee.remarks}}
+                                </td>
+                                <td class="text-center">
+                                  {{employee.status | titlecase}}
+                              </td>
+                                <td class="text-center">
+                                  <div >
+                                    <a href="javascript:;" (click)="viewAdvance(employee)"  class="" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                                      <i class="fa fa-eye"></i>
+                                    </a>
+                                    
+                                   </div>
+
+
+
+                                   
+                              </td>
+                            </tr>
+
+                            <tr *ngIf="employees.length == 0">
+                                <td class="text-center" colspan="8">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <!-- </div> -->
+              </div>
+    
+             
+            </div>
+          </div>
+          <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="fetchEmployees({'page':$event})"></app-custom-pagination>
+
+           
+
+        </div>
+    </div>
+    <button id="advanceDetailsModalOpen" [hidden]="true" data-toggle="modal" data-target="#advanceDetailsModal"></button>
+    <div id="advanceDetailsModal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Advance Details</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-striped" style="border: 1px solid #dee2e6;">
+                                <tbody>
+                                    <tr>
+                                        <td>Employee ID</td>
+                                        <th>{{ advanceDetails?.emp_id ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Advance Amount</td>
+                                        <th>{{ advanceDetails?.advance_amount ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Recovery From</td>
+                                        <th>{{ advanceDetails?.recovery_from ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Remarks</td>
+                                        <th>{{ advanceDetails?.remarks ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Number of Installment</td>
+                                        <th>{{ advanceDetails?.no_of_instalments ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Recovery Frequency</td>
+                                        <th>{{ advanceDetails?.recovery_frequency ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Payment Start Month Year</td>
+                                       
+                                        <th>{{advanceDetails?.payment_start_month?.description}}, {{ advanceDetails?.payment_start_year ?? 'YYYY' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Booking Date</td>
+                                        <th>{{ advanceDetails?.payment_booking_date ?? 'N/A' }}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-bordered table-striped mb-0 text-center" style="border: 1px solid #dee2e6;">
+                                <thead>
+                                    <tr class="bg-info">
+                                        <th colspan="100%" class="text-center text-white">Installment History</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Month</th>
+                                        <th>Year</th>
+                                        <th>Recovery From</th>
+                                        <th>Advance Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of (advanceDetails?.instalment_history ?? []); let i = index">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ getSelectedMonth('index', item.instalment_month)?.description ?? '-' }}</td>
+                                        <td>{{ item.instalment_year }}</td>
+                                        <td class="text-capitalize">{{ item.recovery_from }}</td>
+                                        <td>{{ item.advance_amount }}</td>
+                                        <td>
+                                            <ng-container [ngSwitch]="item.status">
+                                                <ng-container *ngSwitchCase="'pending'">
+                                                    <span class="badge badge-warning">Pending</span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'complete'">
+                                                    <span class="badge badge-success">Completed</span>
+                                                </ng-container>
+                                            </ng-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngIf="(advanceDetails?.instalment_history ?? []).length == 0">
+                                        <td colspan="100%" class="text-center">No records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+<button
+    id="TemplateModalOpen"
+    data-toggle="modal"
+    data-target="#settingsTemplateModal"
+    [hidden]="true"
+  >
+    
+  </button>
+<div
+id="settingsTemplateModal"
+tabindex="-1"
+class="modal fade effect-slide-in-right"
+>
+<div class="modal-dialog  modal-dialog-centered" role="document">
+  <div class="modal-content tx-size-sm">
+    <div class="modal-header pd-x-20">
+      <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+        Action
+      </h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="clearFormData()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form id="settingsTemplateForm" [formGroup]="approveForm">
+      <div class="modal-body pd-20">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12">
+               
+                <select  class="form-control error"  formControlName="status">
+                  <option value="">Select Approval Status</option>
+                  <option value="approved">Approve</option>
+                  <option value="rejected">Reject</option>
+
+                </select>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                  approveForm.controls.status.hasError(
+                      'required'
+                    ) &&
+                    (approveForm.controls.status.dirty ||
+                    approveForm.controls.status.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+             </div>
+            
+
+          
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12" style="padding-top: 15px;">
+                <textarea
+                  type="text"
+                  class="form-control error"
+                  placeholder="Remarks"
+                  formControlName="note"
+                ></textarea>
+               
+  
+               
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn text-uppercase btn-secondary tx-size-xs"
+          data-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          class="btn text-uppercase btn-primary tx-size-xs"
+          type="button"
+          (click)="bulkApprove($event)"
+        >
+          <span>Submit</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

@@ -1,0 +1,149 @@
+<table class="table table-bordered define-lwf-rule-table nowrap table-responsive">
+    <tbody>
+      <tr>
+        <td class="p-0">
+          <table class="w-100">
+            <tbody>
+            
+              <ng-container *ngIf="tdsDetails?.rental_house=='Y'">
+                <tr>
+                  <td>
+                    <label class="tx-medium m-0">Rental Period &nbsp; 
+                    </label>
+                  </td>
+                  <td>
+                    {{tdsDetails?.rental_financial_year}}
+
+                  </td>
+              
+                  <td>
+                    <label class="tx-medium m-0">Amount/month &nbsp; 
+                    </label>
+                  </td>
+                  <td>
+                   {{tdsDetails?.rental_amount | currency:'₹'}}
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="tx-medium m-0">Address &nbsp; 
+                    </label>
+                  </td>
+                  <td>
+                    {{tdsDetails?.address}}
+
+                  </td>
+                  <td>
+                    <label class="tx-medium m-0">Landloard Name &nbsp; 
+                    </label>
+                  </td>
+                  <td>
+                    {{tdsDetails?.landlord_name}}
+
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="tx-medium m-0">Urbanization type &nbsp; 
+                    </label>
+                  </td>
+                  <td>
+               
+                    {{tdsDetails?.urbanizaion_type | titlecase}}
+
+                  </td>
+                  <td>
+                    <label class="tx-medium m-0">Landloard Pan &nbsp; 
+                    </label>
+                  </td>
+                  <td>
+                    {{tdsDetails?.landlord_pan}}
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="tx-medium m-0">Rental Document &nbsp; 
+                    </label>
+                  </td>
+                  <td colspan="5">
+                    <ul style="list-style-type: none;margin-top:2px; padding:0;">
+
+                      <li style="display: inline-block" *ngFor="let fileItem of tdsDetails?.rantal_house_documents;  let ccnt = index ">
+                        <a *ngIf="fileItem" href="{{Global.BACKEND_URL}}/{{fileItem.file}}" target="_blank"> Doc - {{ccnt+1}} <span *ngIf="((tdsDetails?.rantal_house_documents.length-1)!=ccnt)">|</span> &nbsp;</a>
+
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr>
+                <td>
+                  <label class="tx-medium m-0">Repaying the home loan for a self-occured house property &nbsp; 
+                  </label>
+                </td>
+                <td>
+                   {{tdsDetails?.house_property=='Y'?'Yes':'No'}} 
+                
+                </td>
+                <td>
+                  <label class="tx-medium m-0">Do you have a let out property with or without a rental income &nbsp; 
+                  </label>
+                </td>
+                <td colspan="2">
+                  {{tdsDetails?.rental_income=='Y'?'Yes':'No'}} 
+                
+                </td>
+              </tr>
+                 <tr>
+                  <th>Investment Type</th>
+                  <th>Amount</th>
+                  <th colspan="2">Documents</th>
+                 </tr>
+             
+                  <tr *ngFor="let templateDataControl of eighty_c_investments; let i = index" >
+                    <td>
+                    
+                      {{templateDataControl?.investment | titlecase}}
+                    </td>
+                    <td>
+                      {{templateDataControl?.amount | currency:'₹'}}
+
+                    </td>
+                    
+                    <td colspan="2">
+                      <ul style="list-style-type: none;margin-top:2px; padding:0;">
+                        <li style="display: inline-block" *ngFor="let fileItem of templateDataControl?.documents;  let ccnt = index ">
+                          <a *ngIf="fileItem?.file;" href="{{Global.BACKEND_URL}}/{{fileItem?.file}}" target="_blank"> Doc - {{ccnt+1}} <span *ngIf="(templateDataControl?.documents.length-1)!=ccnt">|</span> &nbsp;</a>
+
+                        </li>
+                      </ul>
+                    </td>
+                 
+                  </tr>
+           
+
+
+              
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    
+   
+      <button type="button" *ngIf="Global.checkCompanyModulePermission({
+        company_module: 'tds_management',
+        company_operation: 'apply_approve_tds',
+        company_sub_module:['apply_tds_decl', 'approve_tds_decl'],
+        company_sub_operation:['edit'],
+        company_strict:true
+      })"  class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150" (click)="approveTDS()">
+        <span>Approve</span>
+      </button>
+  
+  </div>

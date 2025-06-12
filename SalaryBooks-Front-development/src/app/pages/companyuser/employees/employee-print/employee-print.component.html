@@ -1,0 +1,1364 @@
+<div class="container" *ngFor="let employee_details of items">
+  <div class="row my-4">
+    <div class="col-md-12">
+      <h3 class="text-center text-uppercase">Employee Details</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <tbody>
+          <tr>
+            <td>First Name</td>
+            <th>{{ employee_details?.emp_first_name ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Last Name</td>
+            <th>{{ employee_details?.emp_last_name ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Employee ID</td>
+            <th>{{ employee_details?.emp_id ?? "N/A" }}</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Personal Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['personaldetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-dark text-center text-uppercase">
+          <tr>
+            <th colspan="100%" class="text-white">Personal Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HOD</td>
+            <th>
+              {{
+                getMasterValue(
+                  hodMaster,
+                  employee_details?.emp_det?.employment_hr_details?.hod,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Employee First Name</td>
+            <th>{{ employee_details?.emp_father_name ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Employee Last Name</td>
+            <th>{{ employee_details?.emp_last_name ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Father's Name</td>
+            <th>{{ employee_details?.emp_father_name ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Email ID</td>
+            <th>{{ employee_details?.email_id ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Mobile</td>
+            <th>{{ employee_details?.mobile_no ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Alternate Mobile</td>
+            <th>{{ employee_details?.alternate_mob_no ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Date of Birth</td>
+            <th>
+              {{
+                employee_details?.emp_dob
+                  ? (employee_details?.emp_dob | date)
+                  : "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Gender</td>
+            <th>
+              {{
+                getMasterValue(
+                  Global.getGenderMaster(),
+                  employee_details?.sex,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Aadhar Card Number</td>
+            <th>{{ employee_details?.aadhar_no ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>PAN Card Number</td>
+            <th>{{ employee_details?.pan_no ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Passport Number</td>
+            <th>{{ employee_details?.passport_no ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Passport Valid From</td>
+            <th>
+              {{
+                employee_details?.passport_val_form
+                  ? (employee_details?.passport_val_form | date)
+                  : "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Passport Valid To</td>
+            <th>
+              {{
+                employee_details?.passport_val_to
+                  ? (employee_details?.passport_val_to | date)
+                  : "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Nationality</td>
+            <th>{{ employee_details?.nationality ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Blood Group</td>
+            <th>
+              {{
+                getMasterValue(
+                  Global.bloodGroupMaster,
+                  employee_details?.blood_group,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Physical Disability</td>
+            <th class="text-uppercase">
+              {{ employee_details?.physical_disability ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>Marital Status</td>
+            <th>
+              {{
+                getMasterValue(
+                  Global.maritalStatusMaster,
+                  employee_details?.marital_status,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Date of Marriage</td>
+            <th>
+              {{
+                employee_details?.marriage_date
+                  ? (employee_details?.marriage_date | date)
+                  : "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Emergency Contact Number</td>
+            <th>{{ employee_details?.emergency_contact_no ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Emergency Contact Name</td>
+            <th>{{ employee_details?.emergency_contact_name ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Domicile</td>
+            <th>{{ employee_details?.domicile ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Height</td>
+            <th>{{ employee_details?.height ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Religion</td>
+            <th>
+              {{
+                getMasterValue(
+                  Global.religionMaster,
+                  employee_details?.religion,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Address Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['addressdetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-dark text-center text-uppercase">
+          <tr>
+            <th colspan="100%" class="text-white">Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Residence no</td>
+            <th>
+              {{ employee_details?.emp_det?.emp_address?.resident_no ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>Residence name</td>
+            <th>
+              {{
+                employee_details?.emp_det?.emp_address?.residential_name ??
+                  "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Road/road</td>
+            <th>{{ employee_details?.emp_det?.emp_address?.road ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Locality/Area</td>
+            <th>
+              {{ employee_details?.emp_det?.emp_address?.locality ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>City/Town</td>
+            <th>{{ employee_details?.emp_det?.emp_address?.city ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>District</td>
+            <th>
+              {{ employee_details?.emp_det?.emp_address?.district ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>State</td>
+            <th>
+              {{ employee_details?.emp_det?.emp_address?.state ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>Pincode</td>
+            <th>
+              {{ employee_details?.emp_det?.emp_address?.pincode ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>Country</td>
+            <th>
+              {{ employee_details?.emp_det?.emp_address?.country ?? "N/A" }}
+            </th>
+          </tr>
+
+          <ng-container
+            *ngIf="
+              employee_details?.emp_det?.emp_address?.diff_current_add == 'yes'
+            "
+          >
+            <tr>
+              <th colspan="100%" class="text-center text-uppercase bg-info">
+                Residential Details
+              </th>
+            </tr>
+
+            <tr>
+              <td>Residence no</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address?.resident_no ??
+                    "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>Residence name</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address
+                    ?.residential_name ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>Road/road</td>
+              <th>
+                {{ employee_details?.emp_det?.emp_curr_address?.road ?? "N/A" }}
+              </th>
+            </tr>
+            <tr>
+              <td>Locality/Area</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address?.locality ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>City/Town</td>
+              <th>
+                {{ employee_details?.emp_det?.emp_curr_address?.city ?? "N/A" }}
+              </th>
+            </tr>
+            <tr>
+              <td>District</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address?.district ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>State</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address?.state ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>Pincode</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address?.pincode ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>Country</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.emp_curr_address?.country ?? "N/A"
+                }}
+              </th>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bank Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['bankdetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-dark text-center text-uppercase">
+          <tr>
+            <th colspan="100%" class="text-white">Bank Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bank Name</td>
+            <th>
+              {{ employee_details?.emp_det?.bank_details?.bank_name ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>Branch</td>
+            <th>
+              {{
+                employee_details?.emp_det?.bank_details?.branch_name ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Branch Address</td>
+            <th>
+              {{
+                employee_details?.emp_det?.bank_details?.branch_address ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Bank PIN</td>
+            <th>
+              {{ employee_details?.emp_det?.bank_details?.branch_pin ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>A/C No</td>
+            <th>
+              {{ employee_details?.emp_det?.bank_details?.account_no ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>A/C Type</td>
+            <th>
+              {{
+                getMasterValue(
+                  backAccountTypeMaster,
+                  employee_details?.emp_det?.bank_details?.account_type,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>IFSC Code</td>
+            <th>
+              {{ employee_details?.emp_det?.bank_details?.ifsc_code ?? "N/A" }}
+            </th>
+          </tr>
+          <tr>
+            <td>MICR No</td>
+            <th>
+              {{ employee_details?.emp_det?.bank_details?.micr_no ?? "N/A" }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PF & ESI Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['employmentdetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-dark text-center text-uppercase">
+          <tr>
+            <th colspan="100%" class="text-white">PF & ESI Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngIf="
+              employee_details?.emp_det?.pf_esic_details?.pre_er_pf == 'yes'
+            "
+          >
+            <tr>
+              <th colspan="100%" class="text-center text-uppercase bg-info">
+                Previous Employment
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2">Name of Prev Employer</td>
+              <th colspan="2">
+                {{
+                  employee_details?.emp_det?.pf_esic_details?.pre_er_details
+                    ?.er_name ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2">Exit Date at Prev Employer</td>
+              <th colspan="2">
+                {{
+                  employee_details?.emp_det?.pf_esic_details?.pre_er_details
+                    ?.exit_date
+                    ? (employee_details?.emp_det?.pf_esic_details
+                        ?.pre_er_details?.exit_date | date)
+                    : "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2">Last Drawn Gross</td>
+              <th colspan="2">
+                {{
+                  employee_details?.emp_det?.pf_esic_details?.pre_er_details
+                    ?.last_drawn_gross ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2">Last Designation</td>
+              <th colspan="2">
+                {{
+                  employee_details?.emp_det?.pf_esic_details?.pre_er_details
+                    ?.last_designation ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2">Reporting to</td>
+              <th colspan="2">
+                {{
+                  employee_details?.emp_det?.pf_esic_details?.pre_er_details
+                    ?.reporting_to ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2">Contact No</td>
+              <th colspan="2">
+                {{
+                  employee_details?.emp_det?.pf_esic_details?.pre_er_details
+                    ?.contact_no ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <th colspan="2" class="text-uppercase text-center bg-info">
+                EPFO Details
+              </th>
+              <th colspan="2" class="text-uppercase text-center bg-info">
+                ESIC Details
+              </th>
+            </tr>
+            <tr>
+              <td>UAN No</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.pf_esic_details
+                    ?.pre_er_epfo_details?.uan_no ?? "N/A"
+                }}
+              </th>
+              <td>IP/ESIC No</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.pf_esic_details
+                    ?.pre_er_esic_details?.esic_no ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>Last Member ID</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.pf_esic_details
+                    ?.pre_er_epfo_details?.last_member_id ?? "N/A"
+                }}
+              </th>
+              <td>IP Dispensary</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.pf_esic_details
+                    ?.pre_er_esic_details?.ip_dispensary ?? "N/A"
+                }}
+              </th>
+            </tr>
+            <tr>
+              <td>Last RO</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.pf_esic_details
+                    ?.pre_er_epfo_details?.last_ro ?? "N/A"
+                }}
+              </th>
+              <td>Family Dispensary</td>
+              <th>
+                {{
+                  employee_details?.emp_det?.pf_esic_details
+                    ?.pre_er_esic_details?.family_dispensary ?? "N/A"
+                }}
+              </th>
+            </tr>
+          </ng-container>
+          <tr>
+            <th colspan="100%" class="text-center text-uppercase bg-info">
+              Current Employer Details
+            </th>
+          </tr>
+          <tr>
+            <th colspan="2" class="text-uppercase text-center bg-info">
+              EPFO Details
+            </th>
+            <th colspan="2" class="text-uppercase text-center bg-info">
+              ESIC Details
+            </th>
+          </tr>
+          <tr>
+            <td>UAN No</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_epfo_details
+                  ?.uan_no ?? "N/A"
+              }}
+            </th>
+            <td>IP/ESIC No</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_esic_details
+                  ?.esic_no ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Last Member ID</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_epfo_details
+                  ?.last_member_id ?? "N/A"
+              }}
+            </th>
+            <td>IP Dispensary</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_esic_details
+                  ?.ip_dispensary ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Last RO</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_epfo_details
+                  ?.last_ro ?? "N/A"
+              }}
+            </th>
+            <td>Family Dispensary</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_esic_details
+                  ?.family_dispensary ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Date of Membership as per portal</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_epfo_details
+                  ?.membership_date
+                  ? (employee_details?.emp_det?.pf_esic_details
+                      ?.curr_er_epfo_details?.membership_date | date)
+                  : "N/A"
+              }}
+            </th>
+            <td>Date of Membership as per portal</td>
+            <th>
+              {{
+                employee_details?.emp_det?.pf_esic_details?.curr_er_esic_details
+                  ?.membership_date
+                  ? (employee_details?.emp_det?.pf_esic_details
+                      ?.curr_er_esic_details?.membership_date | date)
+                  : "N/A"
+              }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-info text-center text-uppercase">
+          <tr>
+            <th colspan="100%">Family Details for ESIC</th>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Relation</th>
+            <th>Sex</th>
+            <th>Residing with IP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.pf_esic_details
+                ?.esic_family_details
+            "
+          >
+            <td>{{ item?.fm_name ?? "N/A" }}</td>
+            <td>{{ item?.fm_dob ? (item?.fm_dob | date) : "N/A" }}</td>
+            <th>
+              {{
+                getMasterValue(
+                  Global.relationMaster,
+                  item?.fm_relation,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+            <th>
+              {{
+                getMasterValue(
+                  Global.getGenderMaster(),
+                  item?.sex,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+            <td>{{ item?.residing_with_if == "yes" ? "YES" : "NO" }}</td>
+          </tr>
+          <ng-container
+            *ngIf="
+              (
+                employee_details?.emp_det?.pf_esic_details
+                  ?.esic_family_details ?? []
+              ).length == 0
+            "
+          >
+            <tr>
+              <td colspan="100%" class="text-center">No Records Found</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-info text-center text-uppercase">
+          <tr>
+            <th colspan="100%">Nominee Details for PF</th>
+          </tr>
+          <tr>
+            <th>Aadhar No</th>
+            <th>DOB</th>
+            <th>Name</th>
+            <th>Sex</th>
+            <th>Relation</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.pf_esic_details
+                ?.pf_nominee_details
+            "
+          >
+            <td>{{ item?.aadhar_no ?? "N/A" }}</td>
+            <td>{{ item?.dob ? (item?.dob | date) : "N/A" }}</td>
+            <td>{{ item?.name ?? "N/A" }}</td>
+            <th>
+              {{
+                getMasterValue(
+                  Global.getGenderMaster(),
+                  item?.sex,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+            <th>
+              {{
+                getMasterValue(
+                  Global.relationMaster,
+                  item?.fm_relation,
+                  "value",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+            <td>{{ item?.address ?? "N/A" }}</td>
+          </tr>
+          <ng-container
+            *ngIf="
+              (
+                employee_details?.emp_det?.pf_esic_details
+                  ?.pf_nominee_details ?? []
+              ).length == 0
+            "
+          >
+            <tr>
+              <td colspan="100%" class="text-center">No Records Found</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HR Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['hrdetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead class="bg-dark text-center text-uppercase">
+          <tr>
+            <th colspan="100%" class="text-white">HR Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Department</td>
+            <th>
+              {{
+                getMasterValue(
+                  departmentMaster,
+                  employee_details?.emp_det?.employment_hr_details?.department,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Designation</td>
+            <th>
+              {{
+                getMasterValue(
+                  designationMaster,
+                  employee_details?.emp_det?.employment_hr_details?.designation,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Branch</td>
+            <th>
+              {{
+                getMasterValue(
+                  branchMaster,
+                  employee_details?.emp_det?.employment_hr_details?.branch,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Date of Join</td>
+            <th>
+              {{
+                employee_details?.emp_det?.employment_hr_details?.date_of_join
+                  ? (employee_details?.emp_det?.employment_hr_details
+                      ?.date_of_join | date)
+                  : "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>HOD</td>
+            <th>
+              {{
+                getMasterValue(
+                  hodMaster,
+                  employee_details?.emp_det?.employment_hr_details?.hod,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Client</td>
+            <th>
+              {{
+                getMasterValue(
+                  clientMaster,
+                  employee_details?.emp_det?.employment_hr_details?.client,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Employment Type</td>
+            <th>
+              <ng-container
+                [ngSwitch]="
+                  employee_details?.emp_det?.employment_hr_details?.emp_type
+                "
+              >
+                <ng-container *ngSwitchCase="'daily'">Daily</ng-container>
+                <ng-container *ngSwitchCase="'weekly'">Weekly</ng-container>
+                <ng-container *ngSwitchCase="'monthly'">Monthly</ng-container>
+                <ng-container *ngSwitchDefault>{{
+                  employee_details?.emp_det?.employment_hr_details?.emp_type
+                }}</ng-container>
+              </ng-container>
+            </th>
+          </tr>
+          <tr>
+            <td>Pension Applicable</td>
+            <th>
+              <ng-container
+                [ngSwitch]="
+                  employee_details?.emp_det?.employment_hr_details
+                    ?.pension_applicable
+                "
+              >
+                <ng-container *ngSwitchCase="'yes'">Yes</ng-container>
+                <ng-container *ngSwitchCase="'no'">No</ng-container>
+                <ng-container *ngSwitchDefault>{{
+                  employee_details?.emp_det?.employment_hr_details
+                    ?.pension_applicable
+                }}</ng-container>
+              </ng-container>
+            </th>
+          </tr>
+          <tr>
+            <td>Gross Salary</td>
+            <th>
+              {{
+                employee_details?.emp_det?.employment_hr_details
+                  ?.gross_salary ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Employee Role</td>
+            <th>
+              <ng-container
+                [ngSwitch]="
+                  employee_details?.emp_det?.employment_hr_details?.emp_role
+                "
+              >
+                <ng-container *ngSwitchCase="'role_1'">Role 1</ng-container>
+                <ng-container *ngSwitchCase="'role_2'">Role 2</ng-container>
+                <ng-container *ngSwitchCase="'role_3'">Role 3</ng-container>
+                <ng-container *ngSwitchCase="'role_4'">Role 4</ng-container>
+                <ng-container *ngSwitchCase="'role_5'">Role 5</ng-container>
+                <ng-container *ngSwitchDefault>{{
+                  employee_details?.emp_det?.employment_hr_details?.emp_role
+                }}</ng-container>
+              </ng-container>
+            </th>
+          </tr>
+          <tr>
+            <td>User ID</td>
+            <th>{{ employee_details?.emp_id ?? "N/A" }}</th>
+          </tr>
+          <tr>
+            <td>Self Service</td>
+            <th>
+              {{
+                employee_details?.emp_det?.employment_hr_details
+                  ?.emp_self_service == "yes"
+                  ? "Yes"
+                  : "No"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Salary Template</td>
+            <th>
+              {{
+                getMasterValue(
+                  salaryTemplateMaster,
+                  employee_details?.emp_det?.employment_hr_details?.salary_temp,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+          <tr>
+            <td>Package</td>
+            <th>
+              {{
+                getMasterValue(
+                  employeePackageMaster,
+                  employee_details?.emp_det?.employment_hr_details?.package_id,
+                  "_id",
+                  "description"
+                ) ?? "N/A"
+              }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Employee Assets -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['employeeassets'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Assets Details</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Details</th>
+            <th>No</th>
+            <th>Value</th>
+            <th>QTY</th>
+            <th>Issue Date</th>
+            <th>Recieved Date</th>
+            <th>Recieved By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.assets;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.asset_details ? item.asset_details : "N/A" }}</td>
+            <td>{{ item.asset_no ? item.asset_no : "N/A" }}</td>
+            <td>{{ item.asset_value ? item.asset_value : "N/A" }}</td>
+            <td>{{ item.asset_qty ? item.asset_qty : "N/A" }}</td>
+            <td>{{ item.asset_issue_date ? item.asset_issue_date : "N/A" }}</td>
+            <td>
+              {{ item.asset_receive_date ? item.asset_receive_date : "N/A" }}
+            </td>
+            <td>{{ item.asset_receive_by ? item.asset_receive_by : "N/A" }}</td>
+          </tr>
+
+          <tr *ngIf="(employee_details?.emp_det?.assets ?? []).length == 0">
+            <td colspan="100%" class="text-center">No Assets Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Contract Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['contractdetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Contract Details</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Contract Start Date</th>
+            <th>Contract End Date</th>
+            <th>Description</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.contract;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>
+              {{
+                item.start_date ? (item.start_date | date : "longDate") : "N/A"
+              }}
+            </td>
+            <td>
+              {{ item.end_date ? (item.end_date | date : "longDate") : "N/A" }}
+            </td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+          </tr>
+
+          <tr *ngIf="(employee_details?.emp_det?.contract ?? []).length == 0">
+            <td colspan="100%" class="text-center">No Contracts Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Annual Component -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['annualcomponent'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Annual Component</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Head</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.annual_earnings;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>
+              {{
+                item.earning_head_id
+                  ? getEarningHeadDetails(item.earning_head_id)?.head_name ??
+                    "N/A"
+                  : "N/A"
+              }}
+            </td>
+            <td>{{ item.earning_category ? item.earning_category : "N/A" }}</td>
+            <td>{{ item.earning_amount ? item.earning_amount : "N/A" }}</td>
+          </tr>
+
+          <tr
+            *ngIf="
+              (employee_details?.emp_det?.annual_earnings ?? []).length == 0
+            "
+          >
+            <td colspan="100%" class="text-center">
+              No Annual Components Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Trainings Attended -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['trainings'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Trainings Attended</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Training Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.training;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.training_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+          </tr>
+
+          <tr *ngIf="(employee_details?.emp_det?.training ?? []).length == 0">
+            <td colspan="100%" class="text-center">No Trainings Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Disciplinary Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['disciplinary'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Disciplinary Details</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Disciplinary Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det
+                ?.employment_disciplinary_details;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.disciplinary_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+          </tr>
+
+          <tr
+            *ngIf="
+              (employee_details?.emp_det?.employment_disciplinary_details ?? [])
+                .length == 0
+            "
+          >
+            <td colspan="100%" class="text-center">No Disciplinaries Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Accident Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['accidentdetails'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Accident Details</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Accident Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.accident;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.accident_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+          </tr>
+
+          <tr *ngIf="(employee_details?.emp_det?.accident ?? []).length == 0">
+            <td colspan="100%" class="text-center">No Accidents Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Extra Curriculum Activites -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['extracurriculum'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">
+              Extra Curriculum Activities
+            </th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Extra Curriculum Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.extracurriculum;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.extracurriculum_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+          </tr>
+
+          <tr
+            *ngIf="
+              (employee_details?.emp_det?.extracurriculum ?? []).length == 0
+            "
+          >
+            <td colspan="100%" class="text-center">No Activites Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Educational Details -->
+  <div
+    class="row"
+    *ngIf="!specificPrint || ['education'].includes(specificPrint)"
+  >
+    <div class="col-md-12">
+      <table class="w-100 table table-bordered table-striped">
+        <thead>
+          <tr class="bg-dark text-center text-uppercase">
+            <th colspan="100%" class="text-white">Educational Details</th>
+          </tr>
+          <tr>
+            <th>Sl</th>
+            <th>Institute</th>
+            <th>University</th>
+            <th>Stream</th>
+            <th>Level</th>
+            <th>Specialisation</th>
+            <th>Completion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.education;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item?.institute ?? "N/A" }}</td>
+            <td>{{ item?.university ?? "N/A" }}</td>
+            <td>{{ item?.stream ?? "N/A" }}</td>
+            <td>{{ item?.level ?? "N/A" }}</td>
+            <td>{{ item?.specialisation ?? "N/A" }}</td>
+            <td>{{ item?.completion ?? "N/A" }}</td>
+          </tr>
+
+          <tr *ngIf="(employee_details?.emp_det?.education ?? []).length == 0">
+            <td colspan="100%" class="text-center">
+              No Educational Details Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div #btns *ngIf="items.length" class="container text-right py-3">
+  <button
+  (click)="closeWindow()"
+    class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+  >
+    Cancel
+  </button>
+  <button
+    (click)="printDoc(btns)"
+    class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+  >
+    Print
+  </button>
+</div>

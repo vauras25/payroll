@@ -1,0 +1,26 @@
+#bonus-report-table {
+    background: #fff;
+}
+#bonus-report-table .title-sec .th.column-title {
+    background: #1D2939;
+    color: #fff;
+}
+
+#bonus-report-table .headings .th {
+    background: #3d4755;
+    color: #fff;
+}
+
+#bonus-report-table .th,
+#bonus-report-table .td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.row-border {
+    border:1px solid #a4a4a457;
+}
+.row-border .col-md-3{
+    border: 1px solid #d7d7d7ab;
+    padding: 10px;
+}

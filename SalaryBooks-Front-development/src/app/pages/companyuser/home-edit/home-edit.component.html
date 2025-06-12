@@ -1,0 +1,81 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+<div class="br-mainpanel">
+  <div class="br-pagebody pd-x-20 pd-sm-x-30">
+
+    <!-- <button (click)="toggle()">
+      {{ isEnabled1 ? 'Disable' : 'Enable' }} Active Employees and Active Staff
+    </button>
+    <button (click)="toggle()">
+      {{ isEnabled2 ? 'Disable' : 'Enable' }} credit Balance and current plan
+    </button> -->
+    <br>
+    <div class="image-wrapper">
+      <div class="image-button-container">
+        <figure style="cursor: pointer"
+                class="roundIcon">
+          <img src="assets/img/employeestaff.jpg"
+               alt=""
+               width="500" 
+               [ngClass]="{ 'dimmed': !isEnabled1 }"
+               />
+        </figure>
+
+        <button class="eye-button"
+                (click)="toggleEnabled1()">
+          <!-- {{ isEnabled1 ? 'Disable' : 'Enable' }}  -->
+          <i [class]="isEnabled1 ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+          <!-- Active Employees and Active Staff -->
+        </button>
+      </div>
+    </div>
+    <br>
+    <!-- <button (click)="toggleEnabled2()">
+      {{ isEnabled2 ? 'Disable' : 'Enable' }} credit Balance and current plan
+    </button> -->
+
+    <div class="image-wrapper">
+      <div class="image-button-container">
+        <figure style="cursor: pointer"
+                class="roundIcon">
+          <img src="assets/img/creditbalance.jpg"
+               alt=""
+               width="500" 
+               [ngClass]="{ 'dimmed': !isEnabled2 }"
+               />
+        </figure>
+
+        <button class="eye-button"
+                (click)="toggleEnabled2()">
+          <!-- {{ isEnabled1 ? 'Disable' : 'Enable' }}  -->
+          <i [class]="isEnabled2 ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+          <!-- Active Employees and Active Staff -->
+        </button>
+      </div>
+    </div>
+    <br>
+     <div class="image-wrapper">
+      <div class="image-button-container">
+        <figure style="cursor: pointer"
+                class="roundIcon">
+          <img src="assets/img/daterange.jpg"
+               alt=""
+               width="500" 
+               [ngClass]="{ 'dimmed': !isEnabled3 }"
+               />
+        </figure>
+
+        <button class="eye-button"
+                (click)="toggleEnabled3()">
+          <!-- {{ isEnabled1 ? 'Disable' : 'Enable' }}  -->
+          <i [class]="isEnabled3 ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+          <!-- Active Employees and Active Staff -->
+        </button>
+      </div>
+    </div>
+     
+    <br>
+    <!-- <button (click)="navigateToHomeEdit()">Go to Dashboard</button> -->
+    <button routerLink="/company">Go to Dashboard</button>
+
+  </div>
+</div>

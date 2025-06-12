@@ -1,0 +1,1380 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashbaord</a>
+            <a class="breadcrumb-item">Company Rules</a>
+            <span class="breadcrumb-item active">Salary Template</span>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-list"></i>
+        <div>
+            <h4>Salary Template</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="salarytemplate-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">
+                <ng-container *ngIf="!this.tempEditActionId; else updateTextBlock">
+                    Define Salary Template
+                </ng-container>
+                <ng-template #updateTextBlock>
+                    Update Salary Template
+                </ng-template>
+
+                <button class="btn btn-info pull-right" style="float:right; clear: both;" data-toggle="modal" data-target="#salary-head-modal">Add Salary Heads</button>
+            </h6>
+
+            <br>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="salaryTemplateForm">
+                  <div class="row no-gutters">
+                    <div class="col-3 col-sm-3">
+                      Template Name&nbsp;
+                      <span
+                        *ngIf="
+                          Global.isValidationAvailable(
+                            salaryTemplateForm,
+                            'template_name',
+                            'required'
+                          )
+                        "
+                        class="text-danger"
+                        >*</span
+                      >
+                    </div>
+                    <div class="col-3 col-sm-3">
+                      <input
+                        class="form-control"
+                        type="text"
+                        formControlName="template_name"
+                      />
+        
+                      <p
+                        class="error-element"
+                        *ngIf="
+                          salaryTemplateForm.controls.template_name.hasError(
+                            'required'
+                          ) &&
+                          (salaryTemplateForm.controls.template_name.dirty ||
+                            salaryTemplateForm.controls.template_name.touched)
+                        "
+                      >
+                        This field is required
+                      </p>
+                    </div>
+        
+                    <div class="col-3 col-sm-3 sameasfirst">Restricted PF</div>
+                    <div class="col-3 col-sm-3">
+                      <div
+                        class="br-toggle br-toggle-rounded br-toggle-primary"
+                        id="restricted-pf"
+                      >
+                        <div class="br-toggle-switch"></div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  <div class="row no-gutters">
+                    <div class="col-3 col-sm-3">
+                      Voluntary PF (% of PF Wages)&nbsp;
+                      <span
+                        *ngIf="
+                          Global.isValidationAvailable(
+                            salaryTemplateForm,
+                            'voluntary_pf',
+                            'required'
+                          )
+                        "
+                        class="text-danger"
+                        >*</span
+                      >
+                    </div>
+                    <div class="col-3 col-sm-3">
+                      <input
+                        class="form-control"
+                        type="number"
+                        formControlName="voluntary_pf"
+                      />
+        
+                      <p
+                        class="error-element"
+                        *ngIf="
+                          salaryTemplateForm.controls.voluntary_pf.hasError(
+                            'required'
+                          ) &&
+                          (salaryTemplateForm.controls.voluntary_pf.dirty ||
+                            salaryTemplateForm.controls.voluntary_pf.touched)
+                        "
+                      >
+                        This field is required
+                      </p>
+        
+                      <p
+                        class="error-element"
+                        *ngIf="
+                          salaryTemplateForm.controls.voluntary_pf.hasError(
+                            'pattern'
+                          ) &&
+                          (salaryTemplateForm.controls.voluntary_pf.dirty ||
+                            salaryTemplateForm.controls.voluntary_pf.touched)
+                        "
+                      >
+                        Enter a valid number
+                      </p>
+                      <p
+                        class="error-element"
+                        *ngIf="
+                          salaryTemplateForm.controls.voluntary_pf.hasError(
+                            'max'
+                          ) &&
+                          (salaryTemplateForm.controls.voluntary_pf.dirty ||
+                            salaryTemplateForm.controls.voluntary_pf.touched)
+                        "
+                      >
+                      Enter a value equal to or below 88%
+                      </p>
+                    </div>
+        
+                    <div class="col-3 col-sm-3 sameasfirst">
+                      <!-- No Pension -->
+                    </div>
+                    <div class="col-3 col-sm-3">
+                      <!-- <div class="br-toggle br-toggle-rounded br-toggle-primary" id="no-pension">
+                                        <div class="br-toggle-switch"></div>
+                                    </div> -->
+                    </div>
+                  </div>
+        
+                  <div class="row no-gutters" style="border-right: 1px solid #ced4da">
+                    <div class="col-12 col-sm-12">
+                      <label class="ckbox mg-t-15">
+                        <input (change)="markAdvance($event)" [checked]="salaryTemplateForm.get('advance')?.value" type="checkbox"  />
+                        <span>Advance</span>
+                      </label>
+                    </div>
+                  </div>
+        
+                  <div class="advance-action">
+                    <div class="row no-gutters">
+                      <div class="col-3 col-sm-3">Minimum Wage Amount</div>
+                      <div class="col-3 col-sm-3">
+                        <input
+                          class="form-control"
+                          formControlName="minimum_wage_amount"
+                          type="text"
+                          placeholder="Amount"
+                        />
+        
+                        <p
+                          class="error-element"
+                          *ngIf="
+                            salaryTemplateForm.controls.minimum_wage_amount.hasError(
+                              'required'
+                            ) &&
+                            (salaryTemplateForm.controls.minimum_wage_amount.dirty ||
+                              salaryTemplateForm.controls.minimum_wage_amount.touched)
+                          "
+                        >
+                          This field is required
+                        </p>
+        
+                        <p
+                          class="error-element"
+                          *ngIf="
+                            salaryTemplateForm.controls.minimum_wage_amount.hasError(
+                              'pattern'
+                            ) &&
+                            (salaryTemplateForm.controls.minimum_wage_amount.dirty ||
+                              salaryTemplateForm.controls.minimum_wage_amount.touched)
+                          "
+                        >
+                          Enter a valid number
+                        </p>
+                        <!-- <input class="form-control" type="text" placeholder="Percentage (%)" style="border-bottom: 1px solid #eee;"> -->
+                      </div>
+        
+                      <div class="col-3 col-sm-3 sameasfirst">
+                        Minimum Wage Percentage
+                      </div>
+                      <div class="col-3 col-sm-3">
+                        <input
+                          class="form-control"
+                          formControlName="minimum_wage_percentage"
+                          type="text"
+                          placeholder="Percentage"
+                        />
+        
+                        <p
+                          class="error-element"
+                          *ngIf="
+                            salaryTemplateForm.controls.minimum_wage_percentage.hasError(
+                              'required'
+                            ) &&
+                            (salaryTemplateForm.controls.minimum_wage_percentage
+                              .dirty ||
+                              salaryTemplateForm.controls.minimum_wage_percentage
+                                .touched)
+                          "
+                        >
+                          This field is required
+                        </p>
+        
+                        <p
+                          class="error-element"
+                          *ngIf="
+                            salaryTemplateForm.controls.minimum_wage_percentage.hasError(
+                              'pattern'
+                            ) &&
+                            (salaryTemplateForm.controls.minimum_wage_percentage
+                              .dirty ||
+                              salaryTemplateForm.controls.minimum_wage_percentage
+                                .touched)
+                          "
+                        >
+                          Enter a valid number
+                        </p>
+                        <!-- <input class="form-control" type="text" placeholder="Percentage (%)" style="border-bottom: 1px solid #eee;"> -->
+                      </div>
+                    </div>
+        
+                    <div class="row no-gutters">
+                      <div class="col-3 col-sm-3">Applicable (Which Ever is )</div>
+                      <div class="col-3 col-sm-3">
+                        <label class="rdiobox">
+                          <input
+                            type="radio"
+                            formControlName="wage_applicable"
+                            value="higher"
+                          />
+                          <span>Higher</span>
+                        </label>
+        
+                        <label class="rdiobox">
+                          <input
+                            type="radio"
+                            formControlName="wage_applicable"
+                            value="lower"
+                          />
+                          <span>Lower</span>
+                        </label>
+        
+                        <p
+                          class="error-element"
+                          *ngIf="
+                            salaryTemplateForm.controls.wage_applicable.hasError(
+                              'required'
+                            ) &&
+                            (salaryTemplateForm.controls.wage_applicable.dirty ||
+                              salaryTemplateForm.controls.wage_applicable.touched)
+                          "
+                        >
+                          This field is required
+                        </p>
+                      </div>
+        
+                      <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div>
+                  </div>
+        
+                  <div class="row no-gutters">
+                    <div class="col-9 col-sm-9" style="text-align: center">
+                      Earnings
+                    </div>
+                    <div class="col-3 col-sm-3">
+                      <button
+                        class="btn btn-sm btn-info add-earnings float-right"
+                        (click)="addEarning()"
+                      >
+                        Add Row
+                      </button>
+                    </div>
+                  </div>
+        
+                  <div class="row no-gutters" style="border-right: 1px solid #ced4da">
+                    <div class="col-12 col-sm-12" style="background: transparent">
+                      <div class="table-responsive">
+                        <table
+                          class="table table-bordered table-striped text-center"
+                          style="border: 1px solid #dee2e6"
+                        >
+                          <thead class="bg-dark">
+                            <tr>
+                              <th style="white-space: nowrap" class="text-white">
+                                SL No
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                % OF
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Full Name
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Priority
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Percentage (%)
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Dependent Head
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Attendance Relateion
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Head Include in
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Type
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Value
+                              </th>
+                              <th style="white-space: nowrap" class="text-white">
+                                Action
+                              </th>
+                            </tr>
+                          </thead>
+        
+                          <tbody *ngIf="earnings.length > 0; else noEarningFound">
+                            <tr *ngFor="let item of earnings; let i = index">
+                              <td>{{ i + 1 }}</td>
+                              <td>{{ item.is_percentage ? "Yes" : "No" }}</td>
+                              <td>{{ item.head_id?.description ?? "N/A" }}</td> 
+                              <td>{{ item.priority?.description ?? "N/A" }}</td>
+                              <td>
+                                <ng-container
+                                  *ngIf="this.salaryTemplateForm.value.advance == true"
+                                >
+                                  {{
+                                    item.percentage_amount
+                                      ? item.percentage_amount + " %"
+                                      : "N/A"
+                                  }}
+                                </ng-container>
+        
+                                <ng-container
+                                  *ngIf="this.salaryTemplateForm.value.advance != true"
+                                >
+                                  N/A
+                                </ng-container>
+                              </td>
+                              <td>
+                                <ng-container
+                                  *ngIf="this.salaryTemplateForm.value.advance == true"
+                                >
+                                  {{ item.dependent_head?.description ?? "N/A" }}
+                                </ng-container>
+        
+                                <ng-container
+                                  *ngIf="this.salaryTemplateForm.value.advance != true"
+                                >
+                                  N/A
+                                </ng-container>
+                              </td>
+                              <td>
+                                {{ item.attendance_relation?.description ?? "N/A" }}
+                              </td>
+                              <td>
+                                <ng-container
+                                  *ngIf="
+                                    item.head_include_in.length > 0;
+                                    else noHeadIncludeFound
+                                  "
+                                >
+                                  <ng-container
+                                    *ngFor="let item of item.head_include_in"
+                                  >
+                                    <span
+                                      style="
+                                        font-size: 12px;
+                                        margin: 3px;
+                                        padding: 4px 10px;
+                                      "
+                                      class="badge badge-primary"
+                                      >{{ item }}</span
+                                    >
+                                  </ng-container>
+                                </ng-container>
+        
+                                <ng-template #noHeadIncludeFound> - </ng-template>
+                              </td>
+                              <td>{{ item.earning_type?.description ?? "N/A" }}</td>
+                              <td>{{ item.earning_value ?? "N/A" }}</td>
+                              <td style="white-space: nowrap">
+                                <button
+                                  (click)="editEarning(item, i)"
+                                  class="btn btn-primary btn-icon mg-r-5 add-earnings"
+                                >
+                                  <div style="width: 25px; height: 25px">
+                                    <i class="fa fa-pen"></i>
+                                  </div>
+                                </button>
+        
+                                <button
+                                  *ngIf="!this.salaryTemplateForm.get('advance')?.value || item?.head_id?.pre_def_head !== 'yes'"
+                                  (click)="removeEarning(i)"
+                                  class="btn btn-danger btn-icon"
+                                >
+                                  <div style="width: 25px; height: 25px">
+                                    <i class="fa fa-trash"></i>
+                                  </div>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+        
+                          <ng-template #noEarningFound>
+                            <tbody>
+                              <tr>
+                                <td colspan="11" class="text-center">
+                                  No Earnings Added
+                                </td>
+                              </tr>
+                            </tbody>
+                          </ng-template>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+        
+                  <div
+                    class="row no-gutters bd-1"
+                    style="border-right: 1px solid #ced4da"
+                  >
+                    <div class="col-12 col-sm-12">
+                      <button
+                        class="btn btn-danger mr-2"
+                        type="button"
+                        (click)="cancelSalaryTemplateEntry()"
+                      >
+                        <span>Cancel</span>
+                      </button>
+        
+                      <button
+                        class="btn btn-info"
+                        type="submit"
+                        (click)="addSalaryTemplate($event)"
+                        *ngIf="!this.tempEditActionId; else editButtonBlock"
+                      >
+                        <span>Add Template</span>
+                      </button>
+                      <ng-template #editButtonBlock>
+                        <button
+                          class="btn btn-info"
+                          type="submit"
+                          (click)="updateSalaryTemplate($event)"
+                        >
+                          <span>Update Template</span>
+                        </button>
+                      </ng-template>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            <!-- <div class="form-layout form-layout-6">
+                <form [formGroup]="salaryTemplateForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(salaryTemplateForm, 'template_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="template_name">
+
+                            <p class="error-element" *ngIf="salaryTemplateForm.controls.template_name.hasError('required') && ( salaryTemplateForm.controls.template_name.dirty || salaryTemplateForm.controls.template_name.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Restricted PF
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary" id="restricted-pf">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Voluntary PF (% of PF Wages)&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(salaryTemplateForm, 'voluntary_pf', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="voluntary_pf">
+
+                            <p class="error-element" *ngIf="salaryTemplateForm.controls.voluntary_pf.hasError('required') && ( salaryTemplateForm.controls.voluntary_pf.dirty || salaryTemplateForm.controls.voluntary_pf.touched )">This field is required</p>
+
+                            <p class="error-element" *ngIf="salaryTemplateForm.controls.voluntary_pf.hasError('pattern') && ( salaryTemplateForm.controls.voluntary_pf.dirty || salaryTemplateForm.controls.voluntary_pf.touched )">Enter a valid number</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            No Pension
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary" id="no-pension">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <label class="ckbox mg-t-15">
+                              <input type="checkbox" formControlName="advance">
+                              <span>Advance</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="advance-action">
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Minimum Wage Amount
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" formControlName="minimum_wage_amount" type="text" placeholder="Amount">
+
+                                <p class="error-element" *ngIf="salaryTemplateForm.controls.minimum_wage_amount.hasError('required') && ( salaryTemplateForm.controls.minimum_wage_amount.dirty || salaryTemplateForm.controls.minimum_wage_amount.touched )">This field is required</p>
+
+                                <p class="error-element" *ngIf="salaryTemplateForm.controls.minimum_wage_amount.hasError('pattern') && ( salaryTemplateForm.controls.minimum_wage_amount.dirty || salaryTemplateForm.controls.minimum_wage_amount.touched )">Enter a valid number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Minimum Wage Percentage
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" formControlName="minimum_wage_percentage" type="text" placeholder="Percentage">
+
+                                <p class="error-element" *ngIf="salaryTemplateForm.controls.minimum_wage_percentage.hasError('required') && ( salaryTemplateForm.controls.minimum_wage_percentage.dirty || salaryTemplateForm.controls.minimum_wage_percentage.touched )">This field is required</p>
+
+                                <p class="error-element" *ngIf="salaryTemplateForm.controls.minimum_wage_percentage.hasError('pattern') && ( salaryTemplateForm.controls.minimum_wage_percentage.dirty || salaryTemplateForm.controls.minimum_wage_percentage.touched )">Enter a valid number</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Applicable (Which Ever is )
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <label class="rdiobox">
+                                  <input type="radio" formControlName="wage_applicable" value="higher">
+                                  <span>Higher</span>
+                                </label>
+
+                                <label class="rdiobox">
+                                  <input type="radio" formControlName="wage_applicable" value="lower">
+                                  <span>Lower</span>
+                                </label>
+
+                                <p class="error-element" *ngIf="salaryTemplateForm.controls.wage_applicable.hasError('required') && ( salaryTemplateForm.controls.wage_applicable.dirty || salaryTemplateForm.controls.wage_applicable.touched )">This field is required</p>
+                            </div>
+
+                            <div class="col-6 col-sm-6 sameasfirst">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-9 col-sm-9" style="text-align: center;">
+                            Earnings
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <button class="btn btn-sm btn-info add-earnings float-right" (click)="addEarning()">Add Row</button>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12" style="background: transparent;">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped text-center" style="border: 1px solid #dee2e6">
+                                    <thead class="bg-dark">
+                                        <tr>
+                                            <th style="white-space: nowrap;" class="text-white">SL No</th>
+                                            <th style="white-space: nowrap;" class="text-white">% OF</th>
+                                            <th style="white-space: nowrap;" class="text-white">Full Name</th>
+                                            <th style="white-space: nowrap;" class="text-white">Priority</th>
+                                            <th style="white-space: nowrap;" class="text-white">Percentage (%)</th>
+                                            <th style="white-space: nowrap;" class="text-white">Dependent Head</th>
+                                            <th style="white-space: nowrap;" class="text-white">Attendance Relateion</th>
+                                            <th style="white-space: nowrap;" class="text-white">Head Include in</th>
+                                            <th style="white-space: nowrap;" class="text-white">Type</th>
+                                            <th style="white-space: nowrap;" class="text-white">Value</th>
+                                            <th style="white-space: nowrap;" class="text-white">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody *ngIf="earnings.length > 0; else noEarningFound">
+                                        <tr *ngFor="let item of earnings; let i = index">
+                                            <td>{{i+1}}</td>
+                                            <td>{{item.is_percentage ? "Yes" : "No"}}</td>
+                                            <td>{{item.head_id?.description ?? "N/A"}}</td>
+                                            <td>{{item.priority?.description ?? "N/A"}}</td>
+                                            <td>
+                                                <ng-container *ngIf="this.salaryTemplateForm.value.advance == true">
+                                                    {{item.percentage_amount ? item.percentage_amount + " %" : "N/A"}}
+                                                </ng-container>
+
+                                                <ng-container *ngIf="this.salaryTemplateForm.value.advance != true">
+                                                    N/A
+                                                </ng-container>
+                                            </td>
+                                            <td>
+                                                <ng-container *ngIf="this.salaryTemplateForm.value.advance == true">
+                                                    {{item.dependent_head?.description ?? "N/A"}}
+                                                </ng-container>
+
+                                                <ng-container *ngIf="this.salaryTemplateForm.value.advance != true">
+                                                    N/A
+                                                </ng-container>
+                                            </td>
+                                            <td>{{item.attendance_relation?.description ?? "N/A"}}</td>
+                                            <td>
+                                                <ng-container *ngIf="item.head_include_in.length > 0; else noHeadIncludeFound">
+                                                    <ng-container *ngFor="let item of item.head_include_in">
+                                                        <span style="font-size: 12px; margin: 3px; padding: 4px 10px;" class="badge badge-primary">{{item}}</span>
+                                                    </ng-container>
+                                                </ng-container>
+
+                                                <ng-template #noHeadIncludeFound>
+                                                    -
+                                                </ng-template>
+                                            </td>
+                                            <td>{{item.earning_type?.description ?? "N/A"}}</td>
+                                            <td>{{item.earning_value ?? "N/A"}}</td>
+                                            <td style="white-space: nowrap;">
+                                                <button (click)="editEarning(item, i)" class="btn btn-primary btn-icon mg-r-5 add-earnings">
+                                                    <div style="width:25px;height:25px;"><i class="fa fa-pen"></i></div>
+                                                </button>
+
+                                                <button (click)="removeEarning(i)" class="btn btn-danger btn-icon">
+                                                    <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <ng-template #noEarningFound>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="11" class="text-center">No Earnings Added</td>
+                                            </tr>
+                                        </tbody>
+                                    </ng-template>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-danger mr-2" type="button" (click)="cancelSalaryTemplateEntry()"><span>Cancel</span></button>
+
+                            <button class="btn btn-info" type="submit" (click)="addSalaryTemplate($event)" *ngIf="!this.tempEditActionId; else editButtonBlock"><span>Add Template</span></button>
+                            <ng-template #editButtonBlock>
+                                <button class="btn btn-info" type="submit" (click)="updateSalaryTemplate($event)"><span>Update Template</span></button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">
+                All Salary Template
+            </h6>
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <th class="wd-15p text-center">Publish</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Template Name</th>
+                            <th class="wd-15p">PF Restricted</th>
+                            <th class="wd-15p">Voluntary PF</th>
+                            <th class="wd-15p">No Pension</th>
+                            <th class="wd-15p">Min Wage Amount</th>
+                            <th class="wd-15p">Min Wage Percentage</th>
+                            <th class="wd-15p">Wage Applicable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div
+    class="earning-desc animate__animated animate__slideInRight bd_rightside"
+  >
+    <form [formGroup]="salaryEarningForm" id="salaryEarningForm">
+      <div class="pd-20 pd-xs-40 mg-t-40" style="width: 100%">
+        <h6 class="tx-gray-800 tx-uppercase tx-bold">
+          Earnings
+          <button
+            class="btn btn-info pull-right close-earnings float-right"
+            (click)="cancelEarningEntry()"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </h6>
+
+        <p
+          class="tx-gray-600 mg-b-30"
+          *ngIf="earningEditActionIndex == ''; else earningEditTextBlock"
+        >
+          Add your earnings below
+        </p>
+        <ng-template #earningEditTextBlock>
+          <p class="tx-gray-600 mg-b-30">Edit your earnings below</p>
+        </ng-template>
+
+        <div class="form-group">
+          <label>
+            Full Name&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'head_id',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <ngx-select-dropdown
+            formControlName="head_id"
+            [options]="earningSalaryHeads"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'Choose One',
+              height: '200px'
+            }"
+            [disabled]="isAdvancePreDefiend"
+            [class.error]="
+              salaryEarningForm.controls.head_id.dirty ||
+              salaryEarningForm.controls.head_id.touched
+            "
+          ></ngx-select-dropdown>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.head_id.hasError('required') &&
+              (salaryEarningForm.controls.head_id.dirty ||
+                salaryEarningForm.controls.head_id.touched)
+            "
+          >
+            This field is required
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>
+            Priority&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'priority',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <ngx-select-dropdown
+            formControlName="priority"
+            [options]="priorityMaster"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'Choose One',
+              height: '200px'
+            }"
+            [class.error]="
+              salaryEarningForm.controls.priority.dirty ||
+              salaryEarningForm.controls.priority.touched
+            "
+            [disabled]="isAdvancePreDefiend"
+          ></ngx-select-dropdown>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.priority.hasError('required') &&
+              (salaryEarningForm.controls.priority.dirty ||
+                salaryEarningForm.controls.priority.touched)
+            "
+          >
+            This field is required
+          </p>
+        </div>
+
+        <div class="form-group advance-fields" style="display: none">
+          <label class="ckbox mg-t-15">
+            <input     
+            [readOnly]="isAdvancePreDefiend"
+            [disabled]="isAdvancePreDefiend" type="checkbox" formControlName="is_percentage" />
+            <span>is % OF?</span>
+          </label>
+        </div>
+
+        <div class="form-group advance-fields" style="display: none">
+          <label>
+            Percentage&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'percentage_amount',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <input
+            type="text"
+            class="form-control pd-y-12"
+            placeholder="Percentage"
+            formControlName="percentage_amount"
+            [readOnly]="!salaryEarningForm.get('is_percentage')?.value"
+          />
+          
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.percentage_amount.hasError(
+                'required'
+              ) &&
+              (salaryEarningForm.controls.percentage_amount.dirty ||
+                salaryEarningForm.controls.percentage_amount.touched)
+            "
+          >
+            This field is required
+          </p>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.percentage_amount.hasError(
+                'pattern'
+              ) &&
+              (salaryEarningForm.controls.percentage_amount.dirty ||
+                salaryEarningForm.controls.percentage_amount.touched)
+            "
+          >
+            Enter valid number
+          </p>
+        </div>
+
+        <div class="form-group advance-fields" style="display: none">
+          <label>
+            Dependent Head&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'dependent_head',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <ngx-select-dropdown
+            formControlName="dependent_head"
+            [options]="dependentSalaryHeads"
+            [disabled]="!this.salaryEarningForm.get('is_percentage')?.value "
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'Choose One',
+              height: '200px'
+            }"
+            [class.error]="
+              salaryEarningForm.controls.dependent_head.dirty ||
+              salaryEarningForm.controls.dependent_head.touched
+            "
+          ></ngx-select-dropdown>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.dependent_head.hasError('required') &&
+              (salaryEarningForm.controls.dependent_head.dirty ||
+                salaryEarningForm.controls.dependent_head.touched)
+            "
+          >
+            This field is required
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>
+            Attendance Relation&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'attendance_relation',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <ngx-select-dropdown
+            formControlName="attendance_relation"
+            [options]="attendanceRelationMaster"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'Choose One',
+              height: '200px'
+            }"
+            [disabled]="isAdvancePreDefiend"
+            [class.error]="
+              salaryEarningForm.controls.attendance_relation.dirty ||
+              salaryEarningForm.controls.attendance_relation.touched
+            "
+          ></ngx-select-dropdown>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.attendance_relation.hasError(
+                'required'
+              ) &&
+              (salaryEarningForm.controls.attendance_relation.dirty ||
+                salaryEarningForm.controls.attendance_relation.touched)
+            "
+          >
+            This field is required
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label class="mb-0">Heads Included in</label>
+
+          <label class="ckbox mg-t-15" *ngFor="let item of headsIncludeMaster">
+            <input
+              type="checkbox"
+              value="{{ item.value }}"
+              name="head_include_in[]"
+            />
+            <span>{{ item.description }}</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>
+            Earning Type&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'earning_type',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <ngx-select-dropdown
+            formControlName="earning_type"
+            [options]="earningTypeOptions"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'Choose One',
+              height: '200px'
+            }"
+            [class.error]="
+              salaryEarningForm.controls.earning_type.dirty ||
+              salaryEarningForm.controls.earning_type.touched
+            "
+            [disabled]="isAdvancePreDefiend || this.salaryEarningForm.get('is_percentage')?.value "
+          ></ngx-select-dropdown>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.earning_type.hasError('required') &&
+              (salaryEarningForm.controls.earning_type.dirty ||
+                salaryEarningForm.controls.earning_type.touched)
+            "
+          >
+            This field is required
+          </p>
+        </div>
+
+        <div class="form-group" *ngIf="salaryEarningForm.get('earning_type')?.value?.value !== 'auto' ">
+          <label>
+            Earning Value&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  salaryEarningForm,
+                  'earning_value',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </label>
+
+          <input
+            type="text"
+            class="form-control pd-y-12"
+            placeholder="Earning Value"
+            formControlName="earning_value"
+            [readOnly]="isAdvancePreDefiend"
+            [disabled]="isAdvancePreDefiend"
+          />
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.earning_value.hasError('required') &&
+              (salaryEarningForm.controls.earning_value.dirty ||
+                salaryEarningForm.controls.earning_value.touched)
+            "
+          >
+            This field is required
+          </p>
+
+          <p
+            class="mt-1 text-danger"
+            *ngIf="
+              salaryEarningForm.controls.earning_value.hasError('pattern') &&
+              (salaryEarningForm.controls.earning_value.dirty ||
+                salaryEarningForm.controls.earning_value.touched)
+            "
+          >
+            Enter valid number
+          </p>
+        </div>
+
+        <button
+          class="btn btn-info btn-block pd-y-10"
+          (click)="submitEarning($event)"
+        >
+          <span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  
+    <!-- <div class="earning-desc animate__animated animate__slideInRight bd_rightside">
+        <form [formGroup]="salaryEarningForm" id="salaryEarningForm">
+            <div class="pd-20 pd-xs-40 mg-t-40" style="width:100%;">
+                <h6 class="tx-gray-800 tx-uppercase tx-bold">
+                    Earnings
+                    <button class="btn btn-info pull-right close-earnings float-right" (click)="cancelEarningEntry()"><i class="fa fa-times"></i></button>
+                </h6>
+
+                <p class="tx-gray-600 mg-b-30" *ngIf="earningEditActionIndex == ''; else earningEditTextBlock">Add your earnings below</p>
+                <ng-template #earningEditTextBlock>
+                    <p class="tx-gray-600 mg-b-30">Edit your earnings below</p>
+                </ng-template>
+
+                <div class="form-group">
+                    <label>
+                      Full Name&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'head_id', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <ngx-select-dropdown formControlName="head_id" [options]="salaryHeads" class="form-control p-1" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}" [class.error]="salaryEarningForm.controls.head_id.dirty || salaryEarningForm.controls.head_id.touched"></ngx-select-dropdown>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.head_id.hasError('required') && ( salaryEarningForm.controls.head_id.dirty || salaryEarningForm.controls.head_id.touched )">This field is required</p>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                      Priority&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'priority', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <ngx-select-dropdown formControlName="priority" [options]="priorityMaster" class="form-control p-1" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}" [class.error]="salaryEarningForm.controls.priority.dirty || salaryEarningForm.controls.priority.touched"></ngx-select-dropdown>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.priority.hasError('required') && ( salaryEarningForm.controls.priority.dirty || salaryEarningForm.controls.priority.touched )">This field is required</p>
+                </div>
+
+                <div class="form-group advance-fields" style="display: none;">
+                    <label class="ckbox mg-t-15">
+                      <input type="checkbox" formControlName="is_percentage">
+                      <span>is % OF?</span>
+                    </label>
+                </div>
+
+                <div class="form-group advance-fields" style="display: none;">
+                    <label>
+                      Percentage&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'percentage_amount', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <input type="text" class="form-control pd-y-12" placeholder="Percentage" formControlName="percentage_amount">
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.percentage_amount.hasError('required') && ( salaryEarningForm.controls.percentage_amount.dirty || salaryEarningForm.controls.percentage_amount.touched )">This field is required</p>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.percentage_amount.hasError('pattern') && ( salaryEarningForm.controls.percentage_amount.dirty || salaryEarningForm.controls.percentage_amount.touched )">Enter valid number</p>
+                </div>
+
+                <div class="form-group advance-fields" style="display: none;">
+                    <label>
+                      Dependent Head&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'dependent_head', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <ngx-select-dropdown formControlName="dependent_head" [options]="salaryHeads" class="form-control p-1" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}" [class.error]="salaryEarningForm.controls.dependent_head.dirty || salaryEarningForm.controls.dependent_head.touched"></ngx-select-dropdown>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.dependent_head.hasError('required') && ( salaryEarningForm.controls.dependent_head.dirty || salaryEarningForm.controls.dependent_head.touched )">This field is required</p>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                      Attendance Relation&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'attendance_relation', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <ngx-select-dropdown formControlName="attendance_relation" [options]="attendanceRelationMaster" class="form-control p-1" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}" [class.error]="salaryEarningForm.controls.attendance_relation.dirty || salaryEarningForm.controls.attendance_relation.touched"></ngx-select-dropdown>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.attendance_relation.hasError('required') && ( salaryEarningForm.controls.attendance_relation.dirty || salaryEarningForm.controls.attendance_relation.touched )">This field is required</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="mb-0">Heads Included in</label>
+
+                    <label class="ckbox mg-t-15" *ngFor="let item of headsIncludeMaster">
+                      <input type="checkbox" value="{{ item.value }}" name="head_include_in[]">
+                      <span>{{ item.description }}</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                      Earning Type&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'earning_type', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <ngx-select-dropdown formControlName="earning_type" [options]="earningTypeOptions" class="form-control p-1" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}" [class.error]="salaryEarningForm.controls.earning_type.dirty || salaryEarningForm.controls.earning_type.touched"></ngx-select-dropdown>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.earning_type.hasError('required') && ( salaryEarningForm.controls.earning_type.dirty || salaryEarningForm.controls.earning_type.touched )">This field is required</p>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                      Earning Value&nbsp;
+                      <span *ngIf="Global.isValidationAvailable(salaryEarningForm, 'earning_value', 'required')" class="text-danger">*</span>
+                    </label>
+
+                    <input type="text" class="form-control pd-y-12" placeholder="Earning Value" formControlName="earning_value">
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.earning_value.hasError('required') && ( salaryEarningForm.controls.earning_value.dirty || salaryEarningForm.controls.earning_value.touched )">This field is required</p>
+
+                    <p class="mt-1 text-danger" *ngIf="salaryEarningForm.controls.earning_value.hasError('pattern') && ( salaryEarningForm.controls.earning_value.dirty || salaryEarningForm.controls.earning_value.touched )">Enter valid number</p>
+                </div>
+
+                <button class="btn btn-info btn-block pd-y-10" (click)="submitEarning($event)"><span>Save</span></button>
+            </div>
+        </form>
+    </div> -->
+
+    <div id="salary-head-modal" class="modal fade">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Add Salary Head</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="salaryHeadForm">
+                    <div class="modal-body pd-20">
+                        <div class="form-group">
+                            <label>Full Name&nbsp;<span *ngIf="Global.isValidationAvailable(salaryHeadForm, 'full_name', 'required')" class="text-danger">*</span></label>
+                            <input type="text" class="form-control pd-y-12" formControlName="full_name">
+
+                            <p class="mt-1 text-danger" *ngIf="salaryHeadForm.controls.full_name.hasError('required') && ( salaryHeadForm.controls.full_name.dirty || salaryHeadForm.controls.full_name.touched )">This field is required</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Abbreviation&nbsp;<span *ngIf="Global.isValidationAvailable(salaryHeadForm, 'abbreviation', 'required')" class="text-danger">*</span></label>
+                            <input type="text" class="form-control pd-y-12" formControlName="abbreviation">
+
+                            <p class="mt-1 text-danger" *ngIf="salaryHeadForm.controls.abbreviation.hasError('required') && ( salaryHeadForm.controls.abbreviation.dirty || salaryHeadForm.controls.abbreviation.touched )">This field is required</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Type&nbsp;<span *ngIf="Global.isValidationAvailable(salaryHeadForm, 'head_type', 'required')" class="text-danger">*</span></label>
+
+                            <label class="rdiobox">
+                              <input formControlName="head_type" value="earning" type="radio">
+                              <span>Earning</span>
+                            </label>
+
+                            <label class="rdiobox">
+                              <input formControlName="head_type" value="deduction" type="radio">
+                              <span>Deduction</span>
+                            </label>
+
+                            <p class="mt-1 text-danger" *ngIf="salaryHeadForm.controls.head_type.hasError('required') && ( salaryHeadForm.controls.head_type.dirty || salaryHeadForm.controls.head_type.touched )">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary tx-size-xs" (click)="addSalaryHead($event)"><span>Save changes</span></button>
+                        <button type="button" class="btn btn-secondary tx-size-xs" (click)="cancelSalaryHeadEntry()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <button id="viewSalaryTemplateModalButton" [hidden]="true" data-toggle="modal" data-target="#viewSalaryTemplateModal"></button>
+    <div id="viewSalaryTemplateModal" data-keyboard="false" class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Salary Template</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20" *ngIf="salaryTempateDetails != null">
+                    <div class="bd bd-gray-300 rounded table-responsive">
+                        <table class="table table-striped mg-b-0">
+                            <tbody>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Template Name</th>
+                                    <td>{{salaryTempateDetails?.template_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Restricted PF</th>
+                                    <td class="text-uppercase">{{salaryTempateDetails?.restricted_pf}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Voluntary PF <small>(% of PF wages)</small></th>
+                                    <td>{{salaryTempateDetails?.voluntary_pf}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">No Pension</th>
+                                    <td class="text-uppercase">{{salaryTempateDetails?.no_pension}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Advance</th>
+                                    <td class="text-uppercase">{{salaryTempateDetails?.advance}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Minimum Wage Amount</th>
+                                    <td>{{salaryTempateDetails?.minimum_wage_amount}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Minimum Wage Percentage</th>
+                                    <td>{{salaryTempateDetails?.minimum_wage_percentage}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Wage Applicable</th>
+                                    <td class="text-capitalize">{{salaryTempateDetails?.wage_applicable}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bd bd-gray-300 rounded table-responsive mg-t-10">
+                        <table class="table table-striped mg-b-0 text-center">
+                            <thead class="bg-info">
+                                <tr>
+                                    <th class="text-uppercase text-white" colspan="10">Earnings</th>
+                                </tr>
+                            </thead>
+                            <thead class="bg-dark">
+                                <tr>
+                                    <th style="white-space: nowrap;" class="text-white">SL No</th>
+                                    <th style="white-space: nowrap;" class="text-white">% OF</th>
+                                    <th style="white-space: nowrap;" class="text-white">Full Name</th>
+                                    <th style="white-space: nowrap;" class="text-white">Priority</th>
+                                    <th style="white-space: nowrap;" class="text-white">Percentage (%)</th>
+                                    <th style="white-space: nowrap;" class="text-white">Dependent Head</th>
+                                    <th style="white-space: nowrap;" class="text-white">Attendance Relateion</th>
+                                    <th style="white-space: nowrap;" class="text-white">Head Include in</th>
+                                    <th style="white-space: nowrap;" class="text-white">Type</th>
+                                    <th style="white-space: nowrap;" class="text-white">Value</th>
+                                </tr>
+                            </thead>
+
+                            <tbody *ngIf="salaryTempateDetails.earnings.length > 0; else noViewEarningFound">
+                                <tr *ngFor="let item of salaryTempateDetails.earnings; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.is_percentage == 'yes' ? "Yes" : "No"}}</td>
+                                    <td>{{item.head_full_name ?? "N/A"}}</td>
+                                    <td>{{item.priority ?? "N/A"}}</td>
+                                    <td>{{item.percentage_amount ? item.percentage_amount + ' %' : "N/A"}}</td>
+                                    <td>{{item.dependent_head_full_name ?? "N/A"}}</td>
+                                    <td class="text-capitalize">{{item.attendance_relation ?? "N/A"}}</td>
+                                    <td>
+                                        <ng-container *ngIf="item.head_include_in.length > 0; else noHeadIncludeFound">
+                                            <ng-container *ngFor="let item of item.head_include_in">
+                                                <span style="font-size: 12px; margin: 3px; padding: 4px 10px;" class="badge badge-primary">{{item}}</span>
+                                            </ng-container>
+                                        </ng-container>
+
+                                        <ng-template #noHeadIncludeFound>
+                                            -
+                                        </ng-template>
+                                    </td>
+                                    <td class="text-capitalize">{{item.type ?? "N/A"}}</td>
+                                    <td>{{item.earning_value ?? "N/A"}}</td>
+                                </tr>
+                            </tbody>
+
+                            <ng-template #noViewEarningFound>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="10" class="text-center">No Earnings Added</td>
+                                    </tr>
+                                </tbody>
+                            </ng-template>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

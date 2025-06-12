@@ -1,0 +1,76 @@
+.select2.select2-container {
+    margin-bottom: 5px;
+}
+
+.from-pf,
+.bd_rightside {
+    width: 450px;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    right: 0;
+    display: none;
+    background: #fff;
+    box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -webkit-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -moz-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -o-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+}
+
+.from-pf .form-group label,
+.bd_rightside .form-group label,
+.from-pf .form-group span.select2,
+.bd_rightside .form-group span.select2,
+.from-pf .form-group .form-control,
+.bd_rightside .form-group .form-control {
+    width: 100% !important;
+}
+
+.advance-action {
+    display: none;
+}
+
+.bd_title {
+    font-size: 18px;
+    color: #212529;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}
+
+button.ngx-dropdown-button {
+    border: none !important;
+}
+
+ngx-select-dropdown {
+    padding: 4px !important;
+}
+
+li.disabled {
+    pointer-events: none;
+}
+
+.pointer-none {
+    pointer-events: none;
+}
+
+.company-logo {
+    max-width: 100px;
+    border: 1px solid #17a2b8;
+    border-radius: 5px;
+    /* cursor: pointer; */
+}
+
+.dbpick-icon {
+    cursor: pointer;
+    background: #17a2b8;
+    color: #fff;
+    font-size: smaller;
+    padding: 8px 11px;
+    position: absolute;
+    right: 250px;
+    top: 0;
+    border-radius: 100px;
+    border: 1px solid #1d2939;
+}

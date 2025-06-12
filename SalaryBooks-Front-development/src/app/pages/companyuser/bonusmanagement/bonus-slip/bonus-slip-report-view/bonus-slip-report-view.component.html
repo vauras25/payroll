@@ -1,0 +1,192 @@
+<div *ngFor="let item of rows;">
+
+  <ng-container *ngIf="item?.bonus_slip_temp_data">
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; margin-top: 1rem;">
+      <div style="flex: 0 0 8.33333%; max-width: 8.33333%;">
+        <img src="{{Global?.BACKEND_URL}}/{{item?.com_logo}}" style="height: 100px;width: 100px;">  
+
+        </div>
+      <div style="flex: 0 0 75%; max-width: 75%;">
+        <h6 style="text-align: center; text-transform: uppercase;">{{item?.company_name}}</h6>
+        <h6 style="text-align: center; text-transform: uppercase;">
+          {{ item?.company_address?.door_no }} 
+          {{item?.company_address?.street_name}} 
+          {{item?.company_address?.locality}}
+          {{item?.company_address?.district_name}}  
+          {{item?.company_address?.pin_code}}  
+          {{item?.company_address?.state}} 
+        </h6>
+        <h6 style="text-align: center; text-transform: uppercase;">{{ item?.company_phone }}</h6>
+
+      </div>
+    </div>
+  </ng-container>
+    <ng-container *ngIf="item?.bonus_slip_temp_data?.bonus_details?.includes('bonus-period')">
+      <div style="font-size: 13px; margin-right: -15px; margin-left: -15px; margin-top: 1rem; border: 1px solid #d7d7d7ab; padding: 10px;">Bonus Slip for the Period :{{item?.from_time_period}} to {{item?.to_time_period}}</div>
+    </ng-container>
+    <ng-container *ngIf="item?.bonus_slip_temp_data?.employee_details?.length">
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+      <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_id')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Employee Id</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_id')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.emp_id}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Employee Name</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.emp_first_name | titlecase}} {{item?.emp_last_name | titlecase}}</div>
+            <!-- <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_last_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Employee Last Name</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_last_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.emp_last_name | titlecase}}</div> -->
+    
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('client')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Client</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('client')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px; word-break: break-all;">{{item?.client?.client_code | titlecase}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('branch')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Branch</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('branch')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.branch?.branch_name | titlecase}}</div>         
+
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('department')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Department</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('department')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.department?.department_name | titlecase}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('designation')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Designation</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('designation')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.designation?.designation_name | titlecase}}</div>
+
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('hod')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">HOD</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('hod')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.hod?.first_name | titlecase}} {{item?.hod?.last_name | titlecase}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('gender')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Gender</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('gender')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.sex == 'm' ? 'Male' : 'Female'  | titlecase}}</div>
+            
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('dob')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">DOB</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('dob')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px; word-break: break-all;">{{item?.emp_dob | date}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('doj')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">DOJ</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('doj')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px; word-break: break-all;">{{item?.date_of_join | date}}</div>
+            
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('email_id')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Email Id</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('email_id')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px; word-break: break-all;">{{item?.email_id}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('phone')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Phone</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('phone')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px; word-break: break-all;">{{item?.mobile_no}}</div>
+    
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('bank_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bank Name</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('bank_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.bank}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('account_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Account Number</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('account_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.account_number}}</div>
+    
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('ifsc_code')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">IFSC Code</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('ifsc_code')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.ifsc}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('account_type')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Account Type</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('account_type')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.account_type | titlecase}}</div>
+    
+            <!-- <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('branch_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Branch Name</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('branch_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.branch?.branch_name | titlecase}}</div> -->
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('aadhar_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Aadhar No</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('aadhar_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.aadhar_no}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('pan_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Pan No</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('pan_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.pan_no}}</div>
+    
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('uan_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">UAN No</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('uan_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.uan_no}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('pan_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">PF No</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('pan_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.pf_no}}</div>
+    
+            <!-- <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_father_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Employee Father Name</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('emp_father_name')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.emp_father_name | titlecase}}</div> -->
+            
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('esic_ip_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">ESIC/IP No</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.employee_details?.includes('esic_ip_no')" style="flex: 0 0 25%; max-width:25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.esic_ip_no}}</div>            
+        </div>
+    </ng-container>
+    
+    <ng-container *ngIf="item?.bonus_slip_temp_data?.bonus_details?.length && item?.bonus_slip_temp_data?.bonus_details?.includes('advance')">
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 1rem;">
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Type</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Wage</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Rate</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Amt</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recoverd</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">TDS</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Statutory Deduction</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Amount Remitted</div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; ">
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.bonus_type || 'N/A' | titlecase}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.bonus_wage || 0 | number}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.bonus_rate || 0 | number}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.bonus_amt || 0 | number}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.advance_recovered || 0 | number}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.tds || 0 | number}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.statutory_deduction || 0 | number}}</div>
+      <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.amount_remitted || 0 | number}}</div>
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="item?.bonus_slip_temp_data?.bonus_details?.length && item?.bonus_slip_temp_data?.bonus_details?.includes('bonus-details')">
+      
+      <div style="font-size: 15px; font-weight: 600; margin-right: -15px; margin-left: -15px; margin-top: 1rem;">Month Wise Details</div>
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 0.5rem;">
+      <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Wage Month</div>
+      <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Wage</div>
+      <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Rate</div>
+      <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus</div>
+    </div>
+    <ng-container *ngFor="let report of item?.employee_monthly_reports">
+      <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; ">
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{formatmonth(report?.wage_month)}} {{report?.wage_year}} </div>
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{report?.bonus_report?.bonus_wages ||   0 | number}}</div>
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{+report?.bonus_report?.module_data?.bonus_value ||   0 | number}}</div>
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{report?.bonus_report?.gross_earning ||   0 | number}}</div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="item?.employee_monthly_reports?.length">
+      <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; ">
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Total</div>
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.month_wise_total?.total_bonus_wage || 0 | number}}</div>
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.month_wise_total?.total_bonus_rate || 0 | number}}</div>
+        <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.advance_details?.month_wise_total?.total_bonus || 0 | number}}</div>
+      </div>
+    </ng-container>
+    </ng-container>
+
+    <!-- <ng-container *ngIf="item?.bonus_slip_temp_data?.bonus_details?.length">
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 1rem;">
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('overtime')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Overtime</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('bonus')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('gratuity')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Gratuity</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('incentive')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Incentive</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('Ex-gratia')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Ex-Gratia</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('arrear')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Arrear</div>
+      <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('advance-given')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Given</div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  ">
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('overtime')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('bonus')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('gratuity')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('incentive')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('Ex-gratia')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('arrear')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_payment?.includes('advance-given')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="item?.bonus_slip_temp_data?.bonus_details?.length">
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 1rem;">
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover1')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 1</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover2')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 2</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover3')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 3</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover4')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 4</div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  ">
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover1')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover2')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover3')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+            <div *ngIf="item?.bonus_slip_temp_data?.other_deduction?.includes('advance-recover4')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{'N/A'}}</div>
+        </div>
+    </ng-container> -->
+
+    <ng-container *ngIf="item?.bonus_slip_temp_data?.signature_message">
+    <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 1rem;">
+            <div style="flex: 0 0 100%; max-width: 100%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{item?.bonus_slip_temp_data?.signature_message}}</div>
+        </div>
+    </ng-container>
+
+</div>   
+    
+
+
+
+
+
+
+
+

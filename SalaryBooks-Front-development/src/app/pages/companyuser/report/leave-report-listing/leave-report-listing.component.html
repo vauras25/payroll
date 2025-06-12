@@ -1,0 +1,206 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Over-Time Report Listing</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Over-Time Report Listing</h4>
+      <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        [isBankAccount]="true"
+      >
+      </companyuser-app-table-filter>
+
+      <div class="row">
+        <div class="col-4">
+          <ngx-select-dropdown
+            [options]="['Master Template']"
+            class="form-control p-1"
+            [config]="{
+              search: false,
+              placeholder: 'SELECT TEMPLATE'
+            }"
+            [multiple]="false"
+          ></ngx-select-dropdown>
+        </div>
+        <div class="col-2 pl-0">
+          <button
+            id="TemplateModalOpen"
+            data-toggle="modal"
+            data-target="#settingsTemplateModal"
+            class="btn btn-info tx-11 tx-spacing-2 h-100"
+          >
+            <span style="font-size: 20px" class="fa align-middle"
+              >&#xf013;</span
+            >
+            <i class="fa-regular fa-gear"></i>
+          </button>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-center flex-1">
+            <label
+              style="font-size: 12px"
+              for="process_payout"
+              class="mr-3 mb-0"
+            >
+              <input
+                class="mr-2"
+                type="checkbox"
+                name="process_payout"
+                id="process_payout"
+              />Process payout
+            </label>
+            <ngx-select-dropdown
+              formControlName="salary_temp"
+              [options]="['Bank 1', 'Bank 2', 'Bank 3']"
+              class="form-control p-1"
+              [config]="{ search: false, placeholder: 'EMP BANK' }"
+              [multiple]="false"
+              style="max-width: 160px"
+            ></ngx-select-dropdown>
+          </div>
+          <div>
+            <div class="d-flex h-100">
+              <button
+                type="button"
+                class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+              >
+                <span
+                  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i>
+                  GENERATE BANK INSTRUCTION</span
+                >
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+              >
+                <span
+                  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                  >GENERATE CASH VOUCHER</span
+                >
+              </button>
+              <button
+                type="button"
+                class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+              >
+                <span
+                  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i>VIEW
+                  REPORT</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive mt-3">
+          <table class="w-100 c-table">
+            <colgroup span="3"></colgroup>
+            <thead>
+              <tr>
+                <th rowspan="2">SL No.</th>
+                <th rowspan="2">Employee ID</th>
+                <th rowspan="2">Employee Name</th>
+                <th rowspan="2">Status Bank Instructions</th>
+                <th rowspan="2">Emp Bank</th>
+                <th colspan="5">Opening Balance</th>
+                <th rowspan="2">Total Deduction</th>
+                <th rowspan="2">Net Pay</th>
+                <th rowspan="2">
+                  <div
+                    class="br-toggle br-toggle-rounded br-toggle-primary btnstatus"
+                    id="changeAutoDisburseValue"
+                  >
+                    <div class="br-toggle-switch"></div>
+                  </div>
+                </th>
+              </tr>
+              <tr>
+                <th>Head 1</th>
+                <th>Head 2</th>
+                <th>Head 3</th>
+                <th>Head 4</th>
+                <th>Head 5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>emp1</td>
+                <td>sandeep</td>
+                <td>active</td>
+                <td>hdfc</td>
+                <td>active</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>1230</td>
+                <td>12300/-</td>
+                <td>
+                  <button
+                  class="btn btn-custom btn-icon mx-1"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="View"
+                >
+                  <div style="width: 25px; height: 25px">
+                    <i class="fa">&#xf303;</i>
+                  </div>
+                </button>
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>emp1</td>
+                <td>sandeep</td>
+                <td>active</td>
+                <td>hdfc</td>
+                <td>active</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>1230</td>
+                <td>12300/-</td>
+                <td>
+                  <button
+                  class="btn btn-custom btn-icon mx-1"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="View"
+                >
+                  <div style="width: 25px; height: 25px">
+                    <i class="fa">&#xf303;</i>
+                  </div>
+                </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <app-custom-pagination></app-custom-pagination>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

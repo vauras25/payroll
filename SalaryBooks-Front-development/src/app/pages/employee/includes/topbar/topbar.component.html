@@ -1,0 +1,234 @@
+<div class="br-header">
+  <div class="br-header-left">
+    <div class="navicon-left hidden-md-down">
+      <a id="btnLeftMenu" href=""><i class="icon ion-navicon-round"></i></a>
+    </div>
+    <div class="navicon-left hidden-lg-up">
+      <a id="btnLeftMenuMobile" href=""
+        ><i class="icon ion-navicon-round"></i
+      ></a>
+    </div>
+  </div>
+
+  <div class="br-header-right">
+    <nav class="nav align-items-center">
+      <div class="dropdown mr-4" *ngIf="employee_details">
+        <button class="btn btn-info" (click)="openRateNowModal()">
+          Rate Now
+        </button>
+      </div>
+      <div class="dropdown">
+        <a
+          href="javascript:;"
+          class="nav-link pd-x-7 pos-relative notifecation"
+          data-toggle="dropdown"
+        >
+          <i class="icon ion-ios-bell-outline tx-24"></i>
+          <div class="notis-count">2</div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-header">
+          <div class="dropdown-menu-label">
+            <label>Notifications</label>
+            <a href="javascript:;">Mark All as Read</a>
+          </div>
+
+          <div class="media-list">
+            <a
+              href="javascript:;"
+              class="media-list-link read"
+              *ngFor="let item of notificationList"
+            >
+              <div class="media">
+                <img src="{{ item.img }}" alt="" />
+                <div class="media-body">
+                  <p class="noti-text" [innerHTML]="item.content"></p>
+                  <span>{{ item.date }}</span>
+                </div>
+              </div>
+            </a>
+            <div class="dropdown-footer">
+              <a href="javascript:;"
+                ><i class="fa fa-angle-down"></i> Show All Notifications</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a
+          href=""
+          class="nav-link nav-link-profile ml-3"
+          data-toggle="dropdown"
+        >
+          <img
+            src="assets/img/employee-panel/user-img.jpg"
+            class="wd-32 rounded-circle"
+            alt=""
+          />
+          <span class="square-10 bg-success"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-header wd-250">
+          <div class="tx-center">
+            <a href="javascript:;"
+              ><img
+                src="assets/img/employee-panel/user-img.jpg"
+                class="wd-80 rounded-circle border-c"
+                alt=""
+            /></a>
+            <h6 class="logged-fullname">Johan Smith</h6>
+            <p>ID: 2584569</p>
+          </div>
+          <hr />
+          <ul class="list-unstyled user-profile-nav">
+            <li>
+              <a routerLink="/employee/profile"
+                ><i class="icon ion-ios-person"></i> Edit Profile</a
+              >
+            </li>
+            <li>
+              <a href="javascript:;"
+                ><i class="icon ion-ios-gear"></i> Settings</a
+              >
+            </li>
+            <li>
+              <a href="javascript:;" (click)="logOut()"
+                ><i class="icon ion-power"></i> Sign Out</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<button
+  id="rateNowModalButton"
+  [hidden]="true"
+  data-toggle="modal"
+  data-target="#rateNowModal"
+></button>
+<div id="rateNowModal" tabindex="-1" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content bd-0 tx-14">
+      <div class="modal-header py-1 px-3">
+        <!-- <h6 >
+          Update Layoff
+        </h6> -->
+        <button
+        id="close_btn"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pd-25">
+        <form [formGroup]="employeeKpiDetailForm">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+              Self Assignment
+            </h6>
+            <div>
+              <ngx-select-dropdown
+                style="height: 50px"
+                formControlName="rating_year"
+                [options]="yearMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select Year' }"
+              ></ngx-select-dropdown>
+            </div>
+          </div>
+
+          <div>
+            <div style="border-right: 1px solid #ced4da" class="mt-3">
+              <div>
+                <div class="table-responsive">
+                  <table class="w-100 c-table">
+                    <thead>
+                      <tr>
+                        <th style="white-space: nowrap; width: 10%">SL No</th>
+                        <th style="white-space: nowrap; width: 40%">KPI</th>
+                        <th style="white-space: nowrap; width: 30%">
+                          Assign Value
+                        </th>
+                        <th style="white-space: nowrap; width: 20%">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <ng-container formArrayName="kpi_rating_data">
+                        <ng-container
+                          *ngFor="
+                            let item of getTemplateRows('kpi_rating_data');
+                            let i = index
+                          "
+                        >
+                          <tr [formGroupName]="i">
+                            <td>{{ i + 1 }}</td>
+                            <td>
+                              {{ item?.value?.head_name }}
+                            </td>
+                            <td>
+                              {{ item?.value?.head_value }}
+                            </td>
+                            <td>
+                              <div class="d-flex justify-content-center">
+                                <input
+                                  formControlName="assign_value"
+                                  placeholder="Rate out of {{
+                                    item?.value?.head_value
+                                  }}"
+                                  class="form-control"
+                                  type="number"
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+                    </tbody>
+
+                    <!-- <ng-template >/ -->
+                    <tbody
+                      *ngIf="
+                        !employeeKpiDetailForm?.value?.kpi_rating_data?.length
+                      "
+                    >
+                      <tr>
+                        <td colspan="11" class="text-center">No Data Found</td>
+                      </tr>
+                    </tbody>
+                    <!-- </ng-template> -->
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="bd-1 mt-3 d-flex justify-content-end">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                class="btn btn-grey mr-2"
+              >
+                <span>Cancel</span>
+              </button>
+              <button
+                [disabled]="this.employeeKpiDetailForm.invalid"
+                type="button"
+                (click)="updateEmployeeKpiDetail($event)"
+                class="btn btn-info ml-3"
+              >
+                <span>Update</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

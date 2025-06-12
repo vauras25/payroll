@@ -1,0 +1,105 @@
+<div class="table-responsive" >
+   <div class="table-wrapper mt-3">
+      <table class="table display responsive nowrap wd-100p employee-table" >
+         <thead>
+            <tr >
+               
+               <th  rowspan="2">
+                  <label
+                  class="d-flex align-items-center mb-0"
+                  for="select-all"
+                >
+                  <input
+                    type="checkbox"
+                    class="mr-2"
+                    id="select-all"
+                    [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"
+                  />
+                  SL No.
+                </label>
+               
+               </th>
+               <th  rowspan="2">Emp ID</th>
+               <th  rowspan="2">Name</th>
+               <th  rowspan="2">Department</th>
+               <th  rowspan="2">Designation</th>
+               <th  rowspan="2">Branch</th>
+               <th  rowspan="2">Client</th>
+               <th  rowspan="2">HOD</th>
+               <th colspan="2" *ngFor="let item of days" class="text-center">{{item | date:'MM-YYYY'}}</th>
+               <th colspan="2">Total</th>
+               
+            </tr>
+            <tr >
+               
+               <ng-container *ngFor="let item of days">
+               <th class="text-center">
+                  <div class="softmerge-inner" style="width:57px;left:-1px">Instances</div>
+               </th>
+               <th class="text-center">Hours</th>
+              </ng-container>
+              <th class="text-center">
+                 <div class="softmerge-inner" style="width:57px;left:-1px">Instances</div>
+              </th>
+              <th class="text-center">Hours</th>
+  
+            </tr>
+         </thead>
+         <tbody>
+  
+            
+            <tr  *ngFor="let item of empReportData; let i=index">
+               
+               <td >
+                <label
+                class="d-flex align-items-center"
+                [for]="'checkrow-' + (i + 1)"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-2"
+                  [attr.checked]="
+                  item?.checked == true ? 'checked' : null
+                  "
+                  id="checkrow-{{ i + 1 }}"
+                  [attr.data-checkbox-id]="item?._id"
+                  (click)="rowCheckBoxChecked($event, item)"
+                />
+                {{
+                  Global.getTableSerialNumber(
+                    i,
+                    paginationOptions.limit,
+                    paginationOptions.page
+                  )
+                }}
+              </label>
+               </td>
+               <td >{{item?.emp_id}}</td>
+               <td >{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+               <td >{{item?.department[0]?.department_name}}</td>
+               <td >{{item?.designation[0]?.designation_name}}</td>
+               <td >{{item?.branch[0]?.name}}</td>
+               <td >{{item?.client[0]?.client_code}}</td>
+               <td >{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+               <ng-container *ngFor="let subItem of item?.attendance_summ">
+               <td >{{subItem?.total_instances}}</td>
+               <td >{{subItem?.total_late_hour!='N/A'?(subItem?.total_late_hour):'N/A'}}</td>
+  
+               </ng-container>
+               <td >0</td>
+               <td >{{item?.rowTotal!='N/A'?(item?.rowTotal | number : '1.2-2'):'N/A'}}</td>
+            </tr>
+            <tr *ngIf="empReportData.length<=0">
+              <td  [attr.colspan]="(3+(days.length*2))" style="text-align: center;">No Record(s) Found</td>
+            </tr>
+  
+         </tbody>
+      </table>   
+   </div>
+
+ </div>
+ <app-custom-pagination
+ [rows]="empReportData"
+ [paginationOptions]="paginationOptions"
+ (onPageClicked)="getFiltered($event)"
+></app-custom-pagination>

@@ -1,0 +1,25 @@
+<div class="br-pagebody pd-x-20 pd-sm-x-30 padding-top p-0">
+    <div class="psbodymain">
+        
+        <div class="righttab-details">
+            <div class="tab-content" >
+                <div class="">
+                    <div class="tabheader">
+                        <h5>File Lists</h5>
+                    </div>
+                    <div class="table-main">
+                        <div class="form-row">
+                            <div class="col-md-2 img-fluid" *ngFor="let item of rows; let i = index">
+                                <a class="folder-box" title="{{item.file_name}}" href="{{Global.BACKEND_URL}}/{{item.file_path}}" target="_blank">
+                                   <img src="{{Global.BACKEND_URL}}/{{item.file_path}}">
+                                    <h3>{{item.file_name}}</h3>
+                                </a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

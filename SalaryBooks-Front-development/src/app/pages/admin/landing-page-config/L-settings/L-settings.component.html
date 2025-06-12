@@ -1,0 +1,106 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+      <a class="breadcrumb-item">Landing-Page</a>
+      <a class="breadcrumb-item active">Posts</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-home"></i>
+    <div>
+      <h4>Posts</h4>
+      <p class="mg-b-0">Add Posts And Content For Pages</p>
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30" id="letterwriting-submit-section">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-3">Add Page</h6>
+
+      <div class="form-layout form-layout-6">
+        <form [formGroup]="settingFrom">
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Title&nbsp;
+              <span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    settingFrom,
+                    'title',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-9 col-sm-9">
+              <input
+                class="form-control"
+                formControlName="title"
+                type="text"
+              />
+              <p
+                class="error-element"
+                *ngIf="
+                  settingFrom.controls.title.hasError('required') &&
+                  settingFrom.controls.title.touched
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Description
+            </div>
+            <div class="col-9 col-sm-9">
+              <textarea
+                class="form-control"
+                formControlName="description"
+                rows="3"
+                cols="100%"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="br-section-label mt-3">
+            Social Links
+          </div>
+
+          <div *ngFor="let item of socialLinks" class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              {{item?.title}}
+            </div>
+            <div class="col-9 col-sm-9">
+              <input
+                class="form-control"
+                type="text"
+                [value]="item?.link"
+                (change)="setSocialLink($event, item)"
+              />
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-12 col-sm-12">
+              <button [disabled]="isUpdateDisable" (click)="updateSettings($event)" type="submit" class="btn btn-info">
+                <span>Update</span>
+            </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+  <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

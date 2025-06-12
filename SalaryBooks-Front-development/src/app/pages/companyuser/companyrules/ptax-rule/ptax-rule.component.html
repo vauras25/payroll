@@ -1,0 +1,486 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">P-TAX Template</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>P-TAX Template</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="ptax-submit-section" *ngIf="preferenceGroup.includes('customizable') && Global.checkCompanyModulePermission({
+        company_module: 'company_rules_2',
+        company_sub_module: 'p_tax_rules',
+        company_sub_operation: ['add', 'edit'],
+        company_strict:true
+      })">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define P-TAX Template
+                <button (click)="openTemplateLibrary()" class="btn btn-primary btn-sm float-right"><i class="fa fa-book"></i> Template Library</button>
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">
+                    Update P-TAX Template
+                </h6>
+            </ng-template>
+
+            <br>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="pTaxRuleForm">
+                    <div class="row no-gutters">
+                        <!-- <div class="col-3 col-sm-3">
+                            Template Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="template_name" class="form-control" type="text">
+                            <p class="error-element" *ngIf="pTaxRuleForm.controls.template_name.hasError('required') && (pTaxRuleForm.controls.template_name.dirty)">This field is required</p>
+                        </div> -->
+                        <div class="col-3 col-sm-3">
+                            State&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="state" [options]="stateMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <!-- <input formControlName="state" class="form-control" type="text"> -->
+                            <p class="error-element" *ngIf="pTaxRuleForm.controls.state.hasError('required') && (pTaxRuleForm.controls.state.dirty)">This field is required</p>
+                        </div>
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Effective From&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <dp-date-picker [config]="{'disableKeypress': true, 'format': 'MM/DD/YYYY'}" formControlName="effective_from" theme="dp-material" attachTo=".mat-input-wrapper"></dp-date-picker>
+                            <p class="error-element" *ngIf="pTaxRuleForm.controls.effective_from.hasError('required') && (pTaxRuleForm.controls.effective_from.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3 ">
+                            Salary Type&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="salary_type" [options]="salaryTypeMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="pTaxRuleForm.controls.salary_type.hasError('required') && (pTaxRuleForm.controls.salary_type.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Settlement Frequency&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="settlement_frequency" [options]="settlementMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="pTaxRuleForm.controls.settlement_frequency.hasError('required') && (pTaxRuleForm.controls.settlement_frequency.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <!-- <div class="col-3 col-sm-3">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="pTaxRuleForm.controls.publish_status.hasError('required') && (pTaxRuleForm.controls.publish_status.dirty)">This field is required</p>
+                        </div> -->
+
+                        
+
+                        <div class="col-12 col-sm-12 sameasfirst"></div>
+                    </div>
+                   <ng-container *ngIf="presentSettlement != 'monthly'">
+                     <ng-container formArrayName="tax_range_amount">
+                        <ng-container *ngFor="let employeeDetailControl of getTemplateRows('tax_range_amount'); let i = index">
+                            <!-- <span>{{getDemo(employeeDetailControl)}}</span> -->
+                            <ng-container [formGroupName]="i">
+                            <div class="row no-gutters">
+                                <div class="col-6 col-sm-6 d-flex align-items-baseline">
+                                    Row - {{i+1}} 
+                                    <label class="ckbox ml-3" *ngIf="getTemplateRows('tax_range_amount')?.length == (i+1)">
+                                        <input (change)="configLastSlab($event.target)" type="checkbox" formControlName="last_slab">
+                                        <span>Last Slab</span>
+                                      </label>
+                                </div>
+                                
+                                <div class="col-6 col-sm-6 text-right tr-slab">
+                                    <button type="button" class="btn btn-sm btn-danger mr-2" (click)="removeTemplateRow('tax_range_amount', i)" *ngIf="getTemplateRows('tax_range_amount').length > 1"><i class="fa fa-times"></i> Remove</button>
+                                    <button type="button" class="btn btn-sm btn-info" (click)="addTemplateRows('tax_range_amount')" *ngIf="!employeeDetailControl.get('last_slab')?.value && (getTemplateRows('tax_range_amount').length - 1) == i"><i class="fa fa-plus"></i> Add More</button>
+                                </div>
+                            </div>
+
+                            <div class="row no-gutters">
+                                    <div class="col-2 col-sm-2">
+                                        Amount From&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <input formControlName="amount_from" class="form-control" type="number">
+                                    </div>
+                                    <div  class="col-2 col-sm-2 sameasfirst">
+                                        Amount To&nbsp;<span *ngIf="employeeDetailControl.controls.amount_to.hasError('required')" class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <input [readOnly]="employeeDetailControl.get('last_slab')?.value" formControlName="amount_to" class="form-control" type="number">
+                                    </div>
+                                    <div class="col-2 col-sm-2 sameasfirst">
+                                        P-TAX Amount&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <input formControlName="tax_amount" class="form-control" type="number">
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                     </ng-container>
+                   </ng-container>
+                   <ng-container *ngIf="presentSettlement == 'monthly'">
+                    <ng-container formArrayName="periods">
+                     <ng-container *ngFor="let employeeDetailControl of getTemplateRows('periods'); let ind = index">
+                          <!-- <span>{{getDemo(employeeDetailControl)}}</span> -->
+                      <ng-container [formGroupName]="ind">
+                       <div class="row no-gutters">
+                        <div class="col-2 col-sm-2">
+                        </div>
+                        <div class="col-2 col-sm-2">
+                            <span>Period {{ind + 1}} &nbsp;<span class="text-danger">*</span></span>
+                        </div>
+                        <div class="col-2 col-sm-2">
+                            <ngx-select-dropdown formControlName="from_month" [options]="Global.monthMaster" class="form-control" [config]="{search: false, placeholder: 'From', 'height': '200px'}"></ngx-select-dropdown>
+                        </div>
+                        <div class="col-2 col-sm-2">
+                            <ngx-select-dropdown formControlName="to_month" [options]="Global.monthMaster" class="form-control" [config]="{search: false, placeholder: 'To', 'height': '200px'}"></ngx-select-dropdown>
+                        </div>
+                        <div class="col-4 col-sm-4  tr-slab">
+                            <button type="button" class="btn btn-sm btn-danger mr-2" (click)="removeperiodTemp('periods',ind)" *ngIf="getTemplateRows('periods').length > 1"><i class="fa fa-times"></i> Remove Period</button>
+                            <button type="button" class="btn btn-sm btn-info" (click)="addPeriodTemp('periods')" *ngIf="(getTemplateRows('periods').length - 1) == ind"><i class="fa fa-plus"></i> Add Period</button>
+                        </div>
+                       </div>  
+                       
+                       <ng-container formArrayName="tax_range_amount">
+                        <ng-container *ngFor="let employeeDetailControls of getPeriodTempRows('periods','tax_range_amount',ind); let i = index">
+                            <ng-container [formGroupName]="i">
+                            <div class="row no-gutters">
+                                <div class="col-6 col-sm-6 d-flex align-items-baseline">
+                                    Row - {{i+1}} 
+                                    <label class="ckbox ml-3" *ngIf="getPeriodTempRows('periods','tax_range_amount',ind)?.length == (i+1)">
+                                        <input (change)="configLastSlabNested($event.target,'periods','tax_range_amount',ind)" type="checkbox" formControlName="last_slab">
+                                        <span>Last Slab</span>
+                                      </label>
+                                </div>
+                                <div class="col-6 col-sm-6 text-right tr-slab">
+                                    <button type="button" class="btn btn-sm btn-danger mr-2" (click)="removeNestedTaxSlab('periods','tax_range_amount',ind,i)" *ngIf="getPeriodTempRows('periods','tax_range_amount',ind).length > 1"><i class="fa fa-times"></i> Remove</button>
+                                    <button type="button" class="btn btn-sm btn-info" (click)="addNestedTaxSlab('periods','tax_range_amount',ind)" *ngIf="!employeeDetailControls.get('last_slab')?.value && (getPeriodTempRows('periods','tax_range_amount',ind).length - 1) == i"><i class="fa fa-plus"></i> Add More</button>
+                                </div>
+                            </div>
+
+                            <div class="row no-gutters">
+                                    <div class="col-2 col-sm-2">
+                                        Amount From&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <input formControlName="amount_from" class="form-control" type="number">
+                                    </div>
+                                    <div  class="col-2 col-sm-2 sameasfirst">
+                                        Amount To&nbsp;<span *ngIf="employeeDetailControls.controls.amount_to.hasError('required')" class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <input [readOnly]="employeeDetailControls.get('last_slab')?.value" formControlName="amount_to" class="form-control" type="number">
+                                    </div>
+                                    <div class="col-2 col-sm-2 sameasfirst">
+                                        P-TAX Amount&nbsp;<span class="text-danger">*</span>
+                                    </div>
+                                    <div class="col-2 col-sm-2">
+                                        <input formControlName="tax_amount" class="form-control" type="number">
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                       </ng-container>
+                       <div class="row no-gutters" *ngIf="(getTemplateRows('periods')?.length - 1) != ind">
+                         <div class="col-12 col-sm-12 sameasfirst"></div>
+                       </div>
+                      </ng-container> 
+                     </ng-container>
+                    </ng-container>
+
+                   </ng-container>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!pTaxRuleForm.valid" (click)="create($event)" type="submit" *ngIf="!editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'company_rules_2',
+                                company_sub_module: 'p_tax_rules',
+                                company_sub_operation: ['add'],
+                                company_strict:true
+                              })">
+                                <span>Save</span>
+                            </button>
+
+                            <div *ngIf="editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'company_rules_2',
+                                company_sub_module: 'p_tax_rules',
+                                company_sub_operation: ['edit'],
+                                company_strict:true
+                              })">
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel</span>
+                                </button>
+                                <button type="submit" [disabled]="!pTaxRuleForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Template</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" *ngIf="preferenceGroup.includes('customizable'); else defaultTemplateTable">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">P-Tax Template</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Status</th>
+                            <th class="">Action</th>
+                            <!-- <th class="">Template Name</th> -->
+                            <th class="">State</th>
+                            <th class="">Wef</th>
+                            <th class="">Salary Type</th>
+                            <th class="">Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #defaultTemplateTable>
+        <div class="br-pagebody pd-x-20 pd-sm-x-30">
+            <div class="br-section-wrapper" *ngIf="preferenceGroup.includes('default')">
+                <h6 class="br-section-label">Default P-Tax Template</h6>
+                <div class="table-wrapper">
+                    <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                        <thead>
+                            <tr>
+                                <th class="">SL No</th>
+                                <th class="">Action</th>
+                                <th class="">State</th>
+                                <th class="">Wef</th>
+                                <th class="">Salary Type</th>
+                                <th class="">Frequency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-container *ngIf="preferenceGroup.includes('customizable')">
+        <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+        <div id="historymodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content tx-size-sm">
+                    <div class="modal-header pd-x-20">
+                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body pd-20">
+                        <div class="">
+                            <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                                <thead>
+                                    <th class="">SL No</th>
+                                    <th class="">Action</th>
+                                    <th class="">Time</th>
+                                    <th class="">Updated By</th>
+                                    <th class="">Template Name</th>
+                                    <th class="">State</th>
+                                    <th class="">Wef</th>
+                                    <th class="">Salary Type</th>
+                                    <th class="">Frequency</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="viewhistorymodalbutton" [hidden]="true" data-toggle="modal" data-target="#viewhistorymodal"></button>
+        <div id="viewhistorymodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content tx-size-sm">
+                    <div class="modal-header pd-x-20">
+                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Previous Version of the Template</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body pd-20" *ngIf="viewPTaxTemplateHistory != null">
+                        <div class="bd bd-gray-300 rounded table-responsive">
+                            <table class="table table-striped mg-b-0">
+                                <tbody>
+                                    <tr>
+                                        <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">State</th>
+                                        <td>{{viewPTaxTemplateHistory.state_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Effective From</th>
+                                        <td>{{formatDate(viewPTaxTemplateHistory.effective_from)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bd bd-gray-300 rounded table-responsive mg-t-10">
+                            <table class="table table-striped mg-b-0">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="bg-info text-center">
+                                            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold text-white">Amount Slab wise P-TAX</h6>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">Amount From</th>
+                                        <th class="text-center">Amount To</th>
+                                        <th class="text-center">P-TAX Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of viewPTaxTemplateHistory.tax_range_amount; let i = index">
+                                        <td class="text-center">&#8377;{{item.amount_from.toFixed(2)}}</td>
+                                        <td class="text-center">&#8377;{{item.amount_to.toFixed(2)}}</td>
+                                        <td class="text-center">&#8377;{{item.tax_amount.toFixed(2)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+        <div id="librarymodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content tx-size-sm">
+                    <div class="modal-header pd-x-20">
+                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body pd-20">
+                        <div class="">
+                            <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                                <thead>
+                                    <tr>
+                                        <th class="">SL No</th>
+                                        <th class="">Action</th>
+                                        <th class="">State</th>
+                                        <th class="">Wef</th>
+                                        <th class="">Salary Type</th>
+                                        <th class="">Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="preferenceGroup.includes('customizable') || preferenceGroup.includes('default')">
+        <button id="viewmmodalbutton" [hidden]="true" data-toggle="modal" data-target="#viewmodal"></button>
+        <div id="viewmodal" data-keyboard="false" class="modal fade effect-slide-in-right">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content tx-size-sm">
+                    <div class="modal-header pd-x-20">
+                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Details</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body pd-20" *ngIf="viewPTaxTemplate != null">
+                        <div class="bd bd-gray-300 rounded table-responsive">
+                            <table class="table table-striped mg-b-0">
+                                <tbody>
+                                    <tr>
+                                        <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">State</th>
+                                        <td>{{viewPTaxTemplate.state_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Effective From</th>
+                                        <td>{{formatDate(viewPTaxTemplate.effective_from)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bd bd-gray-300 rounded table-responsive mg-t-10">
+                            <table class="table table-striped mg-b-0">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="bg-info text-center">
+                                            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold text-white">Amount Slab wise P-TAX</h6>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">Amount From</th>
+                                        <th class="text-center">Amount To</th>
+                                        <th class="text-center">P-TAX Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of viewPTaxTemplate.tax_range_amount; let i = index">
+                                        <td class="text-center">&#8377;{{item.amount_from.toFixed(2)}}</td>
+                                        <td *ngIf="item?.last_slab == 'yes'" class="text-center">&#8377; <span style="font-size: 20px;">&#8734;</span></td>
+                                        <td *ngIf="item?.last_slab == 'no'" class="text-center">&#8377;{{item.amount_to.toFixed(2)}}</td>
+                                        <td class="text-center">&#8377;{{item.tax_amount.toFixed(2)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

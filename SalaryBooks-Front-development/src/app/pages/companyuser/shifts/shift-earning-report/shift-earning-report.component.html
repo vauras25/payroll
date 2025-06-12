@@ -1,0 +1,130 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item active">Shift Management</a>
+            <a class="breadcrumb-item">Shift Earning Report</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>Shift Earning Report</h4>
+            <!-- <p class="mg-b-0">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+            </p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <companyuser-app-table-filter   [dateFromFilter]="true"
+            [dateToFilter]="true" (onFiltered)="setfilter($event)"></companyuser-app-table-filter>
+            <div class="text-right">
+                <button type="button" [disabled]="!anyRowsChecked()" (click)="exportData();" class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+                    <span><i style="font-size: 12px" class="mr-1 fa fa-download"></i>Export</span>
+                </button>
+
+              
+            </div>
+            <div class="mt-3">
+                <ng-container >
+                    <div class="table-responsive mt-3">
+                      <app-custom-tableoption
+                      [searchable]="true"
+                      (onFilterChanged)="paginationOptions.limit = +$event?.length ;getFiltered(1,$event.searchkey)"
+                    ></app-custom-tableoption>
+                        <table class="table nowrap wd-100p employee-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label
+                                        class="d-flex align-items-center mb-0"
+                                        for="select-all"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          class="mr-2"
+                                          id="select-all"
+                                          [value]="rowCheckedAll"
+                                          (change)="allRowsCheckboxChecked($event)"
+                                         
+                                        />
+                                        SL No.
+                                      </label>
+                                    </th>
+                                    <th>Emp ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th >Branch</th>
+                                    <th >Client</th>
+                                    <th >HOD</th>
+                                    <th *ngFor="let shift of shiftMasters">{{shift?.shift_name}}</th>
+                                    <th >Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of empReportData;let i=index">
+                                  <td>  
+                                <label
+                                class="d-flex align-items-center"
+                                [for]="'checkrow-' + (i + 1)"
+                              >
+                                <input
+                                  type="checkbox"
+                                  class="mr-2"
+                                  [attr.checked]="item?.checked == true ? 'checked' : null"
+                                  id="checkrow-{{ i + 1 }}"
+                                  [attr.data-checkbox-id]="item?._id"
+                                  (click)="rowCheckBoxChecked($event, item)"
+                                />
+                                {{
+                                  Global.getTableSerialNumber(
+                                    i,
+                                    paginationOptions.limit,
+                                    paginationOptions.page
+                                  )
+                                }}
+                              </label>
+                  
+                                  </td>
+                                  
+                                  <td>{{item?.emp_id}}</td>
+                                  <td>{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+                                  <td>{{item?.department?.department_name}}</td>
+                                  <td>{{item?.designation?.designation_name}}</td>
+                                  <td>{{item?.branch?.branch_name}}</td>
+                                  <td>{{item?.client?.client_code}}</td>
+                                  <td>{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+                                  <td *ngFor="let subItem of item?.shift_rate">{{subItem?.rate | currency:'₹'}}</td>
+                                 
+                                  <td>{{item.total_rate | currency:'₹'}}</td>
+                                
+                                </tr>
+                                <tr *ngIf="empReportData.length==0">
+                                  <td [attr.colspan]="(shiftMasters.length+8)">
+                                    No Record(s) Found
+                                  </td>
+                                </tr>
+                              </tbody>
+                        </table>
+                    </div>
+                    <app-custom-pagination [rows]="empReportData" [paginationOptions]="paginationOptions" (onPageClicked)="getFiltered($event)"></app-custom-pagination>
+
+                </ng-container>
+              
+            </div>
+
+       
+
+        </div>
+    </div>
+
+  
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

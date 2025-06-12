@@ -1,0 +1,105 @@
+<div class="table-responsive" >
+  <div class="table-wrapper mt-3">
+    <table class="table display responsive nowrap wd-100p employee-table" >
+      <thead>
+        <tr >
+  
+         
+          <th [attr.colspan]="days.length+3" class="text-center">{{start_date | date:"MMM"}}/{{start_date | date:"YY"}}</th>
+          
+          <th colspan="5" class="text-center">
+            <div class="softmerge-inner" >Month Days</div>
+          </th>
+          
+          <th  colspan="5" class="text-center">{{days.length}}</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+   
+        <tr >
+  
+          <td >
+            <label
+            class="d-flex align-items-center mb-0"
+            for="select-all"
+          >
+            <input
+              type="checkbox"
+              class="mr-2"
+              id="select-all"
+              [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"
+            />
+            SL No.
+          </label>
+          
+          </td>
+          <td >Emp. ID</td>
+          <td >Name</td>
+          <td  *ngFor="let item of days;let i=index">{{i+1}}</td>
+  
+          <td >Present</td>
+          <td >W/Off &amp; H/Off</td>
+          <td >PL</td>
+          <td >Absent/LWP</td>
+          <td >Total</td>
+          <td >Total Payable Days</td>
+          <td >L E</td>
+          <td >LATE</td>
+          <td >Remarks Ded. for {{current_date | date:'MMM'}} {{current_date | date:'YY'}}</td>
+        </tr>
+  
+        <tr style="height: 19px" *ngFor="let item of empReportData;let i=index">
+  
+          <td class="s8">
+            <label
+            class="d-flex align-items-center"
+            [for]="'checkrow-' + (i + 1)"
+          >
+            <input
+              type="checkbox"
+              class="mr-2"
+              [attr.checked]="
+              item?.checked == true ? 'checked' : null
+              "
+              id="checkrow-{{ i + 1 }}"
+              [attr.data-checkbox-id]="item?._id"
+              (click)="rowCheckBoxChecked($event, item)"
+            />
+            {{
+              Global.getTableSerialNumber(
+                i,
+                paginationOptions.limit,
+                paginationOptions.page
+              )
+            }}
+          </label>
+          </td>
+          <td class="s9">{{item?.emp_id}}</td>
+          <td class="s9">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+          <td class="{{(subItem?.first_half=='WO' || subItem?.second_half=='WO')?'s11':'s10'}}" *ngFor="let subItem of item?.attendance">{{subItem?.first_half}} - {{subItem?.second_half}}</td>
+  
+          <td class="s12">{{item?.total_attendance | number:'1.2'}} </td>
+          <td class="s12">{{item?.total_wo | number:'1.2'}} </td>
+          <td class="s12">{{item?.total_pl | number:'1.2'}} </td>
+          <td class="s12">{{item?.total_absent | number:'1.2'}} </td>
+          <td class="s12">{{days.length | number:'1.2'}} </td>
+          <td class="s12">{{item[0]?.paydays | number:'1.2'}}</td>
+          <td class="s12">0.0 </td>
+          <td class="s12">{{item?.total_late | number:'1.2'}} </td>
+          <td class="s10"></td>
+        </tr>
+        <tr *ngIf="empReportData.length<=0">
+          <td [attr.colspan]="days.length+13">No Record(s) Found</td>
+        </tr>
+  
+      </tbody>
+    </table> 
+  </div>
+
+</div>
+<app-custom-pagination
+[rows]="empReportData"
+[paginationOptions]="paginationOptions"
+(onPageClicked)="getFiltered($event)"
+></app-custom-pagination>

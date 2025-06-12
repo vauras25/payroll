@@ -1,0 +1,11 @@
+table th,
+table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+input.form-control.non-editing {
+    background: transparent;
+    border: transparent;
+    font-weight: 500;
+}

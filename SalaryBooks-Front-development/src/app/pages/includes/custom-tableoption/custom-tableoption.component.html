@@ -1,0 +1,26 @@
+<form [formGroup]="TableOptionForm">
+    <div class="row table-options">
+        <div class="col-6">
+            <div class="table-lengthmenu mt-2" *ngIf="lengthChange == true">
+                <label>
+                    Show
+                    <select formControlName="length"
+                            (change)="filterChanged()">
+
+                        <option *ngFor="let item of Global.DataTableLengthChangeMenu"
+                                value="{{item}}">{{item}}</option>
+                    </select>
+                    entries
+                </label>
+            </div>
+        </div>
+        <div class="col-6">
+            <input formControlName="searchkey"
+                   type="text"
+                   class="table-search"
+                   placeholder="Search..."
+                   *ngIf="searchable == true"
+                   > 
+        </div>
+    </div>
+</form>

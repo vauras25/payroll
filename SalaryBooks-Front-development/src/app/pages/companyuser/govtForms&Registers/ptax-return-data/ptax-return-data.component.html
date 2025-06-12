@@ -1,0 +1,270 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Govt Forms And Register</a>
+      <a class="breadcrumb-item">P Tax Return Data</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>P Tax Return Data</h4>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [dateFromFilter]="!!state"
+        [dateToFilter]="!!state"
+        [basicFilter]="!!state"
+        (onFiltered)="employeeListFilter = $event; fetchEmployees()"
+      >
+        <ng-container extraFilter>
+          <div class="col-sm-3 col-12 mb-3">
+            <div class="form-layout">
+              <ngx-select-dropdown
+                style="padding: 5px !important"
+                (change)="state = $event"
+                [options]="stateMaster"
+                class="form-control"
+                [config]="{
+                  search: true,
+                  placeholder: 'Select State',
+                  height: '200px'
+                }"
+              ></ngx-select-dropdown>
+            </div>
+          </div>
+        </ng-container>
+      </companyuser-app-table-filter>
+
+      <ng-container *ngIf="!isReportView">
+        <div class="mt-3">
+          <div class="text-right">
+            <div>
+              <button
+                [disabled]="!anyRowsChecked()"
+                class="btn btn-info mt-3"
+                (click)="viewReport()"
+              >
+                View Report
+              </button>
+            </div>
+            <!-- <div>
+        <button
+        [disabled]="!anyRowsChecked()"
+        class="btn btn-info mt-3"
+        (click)="downloadReport()"
+      >
+        Download
+      </button>
+      </div> -->
+          </div>
+          <div class="table-responsive mt-3">
+            <table class="w-100 c-table">
+              <colgroup span="3"></colgroup>
+
+              <thead>
+                <tr class="text-center">
+                  <th>
+                    <input
+                      type="checkbox"
+                      [value]="rowCheckedAll"
+                      (change)="allRowsCheckboxChecked($event)"
+                    />
+                    SL No.
+                  </th>
+                  <th>Salary Slab</th>
+                  <th colspan="2" *ngFor="let date of monthYearArray">
+                    {{ date?.month }}-{{ date?.year }}
+                  </th>
+                </tr>
+                <tr class="text-center">
+                  <th></th>
+                  <th></th>
+                  <ng-container *ngFor="let date of monthYearArray">
+                    <th>No of Emp</th>
+                    <th>Amount</th>
+                  </ng-container>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let item of employees; let i = index">
+                  <td>
+                    <label
+                      class="d-flex align-items-center"
+                      [for]="'checkrow-' + (i + 1)"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          item?.tax_slab?.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="item?.tax_slab?._id"
+                        (click)="rowCheckBoxChecked($event, item?.tax_slab)"
+                      />
+                      {{
+                        Global.getTableSerialNumber(
+                          i,
+                          reportPaginationOptions.limit,
+                          reportPaginationOptions.page
+                        )
+                      }}
+                    </label>
+                  </td>
+
+                  <td style="white-space: nowrap">
+                    {{ item?.tax_slab?.amount_from }} to
+                    <span *ngIf="item?.tax_slab?.last_slab == 'no'">{{
+                      item?.tax_slab?.amount_to
+                    }}</span>
+                    <span
+                      style="font-size: 16px"
+                      *ngIf="item?.tax_slab?.last_slab == 'yes'"
+                      >∞</span
+                    >
+                  </td>
+                  <ng-container *ngFor="let arr of item?.monthly_array">
+                    <td>
+                      {{ arr?.no_of_employee }}
+                    </td>
+                    <td>
+                      {{ arr?.amount | number : "2.1-1" }}
+                    </td>
+                  </ng-container>
+                </tr>
+                <tr *ngIf="employees?.length == 0">
+                  <td
+                    colspan="100%"
+                    class="text-center"
+                    style="background-color: #f7f7f7"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isReportView">
+        <div class="text-right">
+          <button type="button"
+          (click)="downloadReport()"
+                  class="btn btn-primary tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+            <span><i style="font-size: 12px"
+                 class="mr-1 fa fa-download"></i>Export</span>
+          </button>
+
+          <button (click)="cancelGenerateReport()"
+                  type="button"
+                  class="btn btn-danger tx-11 tx-mont tx-medium h-100 flex-1 mr-2">
+            <span><i style="font-size: 12px"
+                 class="mr-1 fa fa-times"></i>Cancel</span>
+          </button>
+        </div>
+        <div class="table-wrapper mt-3">
+          <div class="table-responsive">
+            <table class="table table-bordered cust-table table-striped cust-reporting-table">
+              <thead>
+              
+                  <tr class="text-center d-flex justify-content-center">
+                    <th class="text-center">{{companyData?.establishment_name}}</th>
+                
+                  </tr>
+                  <tr class="headings">
+                    <th></th>
+                    <th></th>
+              <ng-container *ngFor="let date of monthYearArray; let i=index">
+                <ng-container *ngFor="let module of generatedReportTemplate;let ind=index">
+                
+                  <!-- <tr class="title-sec">
+                 
+                    <th class="column-title text-center"
+                        [attr.colspan]="module.fields?.length">
+                      {{ module?.module_title }}
+                    </th>
+                  </tr> -->
+                    
+                    <th class="column-title"
+                        *ngFor="let field of module.fields">
+                      {{ field.title }}
+                    </th>
+                  </ng-container>
+                </ng-container>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of employees; let i = index">
+                  <td>
+                    <label
+                      class="d-flex align-items-center"
+                      [for]="'checkrow-' + (i + 1)"
+                    >
+                      <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="
+                          item?.tax_slab?.checked == true ? 'checked' : null
+                        "
+                        id="checkrow-{{ i + 1 }}"
+                        [attr.data-checkbox-id]="item?.tax_slab?._id"
+                        (click)="rowCheckBoxChecked($event, item?.tax_slab)"
+                      />
+                      {{
+                        Global.getTableSerialNumber(
+                          i,
+                          reportPaginationOptions.limit,
+                          reportPaginationOptions.page
+                        )
+                      }}
+                    </label>
+                  </td>
+
+                  <td style="white-space: nowrap">
+                    {{ item?.tax_slab?.amount_from }} to
+                    <span *ngIf="item?.tax_slab?.last_slab == 'no'">{{
+                      item?.tax_slab?.amount_to
+                    }}</span>
+                    <span
+                      style="font-size: 16px"
+                      *ngIf="item?.tax_slab?.last_slab == 'yes'"
+                      >∞</span
+                    >
+                  </td>
+                  <ng-container *ngFor="let arr of item?.monthly_array">
+                    <td>
+                      {{ arr?.no_of_employee }}
+                    </td>
+                    <td>
+                      {{ arr?.amount | number : "2.1-1" }}
+                    </td>
+                  </ng-container>
+                </tr>
+                <tr *ngIf="employees?.length == 0">
+                  <td colspan="100%"
+                      class="text-center">No records found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <!-- <app-custom-pagination
+        [rows]="employeesListing"
+        [paginationOptions]="reportPaginationOptions"
+        (onPageClicked)="fetchAppraisalListing()"
+      ></app-custom-pagination> -->
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

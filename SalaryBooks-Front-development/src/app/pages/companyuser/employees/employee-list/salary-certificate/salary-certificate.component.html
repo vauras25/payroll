@@ -1,0 +1,304 @@
+<ng-container *ngFor="let emp of employees">
+    <div class=" d-flex justify-content-center p-3 mt-2 ">
+        <div class="col-9 bg-white p-2">
+            <div class="header">
+                <h4>{{companyDetails?.establishment_name ?? 'N/A'}}</h4>
+              </div>
+            <div class="header">
+                <h4>{{companyDetails?.com_det?.reg_office_address?.door_no}} {{companyDetails?.com_det?.reg_office_address?.locality}} {{companyDetails?.com_det?.reg_office_address?.district_name}} {{companyDetails?.com_det?.reg_office_address?.state}} {{companyDetails?.com_det?.reg_office_address?.pin_code}} </h4>
+              </div>
+            <div class="header">
+                <h4>Earning Certificate for the Period ................</h4>
+              </div>
+            <div class="content">
+                <div class="d-flex justify-content-between">
+                    <div class="i">
+                        <!-- <img src="" alt="Employee Photo"> -->
+                        <div class="details">EMP ID: {{emp?.emp_id ?? 'N/A'}}</div>
+                        <div class="name">PF. No :- {{emp?.pf_no ?? 'N/A'}}</div>
+                        <div class="name">Pay Days :- {{emp?.paydays ?? '0.00'}} </div>
+                        <div class="name">Designation :- {{emp?.designation?.designation_name ?? 'N/A'}}</div>
+                        <div class="name">Client :- {{emp?.client?.client_code ?? 'N/A'}}</div>
+                        <div class="name">UAN :- {{emp?.pf_esic_details?.curr_er_epfo_details?.uan_no ?? 'N/A'}}</div>
+                    </div>
+                    <div class="">
+                        <div class="details">Employee Name :- {{emp?.emp_first_name ?? 'N/A'}} {{emp?.emp_last_name ?? 'N/A'}}</div>
+                        <div class="details">ESI No :- {{emp?.esic_no ?? 'N/A'}}</div>
+                        <div class="details">DOJ :- {{emp?.employment_hr_details?.date_of_join ?? 'N/A'}}</div>
+                        <div class="details">Department :- {{emp?.department?.department_name ?? 'N/A'}}</div>
+                        <div class="details">Bank A/c :- {{emp?.employee_details?.account_no ?? 'N/A'}}</div>
+                        <div class="details">Remarks :- </div>
+                    </div>
+                </div>
+             
+                <div class="earnings">
+                    <h4>Earnings</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Earnings</th>
+                                <th>Amount</th>
+                                <th>Deductions</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BASIC</td>
+                                <td>{{emp?.basic_amount ?? '0.00'}}</td>
+                                <td>PF</td>
+                                <td>{{emp?.pf_amount ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>HRA</td>
+                                <td>{{emp?.hra_amount ?? '0.00'}}</td>
+                                <td>PT</td>
+                                <td>{{emp?.pt_amount ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Other allo</td>
+                                <td>{{emp?.other_amount ?? '0.00'}}</td>
+                                <td>SUP.PF</td>
+                                <td>{{'0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Lev Enc.(8) </td>
+                                <td>0.00</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Bonus</td>
+                                <td>{{emp?.bonus_amount ?? '0.00'}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Arr.Earn</td>
+                                <td>{{emp?.arr_earn ?? '0.00'}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Reim.Medi</td>
+                                <td>{{emp?.reimbursment_amount ?? '0.00'}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                           
+                            <tr>
+                                <td>Total</td>
+                                <td>{{emp?.earning_total_amount ?? '0.00'}}</td>
+                                <td>Total</td>
+                                <td>{{emp?.deductions_total_amount ?? '0.00'}}</td>
+                            </tr>
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                              <td colspan="4">Net Pay - {{emp?.net_payment ?? '0.00'}}</td>
+                            </tr>
+                            <tr class="border-dark">
+                              <td colspan="4">In Words- {{emp?.net_payment_in_words ?? 'N/A'}}</td>
+                            </tr>
+                            <tr colspan="4" class="">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              <td colspan="4">Signature </td>
+                            </tr>
+                          </tfoot>
+                    </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Gross</th>
+                                <th>Exempt</th>
+                                <th>Taxable</th>
+                                <th colspan="2" class="text-center" >Income Tax Deduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Basic Salary</td>
+                                <td>{{emp?.tds_basic_amount ?? '0.00'}}</td>
+                                <td></td>
+                                <td>{{emp?.tds_basic_amount ?? '0.00'}}</td>
+                                <td>Gross Salary</td>
+                                <td>{{emp?.earning_total_amount ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>DA</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Profession Tax</td>
+                                <td>{{emp?.tds_profession_tax ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>HRA</td>
+                                <td>{{emp?.tds_hra_amount ?? '0.00'}}</td>
+                                <td></td>
+                                <td>{{emp?.tds_hra_amount ?? '0.00'}}</td>
+                                <td>Other Ded. & 
+                                    Standard Ded.</td>
+                                <td>{{emp?.tds_other_ded_standard_ded ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Conveyance</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>House Property </td>
+                                <td>{{emp?.tds_house_property ?? '0.00' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Any Other 
+                                    Allowance
+                                </td>
+                                <td>{{emp?.tds_other_amount ?? 'N/A'}}</td>
+                                <td></td>
+                                <td>{{emp?.tds_other_amount ?? 'N/A'}}</td>
+                                <td> Income from Other 
+                                    Source
+                                    </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Perquisites
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td> Total VI-A deduction
+                                    </td>
+                                <td>{{emp?.tds_total_vi_a_deduction ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td>Other 
+                                    Components                                
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Taxable Income</td>
+                                <td>{{emp?.tds_total_tax_slab_amount ?? '0.00'}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Surcharge + 
+                                    Education Cess</td>
+                                <td>{{emp?.tax_slab_charge_total_amount ?? '0.00'}}</td>
+                            </tr>
+                            
+                            
+                        </tbody>
+                      
+                    </table>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="text-center">Deduction Under Chapter VI-A</th>
+                                        <th colspan="6" class="text-center">Tax Deducted(Prev.Emplr+Other)</th>
+                                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Expenditure on Children 
+                                            Education
+                                        </td>
+                                        <td>{{emp?.tds_eighty_e_investments_amount ?? '0.00'}}</td>
+                                        <td colspan="3">Tax Deducted Till date</td>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Housing Loan Repayment
+                                        </td>
+                                        <td>{{emp?.tds_eighty_ee_and_eea_investments_amount ?? '0.00'}}</td>
+                                        <td colspan="3"> Tax to be Deducted </td>
+                                        <td colspan="3">{{(emp?.tds_total_tax_slab_amount - emp?.tax_slab_charge_total_amount) ?? '0.00'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Life Insurance Premium
+                                        </td>
+                                        <td>{{emp?.tds_eighty_ccc_investments_amount ?? '0.00'}}</td>
+                                        <td colspan="3"> Monthly Projected Tax</td>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Public Provident Fund 
+                                        </td>
+                                        <td>{{emp?.tds_eighty_c_investments_amount ?? '0.00'}}</td>
+                                        <td colspan="6" class="text-center text-dark"> Tax Paid Details</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>Statutory Provident Fund 
+                                        </td>
+                                        <td>{{emp?.tds_eighty_g_investments_amount}}</td>
+                                        <td >APR</td>
+                                        <td >MAY</td>
+                                        <td >JUN</td>
+                                        <td >JUL</td>
+                                        <td >AUG</td>
+                                        <td >SEP</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td></td>
+                                        <td >{{emp?.tds_apr_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_may_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_jun_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_jul_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_aug_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_sep_amount ?? '0.00'}}</td>
+                                        
+                                    </tr>
+                                 
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td></td>
+                                        <td >OCT</td>
+                                        <td >NOV</td>
+                                        <td >DEC</td>
+                                        <td >JAN</td>
+                                        <td >FEB</td>
+                                        <td >MAR</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td></td>
+                                        <td >{{emp?.tds_oct_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_nov_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_dec_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_jan_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_feb_amount ?? '0.00'}}</td>
+                                        <td >{{emp?.tds_mar_amount ?? '0.00'}}</td>
+                                      
+                                        
+                                    </tr>
+                                </tbody>
+                              
+                            </table>
+                     
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</ng-container>
+
+<div class="text-right py-3 ">
+    <button class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium me-5 " (click)="downloadSalaryCertificates()"> Download </button>
+    <button class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium me-5" routerLink="/company/employees"> Cancel </button>
+  </div>

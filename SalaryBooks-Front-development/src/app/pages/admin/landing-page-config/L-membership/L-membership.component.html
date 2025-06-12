@@ -1,0 +1,194 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+      <a class="breadcrumb-item">Landing-Page</a>
+      <a class="breadcrumb-item active">Membership Plans</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-home"></i>
+    <div>
+      <h4>Membership Plans</h4>
+      <p class="mg-b-0">Add Membership Plans</p>
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30" id="letterwriting-submit-section">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-3">Add Plan</h6>
+
+      <div class="">
+        <form [formGroup]="membershipForm">
+          <div class="row">
+            <div class="col-4 col-sm-4">
+              <input
+                class="form-control"
+                placeholder="Title"
+                formControlName="title"
+                type="text"
+              />
+              <p
+                class="error-element mt-1"
+                *ngIf="
+                  membershipForm.controls.title.hasError('required') &&
+                  membershipForm.controls.title.touched
+                "
+              >
+                This field is required
+              </p>
+            </div>
+            <div class="col-4 col-sm-4">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                formControlName="amount"
+                type="number"
+              />
+              <p
+              class="error-element mt-1"
+              *ngIf="
+                membershipForm.controls.amount.hasError('required') &&
+                membershipForm.controls.amount.touched
+              "
+            >
+              This field is required
+            </p>
+            </div>
+            <div class="col-4 col-sm-4">
+              <ngx-select-dropdown formControlName="duration" [options]="tenureMaster" class="form-control p-1" [config]="{search: true, placeholder: 'Duration'}"></ngx-select-dropdown>
+              <!-- <input
+                class="form-control"
+                placeholder="Duration (Number in days)"
+                formControlName="duration"
+                type="number"
+              /> -->
+            </div>
+            <div class="col-9 mt-3">
+              <h5 class="br-section-label">Add Features</h5>
+            </div>
+            <div class="col-3 text-right mt-3">
+              <u (click)="addFeature()" class="text-primary pointer-cursor">
+                +Add
+                {{
+                  membershipForm.get("features")?.value.length
+                    ? "More"
+                    : "Feature"
+                }}</u>
+            </div>
+            <ng-container formArrayName="features">
+              <div
+                *ngFor="let feature of features.controls; let i = index"
+                class="col-4 col-sm-4 mt-3 pos-relative"
+              >
+                <ng-container [formGroupName]="i">
+                  <input
+                    class="form-control"
+                    placeholder="Feature"
+                    formControlName="feature"
+                    tyep="text"
+                  />
+                  <span
+                    (click)="removeFeature(i)"
+                    class="pos-absolute pointer-cursor"
+                    style="
+                      top: 0%;
+                      right: 8%;
+                      font-size: 28px;
+                      font-weight: 300;
+                    "
+                    aria-hidden="true"
+                    >&times;</span
+                  >
+                </ng-container>
+              </div>
+            </ng-container>
+
+          </div>
+
+
+          <div class="row no-gutters bd-1 mt-3">
+            <div class="col-12 col-sm-12">
+              <button
+                class="btn btn-info"
+                (click)="createPlan($event)"
+                *ngIf="!editActionId"
+              >
+                <span>Submit {{ editActionId }}</span>
+              </button>
+              <div *ngIf="editActionId">
+                <button
+                  type="button"
+                  (click)="cancelPlanUpdation()"
+                  class="btn btn-danger mg-r-5"
+                >
+                  <span>Cancel</span>
+                </button>
+                <button
+                  type="submit"
+                  (click)="updatePlan($event)"
+                  class="btn btn-info"
+                >
+                  <span>Update Plan</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="br-section-wrapper mt-5">
+      <h6 class="br-section-label mb-1 mt-1">Plans</h6>
+      <div class="table-wrapper">
+        <table class="table display responsive nowrap">
+          <thead>
+            <tr>
+              <th>SL</th>
+              <th>Title</th>
+              <th>Amount</th>
+              <th>Duration</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let plan of membershipPlansList; let i = index">
+              <td>{{ "#" + (i + 1) }}</td>
+              <td>{{ plan?.title | titlecase }}</td>
+              <td>{{ plan?.amount }}</td>
+              <td>{{ plan?.duration }}</td>
+              <td>
+                <div class="br-toggle br-toggle-rounded br-toggle-primary" [class.on]="plan?.status === 'active'" id="policy-last-day-of-month" (click)="updatePlanStatus(plan, plan?.status)" >
+                  <div class="br-toggle-switch"></div>
+              </div>
+              </td>
+              <!-- <td>{{ page?.status | titlecase}}</td> -->
+              <td>
+                <div style="width: 25px; height: 25px">
+                  <i
+                    class="fa fa-pen pen-icon"
+                    (click)="setPlanFormValue(plan)"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!membershipPlansList.length">
+              <td
+                colspan="100%"
+                class="text-center"
+                style="background-color: #f7f7f7"
+              >
+                No records found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

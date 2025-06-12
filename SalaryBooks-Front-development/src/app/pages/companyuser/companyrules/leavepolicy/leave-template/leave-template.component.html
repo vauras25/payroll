@@ -1,0 +1,75 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item">Leave Policy Rule</a>
+            <a class="breadcrumb-item active">Define Leave Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Define Leave Rule</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper p-4">
+            <div class="d-flex align-items-center justify-content-end mg-b-10">
+                <div class="d-md-flex pd-y-20 pd-md-y-0">
+                    <button (click)="add()" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-md-l-10 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2">Add Leave Heads</button>
+                </div>
+            </div>
+
+            <div class="bd_rightside animate__animated animate__slideInRight" id="leavehead-form-modal">
+                <div class="pd-20 pd-xs-40 mg-t-40" style="width:100%;">
+                    <h6 class="tx-gray-800 tx-uppercase tx-bold">Add Leave Heads
+                        <button (click)="cancelEntry()" class="btn btn-info pull-right" style="float:right;clear: both;"><i class="fa fa-times"></i></button>
+                    </h6>
+
+                    <form [formGroup]="leaveHeadForm">
+                        <div class="form-group">
+                            <label>Full Name&nbsp;<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Enter Full Name" formControlName="full_name" [class.error]="leaveHeadForm.controls.full_name.dirty || leaveHeadForm.controls.full_name.touched">
+
+                            <p class="mt-1 text-danger" *ngIf="leaveHeadForm.controls.full_name.hasError('required') && ( leaveHeadForm.controls.full_name.dirty || leaveHeadForm.controls.full_name.touched )">This field is required</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Abbreviation&nbsp;<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Abbreviation" formControlName="abbreviation" [class.error]="leaveHeadForm.controls.abbreviation.dirty || leaveHeadForm.controls.abbreviation.touched">
+
+                            <p class="mt-1 text-danger" *ngIf="leaveHeadForm.controls.abbreviation.hasError('required') && ( leaveHeadForm.controls.abbreviation.dirty || leaveHeadForm.controls.abbreviation.touched )">This field is required</p>
+                        </div>
+
+                        <button (click)="submit($event)" class="btn btn-info btn-block pd-y-10 mg-b-30"><span>Add</span></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <!-- <th class="wd-25p text-center">Action</th> -->
+                            <th class="wd-15p">Full Name</th>
+                            <th class="wd-15p">Abbreviation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

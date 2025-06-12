@@ -1,0 +1,7 @@
+select {
+  border: none;
+  border-bottom: 1px solid #8f8f8f;
+  padding: 4px 5px;
+  outline: none;
+  background: #ededed;
+}

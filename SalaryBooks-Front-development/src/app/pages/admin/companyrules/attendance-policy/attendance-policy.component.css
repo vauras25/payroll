@@ -1,0 +1,9 @@
+input[type="time"] {
+    background: transparent !important;
+}
+
+::ng-deep span.rg-badges {
+    font-size: 13px;
+    padding: 6px 6px;
+    margin: 0 2px;
+}

@@ -1,0 +1,591 @@
+<div
+  class="card shadow-base bd-0 rounded-0 widget-4"
+  *ngIf="['view', 'edit'].includes(this.operation)"
+>
+  <div class="card-header ht-75 bg-info">
+    <div class="hidden-xs-down" *ngIf="['view'].includes(this.operation)">
+      <a
+        target="_blank"
+        routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+        class="text-white text-uppercase"
+      >
+        <i class="fa fa-print"></i> Print
+      </a>
+    </div>
+    <div class="tx-24 hidden-xs-down"></div>
+  </div>
+  <div class="card-body bg-dark">
+    <div class="card-profile-img" *ngIf="employee_details?.profile_pic; else noImg">
+      <img [src]="Global.BACKEND_URL + '/' +  employee_details?.profile_pic" alt="" />
+    </div>
+    <ng-template #noImg>
+      <div class="card-profile-img" >
+        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="" />
+      </div>
+    </ng-template>
+
+    <h4 class="tx-normal tx-roboto tx-white text-uppercase">
+      <ng-container *ngIf="employee_details; else naBlock"
+        >{{ this.employee_details?.emp_first_name }}
+        {{ this.employee_details?.emp_last_name }}</ng-container
+      >
+      <ng-template #naBlock>-</ng-template>
+    </h4>
+    <p class="mg-b-25">
+      Employee ID : <b>{{ this.employee_details?.emp_id ?? "N/A" }}</b>
+    </p>
+  </div>
+</div>
+
+<div class="card shadow-base bd-0 mg-t-0 widget-4">
+  <div class="card-footer tx-14 d-sm-flex justify-content-sm-center">
+    <nav
+      class="nav nav-inline flex-column flex-sm-row"
+      *ngIf="operation == 'add'"
+    >
+      <a
+        routerLink="/company/employees/add"
+        class="nav-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [ 'add', 'edit'],
+            company_strict: true
+          })
+        "
+        >Personal Details</a
+      >
+      <a
+        class="nav-link disabled-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [ 'add', 'edit'],
+            company_strict: true
+          })
+        "
+        >Address</a
+      >
+      <a
+        class="nav-link disabled-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [ 'add', 'edit'],
+            company_strict: true
+          })
+        "
+        >Bank Details</a
+      >
+      <a
+        class="nav-link disabled-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [ 'add', 'edit'],
+            company_strict: true
+          })
+        "
+        >PF & ESI Details</a
+      >
+      <a
+        class="nav-link disabled-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [ 'add', 'edit'],
+            company_strict: true
+          })
+        "
+        >HR Details</a
+      >
+
+      <button
+        class="btn btn-link dropdown-toggle disabled-link"
+        style="margin-top: -3px"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Other Info
+      </button>
+    </nav>
+
+    <nav
+      class="nav nav-inline flex-column flex-sm-row"
+      *ngIf="operation == 'view' || operation == 'edit'"
+    >
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        routerLink="/company/employees/{{ employee_id }}/{{
+          operation
+        }}/details"
+        class="nav-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+          })
+        "
+        >Personal Details</a
+      >
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        routerLink="/company/employees/{{ employee_id }}/{{
+          operation
+        }}/address"
+        class="nav-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+          })
+        "
+        >Address</a
+      >
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        routerLink="/company/employees/{{ employee_id }}/{{ operation }}/bank"
+        class="nav-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+          })
+        "
+        >Bank Details</a
+      >
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        routerLink="/company/employees/{{ employee_id }}/{{
+          operation
+        }}/employment"
+        class="nav-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+          })
+        "
+        >PF & ESI Details</a
+      >
+      <a
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        routerLink="/company/employees/{{ employee_id }}/{{
+          operation
+        }}/hr-details"
+        class="nav-link"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+          })
+        "
+        >HR Details</a
+      >
+
+      <div
+        class="dropdown"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+          })
+        "
+      >
+        <button
+          class="btn btn-link dropdown-toggle"
+          type="button"
+          data-toggle="dropdown"
+          style="margin-top: -3px"
+        >
+          Payroll Shortcuts <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu">
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/attendance-management/edit?emp_id={{
+                employee_id
+              }}"
+              >Attendance</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/reports/master-sheet?emp_id={{
+                employee_id
+              }}"
+              >Salary Sheet</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/advance-management/manage?emp_id={{
+                employee_id
+              }}"
+              >Advance</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/incentive-management/list?emp_id={{
+                employee_id
+              }}"
+              >Incentive</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item" target="_blank" href="javascript:;"
+              >Leave</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item" target="_blank" routerLink="javascript:;"
+              >Extra Earnings</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/reports/arrear-report?emp_id={{
+                employee_id
+              }}"
+              >Salary Revision</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/bonus-management/applied?emp_id={{
+                employee_id
+              }}"
+              >Bonus</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              target="_blank"
+              routerLink="/company/shift-management/add?emp_id={{
+                employee_id
+              }}"
+              >Shift Management</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="dropdown"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'quick_links',
+            staff_strict: Global.checkCompanyModulePermission({
+              company_module: 'employee',
+              company_operation: 'employee_assest',
+              company_sub_module: 'asset_management',
+              company_sub_operation: ['view', 'add', 'edit']
+            }) ||  Global.checkCompanyModulePermission({
+              company_module: 'employee',
+              company_operation: 'annual_component',
+              company_sub_module: 'annual_component',
+              company_sub_operation: ['view', 'add', 'edit']
+            }) ||  Global.checkCompanyModulePermission({
+              company_module: 'employee',
+              company_operation: 'fullnfinal',
+              company_sub_module: 'full_&_final',
+              company_sub_operation: ['view', 'add', 'edit']
+            })
+
+          })
+        "
+      >
+        <button
+          class="btn btn-link dropdown-toggle"
+          type="button"
+          data-toggle="dropdown"
+          style="margin-top: -3px"s
+        >
+          Shortcuts <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu">
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/assets"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'employee_assest',
+                  company_sub_module: 'asset_management',
+                  company_sub_operation: ['view', 'add', 'edit']
+                })
+              "
+              >Employee Assets</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/contract-details"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'contract_details'
+                })
+              "
+              >Contract Details</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/annual-component"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'annual_component',
+                  company_sub_module: 'annual_component',
+                  company_sub_operation: ['view', 'add', 'edit']
+                })
+              "
+              >Annual Component</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/fullfinal"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'fullnfinal',
+                  company_sub_module: 'full_&_final',
+                  company_sub_operation: ['view']
+                })
+              "
+              >Full & Final</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/kpi-details"
+              >KPI & Performance</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="dropdown"
+        *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'employee',
+            company_operation: 'quick_links'
+          })
+        "
+      >
+        <button
+          class="btn btn-link dropdown-toggle"
+          type="button"
+          data-toggle="dropdown"
+          style="margin-top: -3px"
+        >
+          Other Info <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu">
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/training-attended"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  staff_module: 'employee_training_details',
+                  staff_operation: operation,
+                  company_strict: true
+                })
+              "
+              >Training</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              routerLink="/company/employees/{{ employee_id }}/tds"
+              >TDS</a
+            >
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/disciplinary-actions"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+                })
+              "
+              >Disciplinary Actions</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/accident-details"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'listing_add_approve',
+                  company_sub_module: 'employee_master_data',
+                  company_sub_operation: [operation],
+                  company_strict: true
+                })
+              "
+              >Accidents Details</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/extra-curricular"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+                  company_operation: 'listing_add_approve',
+                  company_sub_module: 'employee_master_data',
+                  company_sub_operation: [operation],
+                  company_strict: true
+                })
+              "
+              >Extra Curricular</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/educational-details"
+              *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'employee',
+            company_operation: 'listing_add_approve',
+            company_sub_module: 'employee_master_data',
+            company_sub_operation: [operation],
+            company_strict: true
+                })
+              "
+              >Educational Details</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLink="/company/employees/{{ employee_id }}/{{
+                operation
+              }}/employee-vault"
+              >Employee Vault</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<br />

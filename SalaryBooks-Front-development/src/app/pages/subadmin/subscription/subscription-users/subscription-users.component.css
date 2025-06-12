@@ -1,0 +1,26 @@
+.card-block .ng-valid {
+    border-color: #ced4da !important;
+}
+
+.company-desc {
+    width: 450px;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: 0;
+    right: 0;
+    display: none;
+    background: #fff;
+    box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -webkit-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -moz-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -o-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    z-index: 9999 !important;
+}
+
+.company-desc .form-group label,
+.company-desc .form-group span.select2,
+.company-desc .form-group .form-control {
+    width: 100% !important;
+}

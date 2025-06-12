@@ -1,0 +1,306 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item"
+               routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Bonus Management</a>
+            <a class="breadcrumb-item active">Bonus Applied</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-cash"></i>
+        <div>
+            <h4>Bonus Management</h4>
+            <!-- <p class="mg-b-0">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+            </p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <companyuser-app-table-filter [frequencyFilter]="true" [disburesmentFilter]="true" [isClient]="false" (onFiltered)="filterDataTable($event); ">
+                <!-- <div addOn_btn1 class="col-sm-2 col-12">
+                    <button class="btn-block btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2" (click)="runBonus()" [class.disabled]="rowCheckedAll == false && checkedRowIds.length == 0 && uncheckedRowIds.length == 0 ">
+                        Run Bonus
+                    </button>
+                </div> -->
+
+                <div *ngIf="
+                Global.checkCompanyModulePermission({
+                  company_module: 'bonus',
+                  company_sub_module: 'apply_bonus',
+                  company_sub_operation: ['edit'],
+                  company_strict:true
+                })" addOn_btn1 class="col-sm-2 col-12">
+                    <button class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2" (click)="openBonusEditModal('multiple')" [class.disabled]="rowCheckedAll == false && checkedRowIds.length == 0 && uncheckedRowIds.length == 0 ">
+                        Bulk Action
+                    </button>
+                </div>
+
+                <div addOn_btn2 class="col-sm-2 col-12"
+                    *ngIf="
+                        Global.checkCompanyModulePermission({
+                            company_module: 'bonus',
+                            company_sub_module: 'apply_bonus',
+                            company_sub_operation: ['add'],
+                            company_strict:true
+                        })">
+                    <button [disabled]="!this.employeeListFilter || this.employeeListFilter?.disbursement_frequency == 'monthly' || this.employeeListFilter?.disbursement_type == 'percent'" class="btn-block btn btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2" (click)="initDataImport()">
+                        <i class="fa fa-file-import"></i>&nbsp;Import Data
+                    </button>
+                </div>
+            </companyuser-app-table-filter>
+            
+            <br />
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p employee-table" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">
+                                <input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" />
+                            </th>
+                            <th >Action</th>
+                            <!-- <th class="" *ngIf="
+                            Global.checkCompanyModulePermission({
+                              company_module: 'bonus',
+                              company_sub_module: 'apply_bonus',
+                              company_sub_operation: ['edit']
+                            })">Action</th> -->
+                              <th class="">Employee ID</th> 
+                            <th class="">Photo</th>
+                            <th class="">First Name</th>
+                            <th class="">Last Name</th>
+                            <th class="">Email ID</th>
+                            <th class="">Bonus Value</th>
+                            <th class="">Bonus Type</th>
+                            <th class="">Disbursement</th>
+                            <th class="">Exgratia Status</th>
+                            <th class="">From Date</th>
+                            <th class="">To Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                  
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bonus Update Modal -->
+    <button id="updateBonusModalButton" [hidden]="true" data-toggle="modal" data-target="#updateBonusModal"></button>
+    <div id="updateBonusModal" tabindex="-1" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        Update Bonus
+                    </h6>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="bonusUpdateForm">
+                    <div class="modal-body pd-25">
+                        <div class="row">
+                            <div class="col-lg-12 mb-3">
+                                <label>Bonus Value <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" placeholder="Enter Bonus Value" formControlName="bonus_value" />
+                                <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_value.hasError('required') && (bonusUpdateForm.controls.bonus_value.dirty || bonusUpdateForm.controls.bonus_value.touched)">
+                                    This field is required
+                                </p>                          
+                            </div>
+
+                            <div *ngIf="employeeListFilter?.disbursement_type !== 'fixed'" class="col-lg-12 mb-3" id="exgratiaStatus">
+                                <label>Exgratia Status <span class="text-danger">*</span></label>
+                                <ngx-select-dropdown formControlName="exgratia_status" [options]="exgratiaStatusMaster" class="form-control p-1" [config]="{ search: false, placeholder: 'Select One' }"></ngx-select-dropdown>
+                                <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.exgratia_status.hasError('required') && (bonusUpdateForm.controls.exgratia_status.dirty || bonusUpdateForm.controls.exgratia_status.touched)">
+                                    This field is required
+                                </p>
+                            </div>
+
+                            <div *ngIf="
+                            employeeListFilter?.disbursement_type !== 'fixed' &&
+                            employeeListFilter?.disbursement_frequency == 'yearly'
+                            " class="col-lg-12 mb-3" id="fromMonth">
+                                <label>From Month / Year <span class="text-danger">*</span></label>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ngx-select-dropdown formControlName="bonus_from_month" [options]="Global?.monthMaster" class="form-control p-1" [config]="{ search: false, placeholder: 'Select Month' }"></ngx-select-dropdown>
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_from_month.hasError('required') && (bonusUpdateForm.controls.bonus_from_month.dirty || bonusUpdateForm.controls.bonus_from_month.touched)">
+                                            This field is required
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="number" class="form-control" formControlName="bonus_from_year" placeholder="Enter Year" />
+
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_from_year.hasError('required') && (bonusUpdateForm.controls.bonus_from_year.dirty || bonusUpdateForm.controls.bonus_from_year.touched)">
+                                            This field is required
+                                        </p>
+
+                                        <p class="mt-1 mb-0 text-danger"
+                                           *ngIf="(bonusUpdateForm.controls.bonus_from_year.hasError('pattern') || bonusUpdateForm.controls.bonus_from_year.hasError('minlength') || bonusUpdateForm.controls.bonus_from_year.hasError('maxlength')) && (bonusUpdateForm.controls.bonus_from_year.dirty || bonusUpdateForm.controls.bonus_from_year.touched)">
+                                            Enter a valid year
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="
+                            employeeListFilter?.disbursement_type !== 'fixed' &&
+                            employeeListFilter?.disbursement_frequency == 'yearly'" class="col-lg-12 mb-3" id="toMonth">
+                                <label>To Month / Year <span class="text-danger">*</span></label>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ngx-select-dropdown formControlName="bonus_to_month" [options]="Global.monthMaster" class="form-control p-1" [config]="{ search: false, placeholder: 'Select Month' }"></ngx-select-dropdown>
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_to_month.hasError('required') && (bonusUpdateForm.controls.bonus_to_month.dirty || bonusUpdateForm.controls.bonus_to_month.touched)">
+                                            This field is required
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="number" class="form-control" formControlName="bonus_to_year" placeholder="Enter Year" />
+
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_from_year.hasError('required') && (bonusUpdateForm.controls.bonus_from_year.dirty || bonusUpdateForm.controls.bonus_from_year.touched)">
+                                            This field is required
+                                        </p>
+
+                                        <p class="mt-1 mb-0 text-danger"
+                                           *ngIf="(bonusUpdateForm.controls.bonus_from_year.hasError('pattern') || bonusUpdateForm.controls.bonus_from_year.hasError('minlength') || bonusUpdateForm.controls.bonus_from_year.hasError('maxlength')) && (bonusUpdateForm.controls.bonus_from_year.dirty || bonusUpdateForm.controls.bonus_from_year.touched)">
+                                            Enter a valid year
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 mb-3" *ngIf="
+                            employeeListFilter?.disbursement_type !== 'fixed' &&
+                            employeeListFilter?.disbursement_frequency !== 'monthly' &&
+                            employeeListFilter?.disbursement_frequency !== 'yearly'
+                            ">
+                            <label>Bonus Slot {{ selectedEmployeeForUpdate?.employee_details?.template_data}}<span class="text-danger">*</span></label>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <ngx-select-dropdown formControlName="bonus_slot" (change)="setBonusMonth($event)" [options]="frequancyMaster" class="form-control p-1" [config]="{ search: false,displayKey:'description', placeholder: 'Select Month' }"></ngx-select-dropdown>
+                                    <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_to_month.hasError('required') && (bonusUpdateForm.controls.bonus_to_month.dirty || bonusUpdateForm.controls.bonus_to_month.touched)">
+                                        This field is required
+                                    </p>
+                                    <p class="mt-1 mb-0 text-danger" *ngIf="(bonusUpdateForm.get('bonus_to_year')?.value > currentYear || (bonusUpdateForm.get('bonus_to_year')?.value == currentYear && bonusUpdateForm.get('bonus_to_month')?.value > currentMonth))">
+                                        Selected slot range Must be less then currunt month
+                                    </p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <input formControlName="bonus_slot_year" (change)="setBonusYear($event?.target)" type="number"class="form-control" placeholder="Enter Year" />
+
+                                    <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_to_year.hasError('required') && (bonusUpdateForm.controls.bonus_to_year.dirty || bonusUpdateForm.controls.bonus_to_year.touched)">
+                                        This field is required
+                                    </p>
+
+                                    <p class="mt-1 mb-0 text-danger" *ngIf="(bonusUpdateForm.controls.bonus_to_year.hasError('pattern') || bonusUpdateForm.controls.bonus_to_year.hasError('minlength') || bonusUpdateForm.controls.bonus_to_year.hasError('maxlength')) && (bonusUpdateForm.controls.bonus_to_year.dirty || bonusUpdateForm.controls.bonus_to_year.touched)">
+                                        Enter a valid year
+                                    </p>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div *ngIf="employeeListFilter?.disbursement_frequency !== 'monthly'" class="col-lg-12 mb-3" id="bonus_disburse">
+                                <label>Disburse In <span class="text-danger">*</span></label>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <ngx-select-dropdown formControlName="bonus_g_month" [options]="Global.monthMaster" class="form-control p-1" [config]="{ search: false, placeholder: 'Select Month' }"></ngx-select-dropdown>
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_g_month.hasError('required') && (bonusUpdateForm.controls.bonus_g_month.dirty || bonusUpdateForm.controls.bonus_g_month.touched)">
+                                            This field is required
+                                        </p>
+                                        <p class="mt-1 mb-0 text-danger" *ngIf=" 
+                                        bonusUpdateForm.get('bonus_g_month')?.value &&
+                                        bonusUpdateForm.get('bonus_g_year')?.value &&
+                                        (bonusUpdateForm.get('bonus_g_year')?.value < bonusUpdateForm.get('bonus_to_year')?.value || 
+                                        (bonusUpdateForm.get('bonus_g_year')?.value == bonusUpdateForm.get('bonus_to_year')?.value && bonusUpdateForm.get('bonus_g_month')?.value?.index < bonusUpdateForm.get('bonus_to_month')?.value )
+                                        )">
+                                            Disburse Date can't be shorter then selected slot 
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="number"class="form-control" formControlName="bonus_g_year" placeholder="Enter Year" />
+
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="bonusUpdateForm.controls.bonus_g_year.hasError('required') && (bonusUpdateForm.controls.bonus_g_year.dirty || bonusUpdateForm.controls.bonus_g_year.touched)">
+                                            This field is required
+                                        </p>
+
+                                        <p class="mt-1 mb-0 text-danger" *ngIf="(bonusUpdateForm.controls.bonus_to_year.hasError('pattern') || bonusUpdateForm.controls.bonus_to_year.hasError('minlength') || bonusUpdateForm.controls.bonus_to_year.hasError('maxlength')) && (bonusUpdateForm.controls.bonus_to_year.dirty || bonusUpdateForm.controls.bonus_to_year.touched)">
+                                            Enter a valid year
+                                        </p>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" [disabled]="!bonusUpdateForm.valid" (click)="updateBonus($event)" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Submit</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <button id="bonusImportModalOpen" [hidden]="true" data-toggle="modal" data-target="#bonusImportModal"></button>
+    <div id="bonusImportModal" tabindex="-1" class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        Import bonus Data
+                    </h6>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="bonusImportForm">
+                    <div class="modal-body pd-20">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>Select File</label>
+                                <input type="file" class="form-control" formControlName="file" accept=".csv" (change)="onImportFileChanged($event, bonusImportForm, 'file', 'file_source')" />
+
+                                <p class="mt-1 text-danger" *ngIf="bonusImportForm.controls.file.hasError('required') && (bonusImportForm.controls.file.dirty || bonusImportForm.controls.file.touched)">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button (click)="getSampleImportCsv()" type="button" class="btn btn-info tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Sample CSV</span>
+                        </button>
+
+                        <button [disabled]="!bonusImportForm.valid" (click)="importData($event)" type="button" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Import</span>
+                        </button>
+
+                        <button type="button" class="btn btn-secondary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+<ngx-spinner  type="ball-scale-multiple"></ngx-spinner>

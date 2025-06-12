@@ -1,0 +1,10 @@
+.disabled-link {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: black;
+}
+
+a.nav-link.active {
+    color: #17a2b7;
+}

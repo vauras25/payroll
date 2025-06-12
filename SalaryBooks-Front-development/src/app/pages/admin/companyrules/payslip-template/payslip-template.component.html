@@ -1,0 +1,308 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Company Rules</a>
+            <a class="breadcrumb-item active">Pay Slip Template</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Payslip Template</h4>
+          <p class="mg-b-0">Customize Payslip</p>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="rule-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define Pay Slip Template
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Pay Slip Template</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="paySlipForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(paySlipForm, 'template_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="template_name" type="text">
+
+                            <p class="error-element" *ngIf="paySlipForm.controls.template_name.hasError('required') && ( paySlipForm.controls.template_name.dirty || paySlipForm.controls.template_name.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Logo&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(paySlipForm, 'payslip_temp_company_logo', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="payslip_temp_company_logo" type="file" accept="image/*" (change)="onFileChanged($event, paySlipForm, 'payslip_temp_company_logo', 'payslip_temp_company_logo_file')">
+
+                            <p class="error-element" *ngIf="paySlipForm.controls.payslip_temp_company_logo.hasError('required') && ( paySlipForm.controls.payslip_temp_company_logo.dirty || paySlipForm.controls.payslip_temp_company_logo.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Name <br> Address <br> Phone No&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(paySlipForm, 'company_info', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="company_info" rows="3" cols="100%"></textarea>
+
+                            <p class="error-element" *ngIf="paySlipForm.controls.company_info.hasError('required') && ( paySlipForm.controls.company_info.dirty || paySlipForm.controls.company_info.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                                        <!-- Header Section -->
+                                        <ng-container *ngIf="employeeDetailsMaster.length > 0">
+                                            <div class="row no-gutters" style="border-right: 1px solid #ced4da">
+                                                <div class="col-12 col-sm-12">Header Section</div>
+                                            </div>
+                    
+                                            <div class="row no-gutters">
+                                                <div class="col-3 col-sm-3" style="background: #fff" *ngFor="let item of employeeDetailsMaster">
+                                                    <label class="ckbox mb-0">
+                                                        <input type="checkbox" name="employee_details[]" value="{{ item.value }}" />
+                                                        <span>{{ item.description }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                    
+                                        <!-- Payroll Section -->
+                                        <ng-container *ngIf="salaryDeductionsMaster.length > 0">
+                                            <div class="row no-gutters" style="border-right: 1px solid #ced4da">
+                                                <div class="col-12 col-sm-12">Payroll Section</div>
+                                            </div>
+                    
+                                            <div class="row no-gutters">
+                                                <div class="col-3 col-sm-3" style="background: #fff" *ngFor="let item of salaryDeductionsMaster">
+                                                    <label class="ckbox mb-0">
+                                                        <input type="checkbox" name="payroll_details[]" value="{{ item.value }}" />
+                                                        <span>{{ item.description }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                    
+                                        <!-- Others Section -->
+                                        <ng-container *ngIf="otherPaymentMaster.length > 0">
+                                            <div class="row no-gutters" style="border-right: 1px solid #ced4da">
+                                                <div class="col-12 col-sm-12">Others Section</div>
+                                            </div>
+                    
+                                            <div class="row no-gutters">
+                                                <div class="col-3 col-sm-3" style="background: #fff" *ngFor="let item of otherPaymentMaster">
+                                                    <label class="ckbox mb-0">
+                                                        <input type="checkbox"
+                                                               name="other_details[]"
+                                                               value="{{ item.value }}" />
+                                                        <span>{{ item.description }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        
+                    <!-- <ng-container *ngIf="employeeDetailsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Employee's Details
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of employeeDetailsMaster">
+                                <label class="ckbox mb-0">
+                              <input type="checkbox" name="employee_details[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="salaryDeductionsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Salary Deductions
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of salaryDeductionsMaster">
+                                <label class="ckbox mb-0">
+                              <input type="checkbox" name="statutory_deduction[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="salaryContributionsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Salary Contributions
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of salaryContributionsMaster">
+                                <label class="ckbox mb-0">
+                              <input type="checkbox" name="statutory_deduction[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="otherPaymentMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Other Payments
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of otherPaymentMaster">
+                                <label class="ckbox mb-0">
+                            <input type="checkbox" name="other_payment[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="otherDeductionMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Other Deductions
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of otherDeductionMaster">
+                                <label class="ckbox mb-0">
+                            <input type="checkbox" name="other_deduction[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container> -->
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Leave Status&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(paySlipForm, 'leave_status', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="leave_status" class="form-control" type="text">
+
+                            <p class="error-element" *ngIf="paySlipForm.controls.leave_status.hasError('required') && ( paySlipForm.controls.leave_status.dirty || paySlipForm.controls.leave_status.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            TDS Status&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(paySlipForm, 'tds_status', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="tds_status" class="form-control" type="text">
+
+                            <p class="error-element" *ngIf="paySlipForm.controls.tds_status.hasError('required') && ( paySlipForm.controls.tds_status.dirty || paySlipForm.controls.tds_status.touched )">This field is required</p>
+                        </div>
+                    </div> -->
+
+                    
+                    <div class="row no-gutters">
+                        
+                        <div class="col-3 col-sm-3" style="background: #fff">
+                            <label class="ckbox mb-0">
+                                <input formControlName="leave_status" type="checkbox" name="other_details[]" value="leave_status" />
+                                <span>Leave Status</span>
+                            </label>
+                        </div>
+                        <div class="col-3 col-sm-3" style="background: #fff">
+                            <label class="ckbox mb-0">
+                                <input formControlName="tds_status" type="checkbox" name="other_details[]" value="tds_status" />
+                                <span>TDS Status</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Signature Message Box&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(paySlipForm, 'signature_message', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="signature_message" rows="3" cols="100%"></textarea>
+
+                            <p class="error-element" *ngIf="paySlipForm.controls.signature_message.hasError('required') && ( paySlipForm.controls.signature_message.dirty || paySlipForm.controls.signature_message.touched )">This field is required</p>
+                        </div>
+                    </div> 
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="paySlipForm.controls.publish_status.hasError('required') && (paySlipForm.controls.publish_status.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info" (click)="create($event)" *ngIf="editActionId == ''; else editButtonSection"><span>Save Template</span></button>
+                        </div>
+
+                        <ng-template #editButtonSection>
+                            <button type="button" (click)="cancelEntry()" class="btn btn-danger mg-r-5">
+                              <span>Cancel</span>
+                          </button>
+                            <button type="submit" (click)="update($event)" class="btn btn-info">
+                              <span>Update Template</span>
+                          </button>
+                        </ng-template>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-5">Pay Slip Template</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <th class="wd-25p text-center">Publish</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Template Name</th>
+                            <th class="wd-15p">Company Logo</th>
+                            <th class="wd-15p">Company Info</th>
+                            <th class="wd-15p">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

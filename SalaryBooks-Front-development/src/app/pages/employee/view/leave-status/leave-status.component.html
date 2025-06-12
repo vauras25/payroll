@@ -1,0 +1,79 @@
+<div class="table-responsive table-main table-castam">
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th>LEAVE TYPE</th>
+                <th>AVAILABLE</th>
+                <th>CONSUMED</th>
+                <th>TENURE</th>
+                <th>QUOTA</th>
+                <th>CARRYOVER</th>
+                <th>HISTORY</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of leave_requests; let i = index">
+                <th>{{item?.leave_type_name}}</th>
+                <th>{{item?.available}}</th>
+                <th>{{item?.consumed}}</th>
+                <th>{{item?.tenure}}</th>
+                <th>{{item?.quota}}</th>
+                <th>{{item?.carryover}}</th>
+                <th>
+                    <a class="editicon " href="javascript:void(0)" (click)="getEdit(item)"><i class="fas fa-clock"></i></a>
+                    <a style="display: none;" id="leave_history_btn" href="javascript:void(0)" data-toggle="modal" data-target="#myModal"></a>
+
+
+                </th>
+
+            </tr>
+            <tr *ngIf="leave_requests.length == 0">
+                <td colspan="8" class="text-center">No record(s) found</td>
+            </tr>
+        </tbody>
+    </table>
+</div><div class="modal fade come-from-modal modal-design right" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUnitLabel">{{selectedItem.abbreviation | leaveHead}} History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body form-main" >
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>CONSUMED</th>
+                            <th>BALANCE(DAYS)</th>
+                                            
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <ng-container *ngIf="rows.length>0;else no_data">
+                            <tr  *ngFor="let item_sub of rows; let i = index">
+                                <th>{{item_sub?.leave_from_date | date:'dd/mm/YYYY'}}</th>
+                                <th>{{item_sub?.leave_count_days}}</th>
+                                <th>{{item_sub?.current_balance}}</th>
+                            </tr>
+                        </ng-container>
+                        <ng-template #no_data>
+                            <tr  >
+                                <th colspan="3">No Record(s) Found</th>
+                              
+                            </tr>
+                        </ng-template>
+                        
+                      
+                    </tbody>
+                  
+                </table>
+            </div>
+            <app-custom-pagination [rows]="rows" [paginationOptions]="paginationOptions" (onPageClicked)="fetchLeaveSatus($event)"></app-custom-pagination>
+
+        </div>
+    </div>
+</div>

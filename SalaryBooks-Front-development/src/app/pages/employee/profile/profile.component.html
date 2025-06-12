@@ -1,0 +1,411 @@
+<div class="br-pagebody pd-x-20 pd-sm-x-30 padding-top p-0">
+    <div class="psbodymain">
+        <div class="left-subbar">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <button class="nav-link active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">My Details</button>
+            <button class="nav-link" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Address</button>
+            <button class="nav-link" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Contract Details</button>
+            <button class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Educational Details</button>
+            <button class="nav-link" id="Bank-Details-tab" data-toggle="pill" data-target="#Bank-Details" type="button" role="tab" aria-controls="Bank-Details" aria-selected="false">Bank Details</button>
+            <button class="nav-link" id="Accident-tab" data-toggle="pill" data-target="#Accident" type="button" role="tab" aria-controls="Accident" aria-selected="false">Accident</button>
+            <button class="nav-link" id="Training-tab" data-toggle="pill" data-target="#Training" type="button" role="tab" aria-controls="Training" aria-selected="false">Training</button>
+            <button class="nav-link" id="Extra-Curricular-tab" data-toggle="pill" data-target="#Extra-Curricular" type="button" role="tab" aria-controls="Extra-Curricular" aria-selected="false">Extra Curricular</button>
+            <button class="nav-link" id="ESI-tab" data-toggle="pill" data-target="#ESI" type="button" role="tab" aria-controls="ESI" aria-selected="false">PF & ESI Details</button>
+
+            <button class="nav-link" id="HR-Details-tab" data-toggle="pill" data-target="#HR-Details" type="button" role="tab" aria-controls="HR-Details" aria-selected="false">HR Details</button>
+            </div>
+        </div>
+
+        <div class="righttab-details">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <div class="tabheader">
+                        <h5>My Details</h5>
+                        <a class="editicon " *ngIf="isReadOnly" href="javascript:void(0)" (click)="isReadOnly=!isReadOnly"><i class="fas fa-pencil-alt"></i> Edit</a>
+                        <a class="editicon ml-auto" *ngIf="!isReadOnly" href="javascript:void(0)" (click)="isReadOnly=!isReadOnly"> Cancel</a>
+
+                        <a *ngIf="!isReadOnly"  href="javascript: void(0)" (click)="updateEmployee($event)" class="editicon apply-btn">Save</a>
+                    </div>
+                    <div class="table-responsive table-main">
+                        <form method="post" [formGroup]="employeeDetailsForm">
+                        <table class="table table-hover mb-0">
+                              <!-- <thead> -->
+                                <!-- <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr> -->
+                              <!-- </thead> -->
+                                <tbody>
+                                    <tr>
+                                        <td>First Name</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="emp_first_name" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_first_name', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Name</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="emp_last_name" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_last_name', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fathers Name</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="emp_father_name" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_father_name', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="email_id" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'email_id', 'required')">This field is required</p>
+
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'email_id', 'email')">Please enter a valid email</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="mobile_no" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'required')">This field is required</p>
+                                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'maxlength'))">Enter valid contact number</p>
+                                        
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Alternate Mobile</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="alternate_mob_no" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'required')">This field is required</p>
+                                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'maxlength'))">Enter valid contact number</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>DOB</td>
+                                        <td>
+                                            <input type="date" class="input-edit" [readonly]= "isReadOnly" formControlName="emp_dob" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_dob', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>
+                                            <ngx-select-dropdown [disabled]="isReadOnly" formControlName="sex" [options]="sexMaster" class="form-control" [config]="{search:true, placeholder: 'Select Gender'}" [multiple]="false"></ngx-select-dropdown>
+
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'sex', 'required')">This field is required</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Profile Image</td>
+                                        <td>
+                                            <input type="file" accept="image/*"  [disabled]= "isReadOnly" class="input-edit"  formControlName="profile_image" 
+                                            *ngIf="emp_profile_image=='';else profile_img_url" 
+                                            (change)="onFileChanged($event, employeeDetailsForm, 'profile_image', 'profile_image_file')">
+                                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                            <p class="error-element" *ngIf="employeeDetailsForm.get('profile_image_file')?.hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('profile_image_file').getError('maxSize') }} KB.</p>
+
+                                            <ng-template #profile_img_url>
+                                            <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{emp_profile_image}}" target="_blank">
+                                                <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                            </a>    
+                                            </ng-template>
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Aadhar Card Number</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="aadhar_no" >
+                                            
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'required')">This field is required</p>
+
+                                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'maxlength'))">Enter valid Aadhaarcard Number</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Aadhar Card Image</td>
+                                        <td>
+                                            <input type="file" accept="image/*" (change)="onFileChanged($event, employeeDetailsForm,'emp_aadhaar_image')" [disabled]= "isReadOnly" class="input-edit"  formControlName="emp_aadhaar_image" *ngIf="emp_aadhaar_image=='';else aadaar_url" (change)="onFileChanged($event, employeeDetailsForm, 'emp_aadhaar_image', 'emp_aadhaar_image_file')">
+                                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                            <p class="error-element" *ngIf="employeeDetailsForm.get('emp_aadhaar_image_file')?.hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('emp_aadhaar_image_file').getError('maxSize') }} KB.</p>
+
+                                            <ng-template #aadaar_url>
+                                            <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{emp_aadhaar_image}}" target="_blank">
+                                                <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                            </a>    
+                                            </ng-template>
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>PAN Card Number</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="pan_no" value="">
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'pan_no', 'required')">This field is required</p>
+                        
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'pan_no', 'pattern')">Enter valid PAN Number</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>PAN Card Image</td>
+                                        <td>
+                                            
+                                            <input  class="input-edit" type="file" [disabled]= "isReadOnly" accept="image/*" formControlName="emp_pan_image" *ngIf="emp_pan_image=='';else pan_img_url" (change)="onFileChanged($event, employeeDetailsForm, 'emp_pan_image', 'emp_pan_image_file')">
+                                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                            <p class="error-element" *ngIf="employeeDetailsForm.get('emp_pan_image_file')?.hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('emp_pan_image_file').getError('maxSize') }} KB.</p>
+                                            <ng-template #pan_img_url>
+                                                <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{emp_pan_image}}" target="_blank">
+                                                    <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                                </a>   
+                                            </ng-template>
+                                            
+                                        </td>
+                                    </tr>
+    
+                                    <tr>
+                                        <td>Passport Number</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="passport_no" value="ASF556126">
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_no', 'required')">This field is required</p>
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_no', 'pattern')">Enter valid PAN Number</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passport Image</td>
+                                        <td>
+                                            <input type="file" [disabled]= "isReadOnly" class="input-edit"  accept="image/*"  formControlName="emp_passport_image" *ngIf="emp_passport_image==''else passport_img_url" (change)="onFileChanged($event, employeeDetailsForm, 'emp_passport_image', 'emp_passport_image_file')">
+                                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                            <p class="error-element" *ngIf="employeeDetailsForm.get('emp_passport_image_file')?.hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('emp_passport_image_file').getError('maxSize') }} KB.</p>
+                                            
+                                            <ng-template #passport_img_url>
+                                                <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{emp_passport_image}}" target="_blank">
+                                                    <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                                </a>   
+                                            </ng-template> 
+                                           
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passport Valid Form</td>
+                                        <td>
+                                            <input type="date" class="input-edit" [readonly]= "isReadOnly" formControlName="passport_val_form" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_val_form', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passport Valid To</td>
+                                        <td>
+                                            <input type="date" class="input-edit" [readonly]= "isReadOnly" formControlName="passport_val_to" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_val_to', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nationality</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="nationality" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'nationality', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Blood Group</td>
+                                        <td>
+                                            <ngx-select-dropdown [disabled]="isReadOnly" formControlName="blood_group" [options]="bloodGroupMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'blood_group', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Physical Disability </td>
+                                        <td>
+                                            <ngx-select-dropdown [disabled]="isReadOnly" formControlName="physical_disability" [options]="yesNoMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'physical_disability', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Marital Status </td>
+                                        <td>
+                                            <ngx-select-dropdown [disabled]="isReadOnly" formControlName="marital_status" [options]="maritalStatusMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'marital_status', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="employeeDetailsForm.controls.marital_status.value?.value == 'married'">
+                                        <td>Date Of Marriage </td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="marriage_date" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'marriage_date', 'required')">This field is required</p>                            
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Emergency Contact Number </td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="emergency_contact_no" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'required')">This field is required</p>
+
+                                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'maxlength'))">Enter valid contact number</p>
+                                        
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Emergency Contact Name </td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="emergency_contact_name" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_name', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Domicile</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="domicile" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'domicile', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Height</td>
+                                        <td>
+                                            <input type="text" class="input-edit" [readonly]= "isReadOnly" formControlName="height" >
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'height', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Religon   </td>
+                                        <td>
+                                            <ngx-select-dropdown [disabled]="isReadOnly" formControlName="religion" [options]="religionMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+                                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'religion', 'required')">This field is required</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Addional Id </td>
+                                        <td>
+                                            <input type="file" [disabled]= "isReadOnly" class="input-edit" [readonly]= "isReadOnly"  *ngIf="additional_id_image=='' else additional_id_image_url" formControlName="additional_id_image" (change)="onFileChanged($event, employeeDetailsForm, 'additional_id_image', 'additional_id_image_file')">
+                                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                            <p class="error-element" *ngIf="employeeDetailsForm.get('additional_id_image_file')?.hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('additional_id_image_file').getError('maxSize') }} KB.</p>
+                                            
+                                            <ng-template #additional_id_image_url>
+                                                <a class="attachbtn" target="_blank" href="{{Global.BACKEND_URL}}/{{additional_id_image}}">
+                                                    <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                                </a>   
+                                            </ng-template> 
+                                           
+                                        </td>
+                                    </tr> 
+                               
+                                </tbody>
+                          
+                          
+                        </table>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="tabheader">
+                        <h5>Address</h5>
+                        <a class="editicon " *ngIf="isaddressReadOnly" href="javascript:void(0)" (click)="isaddressReadOnly=!isaddressReadOnly"><i class="fas fa-pencil-alt"></i> Edit</a>
+                        <a class="editicon ml-auto" *ngIf="!isaddressReadOnly" href="javascript:void(0)" (click)="isaddressReadOnly=!isaddressReadOnly"> Cancel</a>
+
+                        <a *ngIf="!isaddressReadOnly"  href="javascript: void(0)" (click)="updateEmployeeAddress($event)"  class="editicon apply-btn">Save</a>
+                    </div>
+                    <div class="table-responsive table-main" *ngIf="employee_details">
+                        <app-address [employee_details]="employee_details.employee_details" [isReadOnly]="isaddressReadOnly" (submitAddress)="submitAddress($event)"></app-address>
+                       
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                    <div class="tabheader">
+                        <h5>Contract Details</h5>
+                        <!-- <a class="editicon" href="javascript:;"><i class="fas fa-pencil-alt"></i> Edit</a> -->
+                        
+                    </div>
+                    <div class="table-responsive table-main table-castam" *ngIf="employee_details">
+                    <app-contract-details [employee_details]="employee_details.employee_details"></app-contract-details>    
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">    
+                <app-education  *ngIf="employee_details" [employee_details]="employee_details.employee_details"  [max_upload_limit]="max_upload_limit" [net_uploaded_size]="net_uploaded_size"></app-education>
+                </div>
+      
+                <div class="tab-pane fade" id="Bank-Details" role="tabpanel" aria-labelledby="Bank-Details-tab">
+                    <div class="tabheader">
+                        <h5>Bank Details</h5>
+                        <a class="editicon " *ngIf="isbankReadOnly" href="javascript:void(0)" (click)="isbankReadOnly=!isbankReadOnly"><i class="fas fa-pencil-alt"></i> Edit</a>
+                        <a class="editicon ml-auto" *ngIf="!isbankReadOnly" href="javascript:void(0)" (click)="isbankReadOnly=!isbankReadOnly"> Cancel</a>
+                        <a *ngIf="!isbankReadOnly"  href="javascript: void(0)" (click)="updateEmployeeBankDetails($event)"   class="editicon apply-btn">Save</a>
+                        </div>
+                        <div class="table-responsive table-main" *ngIf="employee_details">
+                            <app-bank-details [employee_details]="employee_details.employee_details" 
+                            [max_upload_limit]="max_upload_limit" [net_uploaded_size]="net_uploaded_size" (submitbankDetails)="submitbankDetails($event)" [isReadOnly]="isbankReadOnly" ></app-bank-details>
+                           
+                        </div>
+                    
+                </div>
+                <div class="tab-pane fade" id="Accident" role="tabpanel" aria-labelledby="Accident-tab">
+                    <div class="tabheader">
+                        <div class="table-responsive table-main" *ngIf="employee_details"> 
+                            <app-accident (submitAccident)="submitAccident($event)" [employee_details]="employee_details.employee_details"></app-accident>
+                        </div>
+                       
+                    </div>
+                </div>
+
+
+
+                <div class="tab-pane fade" id="HR-Details" role="tabpanel" aria-labelledby="HR-Details-tab">
+                    <div class="tabheader">
+                        <div class="table-responsive table-main" *ngIf="employee_details"> 
+                            <app-hr-policy (submitEducation)="submitEducation($event)" [employee_details]="employee_details"></app-hr-policy>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Training" role="tabpanel" aria-labelledby="Training-tab">
+                    <div class="tabheader">
+                        <div class="table-responsive table-main" *ngIf="employee_details">
+                            <app-training
+                            [max_upload_limit]="max_upload_limit" [net_uploaded_size]="net_uploaded_size"
+                            (submitTraining)="submitTraining($event)" [employee_details]="employee_details"></app-training> 
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="ESI" role="tabpanel" aria-labelledby="ESI-tab">
+                    <div class="tabheader">
+                        <div class="table-responsive table-main" *ngIf="employee_details">
+                            <app-esi (submitESI)="submitESI($event)" [employee_details]="employee_details"></app-esi>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Extra-Curricular" role="tabpanel" aria-labelledby="Extra-Curricular-tab">
+                    <div class="tabheader">
+                        <div class="table-responsive table-main" *ngIf="employee_details">
+                            <app-extracurricular  (submitCurricular)="submitCurricular($event)" [employee_details]="employee_details"
+                            [max_upload_limit]="max_upload_limit" [net_uploaded_size]="net_uploaded_size"
+                            
+                            ></app-extracurricular> 
+                        </div>
+                       
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>

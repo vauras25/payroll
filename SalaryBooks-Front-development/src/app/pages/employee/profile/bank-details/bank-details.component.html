@@ -1,0 +1,113 @@
+
+<form [formGroup]="employeeBankForm">
+    <table class="table table-hover mb-0">
+        <tbody>
+            <tr>
+                <th><b>Bank Name</b></th>
+                <td>
+                    <input class="form-control" type="text" [readOnly]="isReadOnly" formControlName="bank_name">
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'bank_name', 'required')">This field is required</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Branch</th>
+                <td>
+                    <input class="form-control" type="text"  [readOnly]="isReadOnly"  formControlName="branch_name">
+
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'branch_name', 'required')">This field is required</p>
+                </td>
+            </tr>
+           
+            <tr>
+                <th>Branch Address</th>
+                <td>
+                    <input class="form-control" type="text"  [readOnly]="isReadOnly"  formControlName="branch_address">
+
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'branch_address', 'required')">This field is required</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th>Bank PIN</th>
+                <td>
+                    <input class="form-control" type="text"  [readOnly]="isReadOnly"  formControlName="branch_pin">
+                     <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'branch_pin', 'required')">This field is required</p>
+                </td>
+            </tr>
+            <tr>
+                <th> A/C No</th>
+                <td>
+                    <input class="form-control" type="text"  [readOnly]="isReadOnly"  formControlName="account_no">
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'account_no', 'required')">This field is required</p>
+                    <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'account_no', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'account_no', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'account_no', 'maxlength'))">Enter valid A/C No</p>
+    
+                </td>
+            </tr>
+            <tr>
+                <th>Re-enter A/C No</th>
+                <td>
+                    <input class="form-control" type="text"  [readOnly]="isReadOnly"  formControlName="account_no_confirmation">
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'required')">This field is required</p>
+                    <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'account_no_confirmation', 'maxlength'))">Enter valid A/C No</p>
+    
+                
+                </td>
+            </tr>
+            <tr>
+                <th> A/C Type</th>
+                <td>
+                    <ngx-select-dropdown formControlName="account_type"  [disabled]="isReadOnly"  [options]="accountTypeMaster" class="form-control" [config]="{search:false, placeholder: 'Select One'}" [multiple]="false"></ngx-select-dropdown>
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'account_type', 'required')">This field is required</p>
+                </td>
+            </tr>
+            <tr>
+                <th>IFSC Code</th>
+                <td>
+                    <input class="form-control" type="text"  [readOnly]="isReadOnly"  formControlName="ifsc_code">
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'required')">This field is required</p>
+
+                    <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'ifsc_code', 'maxlength'))">Enter valid IFSC Code</p>
+                </td>
+            </tr>
+            <tr>
+                <th>MICR No</th>
+                <td>
+                    <input class="form-control" type="text" formControlName="micr_no"  [readOnly]="isReadOnly" >
+                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeBankForm, 'micr_no', 'required')">This field is required</p>
+                    <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeBankForm, 'micr_no', 'pattern') || !Global.isInputRuleValid(employeeBankForm, 'micr_no', 'minlength') || !Global.isInputRuleValid(employeeBankForm, 'micr_no', 'maxlength'))">Enter valid MICR No</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Upload Cheque/Passbook</th>
+                <td>
+                    <input type="file" class="input-edit" [disabled]= "isReadOnly" *ngIf="cancel_cheque_file=='' else cancel_cheque_url"  accept="image/*" formControlName="cancel_cheque" (change)="onFileChanged($event, employeeBankForm, 'cancel_cheque', 'cancel_cheque_file')">
+                    <ng-container *ngIf="!isReadOnly">
+                       
+                        <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                        <p class="error-element" *ngIf="employeeBankForm.get('cancel_cheque')?.hasError('fileSize')">File size exceeds {{ employeeBankForm.get('cancel_cheque').getError('maxSize') }} KB.</p>
+                    </ng-container>
+                   
+                    <ng-template #cancel_cheque_url>
+                        <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{cancel_cheque_file}}" target="_blank">
+                            <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                        </a>   
+                    </ng-template> 
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    </form>
+
+    <style>
+        .attachbtn{
+
+            border: solid 1px var(--color-gray);
+    color: var(--white);
+    background: #408DFB;
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 7px 15px 7px 10px;
+    display: inline-block;
+        }
+    </style>

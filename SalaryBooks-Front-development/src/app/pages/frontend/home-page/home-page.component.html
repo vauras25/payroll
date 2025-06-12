@@ -1,0 +1,48 @@
+<div class="ht-100v d-flex align-items-center justify-content-center">
+    <div class="wd-lg-70p wd-xl-50p tx-center pd-x-40">
+        <h1 class="tx-40 tx-xs-50 tx-normal tx-inverse tx-roboto mg-b-5 text-uppercase">Payroll <span class="tx-info">Software</span></h1>
+        <p class="tx-16 mg-b-30">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate sequi quam magni, eos quod quia voluptates illo, alias recusandae iusto repellat, iste corrupti voluptatem voluptatum rem unde aperiam tempora nisi.</p>
+
+        <div class="d-flex justify-content-center">
+            <ng-container *ngIf="this.authService.getToken() != null; else nosessionblock">
+                <div class="input-group wd-xs-150 m-2" *ngIf="this.authService.adminLoggedIn()">
+                    <a class="btn-block btn btn-info" routerLink="/login">
+                        Admin Dashboard
+                    </a>
+                </div>
+
+                <div class="input-group wd-xs-200 m-2" *ngIf="this.authService.subAdminLoggedIn()">
+                    <a class="btn-block btn btn-info" routerLink="/sub-admin/login">
+                        Subadmin Dashboard
+                    </a>
+                </div>
+
+                <div class="input-group wd-xs-200 m-2" *ngIf="this.authService.companyUserLoggedIn()">
+                    <a class="btn-block btn btn-info" routerLink="/login">
+                      Company Dashboard
+                  </a>
+                </div>
+            </ng-container>
+
+            <ng-template #nosessionblock>
+                <div class="input-group wd-xs-150 m-2">
+                    <a class="btn-block btn btn-info" routerLink="/login">
+                        Admin Dashboard
+                    </a>
+                </div>
+
+                <div class="input-group wd-xs-200 m-2">
+                    <a class="btn-block btn btn-info" routerLink="/sub-admin/login">
+                        Subadmin Dashboard
+                    </a>
+                </div>
+
+                <div class="input-group wd-xs-200 m-2">
+                    <a class="btn-block btn btn-info" routerLink="/login">
+                        Company Dashboard
+                    </a>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

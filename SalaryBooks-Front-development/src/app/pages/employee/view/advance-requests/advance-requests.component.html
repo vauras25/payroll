@@ -1,0 +1,89 @@
+<div class="table-responsive table-castam">
+<table class="table table-hover mb-0">
+    <thead>
+        <tr>
+            <th>DATE</th>
+            <th>ADVANCE AMOUNT</th>
+            <th>REASON</th>
+            <th>RECOVERY FROM</th>
+            <th>AMOUNT REPAID</th>
+            <th>REMAINING AMOUNT</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of advance_requests; let i = index">
+            <th>{{item.payment_booking_date | date:'dd/MM/YY'}}</th>
+            <th>{{item.advance_amount | currency:'₹'}}</th>
+            <th>{{item.remarks}}</th>
+            <th>{{item.recovery_from | titlecase}}</th>
+            <th>{{item?.repaid_amount | currency:'₹'}}</th>
+            <th>{{item?.remaining_amount | currency:'₹'}}</th>
+            <th>
+             <span class="badge badge-success" *ngIf="item.status=='active';else inactive_tag">{{item.status | titlecase}}</span>
+             <ng-template #inactive_tag>
+                <span class="badge badge-danger">{{item.status | titlecase}}</span>
+             </ng-template>
+
+            </th>
+            <th>
+                <a class="editicon " href="javascript:void(0)" (click)="setValue(item)" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye-slash"></i></a>
+            
+            </th>
+
+
+        </tr>
+        <tr *ngIf="advance_requests.length == 0">
+            <td colspan="6" class="text-center">No records found</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<app-custom-pagination [rows]="advance_requests" [paginationOptions]="paginationOptions" (onPageClicked)="fetchleaveRequest($event)"></app-custom-pagination>
+<div class="modal fade come-from-modal modal-design right" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUnitLabel">Advance Breakup for {{advance_detail.advance_amount | number}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body form-main" >
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>DATE OF RECOVERY</th>
+                            <th>RECOVERY FROM</th>
+                            <th>PAID AMOUNT</th>
+                                            
+                        </tr>
+                    </thead>
+                    <tbody >
+
+                      <tr  *ngFor="let item_sub of advance_detail.instalment_history; let i = index">
+                        <td>
+                            {{item_sub.instalment_month | monthname}} - {{item_sub.instalment_year}}
+                        </td>
+                        <td>{{item_sub.recovery_from | titlecase}}</td>
+                        <td>{{item_sub.advance_amount | currency:'₹'}}</td>
+
+                      </tr>
+                        <tr *ngIf="advance_requests.length == 0">
+                            <td colspan="3" class="text-center">No records found</td>
+                        </tr>
+                    </tbody>
+                    <tfoot *ngIf="advance_detail">
+                        <tr>
+                            <th colspan="2" style="text-align: center;">Total Paid</th>
+                            <th>{{sum_footer | currency:'₹'}}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

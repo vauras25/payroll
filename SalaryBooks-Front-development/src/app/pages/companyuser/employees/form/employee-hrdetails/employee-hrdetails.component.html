@@ -1,0 +1,684 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item"
+        ><a routerLink="/company/employees">Employees</a></a
+      >
+      <a class="breadcrumb-item">HR Details</a>
+      <a class="breadcrumb-item active text-capitalize">{{ operation }}</a>
+    </nav>
+  </div>
+
+  <div class="br-pagebody">
+    <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+    <div class="br-section-wrapper pd-20">
+      <h5 class="text-uppercase mb-3">
+        Employee HR Details
+
+        <a
+          class="float-right"
+          *ngIf="['view'].includes(this.operation)"
+          target="_blank"
+          routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+          [queryParams]="{ section: 'hrdetails' }"
+        >
+          <i class="fa fa-print"></i>
+        </a>
+      </h5>
+
+      <div
+        class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+      >
+        <form [formGroup]="employeeHrDetailsForm">
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Department&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'department',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="department"
+                [options]="departmentMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'department',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col-3 col-sm-3 sameasfirst">
+              Designation&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'designation',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="designation"
+                [options]="designationMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'designation',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Branch&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'branch',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="branch"
+                [options]="branchMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'branch',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col-3 col-sm-3 sameasfirst">
+              Date of Join&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'date_of_join',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <input
+                type="date"
+                class="form-control"
+                formControlName="date_of_join"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'date_of_join',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              HOD&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'hod',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="hod"
+                [options]="hodMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'hod',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col-3 col-sm-3 sameasfirst">
+              Client&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'client',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="client"
+                [options]="clientMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'client',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Employment Type&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'emp_type',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="emp_type"
+                [options]="wageTypeMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'emp_type',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col-3 col-sm-3 sameasfirst">
+              Pension Applicable&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'pension_applicable',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <ngx-select-dropdown
+                formControlName="pension_applicable"
+                [options]="yesNoMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'pension_applicable',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Gross Salary&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'gross_salary',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <input
+                type="number"
+                class="form-control"
+                formControlName="gross_salary"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'gross_salary',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <ng-container *ngIf="selfSevice.classList.contains('on')">
+              
+                          <div  class="col-3 col-sm-3 sameasfirst">
+                            Manage Role&nbsp; &nbsp;<span
+                              *ngIf="
+                                Global.isValidationAvailable(
+                                  employeeHrDetailsForm,
+                                  'emp_role',
+                                  'required'
+                                )
+                              "
+                              class="text-danger"
+                              >*</span
+                            >
+                          </div>
+                          <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown
+                              formControlName="emp_role"
+                              [options]="empRoleMaster"
+                              class="form-control"
+                              [config]="{ search: true, placeholder: 'Select One' }"
+                              [multiple]="false"
+                            ></ngx-select-dropdown>
+              
+                            <p
+                              class="error-element"
+                              *ngIf="
+                                !Global.isInputRuleValid(
+                                  employeeHrDetailsForm,
+                                  'emp_role',
+                                  'required'
+                                )
+                              "
+                            >
+                              This field is required
+                            </p>
+                          </div>
+            </ng-container>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              User ID&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'emp_id',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="emp_id"
+                placeholder="Employee ID"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'emp_id',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col-3 col-sm-3 sameasfirst">
+              <ng-container *ngIf="operation == 'edit'">
+                Password&nbsp; &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employeeHrDetailsForm,
+                      'password',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </ng-container>
+            </div>
+            <div class="col-3 col-sm-3">
+              <ng-container *ngIf="operation == 'edit'">
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  autocomplete="new-password"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeHrDetailsForm,
+                      'password',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeHrDetailsForm,
+                      'password',
+                      'minlength'
+                    ) ||
+                    !Global.isInputRuleValid(
+                      employeeHrDetailsForm,
+                      'password',
+                      'maxlength'
+                    )
+                  "
+                >
+                  Password must be minimum 8 characters & maximum 20 characters
+                </p>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Self Service&nbsp; &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeHrDetailsForm,
+                    'emp_self_service',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-3 col-sm-3">
+              <div
+                #selfSevice
+                class="emp-selfservice br-toggle br-toggle-rounded br-toggle-primary on"
+              >
+                <div class="br-toggle-switch"></div>
+              </div>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeHrDetailsForm,
+                    'emp_self_service',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+            <ng-container
+              *ngIf="selfSevice.classList.contains('on') && employee_details?.emp_det?.template_data?.attendance_temp_data
+                  ?.register_type == 'time'
+              "
+            >
+              <div class="col-3 col-sm-3 sameasfirst">
+                Geo Location&nbsp; &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employeeHrDetailsForm,
+                      'location',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col-3 col-sm-3">
+                <div class="d-flex">
+                  <ngx-select-dropdown
+                    formControlName="location"
+                    [options]="locationMaster"
+                    class="form-control mr-2"
+                    [config]="{
+                      displayKey: 'location',
+                      search: true,
+                      placeholder: 'Select One'
+                    }"
+                    [multiple]="false"
+                  ></ngx-select-dropdown>
+                  <button
+                    *ngIf="employeeHrDetailsForm.get('location')?.value?._id"
+                    class="btn btn-primary btn-icon px-1"
+                    (click)="viewLocation()"
+                  >
+                    <div style="width: 25px; height: 25px">
+                      <i class="fa fa-eye"></i>
+                    </div>
+                  </button>
+                </div>
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeHrDetailsForm,
+                      'location',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </ng-container>
+            <div
+              class="col-3 col-sm-3 sameasfirst"
+              *ngIf="!selfSevice.classList.contains('on')"
+            ></div>
+            <div
+              class="col-3 col-sm-3"
+              *ngIf="!selfSevice.classList.contains('on')"
+            ></div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">Salary Template</div>
+            <div class="col-3 col-sm-3">
+              <b>{{
+                employeeHrDetailsForm.get("salary_temp")?.value?.description ??
+                  "N/A"
+              }}</b>
+            </div>
+            <div class="col-3 col-sm-3 sameasfirst">Package</div>
+            <div class="col-3 col-sm-3">
+              <b>{{
+                employeeHrDetailsForm.get("package_id")?.value?.description ??
+                  "N/A"
+              }}</b>
+            </div>
+          </div>
+
+          <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+            <div class="col-12 col-sm-12">
+              <button
+                class="btn btn-info text-uppercase"
+                (click)="updateEmployeeHrDetails($event)"
+              >
+                <span>Update</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="selfSevice.classList.contains('on')" class="row mt-4" >
+        <div class="col-12 mx-auto mb-2" *ngFor="let role of employeeRoles">
+           <div>
+            {{role.template_name}}
+           </div>
+           <table class="w-100  mt-1">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Me</th>
+                    <th style="width: 10%;">Attendance</th>
+                    <th style="width: 40%;">Apply</th>
+                    <th style="width: 40%;">View</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{role?.rights?.me ? 'Yes' : 'No'}}</td>
+                    <td>{{role?.rights?.attendance ? 'Yes' : 'No'}}</td>
+                    <td >
+                        <li class="px-1" *ngFor="let item of role?.rights?.apply">{{item |  titlecase}}</li> 
+                        <span *ngIf="!role?.rights?.apply">  No Permissions</span> 
+                    </td>
+                    <td>
+                        <li class="px-1" *ngFor="let item of role?.rights?.view">{{item |  titlecase}}</li> 
+                        <span *ngIf="!role?.rights?.view">  No Permissions</span> 
+                    </td>
+                </tr>
+            </tbody>
+           </table>
+      </div>
+    </div>
+  </div>
+  <button
+    id="viewLocation"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#viewLocationModel"
+  ></button>
+  <div id="viewLocationModel" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h4 class="text-dark">Location</h4>
+        </div>
+        <div class="modal-body pd-y-20 pd-x-25">
+          <app-view-location-map
+            [location]="locationModalData"
+          ></app-view-location-map>
+        </div>
+      </div>
+    </div>
+  </div>
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

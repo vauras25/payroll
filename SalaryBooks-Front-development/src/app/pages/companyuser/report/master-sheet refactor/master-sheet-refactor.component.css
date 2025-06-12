@@ -1,0 +1,101 @@
+#salarysheet-report-table .title-sec th.column-title {
+  background: #1d2939;
+  color: #fff;
+}
+
+#salarysheet-report-table .headings th {
+  background: #3d4755;
+  color: #fff;
+}
+
+#salarysheet-report-table th,
+#salarysheet-report-table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-responsive > .table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.card-header {
+  border-color: #dee2e6;
+  border: 1px solid #dee2e6;
+}
+
+table th {
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 14px 10px;
+  height: 42px;
+  vertical-align: middle;
+}
+
+table th,
+td {
+  padding: 14px 10px;
+  font-weight: 600;
+  color: #000;
+  box-shadow: 0 2px 3px #d5d5d5;
+  font-size: 13px;
+  line-height: normal;
+  font-family: var(--font-roboto);
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 4px;
+  /* margin-top: -4px; */
+  /* padding: 0 5px 5px 5px; */
+}
+.finacial-tbl table tr:first-child td {
+  background: #ffffff;
+}
+.finacial-tbl table tr td:nth-child(odd) {
+  background-color: #e3ebeb;
+}
+.finacial-tbl table tr:first-child th {
+  background: #e3ebeb;
+}
+.finacial-tbl table tr th:nth-child(even) {
+  background-color: #edf2f2;
+}
+
+.c-table {
+  /* margin:10px  0px; */
+  box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+    1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+}
+
+.c-table .c-tr .c-td,
+.c-th {
+  box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+    1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+  padding: 6px 12px;
+  width: 25%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c-th {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  background-color: rgba(179, 179, 179, 0.822);
+}
+.c-td {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.c-table .c-tr label {
+  margin: 0px;
+  display: flex;
+}
+
+.btn {
+  /* width: auto; */
+  /* min-width: 110px; */
+}

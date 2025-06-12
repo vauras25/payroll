@@ -1,0 +1,1584 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Attendance Management</a>
+      <a class="breadcrumb-item active">Edit Attendance</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-calendar"></i>
+    <div>
+      <h4>Edit Attendance</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>  
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [monthFilter]="true"
+        [yearFilter]="true"
+        [attendanceTypeFilter]="true"
+        (onFiltered)="filterTable($event)"
+      ></companyuser-app-table-filter>
+
+      <div class="card bd-0">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-12 col-12 text-right pull-right">
+              <button
+              *ngIf="
+                  Global.checkCompanyModulePermission({
+                    company_module: 'attendance',
+                    company_operation: 'attendance_edit',
+                    company_sub_module: 'edit_attendance',
+                    company_sub_operation: ['view']
+                  })
+                "
+                class="button"
+                (click)="openEditAttendanceModal('multiple')"
+                [class.disabled]="
+                  rowCheckedAll == false &&
+                  checkedRowIds.length == 0 &&
+                  uncheckedRowIds.length == 0
+                "
+                class="btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+              >
+                Batch Action
+              </button>
+
+              <ng-container
+                *ngIf="
+                  Global.checkCompanyModulePermission({
+                    company_module: 'attendance',
+                    company_operation: 'attendance_upload',
+                    company_sub_module: 'upload_attendance',
+                    company_sub_operation: ['view']
+                  })
+                "
+              >
+                <button
+                  *ngIf="Global.isCreditAvailable('company_user')"
+                  (click)="openCsvImportModal()"
+                  class="btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+                >
+                  CSV Import
+                </button>
+              </ng-container>
+
+              <button
+                class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+              >
+                View Summary
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body px-0 bd-t-0 rounded-bottom">
+          <app-custom-tableoption (onFilterChanged)="fetch({ page: 1, options: $event })"></app-custom-tableoption>
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+              <thead class="thead-colored thead-info">
+                <tr>
+                  <th rowspan="2">
+                    <input
+                      type="checkbox"
+                      [value]="rowCheckedAll"
+                      (change)="allRowsCheckboxChecked($event)"
+                      *ngIf="employees.length > 0"
+                    />
+                  </th>
+                  <th rowspan="2">EMP ID</th>
+                  <th rowspan="2">Employee Name</th>
+                  <th rowspan="2">Profile</th>
+                  <th  *ngIf="
+                  Global.checkCompanyModulePermission({
+                    company_module: 'attendance',
+                    company_operation: 'attendance_edit',
+                    company_sub_module:'edit_attendance',
+                    company_sub_operation:['view','edit']
+                  })
+                "rowspan="2" class="text-center">Action</th>
+
+                  <ng-container [ngSwitch]="sheetType">
+                    <ng-container *ngSwitchCase="'halfday'">
+                      <th
+                        colspan="2"
+                        class="text-center"
+                        *ngFor="let item of monthDaysArr"
+                      >
+                        {{ item.day }}<br />{{ item.weekday }}
+                      </th>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'monthly'">
+                      <th class="">Pay Days</th>
+                      <th class="">Total Absent</th>
+                      <th class="">Total Attendance</th>
+                      <th class="">Total CL</th>
+                      <th class="">Total GL</th>
+                      <th class="">Total HL</th>
+                      <th class="">Total KB</th>
+                      <th class="">Total LOP</th>
+                      <th class="">Total ML</th>
+                      <th class="">Total Overtime</th>
+                      <th class="">Total PL</th>
+                      <th class="">Adjust Days</th>
+                      <th class="">Total Late</th>
+                      <th class="">Total Weekly Off</th>
+                    </ng-container>
+
+                    <ng-container *ngSwitchDefault>
+                      <th class="text-center" *ngFor="let item of monthDaysArr">
+                        {{ item.day }}<br />{{ item.weekday }}
+                      </th>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+
+                <tr *ngIf="['halfday'].includes(sheetType)">
+                  <!-- <th></th> -->
+                  <!-- <th></th> -->
+                  <!-- <th></th> -->
+                  <!-- <th></th> -->
+                  <!-- <th></th> -->
+
+                  <ng-container [ngSwitch]="sheetType">
+                    <ng-container *ngSwitchCase="'halfday'">
+                      <ng-container *ngFor="let item of monthDaysArr">
+                        <th style="background: #343a40">H1</th>
+                        <th style="background: #343a40">H2</th>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr
+                  *ngFor="let item of employees; let i = index"
+                  id="emp-row-{{ item.emp_id }}"
+                >
+                  <td>
+                    <input
+                      type="checkbox"
+                      [attr.checked]="item.checked == true ? 'checked' : null"
+                      id="checkrow-{{ i + 1 }}"
+                      [attr.data-checkbox-id]="item._id"
+                      (click)="rowCheckBoxChecked($event, item)"
+                    />
+                  </td>
+
+                  <td>{{ item.emp_id }}</td>
+                  <td>{{ item.emp_first_name + " " + item.emp_last_name }}</td>
+                  <td>
+                    <img
+                      src="https://via.placeholder.com/500"
+                      alt=""
+                      class="img-fluid rounded wd-50"
+                    />
+                  </td>
+
+                  <td class="text-center" style="white-space: nowrap"  *ngIf="
+                  Global.checkCompanyModulePermission({
+                    company_module: 'attendance',
+                    company_operation: 'attendance_edit',
+                    company_sub_module:'edit_attendance',
+                    company_sub_operation:['view','edit']
+                  })
+                ">
+                    <ng-container
+                      *ngIf="isEditing(item); else nonEditingButtons"
+                    >
+                      <ng-container [ngSwitch]="sheetType">
+                        <ng-container *ngSwitchCase="'monthly'">
+                          <button
+                            (click)="
+                              singleAttendanceEdit(
+                                item.attendance,
+                                {},
+                                $event,
+                                { full: item }
+                              )
+                            "
+                            class="btn btn-success btn-icon mg-r-5"
+                          >
+                            <div style="width: 25px; height: 25px">
+                              <i class="fa fa-check"></i>
+                            </div>
+                          </button>
+
+                          <button
+                            (click)="cancelEditAndReset()"
+                            class="btn btn-danger btn-icon mg-r-5"
+                          >
+                            <div style="width: 25px; height: 25px">
+                              <i class="fa fa-times"></i>
+                            </div>
+                          </button>
+                        </ng-container>
+
+                        <ng-container *ngSwitchDefault>
+                          <button
+                            (click)="cancelEdit()"
+                            class="btn btn-success btn-icon mg-r-5"
+                          >
+                            <div style="width: 25px; height: 25px">
+                              <i class="fa fa-check"></i>
+                            </div>
+                          </button>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+
+                    <ng-template #nonEditingButtons>
+                      <button
+                        (click)="getEdit(item)"
+                        class="btn btn-primary btn-icon"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-pen"></i>
+                        </div>
+                      </button>
+
+                      <!-- <button class="btn btn-danger btn-icon mg-r-5">
+                                                <div style="width:25px; height:25px;"><i class="fa fa-trash"></i></div>
+                                            </button> -->
+                    </ng-template>
+                  </td>
+
+                  <ng-container [ngSwitch]="sheetType">
+                    <ng-container *ngSwitchCase="'halfday'">
+                      <ng-container *ngFor="let day of monthDaysArr">
+                        <ng-container *ngIf="isEditing(item)">
+                          <td class="first-half text-center">
+                            <select
+                              class="border-0 bg-gray-300"
+                              id="attendance-select"
+                              (change)="
+                                singleAttendanceEdit(
+                                  item.attendance,
+                                  day,
+                                  $event,
+                                  {
+                                    key: 'first_half',
+                                    first_half: checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      'first_half'
+                                    ),
+                                    second_half: checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      'second_half'
+                                    ),
+                                    full: item
+                                  }
+                                )
+                              "
+                              *ngIf="
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  'first_half'
+                                ) != '-'
+                              "
+                            >
+                              <option
+                                disabled
+                                [selected]="
+                                  checkAttendance(
+                                    item.attendance,
+                                    day,
+                                    'first_half'
+                                  ) == '-'
+                                "
+                                value="-"
+                              >
+                                -
+                              </option>
+                              <ng-container
+                                *ngFor="let asmItem of attendanceStatMaster"
+                              >
+                                <option
+                                  [selected]="
+                                    checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      'first_half'
+                                    ) == asmItem.abbreviation
+                                  "
+                                  value="{{ asmItem.value }}"
+                                >
+                                  {{ asmItem.abbreviation }}
+                                </option>
+                              </ng-container>
+                            </select>
+                            <ng-container
+                              *ngIf="
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  'first_half'
+                                ) == '-'
+                              "
+                            >
+                              -
+                            </ng-container>
+                          </td>
+                          <td class="second-half text-center">
+                            <select
+                              class="border-0 bg-gray-300"
+                              id="attendance-select"
+                              (change)="
+                                singleAttendanceEdit(
+                                  item.attendance,
+                                  day,
+                                  $event,
+                                  {
+                                    key: 'second_half',
+                                    first_half: checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      'first_half'
+                                    ),
+                                    second_half: checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      'second_half'
+                                    ),
+                                    full: item
+                                  }
+                                )
+                              "
+                              *ngIf="
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  'second_half'
+                                ) != '-'
+                              "
+                            >
+                              <option
+                                disabled
+                                [selected]="
+                                  checkAttendance(
+                                    item.attendance,
+                                    day,
+                                    'second_half'
+                                  ) == '-'
+                                "
+                                value="-"
+                              >
+                                -
+                              </option>
+                              <ng-container
+                                *ngFor="let asmItem of attendanceStatMaster"
+                              >
+                                <option
+                                  [selected]="
+                                    checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      'second_half'
+                                    ) == asmItem.abbreviation
+                                  "
+                                  value="{{ asmItem.value }}"
+                                >
+                                  {{ asmItem.abbreviation }}
+                                </option>
+                              </ng-container>
+                            </select>
+                            <ng-container
+                              *ngIf="
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  'second_half'
+                                ) == '-'
+                              "
+                            >
+                              -
+                            </ng-container>
+                          </td>
+                        </ng-container>
+
+                        <ng-container *ngIf="!isEditing(item)">
+                          <td class="text-center">
+                            <b
+                              [ngClass]="{
+                                'text-success':
+                                  checkAttendance(
+                                    item.attendance,
+                                    day,
+                                    'first_half'
+                                  ) == 'P',
+                                'text-danger':
+                                  checkAttendance(
+                                    item.attendance,
+                                    day,
+                                    'first_half'
+                                  ) == 'A'
+                              }"
+                              >{{
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  "first_half"
+                                )
+                              }}</b
+                            >
+                          </td>
+                          <td class="text-center">
+                            <b
+                              [ngClass]="{
+                                'text-success':
+                                  checkAttendance(
+                                    item.attendance,
+                                    day,
+                                    'second_half'
+                                  ) == 'P',
+                                'text-danger':
+                                  checkAttendance(
+                                    item.attendance,
+                                    day,
+                                    'second_half'
+                                  ) == 'A'
+                              }"
+                              >{{
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  "second_half"
+                                )
+                              }}</b
+                            >
+                          </td>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'time'">
+                      <ng-container *ngFor="let day of monthDaysArr">
+                        <ng-container *ngIf="isEditing(item)">
+                          <td class="first-half text-center">
+                            <ng-container
+                              *ngIf="
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  'total_logged_in'
+                                ) != '-'
+                              "
+                            >
+                              {{
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  "total_logged_in"
+                                ) == "-"
+                                  ? "-"
+                                  : checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      "total_logged_in"
+                                    ) + "H"
+                              }}
+                            </ng-container>
+                            <ng-container
+                              *ngIf="
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  'total_logged_in'
+                                ) == '-'
+                              "
+                            >
+                              -
+                            </ng-container>
+
+                            <a
+                              (click)="
+                                initAttedanceEdit(
+                                  item.attendance,
+                                  day,
+                                  item.emp_id,
+                                  item
+                                )
+                              "
+                              class="text-primary pointer-cursor"
+                              ><i class="fa fa-edit"></i
+                            ></a>
+                          </td>
+                        </ng-container>
+
+                        <ng-container *ngIf="!isEditing(item)">
+                          <td class="text-center">
+                            <b>
+                              {{
+                                checkAttendance(
+                                  item.attendance,
+                                  day,
+                                  "total_logged_in"
+                                ) == "-"
+                                  ? "-"
+                                  : checkAttendance(
+                                      item.attendance,
+                                      day,
+                                      "total_logged_in"
+                                    ) + "H"
+                              }}
+                            </b>
+                          </td>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'monthly'">
+                      <ng-container
+                        *ngFor="
+                          let fname of [
+                            'paydays',
+                            'total_absent',
+                            'total_attendance',
+                            'total_cl',
+                            'total_gl',
+                            'total_hl',
+                            'total_kb',
+                            'total_lop',
+                            'total_ml',
+                            'total_overtime',
+                            'total_pl',
+                            'adjust_day',
+                            'total_late',
+                            'total_wo'
+                          ]
+                        "
+                      >
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control"
+                            [name]="fname"
+                            value="{{
+                              item?.attendance[0]?.monthly_attendance &&
+                              item?.attendance[0]?.monthly_attendance &&
+                              item?.attendance[0]?.monthly_attendance[fname]
+                                ? item?.attendance[0]?.monthly_attendance[fname]
+                                : '0'
+                            }}"
+                            [class.non-editing]="!isEditing(item)"
+                            [disabled]="!isEditing(item)"
+                          />
+                        </td>
+                      </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngSwitchDefault>
+                      <td class="text-center" *ngFor="let day of monthDaysArr">
+                        <ng-container *ngIf="isEditing(item)">
+                          <select
+                            class="border-0 bg-gray-300"
+                            id="attendance-select"
+                            (change)="
+                              singleAttendanceEdit(
+                                item.attendance,
+                                day,
+                                $event,
+                                { full: item }
+                              )
+                            "
+                          >
+                            <option
+                              disabled
+                              [selected]="
+                                checkAttendance(item.attendance, day) == '-'
+                              "
+                              value="-"
+                            >
+                              -
+                            </option>
+                            <ng-container
+                              *ngFor="let asmItem of attendanceStatMaster"
+                            >
+                              <option
+                                [selected]="
+                                  checkAttendance(item.attendance, day) ==
+                                  asmItem.abbreviation
+                                "
+                                value="{{ asmItem.value }}"
+                              >
+                                {{ asmItem.abbreviation }}
+                              </option>
+                            </ng-container>
+                          </select>
+                          <!-- <ng-container *ngIf="checkAttendance(item.attendance, day) == '-'">
+                                                        -
+                                                    </ng-container> -->
+                        </ng-container>
+
+                        <ng-container *ngIf="!isEditing(item)">
+                          <b
+                            [ngClass]="{
+                              'text-success':
+                                checkAttendance(item.attendance, day) == 'P',
+                              'text-danger':
+                                checkAttendance(item.attendance, day) == 'A'
+                            }"
+                            >{{ checkAttendance(item.attendance, day) }}</b
+                          >
+                        </ng-container>
+                      </td>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+
+                <tr *ngIf="employees.length == 0">
+                  <td class="text-center" colspan="100%">No records found</td>
+                </tr>
+              </tbody>
+
+              <tfoot class="">
+                <tr class="p-2" style="text-align: left !important">
+                  <td colspan="100%">
+                    <button
+                      class="button"
+                      (click)="approveAttendance()"
+                      [class.disabled]="
+                        rowCheckedAll == false &&
+                        checkedRowIds.length == 0 &&
+                        uncheckedRowIds.length == 0
+                      "
+                      class="btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2 mr-1"
+                    >
+                      RUN
+                    </button>
+                    <!-- <button class="button" (click)="openEditAttendanceModal('multiple')" [class.disabled]="rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)" class="btn btn-sm btn-dark mr-1">Update Attendance</button> -->
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <app-custom-pagination
+            [rows]="employees"
+            [paginationOptions]="paginationOptions"
+            (onPageClicked)="fetch({ page: $event })"
+          ></app-custom-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSV Import Modal -->
+  <button
+    id="csvImportModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#csvImportModal"
+  ></button>
+  <div id="csvImportModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Import Attendance CSV
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="csvImportForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-6 mb-4">
+                <label>Month <span class="text-danger">*</span></label>
+                <ngx-select-dropdown
+                  formControlName="attendance_month"
+                  [options]="monthMaster"
+                  class="form-control p-1"
+                  [config]="{ search: true, placeholder: 'Select Month' }"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    csvImportForm.controls.attendance_month.hasError(
+                      'required'
+                    ) &&
+                    (csvImportForm.controls.attendance_month.dirty ||
+                      csvImportForm.controls.attendance_month.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-6 mb-4">
+                <label>Year <span class="text-danger">*</span></label>
+                <ngx-select-dropdown
+                  formControlName="attendance_year"
+                  [options]="yearMaster"
+                  class="form-control p-1"
+                  [config]="{ search: true, placeholder: 'Select Year' }"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    csvImportForm.controls.attendance_year.hasError(
+                      'required'
+                    ) &&
+                    (csvImportForm.controls.attendance_year.dirty ||
+                      csvImportForm.controls.attendance_year.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-12 mb-4">
+                <label>Register Type <span class="text-danger">*</span></label>
+                <ngx-select-dropdown
+                  formControlName="attendance_type"
+                  [options]="attendanceTypeMaster"
+                  class="form-control p-1"
+                  [config]="{ search: true, placeholder: 'Select One' }"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    csvImportForm.controls.attendance_type.hasError(
+                      'required'
+                    ) &&
+                    (csvImportForm.controls.attendance_type.dirty ||
+                      csvImportForm.controls.attendance_type.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-12 mb-4">
+                <label>Select File <span class="text-danger">*</span></label>
+                <input
+                  type="file"
+                  class="form-control"
+                  formControlName="file"
+                  accept=".csv"
+                  (change)="
+                    onFileChanged($event, csvImportForm, 'file', 'file_source')
+                  "
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    csvImportForm.controls.file.hasError('required') &&
+                    (csvImportForm.controls.file.dirty ||
+                      csvImportForm.controls.file.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              [disabled]="
+                !(
+                  csvImportForm.get('attendance_type')?.valid &&
+                  csvImportForm.get('attendance_year')?.valid &&
+                  csvImportForm.get('attendance_type')?.valid
+                )
+              "
+              (click)="getSampleCsv($event)"
+              class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Sample CSV</span>
+            </button>
+
+            <button
+              [disabled]="!csvImportForm.valid"
+              (click)="importCsv($event)"
+              *ngIf=" Global.checkCompanyModulePermission({
+                company_module: 'attendance',
+                company_operation: 'attendance_upload',
+                company_sub_module: 'upload_attendance',
+                company_sub_operation: ['add'], 
+                company_strict:true
+              })"
+              type="button"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Import</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Attendance Modal -->
+  <button
+    id="editAttendanceModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#editAttendanceModal"
+  ></button>
+  <div id="editAttendanceModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Edit Attendance
+            <span *ngIf="shiftData?.shift_name">
+             - ({{shiftData?.shift_name}})
+            </span>
+          </h6>
+          <button
+            (click)="resetTemplate()"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="attendanceForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <label>Select Date <span class="text-danger">*</span></label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="attendance_date"
+                />
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    attendanceForm.controls.attendance_date.hasError(
+                      'required'
+                    ) &&
+                    (attendanceForm.controls.attendance_date.dirty ||
+                      attendanceForm.controls.attendance_date.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-6 mt-3">
+                <label
+                  >Login Time <span class="text-danger">*</span>
+                  <span *ngIf="shiftData?.shift_start_time">
+                    - ({{shiftData?.shift_start_time}})
+                  </span>
+                  </label
+                >
+                <input
+                  type="time"
+                  class="form-control"
+                  formControlName="login_time"
+                />
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    attendanceForm.controls.login_time.hasError('required') &&
+                    (attendanceForm.controls.login_time.dirty ||
+                      attendanceForm.controls.login_time.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-6 mt-3">
+                <label
+                  >Logout Time <span class="text-danger">*</span>
+                  <span *ngIf="shiftData?.shift_end_time">
+                    - ({{shiftData?.shift_end_time}})
+                  </span>
+                </label>
+                <input
+                  type="time"
+                  class="form-control"
+                  formControlName="logout_time"
+                />
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    attendanceForm.controls.logout_time.hasError('required') &&
+                    (attendanceForm.controls.logout_time.dirty ||
+                      attendanceForm.controls.logout_time.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <!-- <div class="col-lg-12 mt-3">
+                                <table class="table table-bordered table-striped w-100 bd m-0">
+                                    <thead>
+                                        <tr class="bg-primary">
+                                            <th colspan="5" class="text-center text-white">Break Data</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center">SL</th>
+                                            <th class="text-center">Start Time</th>
+                                            <th class="text-center">End Time</th>
+                                            <th class="text-center">Total Time</th>
+                                            <th class="text-center">
+                                                <button data-toggle="tooltip" data-placement="top" title="Add New" class="btn btn-primary btn-sm" (click)="addTemplateRows(attendanceForm, 'break_time')">
+                                                  <i class="fa fa-plus"></i>
+                                                </button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <ng-container formArrayName="break_time">
+                                        <tbody>
+                                            <tr *ngFor="let templateDataControl of getTemplateRows(attendanceForm, 'break_time'); let i = index" [formGroupName]="i">
+                                                <td class="text-center">
+                                                    {{i+1}}
+                                                </td>
+                                                <td class="text-center">
+                                                    <input formControlName="break_stime" type="time" class="form-control">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input formControlName="break_etime" type="time" class="form-control">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input formControlName="total_break_time" type="number" class="form-control" placeholder="Total Break Time">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button data-toggle="tooltip" data-placement="top" title="Remove" class="btn btn-danger btn-sm" (click)="removeTemplateRow(attendanceForm, 'break_time', i)">
+                                                      <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                            <tr *ngIf="getTemplateRows(attendanceForm, 'break_time').length == 0">
+                                                <td colspan="5" class="text-center">No records found</td>
+                                            </tr>
+                                        </tbody>
+                                    </ng-container>
+                                </table>
+                            </div> -->
+
+              <div class="col-lg-6 mt-3">
+                <label
+                  >Total Break Time <small>(in hours)</small>
+                  <span class="text-danger">*</span></label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="total_break_time"
+                />
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    attendanceForm.controls.total_break_time.hasError(
+                      'required'
+                    ) &&
+                    (attendanceForm.controls.total_break_time.dirty ||
+                      attendanceForm.controls.total_break_time.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-6 mt-3">
+                <label
+                  >Total Logged in <small>(in hours)</small>
+                  <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control-plaintext"
+                  formControlName="total_logged_in"
+                  readonly
+                />
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    attendanceForm.controls.total_logged_in.hasError(
+                      'required'
+                    ) &&
+                    (attendanceForm.controls.total_logged_in.dirty ||
+                      attendanceForm.controls.total_logged_in.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-12 mt-3">
+                <label
+                  >Attendance Status <span class="text-danger">*</span></label
+                >
+
+                <ngx-select-dropdown
+                  formControlName="attendance_stat"
+                  [options]="attendanceStatMaster"
+                  class="form-control"
+                  [config]="{
+                    search: true,
+                    placeholder: 'Select One',
+                    height: '200px'
+                  }"
+                  style="padding: 3.6px"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    attendanceForm.controls.attendance_stat.hasError(
+                      'required'
+                    ) &&
+                    (attendanceForm.controls.attendance_stat.dirty ||
+                      attendanceForm.controls.attendance_stat.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              [disabled]="!attendanceForm.valid"
+              (click)="submitEmployeeAttendance($event)"
+              type="button"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSV Import Failed Employee IDs -->
+  <button
+    id="csvFailedIdModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#csvFailedIdModal"
+  ></button>
+  <div id="csvFailedIdModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Failed Employee IDs
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pd-25">
+          <div class="row">
+            <div class="col-lg-12">
+              <table class="table table-bordered table-striped w-100 bd">
+                <thead>
+                  <tr>
+                    <th>Sl</th>
+                    <th>Employee ID</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let item of csvFailedIds; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            data-dismiss="modal"
+            aria-label="Close"
+            type="button"
+            class="btn btn-danger tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+          >
+            <span>Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Attendance Modal - For Time Register Type -->
+  <button
+    id="editTimeAttendanceModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#editTimeAttendanceModal"
+  ></button>
+  <div id="editTimeAttendanceModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Edit Attendance
+             <span *ngIf="shiftData?.shift_name">
+              - ({{shiftData?.shift_name}})
+             </span>
+          </h6>
+          <button
+          (click)="resetTemplate()"
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="timeAttendanceForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <ng-container
+                *ngIf="
+                  timeAttendanceForm.get('shift_timing')?.value == 'yes';
+                  else normalTimingBlock
+                "
+              >
+                <div class="col-lg-6">
+                  <label>
+                    <ng-container
+                      *ngIf="
+                        timeAttendanceForm.get('break_shift')?.value == 'yes'
+                      "
+                    >
+                      Shift1
+                    </ng-container>
+                    Login Time
+                    <!-- <span
+                      class="text-danger"
+                      *ngIf="
+                        Global.isValidationAvailable(
+                          timeAttendanceForm,
+                          'shift1_start_time',
+                          'required'
+                        )
+                      "
+                      >*</span
+                    > -->
+                    <span *ngIf="shiftData?.shift_start_time">
+                      - ({{shiftData?.shift_start_time}})
+                    </span>
+
+                  </label>
+                  <input
+                    type="time"
+                    class="form-control"
+                    formControlName="shift1_start_time"
+                  />
+
+                  <!-- <p
+                    class="mt-1 mb-0 text-danger"
+                    *ngIf="
+                      !Global.isInputRuleValid(
+                        timeAttendanceForm,
+                        'shift1_start_time',
+                        'required'
+                      )
+                    "
+                  >
+                    This field is required
+                  </p> -->
+                </div>
+
+                <div class="col-lg-6">
+                  <label>
+                    <ng-container
+                      *ngIf="
+                        timeAttendanceForm.get('break_shift')?.value == 'yes'
+                      "
+                    >
+                      Shift1
+                      <!-- &nbsp; -->
+                    </ng-container>
+                    Logout Time
+                    <!-- <span
+                      class="text-danger"
+                      *ngIf="
+                        Global.isValidationAvailable(
+                          timeAttendanceForm,
+                          'shift1_end_time',
+                          'required'
+                        )
+                      "
+                      >*</span
+                    > -->
+                    <span *ngIf="shiftData?.shift_end_time">
+                      - ({{shiftData?.shift_end_time}})
+                    </span>
+                  </label>
+                  <input
+                    type="time"
+                    class="form-control"
+                    formControlName="shift1_end_time"
+                  />
+
+                  <!-- <p
+                    class="mt-1 mb-0 text-danger"
+                    *ngIf="
+                      !Global.isInputRuleValid(
+                        timeAttendanceForm,
+                        'shift1_end_time',
+                        'required'
+                      )
+                    "
+                  >
+                    This field is required
+                  </p> -->
+                </div>
+
+                <ng-container
+                  *ngIf="timeAttendanceForm.get('break_shift')?.value == 'yes'"
+                >
+                  <div class="col-lg-6 mt-3">
+                    <label>
+                      Shift2 Login Time
+                      <!-- <span
+                        class="text-danger"
+                        *ngIf="
+                          Global.isValidationAvailable(
+                            timeAttendanceForm,
+                            'shift2_start_time',
+                            'required'
+                          )
+                        "
+                        >*</span
+                      > -->
+                      <span *ngIf="shiftData?.shift2_start_time">
+                        - ({{shiftData?.shift2_start_time}})
+                      </span>
+
+                    </label>
+                    <input
+                      type="time"
+                      class="form-control"
+                      formControlName="shift2_start_time"
+                    />
+
+                    <!-- <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        !Global.isInputRuleValid(
+                          timeAttendanceForm,
+                          'shift2_start_time',
+                          'required'
+                        )
+                      "
+                    >
+                      This field is required
+                    </p> -->
+                  </div>
+
+                  <div class="col-lg-6 mt-3">
+                    <label>
+                      Shift2 Logout Time
+                      <!-- <span
+                        class="text-danger"
+                        *ngIf="
+                          Global.isValidationAvailable(
+                            timeAttendanceForm,
+                            'shift2_end_time',
+                            'required'
+                          )
+                        "
+                        >*</span
+                      > -->
+                      <span *ngIf="shiftData?.shift2_end_time">
+                        - ({{shiftData?.shift2_end_time}})
+                      </span>
+                    </label>
+                    <input
+                      type="time"
+                      class="form-control"
+                      formControlName="shift2_end_time"
+                    />
+
+                    <!-- <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        !Global.isInputRuleValid(
+                          timeAttendanceForm,
+                          'shift2_end_time',
+                          'required'
+                        )
+                      "
+                    >
+                      This field is required
+                    </p> -->
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <ng-template #normalTimingBlock>
+                <div class="col-lg-6">
+                  <label>
+                    Login Time
+                    <!-- <span
+                      class="text-danger"
+                      *ngIf="
+                        Global.isValidationAvailable(
+                          timeAttendanceForm,
+                          'login_time',
+                          'required'
+                        )
+                      "
+                      >*</span
+                    > -->
+                    <span *ngIf="shiftData?.shift_start_time">
+                      - ({{shiftData?.shift_start_time}})
+                    </span>
+                  </label>
+                  <input
+                    type="time"
+                    class="form-control"
+                    formControlName="login_time"
+                  />
+
+                  <!-- <p
+                    class="mt-1 mb-0 text-danger"
+                    *ngIf="
+                      !Global.isInputRuleValid(
+                        timeAttendanceForm,
+                        'login_time',
+                        'required'
+                      )
+                    "
+                  >
+                    This field is required
+                  </p> -->
+                </div>
+
+                <div class="col-lg-6">
+                  <label>
+                    Logout Time
+                    <!-- <span
+                      class="text-danger"
+                      *ngIf="
+                        Global.isValidationAvailable(
+                          timeAttendanceForm,
+                          'logout_time',
+                          'required'
+                        )
+                      "
+                      >*</span
+                    > -->
+                    <span *ngIf="shiftData?.shift_end_time">
+                      - ({{shiftData?.shift_end_time}})
+                    </span>
+                  </label>
+                  <input
+                    type="time"
+                    class="form-control"
+                    formControlName="logout_time"
+                  />
+
+                  <!-- <p
+                    class="mt-1 mb-0 text-danger"
+                    *ngIf="
+                      !Global.isInputRuleValid(
+                        timeAttendanceForm,
+                        'logout_time',
+                        'required'
+                      )
+                    "
+                  >
+                    This field is required
+                  </p> -->
+                </div>
+              </ng-template>
+
+              <!-- <div class="col-lg-12 mt-3">
+                                <table class="table table-bordered table-striped w-100 bd m-0">
+                                    <thead>
+                                        <tr class="bg-primary">
+                                            <th colspan="5" class="text-center text-white">Break Data</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center">SL</th>
+                                            <th class="text-center">Start Time</th>
+                                            <th class="text-center">End Time</th>
+                                            <th class="text-center">Total Time</th>
+                                            <th class="text-center">
+                                                <button data-toggle="tooltip" data-placement="top" title="Add New" class="btn btn-primary btn-sm" (click)="addTemplateRows(timeAttendanceForm, 'break_time')">
+                                                  <i class="fa fa-plus"></i>
+                                                </button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <ng-container formArrayName="break_time">
+                                        <tbody>
+                                            <tr *ngFor="let templateDataControl of getTemplateRows(timeAttendanceForm, 'break_time'); let i = index" [formGroupName]="i">
+                                                <td class="text-center">
+                                                    {{i+1}}
+                                                </td>
+                                                <td class="text-center">
+                                                    <input formControlName="break_stime" type="time" class="form-control">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input formControlName="break_etime" type="time" class="form-control">
+                                                </td>
+                                                <td class="text-center">
+                                                    <input formControlName="total_break_time" type="number" class="form-control" placeholder="Total Break Time">
+                                                </td>
+                                                <td class="text-center">
+                                                    <button data-toggle="tooltip" data-placement="top" title="Remove" class="btn btn-danger btn-sm" (click)="removeTemplateRow(timeAttendanceForm, 'break_time', i)">
+                                                      <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                            <tr *ngIf="getTemplateRows(timeAttendanceForm, 'break_time').length == 0">
+                                                <td colspan="5" class="text-center">No records found</td>
+                                            </tr>
+                                        </tbody>
+                                    </ng-container>
+                                </table>
+                            </div> -->
+
+              <div class="col-lg-6 mt-3">
+                <label
+                  >Total Break Time <small>(in hours)</small>
+                  <!-- <span class="text-danger">*</span> -->
+                  </label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="total_break_time"
+                  min="0"
+                />
+
+                <!-- <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    timeAttendanceForm.controls.total_break_time.hasError(
+                      'required'
+                    ) &&
+                    (timeAttendanceForm.controls.total_break_time.dirty ||
+                      timeAttendanceForm.controls.total_break_time.touched)
+                  "
+                >
+                  This field is required
+                </p> -->
+              </div>
+
+              <div class="col-lg-6 mt-3">
+                <label
+                  >Total Logged in <small>(in hours)</small>
+                  <!-- <span class="text-danger">*</span> -->
+                  </label
+                >
+                <input
+                  type="text"
+                  class="form-control-plaintext"
+                  formControlName="total_logged_in"
+                  readonly
+                />
+
+                <!-- <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    timeAttendanceForm.controls.total_logged_in.hasError(
+                      'required'
+                    ) &&
+                    (timeAttendanceForm.controls.total_logged_in.dirty ||
+                      timeAttendanceForm.controls.total_logged_in.touched)
+                  "
+                >
+                  This field is required
+                </p> -->
+              </div>
+
+              <div class="col-lg-12 mt-3">
+                <label
+                  >Attendance Status <span class="text-danger">*</span></label
+                >
+
+                <ngx-select-dropdown
+                  formControlName="attendance_stat"
+                  [options]="attendanceStatMaster"
+                  class="form-control"
+                  [config]="{
+                    search: true,
+                    placeholder: 'Select One',
+                    height: '200px'
+                  }"
+                  style="padding: 3.6px"
+                ></ngx-select-dropdown>
+
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    timeAttendanceForm.controls.attendance_stat.hasError(
+                      'required'
+                    ) &&
+                    (timeAttendanceForm.controls.attendance_stat.dirty ||
+                      timeAttendanceForm.controls.attendance_stat.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              [disabled]="!timeAttendanceForm.valid"
+              (click)="singleTimeAttendanceEdit($event)"
+              type="button"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

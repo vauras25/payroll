@@ -1,0 +1,144 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Invoice</a>
+      <a class="breadcrumb-item">Invoice Listing</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Invoice Report Listing</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      
+
+      <div class="mt-3">
+        <ng-container >
+          <div class="d-flex"  style="float:right;margin-bottom:5px;">
+           
+
+            
+              <div class="d-flex h-100">
+                <button
+                    [disabled]="!anyRowsChecked()"
+                    (click)="
+                    exportData()
+                    "
+                    type="button"
+                    class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                   
+                  >
+                    <span
+                      ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+                      >EXPORT</span
+                    >
+                  </button>
+              
+              </div>
+           
+          </div>
+
+          <div class="table-wrapper mt-3">
+            <app-custom-tableoption
+            [searchable]="true"
+            (onFilterChanged)="paginationOptions.limit = +$event?.length ; fetchTransactionHistory(1,$event.searchkey)"
+          ></app-custom-tableoption>
+            <table class="table display responsive nowrap wd-100p employee-table">
+                <thead >
+                    <th>
+                    <label class="d-flex align-items-center mb-0" for="select-all">
+                        <input
+                            class="mb-0 mr-1"
+                            id="select-all"
+                            [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="transactionHistory.length>0"
+                            type="checkbox"
+                        />
+                        SL No.
+                        </label>  
+                    </th>
+                    <th>Date</th>
+                    <th>Invoice No</th>
+                    <th>Transaction No</th>
+                    <th>Gateway</th>
+                    <th>Gateway ID</th>
+                    <th>Inv Value</th>
+                    <th>Payment Value</th>
+                    <th>Mode</th>
+                    <th>Status</th>
+                    <th>Receipt</th>
+                
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of transactionHistory; let i = index">
+                        <td>
+                            <label
+                            class="d-flex align-items-center"
+                            [for]="'checkrow-' + (i + 1)"
+                            >
+                        <input
+                            type="checkbox"
+                            class="mr-2"
+                            [attr.checked]="item?.checked == true ? 'checked' : null"
+                            id="checkrow-{{ i + 1 }}"
+                            [attr.data-checkbox-id]="item?._id"
+                            (click)="rowCheckBoxChecked($event, item)"
+                            
+                        />
+                        {{
+                            Global.getTableSerialNumber(
+                            i,
+                            paginationOptions.limit,
+                            paginationOptions.page
+                            )
+                        }}
+                    </label>
+                
+                        </td>
+                        <td>{{item?.created_at | date:'dd/MM/YYYY'}}</td>
+                        <td>{{item?.inv_id ?? 'N/A'}}</td>
+                        <td>{{item?.razorpay_payment_id ?? 'N/A'}}</td>
+                        <td>Razorpay</td>
+                        <td>{{item?.razorpay_order_id ?? 'N/A'}}</td>
+                        <td>{{(item?.credit_qty | number) ?? 'N/A'}}</td>
+                        <td>{{(item?.credit_amount | number) ?? 'N/A'}}</td>
+                        <td>{{item?.method ?? 'N/A'}}</td>
+                        <td>{{(item?.status | titlecase)  ?? 'N/A'}}</td>
+                        <td><button class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Download" id="downloadButton"
+                            (click)="exportsingleData(item?._id)"
+                            >
+                            <div style="width:25px; height:25px;"><i class="fa fa-download"></i></div>
+                        </button></td>
+                
+                    </tr>
+                    <tr *ngIf="transactionHistory.length == 0">
+                        <td colspan="100%" class="text-center" colspan="11">No records found</td>
+                    </tr>
+                </tbody>   
+                </table> 
+          </div>
+          <app-custom-pagination [rows]="transactionHistory" [paginationOptions]="paginationOptions" (onPageClicked)="fetchTransactionHistory($event)"></app-custom-pagination>
+
+        </ng-container>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+
+
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

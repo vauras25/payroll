@@ -1,0 +1,343 @@
+
+
+<div class="table-responsive">
+  <table
+    class="table table-bordered cust-table table-striped"
+    id="salarysheet-report-table"
+    #salarysheetreporttable
+  >
+    <thead>
+      <tr class="title-sec">
+        <ng-container *ngFor="let row of sheetTemplate">
+          <th
+            class="column-title"
+            [ngStyle]="{
+              'background-color': row.bg_color,
+              color: row.text_color
+            }"
+            [attr.colspan]="getSheetTemplateMasterHeadColspan(row.main_slug)"
+          >
+            {{ row.main_title }}
+          </th>
+        </ng-container>
+      </tr>
+
+      <tr class="title-sec">
+        <ng-container *ngFor="let row of sheetTemplate">
+          <ng-container *ngFor="let module of row.modules">
+            <ng-container [ngSwitch]="module.module_slug">
+              <ng-container *ngSwitchCase="'master_breakup'">
+                <th
+                  *ngIf="this.empReportTempData.master_head_includes.length > 0"
+                  class="column-title"
+                  [attr.colspan]="
+                    getSheetTemplateHeadColspan(
+                      row.main_slug,
+                      module.module_slug
+                    )
+                  "
+                >
+                  {{ module.module_title }}
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'paid_leaves_dynamic_heads'">
+                <th
+                  *ngIf="this.empReportTempData.attendance_head_includes.length > 0"
+                  class="column-title"
+                  [attr.colspan]="
+                    getSheetTemplateHeadColspan(
+                      row.main_slug,
+                      module.module_slug
+                    )
+                  "
+                >
+                  {{ module.module_title }}
+                </th>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'breakup'">
+                <th
+                  *ngIf="this.empReportTempData.head_includes.length > 0"
+                  class="column-title"
+                  [attr.colspan]="
+                    getSheetTemplateHeadColspan(
+                      row.main_slug,
+                      module.module_slug
+                    )
+                  "
+                >
+                  {{ module.module_title }}
+                </th>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'extraearnings'">
+                <th
+                  *ngIf="this.empReportTempData.extra_earning_data.length > 0"
+                  class="column-title"
+                  [attr.colspan]="
+                    getSheetTemplateHeadColspan(
+                      row.main_slug,
+                      module.module_slug
+                    )
+                  "
+                >
+                  {{ module.module_title }}
+                </th>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+
+                <th
+                  class="column-title"
+                  [attr.colspan]="
+                    getSheetTemplateHeadColspan(
+                      row.main_slug,
+                      module.module_slug
+                    )
+                  "
+                >
+                  {{ module.module_title }}{{ getSheetTemplateHeadColspan(
+                    row.main_slug,
+                    module.module_slug
+                  )}}
+                </th>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tr>
+
+      <tr class="headings">
+
+        <ng-container *ngFor="let row of sheetTemplate">
+          <ng-container *ngFor="let module of row.modules">
+            <ng-container *ngFor="let field of module.fields">
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                  <ng-container
+                  *ngFor="
+                  let headInclude of empReportTempData.master_head_includes
+                  "
+                  >
+                  <th>
+                    <span
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="{{ headInclude.head_title }}"
+                    >{{ headInclude.head_abbreviation }}</span
+                    >
+                  </th>
+                </ng-container>
+              </ng-container>
+                <ng-container *ngSwitchCase="'attendance-dynamic-heads'">
+                  <ng-container
+                  *ngFor="
+                  let headInclude of empReportTempData.attendance_head_includes
+                  "
+                  >
+                  <th>
+                    <span
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="{{ 'err' }}"
+                    >{{ headInclude.abbreviation }}</span
+                    >
+                  </th>
+                </ng-container>
+              </ng-container>
+
+                  <ng-container *ngSwitchCase="'dynamic-heads'">
+                    <ng-container
+                      *ngFor="let headInclude of empReportTempData.head_includes"
+                    >
+                      <th>
+                        <span
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="{{ headInclude.head_title }}"
+                          >{{ headInclude.head_abbreviation }}</span
+                        >
+                      </th>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'extra-earnings'">
+                    <ng-container
+                      *ngFor="
+                        let extraEarning of empReportTempData.extra_earning_data
+                      "
+                    >
+                      <th>{{ extraEarning.earning_abbreviation }}</th>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <th>
+                      <ng-container *ngIf="field.abbreviation">
+                        <span
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="{{ field.title }}"
+                        >
+                          {{ field.abbreviation }}
+                        </span>
+                      </ng-container>
+
+                      <ng-container *ngIf="!field.abbreviation">
+                        {{ field.title }}
+                      </ng-container>
+                    </th>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let report of empReportData; let i = index">
+        <ng-container *ngFor="let row of sheetTemplate">
+          <ng-container *ngFor="let module of row.modules">
+            <ng-container *ngFor="let field of module.fields">
+              <ng-container [ngSwitch]="field.slug">
+                <ng-container *ngSwitchCase="'sl_no'">
+                  <td>{{ i + 1 }}</td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                  <ng-container
+                    *ngFor="let headInclude of empReportTempData.master_head_includes"
+                  >
+                    <td >
+                      {{
+                        getHeadValue(
+                          report,
+                          'master',
+                          empReportTempData.master_head_includes,
+                          headInclude.head_id,
+                          "amount",
+                          i
+                        )
+                      }}
+
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'attendance-dynamic-heads'">
+                  <ng-container
+                    *ngFor="let headInclude of empReportTempData.attendance_head_includes"
+                  >
+                    <td >
+                      {{
+                        getHeadValue2(report,headInclude)
+                      }}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'dynamic-heads'">
+                  <ng-container
+                    *ngFor="let headInclude of empReportTempData.head_includes"
+                  >
+                    <td>
+                      {{
+                        getHeadValue(
+                           report,
+                        'salary',
+                          empReportTempData.head_includes,
+                          headInclude.head_id,
+                          "amount",
+                          i
+                        )
+                      }}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <!-- <ng-container *ngSwitchCase="'attendance-dynamic-heads'">
+                  <ng-container
+                    *ngFor="let headInclude of empReportTempData.head_includes"
+                  >
+                    <td>
+                      {{
+                        getHeadValue(
+                          empReportTempData.head_includes,
+                          headInclude.head_id,
+                          "amount"
+                        )
+                      }}
+                    </td>
+                  </ng-container>
+                </ng-container> -->
+                <ng-container *ngSwitchCase="'extra-earnings'">
+                  <ng-container
+                    *ngFor="
+                      let extraEarning of empReportTempData.extra_earning_data
+                    "
+                  >
+                    <td>
+                      {{
+                        getExtraEarningValue(
+                          empReportTempData.extra_earning_data,
+                          extraEarning.earning_abbreviation,
+                          "earning_amount",
+                          i
+                        )
+                      }}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'sex'">
+                  <td class="text-uppercase">
+                    {{
+                      getSheetTemplateReportValue(
+                        row.main_slug,
+                        module.module_slug,
+                        field.slug,
+                        report
+                      ) ?? "N/A"
+                    }}
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchCase="'age'">
+                  <td class="text-uppercase">
+                    {{
+                      getSheetTemplateReportValue(
+                        row.main_slug,
+                        module.module_slug,
+                        field.slug,
+                        report
+                      )
+                        ? Global.parseToInteger(
+                            getSheetTemplateReportValue(
+                              row.main_slug,
+                              module.module_slug,
+                              field.slug,
+                              report
+                            )
+                          )
+                        : "N/A"
+                    }}
+                  </td>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <td>
+                    {{
+                      getSheetTemplateReportValue(
+                        row.main_slug,
+                        module.module_slug,
+                        field.slug,
+                        report
+                      ) ?? "N/A"
+                    }}
+                  </td>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tr>
+
+      <tr *ngIf="empReportData?.length == 0">
+        <td class="text-center" colspan="100%">No records found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,245 @@
+<div #btns  class="container text-right py-3">
+    <a >
+        <button
+        (click)="cancell();"
+        class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+      >
+        Cancel
+      </button>
+    </a>
+   
+    <button
+      (click)="download();"
+      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+    >
+      Print
+    </button>
+  </div>
+  <div class="container" *ngFor="let item of rows;">
+      <div class="row my-4">
+        <div class="col-md-1">
+          <img src="{{Global?.BACKEND_URL}}/{{item?.com_logo}}" style="height: 100px;width: 100px;">  
+  
+          </div>
+        <div class="col-md-9">
+          <h6 class="text-center text-uppercase">{{item?.company_name}}</h6>
+          <h6 class="text-center text-uppercase">{{ item?.company_address?.door_no }} {{item?.company_address?.street_name}} {{item?.company_address?.locality}}
+            {{item?.company_address?.district_name}}  {{item?.company_address?.pin_code}}  {{item?.company_address?.state}} 
+
+          </h6>
+          <h6 class="text-center text-uppercase">{{ item?.company_phone }}</h6>
+
+        </div>
+      </div>
+    
+      <div class="row" >
+        <div class="col-md-12">
+          <table class="w-100 table table-bordered table-striped">
+           <tbody>
+            <tr>
+                <th colspan="8">Arrear Slip for the Period : {{currentDate}} to {{currentDate}}</th>
+            </tr>
+            <tr>
+                <td colspan="2">Employee Code</td>
+                <td colspan="2">{{item?.emp_id}}</td>
+                <td colspan="2">Employee Name</td>
+                <td colspan="2">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">Client</td>
+                <td colspan="2">{{item?.client?.client_code}}</td>
+                <td colspan="2">Branch</td>
+                <td colspan="2">{{item?.branch?.branch_name}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2">Department</td>
+                <td colspan="2">{{item?.department?.department_name}}</td>
+                <td colspan="2">Designation</td>
+                <td colspan="2">{{item?.designation?.designation_name}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2">HOD</td>
+                <td colspan="2">{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+                <td colspan="2">Gender</td>
+                <td colspan="2">{{item?.sex=='m'?'Male':'Female'}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2">DOB</td>
+                <td colspan="2">{{item?.emp_dob?(item?.emp_dob | date:'dd/MM/YYYY'):'N/A'}}</td>
+                <td colspan="2">DOJ</td>
+                <td colspan="2">{{item?.date_of_join?(item?.date_of_join | date:'dd/MM/YYYY'):'N/A'}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">Email Id</td>
+                <td colspan="2">{{item?.email_id}}</td>
+                <td colspan="2">Phone</td>
+                <td colspan="2">{{item?.mobile_no}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">Bank Name   </td>
+                <td colspan="2">{{item?.bank}}</td>
+                <td colspan="2">Account Number</td>
+                <td colspan="2"> {{item?.account_number}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">IFSC Code</td>
+                <td colspan="2">{{item?.ifsc}}</td>
+                <td colspan="2">Account Type</td>
+                <td colspan="2">{{item?.account_type}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">Aadhar No</td>
+                <td colspan="2">{{item?.aadhar_no}}</td>
+                <td colspan="2">PAN No</td>
+                <td colspan="2">{{item?.pan_no}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">UAN No</td>
+                <td colspan="2">{{item?.uan_no}}</td>
+                <td colspan="2">PF No</td>
+                <td colspan="2">{{item?.pf_no}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">ESIC/IP No</td>
+                <td colspan="2">{{item?.pf_no}}</td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td>Earnings</td>
+                <td>Previous</td>
+                <td>Revised</td>
+                <td>Arrear</td>
+                <td>Deductions</td>
+                <td>Amt</td>
+                <td>Contribution</td>
+                <td>Amt</td>
+
+            </tr>
+            <tr>
+                <td>Basic</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>EPF</td>
+                <td>
+                    {{item?.revision_reports?.consolidated_arrear_report?.total_pf_bucket?(item?.revision_reports?.consolidated_arrear_report?.total_pf_bucket | number:'1.2-2'):'N/A'}}
+
+                </td>
+                <td>EPF</td>
+                <td>
+                    {{item?.revision_reports?.consolidated_arrear_report?.total_pf_wages?(item?.revision_reports?.consolidated_arrear_report?.total_pf_wages | number:'1.2-2'):'N/A'}}
+
+                </td>
+
+            </tr>
+            <tr>
+                <td>HRA</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>ESIC</td>
+                <td>
+                    {{item?.revision_reports?.consolidated_arrear_report?.total_esic_bucket?(item?.revision_reports?.consolidated_arrear_report?.total_esic_bucket | number:'1.2-2') :'N/A'}}
+                </td>
+                <td>EPS</td>
+                <td>
+                    {{item?.revision_reports?.consolidated_arrear_report?.pf_data?.emoloyer_eps_contribution?(item?.revision_reports.consolidated_arrear_report?.pf_data?.emoloyer_eps_contribution | number:'1.2-2'):'N/A'}}
+                </td>
+
+            </tr>
+            <tr>
+                <td>Other</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>PT</td>
+                <td>{{item?.revision_reports?.consolidated_arrear_report?.total_pt_wages?(item?.revision_reports?.consolidated_arrear_report?.total_pt_wages):'N/A'}}</td>
+                <td>Admin+EDLI</td>
+                <td>
+                    {{(item?.revision_reports?.consolidated_arrear_report?.pf_data?.emoloyer_epf_admin_contribution ?? 0) + (item?.employee_data?.revision_reports?.consolidated_arrear_report?.pf_data?.emoloyer_edlis_admin_contribution) ?? 0}}
+
+                </td>
+
+            </tr>
+            <tr>
+                <td>Gross Earning</td>
+                <td>{{item?.revision_reports?.consolidated_arrear_report?.gross_earning??'N/A'}}</td>
+                <td>Net Pay</td>
+                <td>{{item?.revision_reports?.consolidated_arrear_report.net_take_home??'N/A'}}</td>
+                <td>CTC</td>
+                <td>37+##</td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td colspan="8"><strong>Others</strong></td>
+            </tr>
+            <tr>
+                <td colspan="2">Payments</td>
+                <td colspan="2">Amt in Rs</td>
+                <td colspan="2">Deductions</td>
+                <td colspan="2">Amt in Rs</td>
+               
+
+            </tr>
+            <tr>
+                <td colspan="2">Advance Given</td>
+                <td colspan="2">0</td>
+                <td colspan="2">Advance Recovered</td>
+                <td colspan="2">0</td>
+                
+               
+
+            </tr>
+            <tr>
+                <td colspan="2">Reimbursement</td>
+                <td colspan="2">0</td>
+                <td colspan="2">Fine</td>
+                <td colspan="2">0</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2">Breakage</td>
+                <td colspan="2">0</td>
+               
+               
+
+            </tr>
+            <tr>
+                <td colspan="2"> </td>
+                <td colspan="2"></td>
+                <td colspan="2">Other Deduction</td>
+                <td colspan="2">0</td>
+               
+            </tr>
+            <tr>
+                <td colspan="8"><strong>Month wise details</strong></td>
+            </tr>
+            <tr>
+                <td colspan="2">Wage Month</td>
+                <td colspan="2">Pre-revision Earned Gross</td>
+                <td colspan="2">Post revision Earned Gross</td>
+                <td colspan="2">Arrear</td>
+
+            </tr>
+            <tr>
+                <td colspan="2">{{(item?.employee_monthly_reports?.wage_month ?? 'N/A') +'-' + (item?.employee_monthly_reports?.wage_year ?? "N/A")}}</td>
+                <td colspan="2">{{item?.employee_monthly_reports?.salary_report?.gross_earning ?? 'N/A'}}</td>
+                <td colspan="2">{{item?.employee_monthly_reports?.arrear_report?.gross_earning ?? 'N/A'}}</td>
+                <td colspan="2">{{(item?.employee_monthly_reports?.salary_report?.gross_earning ?? 0) - (item?.employee_monthly_reports?.arrear_report?.gross_earning ?? 0) }}</td>
+
+            </tr>
+           </tbody>
+          </table>
+        </div>
+      </div>
+ </div>   
+      
+  
+    

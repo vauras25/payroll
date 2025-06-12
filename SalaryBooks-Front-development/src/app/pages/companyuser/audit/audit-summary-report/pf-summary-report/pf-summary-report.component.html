@@ -1,0 +1,147 @@
+<div class="mb-3 text-right">
+  <button
+    [disabled]="!anyRowsChecked()"
+    class="btn btn-info mt-3"
+    (click)="downloadExcelReport()"
+  >
+    Download Report
+  </button>
+</div>
+<div class="table-responsive mt-3"> <app-custom-tableoption
+  [searchable]="false"
+  (onFilterChanged)="reportPaginationOptions.limit = +$event?.length; onChecked.emit()"
+></app-custom-tableoption>
+  <table class="w-100 c-table">
+    <colgroup span="3"></colgroup>
+    <thead>
+      <tr>
+        <th>
+          <input
+            type="checkbox"
+            [value]="rowCheckedAll"
+            (change)="allRowsCheckboxChecked($event)"
+          />
+          SL No.
+        </th>
+        <th>Wage Month</th>
+        <th>Establishment Code</th>
+        <th>Total No. Of Employees</th>
+        <th>Total Included Employees in PF</th>
+        <th>Total EPF wages of Included Employees</th>
+        <th>Total No. of Employees in EPS</th>
+        <th>Total EPS wages of Included Employees (up to 15000 of pf wages)</th>
+        <th>Total EDLI wages, up to 15000 ONLY</th>
+        <th>Total Excluded Employees in PF</th>
+        <th>Total Gross wages of Excluded Employees</th>
+        <th>TOTAL Gross Wages (Rs.)</th>
+        <th>Salary Books Ref. no.</th>
+        <th>A/C.01 (PF EE 12% + ER 3.67% of pf wages)</th>
+        <th>A/C.02(Admin Charges @.5% of pf wages)</th>
+        <th>A/C.10 (EPS ER 8.33% of EPS wages)</th>
+        <th>A/C.21 (EDLI .5% of EDLI wages)</th>
+        <th>A/C. 22</th>
+        <th>Total pf amount due to pay</th>
+        <th>Payment made as per challan</th>
+        <th>Government Subsidy</th>
+        <th>Difference</th>
+        <th>Challan No (TRRN)</th>
+        <th>Due Date</th>
+        <th>Date of Payment</th>
+        <th>No of delay days</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let challan of pfChallansListing; let i = index">
+        <tr >
+          <td>
+            <label
+              class="d-flex align-items-center"
+              [for]="'checkrow-' + (i + 1)"
+            >
+              <input
+                type="checkbox"
+                class="mr-2"
+                [attr.checked]="
+                challan?.checked == true ? 'checked' : null
+                "
+                id="checkrow-{{ i + 1 }}"
+                [attr.data-checkbox-id]="challan?._id"
+                (click)="rowCheckBoxChecked($event, challan);"
+              />
+              {{
+              i + 1
+              }}
+            </label>
+          </td>
+          <td>{{challan?.wage_month }}</td>
+          <td>N/A</td>
+          <td>{{ challan?.total_emp }}</td>
+          <td>{{ challan?.total_epf_emp }}</td>
+          <td>{{ challan?.total_epf }}</td>
+          <td>{{ challan?.total_eps_emp }}</td>
+          <td>{{ challan?.total_eps }}</td>
+          <td>{{ challan?.total_edli }}</td>
+          <td>{{ challan?.total_excluded_emp }}</td>
+          <td>{{ "N/A" }}</td>
+          <td>{{ challan?.total_epf}}</td>
+          <td>{{ challan?.file_id }}</td>
+          <td>{{ challan?.ac_01 }}</td>
+          <td>{{ challan?.ac_02 }}</td>
+          <td>{{ challan?.ac_10 }}</td>
+          <td>{{ challan?.ac_21 }}</td>
+          <td>{{ challan?.ac_22 }}</td>
+          <td>{{ challan?.total_challan_amount }}</td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <!-- <td>{{ challan?.total_challan_amount }}</td>
+          <td>{{ challan?.payment_confirmation?.total_amount|| "N/A" }}</td>
+          <td>{{ challan?.challan_details?.total_gov_schemes || "N/A" }}</td>
+          <td>{{ (+challan?.total_challan_amount || 0) - (+challan?.payment_confirmation?.total_amount || 0) || 0 }}</td>
+          <td>{{ challan?.trrn || "N/A" }}</td>
+          <td>{{ challan?.due_date || "N/A" }}</td>
+          <td>{{ challan?.payment_confirmation?.date_of_credit || "N/A" }}</td>
+          <td>{{ getDaysDiffFromDates(challan?.due_date, challan?.payment_confirmation?.date_of_credit)|| "N/A" }}</td> -->
+        </tr>
+        <tr *ngFor="let challan_nested of challan?.challans">
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td>{{ challan_nested?.total_pending_amount }}</td>
+          <td>{{ challan_nested?.total_payment_amount|| 0 }}</td>
+          <td>{{ challan_nested?.total_gov_schemes || 0 }}</td>
+          <td>{{ (+challan_nested?.total_pending_amount || 0) - (+challan_nested?.total_payment_amount || 0) || 0 }}</td>
+          <td>{{ challan_nested?.trrn || "N/A" }}</td>
+          <td>{{ challan_nested?.due_date || "N/A" }}</td>
+          <td>{{ challan_nested?.date_of_credit || "N/A" }}</td>
+          <td>{{ getDaysDiffFromDates(challan_nested?.due_date, challan_nested?.date_of_credit) }}</td>
+        </tr>
+      </ng-container>
+      
+
+      <tr *ngIf="!pfChallansListing.length">
+        <td colspan="26"
+            class="text-center">No Data Found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

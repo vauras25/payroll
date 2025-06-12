@@ -1,0 +1,569 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item active">Reports</a>
+            <a class="breadcrumb-item">Run Payroll</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>Run Payroll</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+          <!-- <companyuser-app-table-filter
+          [searchKeyFilter]="true"
+          [empDetailsFilter]="true"
+          [advanceFilter]="true"
+        ></companyuser-app-table-filter> -->
+            <companyuser-app-table-filter [monthFilter]="true" [yearFilter]="true" [searchKeyFilter]="true" (onFiltered)="fetchEmployees($event)">
+              <div addOn_btn1 class="col-sm-2 col-12">
+                <ng-container *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'salary', 'company_operation': 'hold_salary' })">
+                  <button type="button" (click)="getHoldSalaries({ openmodal : true, page : 1 })" class="btn btn-block btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-pause"></i> Hold List</button>
+              </ng-container>
+              </div>
+            </companyuser-app-table-filter>
+
+            <div class="card bd-0" *ngIf="empReportGenerated == false">
+                <div class="card-header">
+                    <div class="row">
+                        <!-- <div class="col-12">
+                            <form [formGroup]="filterForm">
+                                <div class="row align-items-end">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="month" [options]="monthMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Month *'}"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="year" [options]="yearMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Year *'}"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="department" [options]="departmentMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Department *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="designation" [options]="designationMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Designation *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="branch" [options]="branchMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Branch *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="hod" [options]="hodMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select HOD *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <button (click)="fetchEmployees()" type="submit" class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block" [disabled]="!filterForm.valid">Filter</button>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ng-container *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'salary', 'company_operation': 'hold_salary' })">
+                                                    <button type="button" (click)="getHoldSalaries({ openmodal : true, page : 1 })" class="btn btn-block btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-pause"></i> Hold List</button>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> -->
+
+                        <!-- <div class="col-12">
+                            <hr>
+                        </div> -->
+                        <div class="col-12">
+                            <form [formGroup]="generateReportForm">
+                                <div class="row">
+                                    <div class="col-sm-2"></div>
+
+                                    <div class="col-sm-5">
+                                        <ngx-select-dropdown formControlName="template" [options]="[{_id:'master-template', template_name: 'Master Template'}].concat(sheetTemplateMaster)" class="form-control p-1" [config]="{search:true, placeholder: 'Select Template *', displayKey : 'template_name', 'height': '250px'}"></ngx-select-dropdown>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <button [disabled]="(rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)) || !generateReportForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2" (click)="generateReport()">Run Payroll</button>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" (click)="initTemplateCreate()" class="btn btn-block btn-primary pd-y-7 pd-x-12 bd-0 tx-uppercase tx-20 tx-spacing-2"><i class="fa fa-cog"></i></button>
+                                    </div>
+
+                                    <div class="col-sm-2"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body px-0 bd-t-0 rounded-bottom">
+                    <app-custom-tableoption (onFilterChanged)="fetchEmployees({page: 1, options: $event})"></app-custom-tableoption>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead class="thead-colored thead-info">
+                                <tr>
+                                    <th class="text-center">
+                                        <input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="employees.length > 0">
+                                    </th>
+                                    <!-- <th>Corporate ID</th> -->
+                                    <th>Emp ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email ID</th>
+                                    <!-- <th>Joining Date</th> -->
+                                    <th>Register Type</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let employee of employees; let i = index">
+                                    <td class="text-center">
+                                        <input type="checkbox" [attr.checked]="employee.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="employee._id" (click)="rowCheckBoxChecked($event, employee)">
+                                    </td>
+                                    <!-- <td>{{ employee.corporate_id }}</td> -->
+                                    <td>{{ employee.emp_id }}</td>
+                                    <td>{{ employee.emp_first_name }} {{ employee.emp_last_name }}</td>
+                                    <td>{{ employee.email_id }}</td>
+                                    <!-- <td>{{ employee?.employee_details?.employment_hr_details?.date_of_join ? (employee?.employee_details?.employment_hr_details?.date_of_join | date) : "-" }}</td> -->
+                                    <td class="text-uppercase">{{ employee?.employee_details?.template_data?.attendance_temp_data?.register_type ?? "-" }}</td>
+                                    <td class="text-center">
+                                        <ng-container *ngIf="Global.checkCompanyModulePermission({ 'company_module': 'salary', 'company_operation': 'hold_salary' })">
+                                            <ng-container *ngIf="!employee?.hold_salary_emps; else editSalaryHoldBlock">
+                                                <button (click)="initHoldSalary(employee)" class="btn btn-dark btn-sm text-uppercase" data-toggle="tooltip" data-placement="top" title="Hold Salary">
+                                                    <i class="fa fa-pause"></i>
+                                                </button>
+                                            </ng-container>
+
+                                            <ng-template #editSalaryHoldBlock>
+                                                <button (click)="initHoldSalary(employee)" class="btn btn-dark btn-sm text-uppercase" data-toggle="tooltip" data-placement="top" title="Edit Hold Salary">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                            </ng-template>
+
+                                            <!-- <ng-container *ngIf="!employee?.hold_salary_emps; else revokeSalaryHoldBlock">
+                                                <button (click)="initHoldSalary(employee)" class="btn btn-dark btn-sm text-uppercase"><i class="fa fa-pause"></i> Hold Salary</button>
+                                            </ng-container>
+                                            <ng-template #revokeSalaryHoldBlock>
+                                                <button (click)="revokeHoldSalary(employee?.hold_salary_emps)" class="btn btn-dark btn-sm text-uppercase"><i class="fa fa-play"></i> Revoke Hold Salary</button>
+                                            </ng-template> -->
+                                        </ng-container>
+                                    </td>
+                                </tr>
+
+                                <tr *ngIf="employees.length == 0">
+                                    <td class="text-center" colspan="100%">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <app-custom-pagination [rows]="employees" [paginationOptions]="paginationOptions" (onPageClicked)="fetchEmployees({'page' : $event})"></app-custom-pagination>
+                </div>
+            </div>
+
+            <div class="card bd-0" *ngIf="empReportGenerated == true">
+                <div class="card-header">
+                    <h4 class="m-0 text-uppercase">
+                        Earning Sheet <small>{{ getIndexValue(filterForm.value.month, 'description') }}, {{ getIndexValue(filterForm.value.year, 'description') }}</small>
+
+                        <!-- <button type="button" (click)="initSheetTemplateSelection()" class="mx-1 btn btn-sm btn-primary float-right"><i class="fa fa-code"></i> Select Template</button> -->
+                        <!-- <button type="button" (click)="initTemplateCreate()" class="mx-1 btn btn-sm btn-primary float-right"><i class="fa fa-cog"></i> Remember Settings</button> -->
+                        <button type="button" (click)="resetSalarySheet()" class="mx-1 btn btn-sm btn-danger float-right"><i class="fa fa-times"></i> Cancel</button>
+                    </h4>
+                </div>
+
+                <div class="card-body p-0 mt-4">
+                    <form [formGroup]="templateSelectionForm">
+                        <div class="row mb-4" id="template-selection-form" style="display: none;">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-6">
+                                <ngx-select-dropdown formControlName="template" [options]="sheetTemplateMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Template *', displayKey : 'template_name'}"></ngx-select-dropdown>
+                            </div>
+                            <div class="col-md-2">
+                                <button (click)="generateTemplate_v2()" type="submit" class="btn btn-primary btn-block" [disabled]="!this.templateSelectionForm.valid"><i class="fa fa-search"></i> View</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button (click)="cancelSheetTemplateSelection()" type="button" class="btn btn-danger btn-block"><i class="fa fa-times"></i> Reset</button>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered cust-table table-striped" id="salarysheet-report-table" #salarysheetreporttable>
+                            <thead>
+                                <tr class="title-sec">
+                                    <!-- <th colspan="3" class="fixed-title column-title">User Details </th> -->
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <th class="column-title"
+                                            [ngStyle]="{ 'background-color': row.bg_color, 'color': row.text_color }"
+                                            [attr.colspan]="getSheetTemplateMasterHeadColspan(row.main_slug)">
+                                                {{ row.main_title }}
+                                        </th>
+                                    </ng-container>
+                                </tr>
+
+                                <tr class="title-sec">
+                                    <!-- <th colspan="3" class="fixed-title column-title">Personal Details</th> -->
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <ng-container [ngSwitch]="module.module_slug">
+                                                <ng-container *ngSwitchCase="'master_breakup'">
+                                                    <th *ngIf="this.empReportTempData.master_head_includes.length > 0"
+                                                        class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+
+                                                <ng-container *ngSwitchCase="'breakup'">
+                                                    <th *ngIf="this.empReportTempData.head_includes.length > 0"
+                                                        class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+
+                                                <ng-container *ngSwitchCase="'extraearnings'">
+                                                    <th *ngIf="this.empReportTempData.extra_earning_data.length > 0"
+                                                        class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+
+                                                <ng-container *ngSwitchDefault>
+                                                    <th class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+
+                                <tr class="headings">
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <ng-container *ngFor="let field of module.fields">
+                                                <ng-container [ngSwitch]="field.slug">
+                                                    <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.master_head_includes">
+                                                            <th>
+                                                                <span data-toggle="tooltip" data-placement="top" title="{{ headInclude.head_title }}">{{ headInclude.head_abbreviation }}</span>
+                                                            </th>
+                                                        </ng-container>
+                                                        <!-- <ng-container *ngIf="empReportTempData.head_includes.length == 0">
+                                                            <th>-</th>
+                                                        </ng-container> -->
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.head_includes">
+                                                            <th>
+                                                                <span data-toggle="tooltip" data-placement="top" title="{{ headInclude.head_title }}">{{ headInclude.head_abbreviation }}</span>
+                                                            </th>                                                        </ng-container>
+                                                        <!-- <ng-container *ngIf="empReportTempData.head_includes.length == 0">
+                                                            <th>-</th>
+                                                        </ng-container> -->
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'extra-earnings'">
+                                                        <ng-container *ngFor="let extraEarning of empReportTempData.extra_earning_data">
+                                                            <th>{{ extraEarning.earning_abbreviation }}</th>
+                                                        </ng-container>
+                                                        <!-- <ng-container *ngIf="empReportTempData.extra_earning_data.length == 0">
+                                                            <th>-</th>
+                                                        </ng-container> -->
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <th>
+                                                            <ng-container *ngIf="field.abbreviation">
+                                                                <span data-toggle="tooltip" data-placement="top" title="{{ field.title }}">
+                                                                    {{field.abbreviation}}
+                                                                </span>
+                                                            </ng-container>
+
+                                                            <ng-container *ngIf="!field.abbreviation">
+                                                                {{field.title}}
+                                                            </ng-container>
+                                                        </th>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let report of empReportData; let i = index">
+                                    <!-- <td class="fixed-ls-1">{{ (i+1) }}</td> -->
+                                    <!-- <td class="fixed-ls-2">{{ report?.emp_data?.emp_first_name }} {{ report?.emp_data?.emp_last_name }}</td> -->
+                                    <!-- <td class="fixed-ls-3">{{ report?.emp_data?.emp_id ?? "-" }}</td> -->
+
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <ng-container *ngFor="let field of module.fields">
+                                                <ng-container [ngSwitch]="field.slug">
+                                                    <ng-container *ngSwitchCase="'sl_no'">
+                                                            <td>{{ (i+1) }}</td>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.head_includes">
+                                                            <td>{{ getHeadValue(report.heads_rate, headInclude.head_id, 'amount') }}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.head_includes">
+                                                            <td>{{ getHeadValue(report.heads, headInclude.head_id, 'amount') }}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'extra-earnings'">
+                                                        <ng-container *ngFor="let extraEarning of empReportTempData.extra_earning_data">
+                                                            <td>{{ getExtraEarningValue(report.extra_earning_data, extraEarning.earning_abbreviation, 'earning_amount') }}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'sex'">
+                                                        <td class="text-uppercase">{{ getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report) ?? 'N/A' }}</td>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'age'">
+                                                        <td class="text-uppercase">
+                                                            {{ getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report) ? Global.parseToInteger(getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report)) : 'N/A' }}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <td>
+                                                            {{ getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report) ?? 'N/A' }}
+                                                        </td>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+
+                                <tr *ngIf="empReportData.length == 0">
+                                    <td class="text-center" colspan="100%">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <!-- <button (click)="generateReportPdf()" *ngIf="empReportData.length > 0" class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"><i class="fa fa-file-pdf-o"></i> Download PDF</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="settingsTemplateModalOpen" [hidden]="true" data-toggle="modal" data-target="#settingsTemplateModal"></button>
+    <div id="settingsTemplateModal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Create New Template</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form id="settingsTemplateForm" [formGroup]="templateForm">
+                    <div class="modal-body pd-20">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control error" placeholder="Enter Template Name" formControlName="template_name">
+
+                                        <p class="mt-1 text-danger" *ngIf="templateForm.controls.template_name.hasError('required') && ( templateForm.controls.template_name.dirty || templateForm.controls.template_name.touched )">This field is required</p>
+                                    </div>
+                                </div>
+
+                                <ng-container *ngFor="let row of sheetTemplate">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5 class="text-uppercase mg-t-10 text-center">{{row.main_title}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-columns column-count-4 mg-t-10">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <div class="card shadow-base widget-11">
+                                                <table class="table table-bordered table-striped mb-0">
+                                                    <thead>
+                                                        <tr class="bg-dark text-center">
+                                                            <!-- <th class="text-white text-center">
+                                                                <input type="checkbox" [disabled]="(row.fields.length < 1)">
+                                                            </th> -->
+                                                            <th class="text-white" colspan="100%">{{ module.module_title }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let field of module.fields">
+                                                            <td class="text-center">
+                                                                <input type="checkbox" name="fields[{{module.module_slug}}]" id="module-fields" value="{{field.slug}}">
+                                                            </td>
+                                                            <td class="text-uppercase">
+                                                                {{ field.title }}
+                                                                <small *ngIf="field.abbreviation">({{ field.abbreviation }})</small>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr *ngIf="module.fields.length == 0">
+                                                            <td colspan="100%" class="text-center">No fields available</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn text-uppercase btn-primary tx-size-xs" (click)="submitTemplate($event)"><span>Submit</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <button id="salaryHoldModalEmpOpen" [hidden]="true" data-toggle="modal" data-target="#salaryHoldModalEmp"></button>
+    <div id="salaryHoldModalEmp" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+                        Hold List
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body pd-20">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead class="thead-colored thead-info">
+                                        <tr>
+                                            <th class="text-center">
+                                                <input type="checkbox" [value]="salaryHold_rowCheckedAll" (change)="salaryHold_allRowsCheckboxChecked($event)" *ngIf="holdedEmpSalaries.length > 0">
+                                            </th>
+                                            <th>Emp ID</th>
+                                            <th>Full Name</th>
+                                            <!-- <th>Wage Type</th> -->
+                                            <th>Hold Type</th>
+                                            <th>Wage Month</th>
+                                            <th>Wage Year</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let employee of holdedEmpSalaries; let i = index">
+                                            <td class="text-center">
+                                                <input type="checkbox" [attr.checked]="employee.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="employee._id" (click)="salaryHold_rowCheckBoxChecked($event, employee)">
+                                            </td>
+                                            <td>{{ employee.employees.emp_id }}</td>
+                                            <td>{{ employee.employees.emp_first_name }} {{ employee.employees.emp_last_name }}</td>
+                                            <!-- <td class="text-uppercase">{{ employee?.employee_details?.template_data?.attendance_temp_data?.register_type ?? "-" }}</td> -->
+                                            <td class="">
+                                                <ng-container [ngSwitch]="employee?.hold_type">
+                                                    <ng-container *ngSwitchCase="'salary'">Salary</ng-container>
+                                                    <ng-container *ngSwitchCase="'salaryWithCom'">Salary with Compliance</ng-container>
+                                                    <ng-container *ngSwitchDefault>{{ employee?.hold_salary_emp?.hold_type }}</ng-container>
+                                                </ng-container>
+                                            </td>
+                                            <td>{{ employee.wage_month + 1 }}</td>
+                                            <td>{{ employee.wage_year }}</td>
+                                            <td class="text-center">
+                                                <!-- <button (click)="revokeHoldSalary(employee?.hold_salary_emp)" class="btn btn-dark btn-sm text-uppercase"><i class="fa fa-play"></i> Revoke Hold Salary</button> -->
+
+                                                <button (click)="initHoldSalary(employee)" class="btn btn-dark btn-sm text-uppercase" data-toggle="tooltip" data-placement="top" title="Edit Hold Salary">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="holdedEmpSalaries.length == 0">
+                                            <td class="text-center" colspan="100%">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="100%" class="text-left">
+                                                <button class="btn btn-sm btn-dark text-uppercase" (click)="revokeHoldSalary('multiple')">Revoke Hold</button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <app-custom-pagination [rows]="holdedEmpSalaries" [paginationOptions]="holdedSalarypaginationOptions" (onPageClicked)="getHoldSalaries({'page' : $event})"></app-custom-pagination>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="salaryHoldModalOpen" [hidden]="true" data-toggle="modal" data-target="#salaryHoldModal"></button>
+    <div id="salaryHoldModal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Hold Salary <small>{{ this.empSalaryHoldForm.get('emp_details')?.value?.emp_first_name }} {{ this.empSalaryHoldForm.get('emp_details')?.value?.emp_last_name }}</small></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form id="empSalaryHoldForm" [formGroup]="empSalaryHoldForm">
+                    <div class="modal-body pd-20">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Hold Type <span class="text-danger">*</span></label>
+
+                                        <ngx-select-dropdown formControlName="hold_type" [options]="holdTypeMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                                        <p class="mt-1 text-danger" *ngIf="empSalaryHoldForm.controls.hold_type.hasError('required') && ( empSalaryHoldForm.controls.hold_type.dirty || empSalaryHoldForm.controls.hold_type.touched )">This field is required</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+
+                        <ng-container *ngIf="this.empSalaryHoldForm.get('emp_details')?.value?.hold_salary_emps">
+                            <button (click)="revokeHoldSalary(this.empSalaryHoldForm.get('emp_details')?.value?.hold_salary_emps)" type="button" class="btn text-uppercase btn-danger tx-size-xs ml-1">Revoke Hold</button>
+                        </ng-container>
+
+                        <button type="submit" class="btn text-uppercase btn-primary tx-size-xs" (click)="submitEmpSalaryHold($event)"><span>Submit</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

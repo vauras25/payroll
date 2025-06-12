@@ -1,0 +1,54 @@
+<section class="h-bg">
+    <div class="container">
+        <div class="banner-text">
+        <h1>{{testimonialPageData?.page_title}}</h1>
+        <p>{{testimonialPageData?.page_content}}</p>
+    </div>
+
+
+        <div class="main-area plan-area">
+            <div class="container">
+                <div class="p-box contact-box c-wrapper inner-testimonials">
+                    <section class="testimonials-area">
+
+                            <div class="row">
+                              <ng-container *ngFor="let data of testimonialData">
+                                <div class="col-lg-12">
+                                    <div class="client-box">
+                                        <div class="c-content" [innerHTML]="data?.content">
+                                        <!-- Really good. Payroll has completely
+                                        surpassed our expectations. I'd be lost without Payroll. Payroll was worth a fortune to my company. -->
+                                        </div>
+                                        <div class="t-client d-flex align-items-center">
+                                            <img src="assets/img/landing-page/client.png" alt="" />
+                                            <div class="c-text">
+                                                <h5>Daisy Phelps</h5>
+                                                <p>Lorem Ipsum, Designation</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                              </ng-container>
+                            </div>
+                    </section>
+
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+</section>
+
+<section class="social-area">
+  <div class="container">
+      <h3>We are just a text away</h3>
+      <div class="f-social">
+        <ng-container *ngFor="let item of socialLinksData?.social_links">
+          <a *ngIf="item?.link" [href]="item?.link" target="_blank"><i class="bi bi-{{item.slug_name}}"></i></a>
+        </ng-container>
+      </div>
+  </div>
+</section>

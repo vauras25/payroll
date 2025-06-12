@@ -1,0 +1,168 @@
+<div class="mt-3">
+  <div class="table-responsive mt-3">
+    <table class="w-100 c-table">
+      <colgroup span="3"></colgroup>
+
+      <thead>
+        <tr>
+          <th>SL No.</th>
+          <th>Employee ID</th>
+          <th>Employee Name</th>
+          <th>Department</th>
+          <th>Designation</th>
+          <th>Branch</th>
+          <th>Client</th>
+          <th>HOD</th>
+          <th *ngIf="reportListType == 'detailed'" colspan="2">Head</th>
+          <th>Self Assign Rating(%)</th>
+          <th>Level 1 Assign Rating(%)</th>
+          <th>Level 2 Assign Rating(%)</th>
+          <th >Overall Rating(%)</th>
+        </tr>
+        <tr *ngIf="reportListType == 'detailed'">
+          <th colspan="8"></th>
+          <th>Name</th>
+          <th>Value(%)</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let report of employeesListing; let i = index">
+          <td>
+            {{ i + 1 }}
+          </td>
+
+          <td>{{ report?.emp_id }}</td>
+          <td>{{ report?.emp_first_name }} {{ report?.emp_last_name }}</td>
+          <td>{{ report?.department?.department_name || "N/A" }}</td>
+          <td>{{ report?.designation?.designation_name || "N/A" }}</td>
+          <td>{{ report?.branch?.branch_name || "N/A" }}</td>
+          <td>{{ report?.client?.client_name || "N/A" }}</td>
+          <td>
+            {{ report?.hod?.first_name || "N/A" }}
+            {{ report?.hod?.last_name }}
+          </td>
+          <ng-container *ngIf="reportListType == 'detailed'">
+            <td>
+              <tr
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                "
+                class="border-0"
+                *ngFor="let head of getAppraisalheads(report?.appraisals)"
+              >
+                <td class="px-0 py-1">
+                  {{ head?.name | titlecase }}
+                </td>
+              </tr>
+            </td>
+            <td>
+              <tr
+                style="background-color: transparent !important"
+                class="border-0"
+                *ngFor="let head of getAppraisalheads(report?.appraisals)"
+              >
+                <td class="px-0 py-1">
+                  {{ head?.value }}
+                </td>
+              </tr>
+            </td>
+            <td>
+              <tr
+                style="background-color: transparent !important"
+                class="border-0"
+                *ngFor="
+                  let head of getAppraisalheadsAssignValue(
+                    report,
+                    report?.appraisals,
+                    'self_assignee'
+                  )
+                "
+              >
+                <td class="px-0 py-1">
+                  {{ head?.assign_value || 0 }}
+                </td>
+              </tr>
+            </td>
+            <td>
+              <tr
+                style="background-color: transparent !important"
+                class="border-0"
+                *ngFor="
+                  let head of getAppraisalheadsAssignValue(
+                    report,
+                    report?.appraisals,
+                    'lvl_1_assignee'
+                  )
+                "
+              >
+                <td class="px-0 py-1">
+                  {{ head?.assign_value || 0 }}
+                </td>
+              </tr>
+            </td>
+            <td>
+              <tr
+                style="background-color: transparent !important"
+                class="border-0"
+                *ngFor="
+                  let head of getAppraisalheadsAssignValue(
+                    report,
+                    report?.appraisals,
+                    'lvl_2_assignee'
+                  )
+                "
+              >
+                <td class="px-0 py-1">
+                  {{ head?.assign_value || 0 }}
+                </td>
+              </tr>
+            </td>
+          </ng-container>
+          <td *ngIf="reportListType == 'summary'">
+            {{
+              getAppraisalheadsTotalValue(
+                report,
+                report?.appraisals,
+                "self_assignee"
+              )
+            }}
+          </td>
+          <td *ngIf="reportListType == 'summary'">
+            {{
+              getAppraisalheadsTotalValue(
+                report,
+                report?.appraisals,
+                "lvl_1_assignee"
+              )
+            }}
+          </td>
+          <td *ngIf="reportListType == 'summary'">
+            {{
+              getAppraisalheadsTotalValue(
+                report,
+                report?.appraisals,
+                "lvl_2_assignee"
+              )
+            }}
+          </td>
+
+          <td >
+            {{ report?.overallRating }}
+          </td>
+        </tr>
+        <tr *ngIf="employeesListing.length == 0">
+          <td
+            colspan="100%"
+            class="text-center"
+            style="background-color: #f7f7f7"
+          >
+            No records found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

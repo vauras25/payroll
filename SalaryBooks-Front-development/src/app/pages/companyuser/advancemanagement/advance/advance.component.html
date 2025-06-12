@@ -1,0 +1,440 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Advance Management</a>
+            <a class="breadcrumb-item active">Manage</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-cash"></i>
+        <div>
+            <h4>Advance Management</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="advance-submit-section"  *ngIf="
+    Global.checkCompanyModulePermission({
+        company_module: 'advance',
+        company_sub_module: ['apply_advance'],
+        company_sub_operation: ['add','edit'],
+        company_strict:true
+    })
+  ">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">
+                <ng-container *ngIf="!editadvanceDetails">Add Advance</ng-container>
+                <ng-container *ngIf="editadvanceDetails">Edit Advance</ng-container>
+            </h6>
+            <form [formGroup]="advanceForm">
+                <div class="form-layout form-layout-6">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Select Employee&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'emp_id', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="emp_id" [options]="employeeMaster" class="form-control" [config]="{search: true, placeholder: 'Select Employee', searchPlaceholder: 'Search...', height: '200px'}" (searchChange)="empSearch($event)"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.emp_id.hasError('required') && ( advanceForm.controls.emp_id.dirty || advanceForm.controls.emp_id.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Advance Amount&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'advance_amount', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="advance_amount">
+
+                            <p class="error-element" *ngIf="advanceForm.controls.advance_amount.hasError('required') && ( advanceForm.controls.advance_amount.dirty || advanceForm.controls.advance_amount.touched )">This field is required</p>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.advance_amount.hasError('pattern') && ( advanceForm.controls.advance_amount.dirty || advanceForm.controls.advance_amount.touched )">Please enter a valid number</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Recovery From&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'recovery_from', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="recovery_from" [options]="recoveryFromMaster" class="form-control" [config]="{search: false, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.recovery_from.hasError('required') && ( advanceForm.controls.recovery_from.dirty || advanceForm.controls.recovery_from.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Remarks&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'remarks', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" placeholder="" formControlName="remarks"></textarea>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.remarks.hasError('required') && ( advanceForm.controls.remarks.dirty || advanceForm.controls.remarks.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Number of Installments&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'no_of_instalments', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="no_of_instalments">
+
+                            <p class="error-element" *ngIf="advanceForm.controls.no_of_instalments.hasError('required') && ( advanceForm.controls.no_of_instalments.dirty || advanceForm.controls.no_of_instalments.touched )">This field is required</p>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.no_of_instalments.hasError('pattern') && ( advanceForm.controls.no_of_instalments.dirty || advanceForm.controls.no_of_instalments.touched )">Please enter a valid number</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Recovery Frequency&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'recovery_frequency', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="recovery_frequency" [options]="recoveryFrequencyMaster" class="form-control" [config]="{search: false, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.recovery_frequency.hasError('required') && ( advanceForm.controls.recovery_frequency.dirty || advanceForm.controls.recovery_frequency.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Payment start month year
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label><small>Month <span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'payment_start_month', 'required')">*</span></small></label>
+                            <ngx-select-dropdown formControlName="payment_start_month" [options]="monthMaster" class="form-control" [config]="{search: true, placeholder: 'Select Month'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.payment_start_month.hasError('required') && ( advanceForm.controls.payment_start_month.dirty || advanceForm.controls.payment_start_month.touched )">This field is required</p>
+
+                            <br>
+
+                            <label><small>Year <span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'payment_start_year', 'required')">*</span></small></label>
+                            <ngx-select-dropdown formControlName="payment_start_year" [options]="yearMaster" class="form-control" [config]="{search: true, placeholder: 'Select Year'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.payment_start_year.hasError('required') && ( advanceForm.controls.payment_start_year.dirty || advanceForm.controls.payment_start_year.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Booking Date&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'payment_booking_date', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control mt-5" type="date" formControlName="payment_booking_date">
+
+                            <p class="error-element" *ngIf="advanceForm.controls.payment_booking_date.hasError('required') && ( advanceForm.controls.payment_booking_date.dirty || advanceForm.controls.payment_booking_date.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters" *ngIf="editadvanceDetails">
+                        <div class="col-3 col-sm-3">
+                            Outstanding Amount&nbsp;<span class="text-danger" *ngIf="Global.isValidationAvailable(advanceForm, 'advance_outstanding', 'required')">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="advance_outstanding">
+
+                            <p class="error-element" *ngIf="advanceForm.controls.advance_outstanding.hasError('required') && ( advanceForm.controls.advance_outstanding.dirty || advanceForm.controls.advance_outstanding.touched )">This field is required</p>
+
+                            <p class="error-element" *ngIf="advanceForm.controls.advance_outstanding.hasError('pattern') && ( advanceForm.controls.advance_outstanding.dirty || advanceForm.controls.advance_outstanding.touched )">Please enter a valid number</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-12 bg-white" style="border-right: 1px solid #ced4da !important;">
+                            <div class="table-responsive">
+                                <ng-container formArrayName="instalment_history">
+                                    <table class="table table-bordered table-striped text-center" style="border: 1px solid #e9ecef !important;">
+                                        <thead>
+                                            <tr class="bg-info">
+                                                <th colspan="100%" class="text-center text-white">Installment History</th>
+                                            </tr>
+                                            <tr>
+                                                <th>SL</th>
+                                                <th>Month</th>
+                                                <th>Year</th>
+                                                <th>Recovery From</th>
+                                                <th>Advance Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr *ngFor="let item of Global.getFormGroupArray(advanceForm, 'instalment_history'); let i = index" [formGroupName]="i">
+                                                <td class="text-black fw-bold">{{ i+1 }}</td>
+                                                <td>{{ item.get('instalment_month')?.value?.description ?? '-' }}</td>
+                                                <td>{{ item.get('instalment_year')?.value ?? '-' }}</td>
+                                                <td style="min-width: 180px;">
+                                                    <!-- <ng-container *ngIf="item.get('status')!.value?.value == 'pending'">
+                                                        <ngx-select-dropdown formControlName="recovery_from" [options]="recoveryFromMaster" class="form-control px-3" [config]="{search: false, placeholder: 'Select One'}"></ngx-select-dropdown>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item.get('status')!.value?.value == 'complete'">
+                                                        <b>{{ item.get('recovery_from')!.value?.description }}</b>
+                                                    </ng-container> -->
+
+                                                    <b>{{ item.get('recovery_from')!.value?.description }}</b>
+
+
+                                                    <p class="error-element" *ngIf="item.get('recovery_from')!.hasError('required') && ( item.get('recovery_from')!.dirty || item.get('recovery_from')!.touched )">This field is required</p>
+                                                </td>
+                                                <td>
+                                                    <ng-container *ngIf="item.get('status')!.value?.value == 'pending'">
+                                                        <input type="text" class="form-control px-2" placeholder="Enter Advance Amount" formControlName="advance_amount" (keyup)="tableAdvanceAmountChanged(i)">
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="item.get('status')!.value?.value == 'complete'">
+                                                        <b>{{ item.get('advance_amount')!.value }}</b>
+                                                    </ng-container>
+
+                                                    <p class="error-element" *ngIf="item.get('advance_amount')!.hasError('required') && ( item.get('advance_amount')!.dirty || item.get('advance_amount')!.touched )">This field is required</p>
+
+                                                    <p class="error-element" *ngIf="item.get('advance_amount')!.hasError('pattern') && ( item.get('advance_amount')!.dirty || item.get('advance_amount')!.touched )">Enter a valid amount</p>
+                                                </td>
+                                                <td style="min-width: 170px;">
+                                                    {{ item.get('status')?.value?.description ?? '-' }}
+
+                                                    <!-- <ngx-select-dropdown formControlName="status" [options]="statusMaster" class="form-control px-3" [config]="{search: false, placeholder: 'Select Status'}"></ngx-select-dropdown> -->
+
+                                                    <p class="error-element" *ngIf="item.get('status')!.hasError('pattern') && ( item.get('status')!.dirty || item.get('status')!.touched )">Enter a valid amount</p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="Global.getFormGroupArray(advanceForm, 'instalment_history')?.length == 0">
+                                                <td colspan="100%" class="text-center">No records found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12">
+                            <button (click)="cancelEntry()" class="btn btn-danger text-uppercase mx-1" type="button"><span>Cancel</span></button>
+
+                            <ng-container *ngIf="!editadvanceDetails">
+                                <button (click)="create($event)" class="btn btn-info text-uppercase mx-1" type="submit"><span>Create</span></button>
+                            </ng-container>
+                            <ng-container *ngIf="editadvanceDetails">
+                                <button (click)="update($event)" class="btn btn-info text-uppercase mx-1" type="submit"><span>Update</span></button>
+                            </ng-container>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">
+                Advance History
+
+                <button *ngIf=" Global.checkCompanyModulePermission({
+                    company_module: 'advance',
+                    company_sub_module: ['apply_advance'],
+                    company_sub_operation: ['add'],
+                    company_strict:true
+                })
+              " class="btn btn-sm btn-primary float-right" (click)="initDataImport()"><i class="fa fa-file-import"></i>&nbsp;Import Data</button>
+            </h6>
+            <div class="row">
+                <div class="col-md-12">
+                    <app-custom-tableoption
+                    [searchable]="false"
+                    (onFilterChanged)="advancePaginationOptions.limit = +$event?.length ; fetch({ page:advancePaginationOptions.page})"
+                  ></app-custom-tableoption>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" style="border: 1px solid #dee2e6 !important;">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th class="text-center">Action</th>
+                                    <th>Employee ID</th>
+                                    <th>Recovery Frequency</th>
+                                    <th>Advance Amount</th>
+                                    <th>Installments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of advanceData; let i = index">
+                                    <td>{{ (i + 1) }}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-info mx-1" (click)="viewDetails(item)"><i class="fa fa-eye"></i></button>
+                                        <button  *ngIf="
+                                        Global.checkCompanyModulePermission({
+                                            company_module: 'advance',
+                                            company_sub_module: ['apply_advance'],
+                                            company_sub_operation: ['edit'],
+                                            company_strict:true
+                                        }
+                                            )
+                                      " class="btn btn-sm btn-primary mx-1" (click)="getEdit(item)"><i class="fa fa-edit"></i></button>
+                                    </td>
+                                    <td>{{ item.emp_id }}</td>
+                                    <td class="text-capitalize">{{ item.recovery_frequency }}</td>
+                                    <td>{{ item.advance_amount }}</td>
+                                    <td>{{ item.no_of_instalments }}</td>
+                                </tr>
+
+                                <tr *ngIf="advanceData.length == 0">
+                                    <td class="text-center" colspan="100%">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <app-custom-pagination [rows]="advanceData" [paginationOptions]="advancePaginationOptions" (onPageClicked)="fetch({'page' : $event})"></app-custom-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="advanceDetailsModalOpen" [hidden]="true" data-toggle="modal" data-target="#advanceDetailsModal"></button>
+    <div id="advanceDetailsModal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Advance Details</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-striped" style="border: 1px solid #dee2e6;">
+                                <tbody>
+                                    <tr>
+                                        <td>Employee ID</td>
+                                        <th>{{ advanceDetails?.emp_id ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Advance Amount</td>
+                                        <th>{{ advanceDetails?.advance_amount ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Recovery From</td>
+                                        <th>{{ advanceDetails?.recovery_from ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Remarks</td>
+                                        <th>{{ advanceDetails?.remarks ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Number of Installment</td>
+                                        <th>{{ advanceDetails?.no_of_instalments ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Recovery Frequency</td>
+                                        <th>{{ advanceDetails?.recovery_frequency ?? 'N/A' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Payment Start Month Year</td>
+                                        <th>{{ getSelectedMonth('index', advanceDetails?.payment_start_month)?.description ?? 'MM' }}, {{ advanceDetails?.payment_start_year ?? 'YYYY' }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Booking Date</td>
+                                        <th>{{ advanceDetails?.payment_booking_date ?? 'N/A' }}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-bordered table-striped mb-0 text-center" style="border: 1px solid #dee2e6;">
+                                <thead>
+                                    <tr class="bg-info">
+                                        <th colspan="100%" class="text-center text-white">Installment History</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Month</th>
+                                        <th>Year</th>
+                                        <th>Recovery From</th>
+                                        <th>Advance Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of (advanceDetails?.instalment_history ?? []); let i = index">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ getSelectedMonth('index', item.instalment_month)?.description ?? '-' }}</td>
+                                        <td>{{ item.instalment_year }}</td>
+                                        <td class="text-capitalize">{{ item.recovery_from }}</td>
+                                        <td>{{ item.advance_amount }}</td>
+                                        <td>
+                                            <ng-container [ngSwitch]="item.status">
+                                                <ng-container *ngSwitchCase="'pending'">
+                                                    <span class="badge badge-warning">Pending</span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'complete'">
+                                                    <span class="badge badge-success">Completed</span>
+                                                </ng-container>
+                                            </ng-container>
+                                        </td>
+                                    </tr>
+
+                                    <tr *ngIf="(advanceDetails?.instalment_history ?? []).length == 0">
+                                        <td colspan="100%" class="text-center">No records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="advanceImportModalOpen" [hidden]="true" data-toggle="modal" data-target="#advanceImportModal"></button>
+    <div id="advanceImportModal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Import Advance Data</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="advanceImportForm">
+                    <div class="modal-body pd-20">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label>Select File</label>
+                                <input type="file" class="form-control" formControlName="file" accept=".csv" (change)="onImportFileChanged($event, advanceImportForm, 'file', 'file_source')">
+
+                                <p class="mt-1 text-danger" *ngIf="advanceImportForm.controls.file.hasError('required') && ( advanceImportForm.controls.file.dirty || advanceImportForm.controls.file.touched )">This field is required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button (click)="getSampleImportCsv()" type="button" class="btn btn-info tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Sample CSV</span>
+                        </button>
+
+                        <button [disabled]="!advanceImportForm.valid" (click)="importData($event)" type="button" class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Import</span>
+                        </button>
+
+                        <button type="button" class="btn btn-secondary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </form>                
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+
+<ngx-spinner  type="ball-scale-multiple"></ngx-spinner>

@@ -1,0 +1,204 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Company Rules</a>
+            <!-- <a class="breadcrumb-item active">Bonus Slip Template</a> -->
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Bonus Slip Template</h4>
+            <p class="mg-b-0">Customize Bonus Slip</p>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="rule-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define Bonus Slip Template
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Bonus Slip Template</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="bonusSlipForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(bonusSlipForm, 'template_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="template_name" type="text">
+
+                            <p class="error-element" *ngIf="bonusSlipForm.controls.template_name.hasError('required') && ( bonusSlipForm.controls.template_name.dirty || bonusSlipForm.controls.template_name.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Logo&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(bonusSlipForm, 'bonus_temp_company_logo', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="bonus_temp_company_logo" type="file" accept="image/*" (change)="onFileChanged($event, bonusSlipForm, 'bonus_temp_company_logo', 'bonus_temp_company_logo_file')">
+
+                            <p class="error-element" *ngIf="bonusSlipForm.controls.bonus_temp_company_logo.hasError('required') && ( bonusSlipForm.controls.bonus_temp_company_logo.dirty || bonusSlipForm.controls.bonus_temp_company_logo.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Company Name <br> Address <br> Phone No&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(bonusSlipForm, 'company_info', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="company_info" rows="3" cols="100%"></textarea>
+
+                            <p class="error-element" *ngIf="bonusSlipForm.controls.company_info.hasError('required') && ( bonusSlipForm.controls.company_info.dirty || bonusSlipForm.controls.company_info.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="employeeDetailsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Employee's Details
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of employeeDetailsMaster">
+                                <label class="ckbox mb-0">
+                              <input type="checkbox" name="employee_details[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="bonusDetailsMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Bonus Details
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of bonusDetailsMaster">
+                                <label class="ckbox mb-0">
+                              <input type="checkbox" name="bonus_details[]" value="{{item.value}}">
+                              <span>{{ item.description }}</span>
+                            </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!-- <ng-container *ngIf="otherPaymentMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Other Payments
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of otherPaymentMaster">
+                                <label class="ckbox mb-0">
+                            <input type="checkbox" name="other_payment[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="otherDeductionMaster.length > 0">
+                        <div class="row no-gutters" style="border-right: 1px solid #ced4da;">
+                            <div class="col-12 col-sm-12">
+                                Other Deductions
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3" style="background:#fff;" *ngFor="let item of otherDeductionMaster">
+                                <label class="ckbox mb-0">
+                            <input type="checkbox" name="other_deduction[]" value="{{item.value}}">
+                            <span>{{ item.description }}</span>
+                          </label>
+                            </div>
+                        </div>
+                    </ng-container> -->
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Signature Message Box&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(bonusSlipForm, 'signature_message', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <textarea class="form-control" formControlName="signature_message" rows="3" cols="100%"></textarea>
+
+                            <p class="error-element" *ngIf="bonusSlipForm.controls.signature_message.hasError('required') && ( bonusSlipForm.controls.signature_message.dirty || bonusSlipForm.controls.signature_message.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="bonusSlipForm.controls.publish_status.hasError('required') && (bonusSlipForm.controls.publish_status.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info" (click)="create($event)" *ngIf="editActionId == ''; else editButtonSection"><span>Save Template</span></button>
+                        </div>
+
+                        <ng-template #editButtonSection>
+                            <button type="button" (click)="cancelEntry()" class="btn btn-danger mg-r-5">
+                              <span>Cancel</span>
+                          </button>
+                            <button type="submit" (click)="update($event)" class="btn btn-info">
+                              <span>Update Template</span>
+                          </button>
+                        </ng-template>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-5">Bonus Slip Template</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+                            <th class="wd-25p text-center">Publish</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Template Name</th>
+                            <th class="wd-15p">Company Logo</th>
+                            <th class="wd-15p">Company Info</th>
+                            <th class="wd-15p">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

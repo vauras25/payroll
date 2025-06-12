@@ -1,0 +1,48 @@
+<div class="ht-60 d-flex align-items-center justify-content-between custom-pagination">
+    <!-- <div>
+        <span class="pr-2"> Items per page </span>
+        <select [value]="paginationOptions.limit" (change)="onPerPageChange.emit(+$event.target.value)">
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+            <option [value]="75">75</option>
+            <option [value]="100">100</option>
+        </select>
+        <span class="ml-3">
+            {{(rows.length > 0) ? paginationOptions.pagingCounter : 0}} to {{ (rows.length > 0) ? paginationOptions.pagingCounter + (rows.length - 1) : 0}} of {{paginationOptions.totalDocs}} records
+        </span>
+    </div> -->
+    <div>Showing {{(rows.length > 0) ? paginationOptions.pagingCounter : 0}} to {{ (rows.length > 0) ? paginationOptions.pagingCounter + (rows.length - 1) : 0}} of {{paginationOptions.totalDocs}} records</div>
+
+    <ul class="pagination pagination-basic mg-b-0">
+        <li class="page-item" [class.disabled]="paginationOptions.totalPages <= 1 || paginationOptions.page == 1">
+            <button class="page-link" (click)="this.onPageClicked.emit(1)">First</button>
+        </li>
+        <li class="page-item" [class.disabled]="!paginationOptions.hasPrevPage">
+            <button class="page-link" (click)="this.onPageClicked.emit(paginationOptions.prevPage)">Previous</button>
+        </li>
+
+        <!-- <ng-container *ngFor="let item of Global.createArrayRange(paginationOptions.totalPages); let currentElementIndex = index">
+            <li class="page-item" [class.active]="(currentElementIndex + 1) == paginationOptions.page">
+                <ng-container *ngIf="(currentElementIndex + 1) == paginationOptions.page">
+                    <button class="page-link">{{ currentElementIndex + 1 }}</button>
+                </ng-container>
+
+                <ng-container *ngIf="(currentElementIndex + 1) != paginationOptions.page">
+                    <button class="page-link" (click)="this.onPageClicked.emit(currentElementIndex + 1)">{{ currentElementIndex + 1 }}</button>
+                </ng-container>                
+            </li>
+        </ng-container> -->
+
+        <li class="page-item active">
+            <button class="page-link">{{paginationOptions.page}}</button>
+        </li>
+
+        <li class="page-item" [class.disabled]="!paginationOptions.hasNextPage">
+            <button class="page-link" (click)="this.onPageClicked.emit(paginationOptions.nextPage)">Next</button>
+        </li>
+        <li class="page-item" [class.disabled]="paginationOptions.totalPages <= 1 || paginationOptions.page == paginationOptions.totalPages">
+            <button class="page-link" (click)="this.onPageClicked.emit(paginationOptions.totalPages)">Last</button>
+        </li>
+    </ul>
+</div>

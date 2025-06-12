@@ -1,0 +1,131 @@
+<div class="card-body px-0 bd-t-0 rounded-bottom" style="text-align: right;">
+   <button
+   type="button"
+   [disabled]="!anyRowsChecked()"
+   class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+   (click)="exportExcel();"
+  
+ >
+   <span
+     ><i style="font-size: 12px" class="mr-1 fa fa-file"></i>
+     EXPORT</span
+   >
+   
+ </button>
+
+   <button
+   type="button"
+   class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+   (click)="cancellRivReport()"
+ >
+   <span
+     ><i style="font-size: 12px" class="mr-1 fa fa-file"></i>
+     CANCEL</span
+   >
+   
+ </button>
+</div>
+<div class="table-responsive mt-3">
+   <div class="table-responsive mt-3">
+      <table class="table nowrap wd-100p employee-table">
+         <thead>
+            
+            <tr >
+               <th class="text-center">
+                  <label class="d-flex align-items-center mb-0" for="select-all">
+                     <input
+                       class="mb-0 mr-1"
+                       id="select-all"
+                       [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="employees.length > 0"
+                       type="checkbox"
+                     />
+                     SL No.
+                   </label>  
+              </th>
+               <th>Emp Id</th>
+               <th>Name</th>
+               <th>Rev No</th>
+               <th>Date</th>
+               <th>Prev Gross</th>
+               <th>Prev Sal Template</th>
+               <th>Rev Gross</th>
+               <th>Rev Sal Template</th>
+               <th>Revised BY</th>
+
+            </tr>
+         </thead>
+         <tbody>
+            <ng-container *ngFor="let employee of employees;let i=index">
+               <tr *ngFor="let log of employee?.revision_log;let j=index">
+              
+                  <td class="text-center">
+                    
+                     <label
+                     class="d-flex align-items-center"
+                     [for]="'checkrow-' + (j + 1+i)"
+                     >
+                     <input
+                        type="checkbox"
+                        class="mr-2"
+                        [attr.checked]="employee?.checked == true ? 'checked' : null"
+                        id="checkrow-{{ j + 1+i }}"
+                        [attr.data-checkbox-id]="employee?._id"
+                        (click)="rowCheckBoxChecked($event, employee)"
+                     />
+                     {{
+                        Global.getTableSerialNumber(
+                           i,
+                           paginationOptions.limit,
+                           paginationOptions.page
+                        )
+                     }}
+                   
+                     </label>
+                 </td>
+                  <td >{{employee?.emp_id}}</td>
+                  <td >{{employee?.emp_first_name}} {{employee?.emp_last_name}}</td>
+                  <td >{{log?.revision_data.revison_no}}</td>
+                  <td >{{(log?.revision_data?.revision_year + '-' + log?.revision_data?.revision_month + '-01')  | date:'MMM - YYYY'}}</td>
+                  <td >{{log?.prev_gross_salary}}</td>
+                  <td >
+                     <a href="javascript:;" (click)="viewSalaryTemplate(log?.prev_template_data?.salary_temp_data)" class="btn btn-info btn-icon mg-r-5" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                        <div >
+                            <i class="fa fa-eye"></i>
+                        </div>
+                    </a>    
+                     
+                     {{log?.prev_template_data?.salary_temp_data?.template_name}}</td>
+                  <td >{{log?.gross_salary}}</td>
+                  <td >
+                     <a href="javascript:;" (click)="viewSalaryTemplate(log?.template_data?.salary_temp_data)" class="btn btn-info btn-icon mg-r-5" data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                        <div >
+                            <i class="fa fa-eye"></i>
+                        </div>
+                    </a>  
+                     
+                     {{log?.template_data?.salary_temp_data?.template_name}}</td>
+                  <td ></td>
+
+               
+               
+            </tr>
+           
+            
+            </ng-container>
+            <tr>
+               <td colspan="10" class="text-center" *ngIf="employees.length<=0">
+                  No Record(s) Found
+               </td>
+            </tr>
+         </tbody>
+      </table>   
+   </div>   
+   
+ </div>
+ <app-custom-pagination [rows]="employees"
+ [paginationOptions]="paginationOptions"
+ (onPageClicked)="fetchEmployees({'page' : $event})"></app-custom-pagination>
+
+ <companyuser-app-salary-template-details-modal
+ [salaryTempateDetails]="salaryTempateDetails"
+></companyuser-app-salary-template-details-modal>

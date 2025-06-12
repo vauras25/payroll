@@ -1,0 +1,209 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Government Rules</a>
+            <a class="breadcrumb-item active">ESIC Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-card"></i>
+        <div>
+            <h4>ESIC Rule</h4>
+            <p class="mg-b-0">Create, define ESIC rule</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="esic-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Define ESIC Rule</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update ESIC Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="esicRuleForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Circular No&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="circular_no">
+                            <p class="error-element" *ngIf="esicRuleForm.controls.circular_no.hasError('required') && (esicRuleForm.controls.circular_no.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Effective From&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <dp-date-picker [config]="{'disableKeypress': true, 'format': 'MM/DD/YYYY'}" formControlName="effective_date" theme="dp-material" attachTo=".mat-input-wrapper"></dp-date-picker>
+                            <p class="error-element" *ngIf="esicRuleForm.controls.effective_date.hasError('required') && (esicRuleForm.controls.effective_date.dirty)">This field is required</p>
+
+                            <!-- <input class="form-control fc-datepicker" type="text" formControlName="effective_date"> -->
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Employer Contribution (%)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="employer_contribution">
+                            <p class="error-element" *ngIf="esicRuleForm.controls.employer_contribution.hasError('required') && (esicRuleForm.controls.employer_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="esicRuleForm.controls.employer_contribution.hasError('pattern') && (esicRuleForm.controls.employer_contribution.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Wage Ceiling (Rs.)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="wage_ceiling">
+                            <p class="error-element" *ngIf="esicRuleForm.controls.wage_ceiling.hasError('required') && (esicRuleForm.controls.wage_ceiling.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="esicRuleForm.controls.wage_ceiling.hasError('pattern') && (esicRuleForm.controls.wage_ceiling.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Employee Contribution (%)&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="employee_contribution">
+                            <p class="error-element" *ngIf="esicRuleForm.controls.employee_contribution.hasError('required') && (esicRuleForm.controls.employee_contribution.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="esicRuleForm.controls.employee_contribution.hasError('pattern') && (esicRuleForm.controls.employee_contribution.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Round Off&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label class="rdiobox">
+                                <input formControlName="round_off" type="radio" value="up">
+                                <span>Round Up</span>
+                            </label>
+                            <label class="rdiobox">
+                                <input formControlName="round_off" type="radio" value="off">
+                                <span>Round Off</span>
+                            </label>
+                            <label class="rdiobox">
+                                <input formControlName="round_off" type="radio" value="down">
+                                <span>Round Down</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Contribution Period A&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label><small>From</small></label>
+                            <ngx-select-dropdown formControlName="contribution_period_a_from" [options]="monthMaster" class="form-control" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                            <br>
+
+                            <label><small>To</small></label>
+                            <ngx-select-dropdown formControlName="contribution_period_a_to" [options]="monthMaster" class="form-control" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Contribution Period B&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label><small>From</small></label>
+                            <ngx-select-dropdown formControlName="contribution_period_b_from" [options]="monthMaster" class="form-control" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                            <br>
+
+                            <label><small>To</small></label>
+                            <ngx-select-dropdown formControlName="contribution_period_b_to" [options]="monthMaster" class="form-control" [config]="{search: false, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!esicRuleForm.valid" (click)="create($event)" type="submit" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>SAVE</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>CANCEL</span>
+                                </button>
+                                <button type="submit" [disabled]="!esicRuleForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>UPDATE RULE</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">View updates, manage ESIC rules</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Action</th>
+                            <th class="">Date</th>
+                            <th class="">Govt Doc No</th>
+                            <th class="">Wef</th>
+                            <th class="">ER%</th>
+                            <th class="">EE%</th>
+                            <th class="">Wage Ceiling</th>
+                            <th class="">ContrI Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Govt Doc No</th>
+                                <th class="">Wef</th>
+                                <th class="">ER%</th>
+                                <th class="">EE%</th>
+                                <th class="">Wage Ceiling</th>
+                                <th class="">ContrI Period</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-5">
+    <div class="row mt-1">
+      <span class="text-dark col-5">Location Name: </span>
+      <span class="col-7">{{location?.location || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-5">Sub Details: </span>
+      <span class="col-7">{{location?.address || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-5">Latitude: </span>
+      <span class="col-7">{{location?.latitude || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-5">Longitude: </span>
+      <span class="col-7">{{location?.longitude || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-5">Date and Time: </span>
+      <span class="col-7">{{timeNow | date:"dd MMM yyyy HH:mm:ss"}}</span>
+    </div>
+ 
+  </div>
+  <div class="col-7">
+    <!-- {{}}
+    {{ }} -->
+    <agm-map  [latitude]="location?.latitude" [longitude]="location?.longitude" [zoom]="13">
+      <agm-marker [latitude]="location?.preLat" [longitude]="location?.preLng" ></agm-marker>
+      <agm-marker [style]="{width:'10px '}" [label]="'You'" [latitude]="location?.latitude" [longitude]="location?.longitude"></agm-marker>
+       <agm-circle [latitude]="+location?.preLat"  [longitude]="+location?.preLng"
+      [radius]="location?.radius"></agm-circle>
+    </agm-map>
+  </div>
+</div>

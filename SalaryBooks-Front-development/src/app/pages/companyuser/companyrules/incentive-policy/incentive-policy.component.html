@@ -1,0 +1,279 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">Incentive Templates</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>Incentive Templates</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div *ngIf="Global.checkCompanyModulePermission({
+        company_module:'company_rules_1',
+        company_sub_module: 'incentive_policy',
+        company_sub_operation: ['add', 'edit'],
+        company_strict: true
+    })" class="br-pagebody pd-x-20 pd-sm-x-30" id="template-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define Incentive Template
+                <button (click)="openTemplateLibrary()" class="btn btn-primary btn-sm float-right"><i class="fa fa-book"></i> Template Library</button>
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update Incentive Template</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="incentiveTemplateForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="template_name">
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.template_name.hasError('required') && (incentiveTemplateForm.controls.template_name.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Min Hold&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="min_hold">
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.min_hold.hasError('required') && (incentiveTemplateForm.controls.min_hold.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.min_hold.hasError('pattern') && (incentiveTemplateForm.controls.min_hold.dirty)">The value should be numeric</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Max Hold&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="number" formControlName="max_hold">
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.max_hold.hasError('required') && (incentiveTemplateForm.controls.max_hold.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.max_hold.hasError('pattern') && (incentiveTemplateForm.controls.max_hold.dirty)">The value should be numeric</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Settlement Frequency&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="settlement_frequency" [options]="settlementFrequencyMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.settlement_frequency.hasError('required') && (incentiveTemplateForm.controls.settlement_frequency.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            TDS Applied
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="template-tds-apply">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            ESIC Applied
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="template-esic-apply">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            PF Applied
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="template-pf-apply">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            PT Applied
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="template-pt-apply">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            <!-- Eligble Disburse -->
+                            Eligible Advance Auto Disburse
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <div class="br-toggle br-toggle-rounded br-toggle-primary on" id="template-eligble-disburse">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst">
+                        </div>
+
+                        <!-- <div class="col-3 col-sm-3 sameasfirst">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="incentiveTemplateForm.controls.publish_status.hasError('required') && (incentiveTemplateForm.controls.publish_status.dirty || incentiveTemplateForm.controls.publish_status.touched )">This field is required</p>
+                        </div> -->
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button class="btn btn-info" [disabled]="!incentiveTemplateForm.valid" (click)="create($event)" type="submit" *ngIf="editActionId == '' && Global.checkCompanyModulePermission({
+                                company_module:'company_rules_1',
+                                company_sub_module: 'incentive_policy',
+                                company_sub_operation: ['add'],
+                                company_strict: true
+                            });">
+                                <span>Save</span>
+                            </button>
+
+                            <div *ngIf="editActionId && Global.checkCompanyModulePermission({
+                                company_module:'company_rules_1',
+                                company_sub_module: 'incentive_policy',
+                                company_sub_operation: ['edit'],
+                                company_strict: true
+                            })">
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel</span>
+                                </button>
+                                <button type="submit" [disabled]="!incentiveTemplateForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Template</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">Incentive Templates</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Status</th>
+                            <th class="">Action</th>
+                            <th class="">Template</th>
+                            <th class="">Auto Disburse</th>
+                            <th class="">Min Hold</th>
+                            <th class="">Max Hold</th>
+                            <th class="">Frequency</th>
+                            <th class="">ESIC</th>
+                            <th class="">PF</th>
+                            <th class="">PT</th>
+                            <th class="">TDS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+    <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="">
+                        <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                            <thead>
+                                <th class="">SL No</th>
+                                <th class="">Time</th>
+                                <th class="">Updated By</th>
+                                <th class="">Template</th>
+                                <th class="">Auto Disburse</th>
+                                <th class="">Min Hold</th>
+                                <th class="">Max Hold</th>
+                                <th class="">Frequency</th>
+                                <th class="">ESI</th>
+                                <th class="">PF</th>
+                                <th class="">PT</th>
+                                <th class="">TDS</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+    <div id="librarymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-header pd-x-20">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="table-responsive">
+                        <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                            <thead>
+                                <tr>
+                                    <th class="">SL No</th>
+                                    <th class="">Action</th>
+                                    <th class="">Template</th>
+                                    <th class="">Auto Disburse</th>
+                                    <th class="">Min Hold</th>
+                                    <th class="">Max Hold</th>
+                                    <th class="">Frequency</th>
+                                    <th class="">ESIC</th>
+                                    <th class="">PF</th>
+                                    <th class="">PT</th>
+                                    <th class="">TDS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,12 @@
+.template-table{
+  border: 1px solid #010001;
+}
+
+.template-table thead tr{
+  background-color: #35353588;
+}
+.template-table thead tr th{
+  color: #fff;
+  background-color: #4d4d4d88;
+  border-bottom: 1px solid #010001;
+}

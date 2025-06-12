@@ -1,0 +1,235 @@
+<p>audit-variance-report works!</p>
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Variance Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Variance Report</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        (onFiltered)="
+        employeeListFilter = $event;
+        fetchVarinaceReport();
+      "
+    >
+      >
+      </companyuser-app-table-filter>
+
+      <div class="mt-3">
+        <div class="mb-3 text-right">
+          <button
+            [disabled]="!anyRowsChecked()"
+            class="btn btn-info mt-3"
+            (click)="downloadExcelReport($event)"
+          >
+            Download Report
+          </button>
+        </div>
+        <div class="table-responsive mt-3">
+          <app-custom-tableoption
+          [searchable]="true"
+          (onFilterChanged)="reportPaginationOptions.limit = +$event?.length ;reportTableFilterOptions.searchkey = $event.searchkey; fetchVarinaceReport()"
+        ></app-custom-tableoption>
+          <table class="w-100 c-table">
+            <colgroup span="3"></colgroup>
+            <thead>
+              <tr>
+                <th>
+                  <label for="allCheck">
+                    <input
+                    id="allCheck"
+                    name="allCheck"
+                    type="checkbox"
+                    [value]="rowCheckedAll"
+                    (change)="allRowsCheckboxChecked($event)"
+                  />
+                  SL No.
+                  </label>
+                </th>
+                <th>Name</th>
+                <th>Emp.ID</th>
+                <th>Branch</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Type of Heads</th>
+                <th>Wage Month</th>
+                <th>EE</th>
+                <th>ER</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- //salary head -->
+              <ng-container *ngFor="let list of varianceReportListing; let i = index">
+
+                <tr >
+                  <td>
+                    <label
+                    class="d-flex align-items-center"
+                    [for]="'checkrow-' + (i + 1)"
+                  >
+                    <input
+                      type="checkbox"
+                      class="mr-2"
+                      [attr.checked]="
+                      list?.checked == true ? 'checked' : null
+                      "
+                      id="checkrow-{{ i + 1 }}"
+                      [attr.data-checkbox-id]="list?._id"
+                      (click)="rowCheckBoxChecked($event, list);"
+                    />
+                    {{ i + 1 }}
+                  </label>
+                    <!-- {{i + 1}} -->
+                  </td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>Salary</td>
+                  <td>{{getMonthFromIndex(list?.employee_monthly_reports[0]?.wage_month) || 'N/A'}}</td>
+                  <td>{{'0'}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.gross_earning | number}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.gross_earning | number}}</td>
+                </tr>
+                <tr >
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>EPF</td>
+                  <td>{{getMonthFromIndex(list?.employee_monthly_reports[0]?.wage_month) || 'N/A'}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.pf_data?.emoloyee_contribution || 0 | number}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.pf_data?.total_employer_contribution || 0 | number}}</td>
+                  <td>
+                    {{(+list?.employee_monthly_reports[0]?.salary_report?.pf_data?.emoloyee_contribution + +list?.employee_monthly_reports[0]?.salary_report?.pf_data?.total_employer_contribution) || 0 | number}}
+                  </td>
+                </tr>
+                <tr >
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>ESIC</td>
+                  <td>{{getMonthFromIndex(list?.employee_monthly_reports[0]?.wage_month) || 'N/A'}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.esic_data?.emoloyee_contribution || 0 | number}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.esic_data?.emoloyer_contribution || 0 | number}}</td>
+                  <td>
+                    {{(+list?.employee_monthly_reports[0]?.salary_report?.esic_data?.emoloyee_contribution +
+                    +list?.employee_monthly_reports[0]?.salary_report?.esic_data?.emoloyer_contribution)||0 | number}}
+                  </td>
+                </tr>
+                <tr >
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>P.Tax</td>
+                  <td>{{getMonthFromIndex(list?.employee_monthly_reports[0]?.wage_month) || 'N/A'}}</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.pt_amount || 0 | number}}</td>
+                  <td>0</td>
+                  <td>{{list?.employee_monthly_reports[0]?.salary_report?.pt_amount || 0 | number}}</td>
+                </tr>
+
+                <tr *ngFor="let report of list?.employee_monthly_reports | slice:1:list?.employee_monthly_reports.length; let i = index">
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>Salary</td>
+                  <td>{{getMonthFromIndex(report?.wage_month) }}</td>
+                  <td>{{'0'}}</td>
+                  <td>{{report?.salary_report?.gross_earning || 0 | number}}</td>
+                  <td>{{report?.salary_report?.gross_earning || 0 | number}}</td>
+                </tr>
+                <tr *ngFor="let report of list?.employee_monthly_reports | slice:1:list?.employee_monthly_reports.length; let i = index">
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>EPF</td>
+                  <td>{{getMonthFromIndex(report?.wage_month) }}</td>
+                  <td>{{report?.salary_report?.pf_data?.emoloyee_contribution || 0 | number}}</td>
+                  <td>{{report?.salary_report?.pf_data?.total_employer_contribution || 0 | number}}</td>
+                  <td>{{(+report?.salary_report?.pf_data?.emoloyee_contribution + report?.salary_report?.pf_data?.total_employer_contribution) || 0 | number}}</td>
+                </tr>
+                <tr *ngFor="let report of list?.employee_monthly_reports | slice:1:list?.employee_monthly_reports.length; let i = index">
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>ESIC</td>
+                  <td>{{getMonthFromIndex(report?.wage_month) }}</td>
+                  <td>{{report?.salary_report?.esic_data?.emoloyee_contribution || 0 | number}}</td>
+                  <td>{{report?.salary_report?.esic_data?.emoloyer_contribution || 0 | number}}</td>
+                  <td>{{(
+                    +report?.salary_report?.esic_data?.emoloyee_contribution + +report?.salary_report?.esic_data?.emoloyer_contribution
+                    ) || 0 | number}}</td>
+                </tr>
+                <tr *ngFor="let report of list?.employee_monthly_reports | slice:1:list?.employee_monthly_reports.length; let i = index">
+                  <td></td>
+                  <td>{{list?.emp_first_name}} {{list?.emp_last_name}}</td>
+                  <td>{{list?.emp_id || 'N/A'}}</td>
+                  <td>{{list?.branch?.branch_name || 'N/A'}}</td>
+                  <td>{{list?.designation?.designation_name || 'N/A'}}</td>
+                  <td>{{list?.department?.department_name || 'N/A'}}</td>
+                  <td>P.Tax</td>
+                  <td>{{getMonthFromIndex(report?.wage_month) }}</td>
+                  <td>{{report?.salary_report?.pt_amount || 0 | number | number}}</td>
+                  <td>0</td>
+                  <td>{{report?.salary_report?.pt_amount || 0 | number | number}}</td>
+                </tr>
+              </ng-container >
+              
+
+              <tr *ngIf="!varianceReportListing.length">
+                <td colspan="11" class="text-center">No Data Found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <app-custom-pagination
+      [rows]="varianceReportListing"
+      [paginationOptions]="reportPaginationOptions"
+      (onPageClicked)=" this.reportPaginationOptions.page = $event;
+      fetchVarinaceReport()
+      "
+      ></app-custom-pagination>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

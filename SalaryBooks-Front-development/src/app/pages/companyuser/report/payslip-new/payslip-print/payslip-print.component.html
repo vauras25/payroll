@@ -1,0 +1,27 @@
+<div class="container">
+  <ng-container *ngFor="let item of templateData">
+    <div class="modal-body pd-y-20 pd-x-25 mt-5">
+      <payslip-template-modal
+        [empData]="item"
+        [tempDetails]="item?.payslip_temp_data"
+        [wageMonth]="wage_month"
+        [wageYear]="wage_year"
+      ></payslip-template-modal>
+    </div>
+  </ng-container>
+
+  <div #btns *ngIf="templateData.length" class="container text-right py-3">
+    <button
+    (click)="closeWindow()"
+      class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+    >
+      Cancel
+    </button>
+    <button
+      (click)="printDoc(btns)"
+      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+    >
+      Print
+    </button>
+  </div>
+</div>

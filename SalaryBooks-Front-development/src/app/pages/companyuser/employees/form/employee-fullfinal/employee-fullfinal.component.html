@@ -1,0 +1,808 @@
+<ng-container 
+              *ngIf="['normal'].includes(this.actionfrom)">
+    <companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+</ng-container>
+
+<div 
+     [ngClass]="{ 'br-mainpanel': ['normal'].includes(this.actionfrom) }">
+    <div class="br-pageheader"
+         *ngIf="['normal'].includes(this.actionfrom)">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item"
+               routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div [ngClass]="{ 'br-pagebody': ['normal'].includes(this.actionfrom) }">
+        <companyuser-appemployee-form-navbar *ngIf="['normal'].includes(this.actionfrom)"></companyuser-appemployee-form-navbar>
+
+        <div [ngClass]="{ 'br-section-wrapper pd-20': ['normal'].includes(this.actionfrom) }">
+            <h5 *ngIf="['normal'].includes(this.actionfrom)"
+                class="text-uppercase mb-3">Employee Full & Final</h5>
+
+            <div *ngIf="actionfrom !== 'report'" class="form-layout form-layout-6 ">
+                <form [formGroup]="employeeFullFinalForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Date of Resignation
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeFullFinalForm, 'do_resignation', 'required')"
+                                  class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control date_field"
+                                   type="date"
+                                   formControlName="do_resignation">
+
+                            <p class="error-element"
+                               *ngIf="!Global.isInputRuleValid(employeeFullFinalForm, 'do_resignation', 'required')">This field is required</p>
+                        </div>
+
+                        <!-- <div class="col-3 col-sm-3 sameasfirst">
+                            Employee Notice Period
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeFullFinalForm, 'emp_notice_period', 'required')"
+                                  class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control"
+                                   type="number"
+                                   formControlName="emp_notice_period"
+                                   placeholder="In Days">
+
+                            <p class="error-element"
+                               *ngIf="!Global.isInputRuleValid(employeeFullFinalForm, 'emp_notice_period', 'required')">This field is required</p>
+                        </div> -->
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Last Working Day
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeFullFinalForm, 'last_working_date', 'required')"
+                                  class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control date_field"
+                                   type="date"
+                                   formControlName="last_working_date">
+
+                            <p class="error-element"
+                               *ngIf="!Global.isInputRuleValid(employeeFullFinalForm, 'last_working_date', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div *ngIf="actionfrom == 'normal'" class="row no-gutters">
+                        <!-- <div class="col-3 col-sm-3">
+                            Employer Notice Period
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeFullFinalForm, 'er_notice_period', 'required')"
+                                  class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control"
+                                   type="number"
+                                   formControlName="er_notice_period"
+                                   placeholder="In Days">
+
+                            <p class="error-element"
+                               *ngIf="!Global.isInputRuleValid(employeeFullFinalForm, 'er_notice_period', 'required')">This field is required</p>
+                        </div> -->
+
+                       
+                    </div>
+                    <div  class=" row no-gutters">
+                        
+                        <div class="col-3 col-sm-3" *ngIf="actionfrom == 'normal'">
+                           
+                           
+                            <div class="col-md-6 ">
+                                <!-- <div id="previousemployment-toggle" class="br-toggle br-toggle-rounded br-toggle-primary on" (click)="tooglenoticePay()">
+                                    <div class="br-toggle-switch"></div>
+                                </div> -->
+                                <label class="toggleSwitch large" style="margin-left: 0px;">
+                                    <input type="checkbox" [disabled]="operation=='view' || employee_details?.approval_status=='inactive'" [checked]="this.employeeFullFinalForm?.value?.is_notice_pay" 
+                                    
+                                    
+                                    (change)="tooglenoticePay($event)" />
+                                      <span>
+                                        <span></span>
+                                         <span></span>
+                                      </span>
+                                    <a></a>
+                                    </label>  
+                                
+                            </div>
+                            <div class="clearfix">
+                                
+                            </div>
+                            <label> Notice:{{this.employeeFullFinalForm?.value?.is_notice_pay==true?'Pay':'Deduct'}}</label>
+                          
+                           
+                        </div>
+
+                        
+                        <div class="col-3 col-sm-3" *ngIf="actionfrom == 'normal'">
+                           
+                            <input class="form-control" type="number" formControlName="payble_days" placeholder="In Days">
+                            <p class="error-element"
+                               *ngIf="!employeeFullFinalForm.get('payble_days')?.valid && employeeFullFinalForm.get('payble_days')?.touched">This field is required</p>
+                        </div>
+                        <div class="col-3 col-sm-3" >
+                            Reason For Leaving
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeFullFinalForm, 'reason_code', 'required')"
+                                  class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown #navDropdown
+                                                 [options]="leavingReasons"
+                                                 formControlName="reason_code"
+                                                 class="form-control"
+                                                 [config]="{
+                            search: true,
+                            placeholder: 'Select a reason',
+                            displayKey: 'label',
+                            height: '220px'
+                          }"></ngx-select-dropdown>
+                            <!-- <input class="form-control" type="number" formControlName="er_notice_period" placeholder="In Days"> -->
+                            <p class="error-element"
+                               *ngIf="!employeeFullFinalForm.get('reason_code')?.valid && employeeFullFinalForm.get('reason_code')?.touched">This field is required</p>
+                        </div>
+                        <div class="col-12 col-sm-12 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="add_outstanding_leave_encashment"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="add_outstanding_leave_encashment"
+                                       (click)="handleCheck($event,'leave_encashment')"
+                                       [checked]="employeeFullFinalForm?.value?.leave_encashment==true" />
+                                Add outstanding Leave Encashment
+
+
+                            </label>
+                        </div>
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="net_pay"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="net_pay"
+                                       (click)="handleCheck($event,'net_pay')"
+                                       [checked]="employeeFullFinalForm?.value?.net_pay==true"
+                                       disabled
+                                       
+                                       >
+
+                                Net Pay
+                            </label>
+                        </div>
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="pf_ee"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="pf_ee"
+                                       (click)="handleCheck($event,'employee_pf')"
+                                       [checked]="employeeFullFinalForm?.value?.employee_pf==true"
+                                       disabled
+                                       />
+                                PF EE
+                            </label>
+                        </div>
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="pf_er"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="pf_er"
+                                       (click)="handleCheck($event,'employer_pf')"
+                                       [checked]="employeeFullFinalForm?.value?.employer_pf==true"
+                                       disabled
+                                       />
+                                PF ER
+
+
+                            </label>
+                        </div>
+
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="esic_ee"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="esic_ee"
+                                       (click)="handleCheck($event,'employee_esic')"
+                                       disabled
+                                       [checked]="employeeFullFinalForm?.value?.employee_esic==true" />
+                                ESIC EE
+
+
+                            </label>
+                        </div>
+
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="esic_er"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="esic_er"
+                                       (click)="handleCheck($event,'employer_esic')"
+                                       disabled
+                                       [checked]="employeeFullFinalForm?.value?.employer_esic==true" />
+                                ESIC ER
+
+
+                            </label>
+                        </div>
+
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="pt"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="pt"
+                                       (click)="handleCheck($event,'p_tax')"
+                                       disabled
+                                       [checked]="employeeFullFinalForm?.value?.p_tax==true" />
+                                PT
+
+
+                            </label>
+                        </div>
+
+
+
+                        
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="add_accumulated_bonus"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="add_accumulated_bonus"
+                                       (click)="handleCheck($event,'accumulated_bonus')"
+                                       [checked]="employeeFullFinalForm?.value?.accumulated_bonus==true" />
+                                Add accumulated Bonus
+
+
+                            </label>
+                        </div>
+
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="add_outstanding_incentive"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="add_outstanding_incentive"
+                                       (click)="handleCheck($event,'outstanding_incentive')"
+                                       [checked]="employeeFullFinalForm?.value?.outstanding_incentive==true" />
+                                Add Outstanding Incentive
+
+
+                            </label>
+                        </div>
+                        <div class="col-1 col-sm-3 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="less_tds"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="less_tds"
+                                       (click)="handleCheck($event,'tds')"
+                                       [checked]="employeeFullFinalForm?.value?.tds==true" />
+                                Less TDS
+
+
+                            </label>
+                        </div>
+
+                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="less_outstanding_advance"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="less_outstanding_advance"
+                                       (click)="handleCheck($event,'outstanding_advance')"
+                                       [checked]="employeeFullFinalForm?.value?.outstanding_advance==true" />
+                                Less Outstanding Advance
+
+
+                            </label>
+                        </div>
+
+
+                        <div class="col-1 col-sm-3 sameasfirst" *ngIf="actionfrom == 'normal'">
+
+                            <label for="add_gratuity"
+                                   style="margin-bottom: 0;">
+                                <input type="checkbox"
+                                       id="add_gratuity"
+                                       (click)="handleCheck($event,'gratuity')"
+                                       [checked]="employeeFullFinalForm?.value?.gratuity==true" />
+                                Add Gratuity
+
+
+                            </label>
+                        </div>
+                        <div class="col-12 col-sm-12 sameasfirst" *ngIf="actionfrom == 'normal'">
+                            <textarea class="px-3 form-control"
+                                      formControlName="footer_text"
+                                      placeholder="Footer Text"></textarea>
+
+
+                        </div>
+                        <div class="col-12 bg-white"
+                             style="border-right: 1px solid #ced4da !important;" *ngIf="actionfrom == 'normal'">
+                            <div class="row">
+                                <ng-container formArrayName="payble_field">
+                                    <ng-container *ngFor="let templateDataControl of  Global.getFormGroupArray(employeeFullFinalForm, 'payble_field'); let i = index"
+                                                  [formGroupName]="i">
+                                                  
+                                        <div class="col-{{operation!='view' && !employee_details?.emp_det?.full_and_final?.is_final_settlement ?5:6}} col-sm-{{operation!='view' && !employee_details?.emp_det?.full_and_final?.is_final_settlement ?5:6}} sameasfirst">
+                                            <label class="radio-inline addition_deduct">
+                                                <input type="radio"
+                                                       id="label{{i}}"
+                                                       formControlName="label"
+                                                       value="add"
+                                                       > Add
+                                            </label>
+                                            <label class="radio-inline addition_deduct">
+                                                <input type="radio"
+                                                       id="label{{i}}"
+                                                       formControlName="label"
+                                                       value="less"> Less
+                                            </label>
+                                            <p class="error-element"
+                                               *ngIf="(payble_field.controls[i].get('label').errors?.required && isSubmitted)">This field is required</p>
+
+
+
+                                        </div>
+                                        <div class="col-{{operation!='view' && !employee_details?.emp_det?.full_and_final?.is_final_settlement ?5:6}} col-sm-{{operation!='view' && !employee_details?.emp_det?.full_and_final?.is_final_settlement ?5:6}} sameasfirst">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder="Amount"
+                                                   formControlName="value"
+                                                   >
+                                            <br>
+                                            <p class="error-element"
+                                               *ngIf="(payble_field.controls[i].get('value').errors?.required && isSubmitted)">This field is required</p>
+
+
+                                        </div>
+                                        <div class="col-2 col-sm-2 sameasfirst" *ngIf="operation!='view' && !employee_details?.emp_det?.full_and_final?.is_final_settlement">
+                                            <button data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Add New"
+                                                    (click)="addFormRows(employeeFullFinalForm, 'payble_field')"
+                                                    type="button"
+                                                    class="btn btn-primary btn-icon mg-r-5"
+                                                    *ngIf="((Global.getFormGroupArray(employeeFullFinalForm, 'payble_field').length - 1) == i)">
+                                                <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                            </button>
+
+                                            <button data-toggle="tooltip"
+                                                    (click)="removeTemplateRow(employeeFullFinalForm,'payble_field', i)"
+                                                    data-placement="top"
+                                                    title="Remove"
+                                                    type="button"
+                                                    class="btn btn-danger btn-icon"
+                                                    *ngIf="Global.getFormGroupArray(employeeFullFinalForm, 'payble_field').length>1">
+                                                <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                            </button>
+
+
+                                        </div>
+
+                                    </ng-container>
+
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Start of Employee Assets Fields -->
+                    <div *ngIf="actionfrom == 'normal'"
+                         class="row no-gutters">
+                        <div class="col-12 bg-white"
+                             style="border-right: 1px solid #ced4da !important;">
+                            <div class="table-responsive--n w-100">
+                                <table class="mt-table table table-bordered text-center"
+                                       style="border: 1px solid #e9ecef !important;">
+                                    <thead>
+                                        <tr class="bg-dark">
+                                            <th colspan="100%"
+                                                class="text-center text-white">Assets Details</th>
+                                        </tr>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Details</th>
+                                            <th>QTY</th>reoprt
+                                            <th>ID Number</th>
+                                            <th>Issue Date</th>
+                                            <th>Receive Date</th>
+                                            <th>Received By</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of employeeAssets; let i = index">
+
+                                            <td>{{ i+1 }}</td>
+                                            <td>{{ item?.asset_details ?? "N/A" }}</td>
+                                            <td>{{ item?.asset_qty ?? "N/A" }}</td>
+                                            <td>{{ item?.asset_no ?? "N/A" }}</td>
+                                            <td>{{ item?.asset_issue_date ? (item?.asset_issue_date | date ) : "N/A" }}</td>
+                                            <td>{{ item?.asset_receive_date ? (item?.asset_receive_date | date ) : "N/A" }}</td>
+                                            <td>{{ item?.asset_receive_by ?? "N/A" }}</td>
+                                            <td class="text-center">
+                                                <ng-container *ngIf="!item.hasOwnProperty('asset_receive_date');else no_action">
+                                                    <button class="btn btn-primary btn-sm"
+                                                            (click)="initAssetReceive(item)"><i class="fa fa-check"></i></button>
+                                                </ng-container>
+                                                <ng-template #no_action>
+                                                    N/A
+                                                </ng-template>
+
+                                            </td>
+
+                                        </tr>
+
+                                        <tr *ngIf="employeeAssets.length == 0">
+                                            <td colspan="100%"
+                                                class="text-center">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End of Employee Assets Fields -->
+
+                    <div  class="row no-gutters bd-1"
+                         *ngIf="operation == 'edit' &&  actionfrom == 'normal'">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info text-uppercase"
+                                    type="submit"
+                                    (click)="updateEmployeeFullFinalDetails($event)">
+                                <span>Update</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-center"
+                         style="margin-top: 5px;">
+                        <button *ngIf="!employee_details?.emp_det?.full_and_final?.is_final_settlement && !employee_details?.emp_det?.full_and_final?.is_notice_pay && Global.checkCompanyModulePermission({
+                            company_module: 'employee',
+                            company_operation: 'fullnfinal',
+                            company_sub_module: 'full_&_final',
+                            company_sub_operation: ['add']
+                          })"
+                                type="button"
+                                class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"
+                                (click)="submitFullandFinal()"><span>Process F&F</span></button>
+                        <button *ngIf="employee_details?.emp_det?.full_and_final?.is_final_settlement || employee_details?.emp_det?.full_and_final?.is_notice_pay"
+                                type="button"
+                                class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"
+                                (click)="viewFullandFinalReport('print-section')"><span>View Final Report</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Asset Receive Modal -->
+    <button id="employeeAssetReceiveModalButton"
+            [hidden]="true"
+            (click)="textTODATE();"
+            data-toggle="modal"
+            data-target="#employeeAssetReceiveModal"></button>
+    <div id="employeeAssetReceiveModal"
+         tabindex='-1'
+         class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-md"
+             role="document">
+            <div class="modal-content bd-0 tx-14">
+                <div class="modal-header pd-y-20 pd-x-25">
+                    <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Receive Asset</h6>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="employeeAssetReceiveForm">
+
+                    <div class="modal-body pd-25">
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label>
+                                    Receive Date
+                                    &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAssetReceiveForm, 'asset_receive_date', 'required')"
+                                          class="text-danger">*</span>
+                                </label>
+
+                                <input type="date"
+                                       class="form-control"
+                                       id="adverts_eventDate"
+                                       formControlName="asset_receive_date">
+
+                                <p class="error-element"
+                                   *ngIf="!Global.isInputRuleValid(employeeAssetReceiveForm, 'asset_receive_date', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label>
+                                    Received By
+                                    &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAssetReceiveForm, 'asset_receive_by', 'required')"
+                                          class="text-danger">*</span>
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       formControlName="asset_receive_by">
+
+                                <p class="error-element"
+                                   *ngIf="!Global.isInputRuleValid(employeeAssetReceiveForm, 'asset_receive_by', 'required')">This field is required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                [disabled]="!employeeAssetReceiveForm.valid"
+                                (click)="submitAssetReceive($event)"
+                                class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium">
+                            <span>Update</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer *ngIf="['nomral'].includes(this.actionfrom)"></companyuser-app-dashboard-footer>
+</div>
+
+<div *ngIf="['report'].includes(this.actionfrom)">
+    <div id="print-section"
+     class="modal-content">
+    <div class="modal-body bd-0 tx-14 container pd-y-20 pd-x-25">
+        <div class="tablemain "
+             style="width: 100%; margin: 0 auto;">
+            <table class="template-table"
+                   style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+                <tr>
+                    <td colspan="100%"
+                        style="padding: 0;">
+                        <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                            <!-- <div style="width: 100%;"> -->
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 100%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;  font-size: 22px; font-weight:bold;">Full & Final Settlement of Accounts</div>
+                                </div>
+
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <!-- <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Employee Name</div> -->
+                                    <div style="width: 100%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: right;">Settlement Date:  {{ report_data?.full_and_final?.created_at | date:"dd-MM-yyyy" }}</div>
+                                </div>
+
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Employee Name</div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.emp_first_name }} {{ report_data?.emp_last_name }}</div>
+                                </div>
+                            <!-- </div> -->
+
+
+                            <!-- <div style="width: 100%;"> -->
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;
+                                    font-weight: bold;">Designation</div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.designation?.designation_name || "N/A" }}</div>
+                                </div>
+                            <!-- </div> -->
+
+                            <!-- <div style="width: 100%;"> -->
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Date Of Joining</div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ (report_data?.date_of_join  | date) ?? 'N/A'  }}</div>
+                                </div>
+                                <!-- </div> -->
+                                
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Date Of Leaving </div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ (report_data?.full_and_final_data?.last_working_date | date) ?? 'N/A'  }}
+                                    </div>
+                                </div>
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Working Tenure </div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.working_tenaure || 'N/A'   }}
+                                    </div>
+                                </div>
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Last Working Month </div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final_data?.last_working_date | date:"MMM yyyy"  }}
+                                    </div>
+                                </div>
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Month Days</div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.lastMonthDays  || 'N/A'}}
+                                    </div>
+                                </div>
+                                <div style="width: 100%; display: flex; flex-wrap: wrap; height: 100%;">
+                                    <div style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; font-weight: bold;">Days to pay in the last working month</div>
+                                    <div style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.lastMonthDaysToPay || 'N/A'   }}
+                                    </div>
+                                </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"
+                        style="padding: 0;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 33.34%; padding: 0; vertical-align: top;">
+                                    <table style="width: 100%; border-bottom: 1px solid;">
+                                        <tr>
+                                            <th style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">COMPONENTS</th>
+                                            <th style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">RATE</th>
+                                        </tr>
+                                        <ng-container>
+                                            <tr *ngFor="let head of report_data?.full_and_final?.salary_report?.heads ?? []">
+                                                <td style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.head_title }}</td>
+                                                <td style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.amount ?? 0 | number:'1.2-2'}}</td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr>
+                                            <td style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Gross</td>
+                                            <th style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.salary_report?.gross_earning ?? 0 |number:'1.2-2' }}</th>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"
+                        style="padding: 0;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td colspan="2" style="width: 100%; padding: 0; vertical-align: top;">
+                                    <table style="width: 100%; border-bottom: 1px solid;">
+                                        <tr>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">EARNINGS</th>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">DEDUCTION</th>
+                                        </tr>
+                                       
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 33.34%; padding: 0; vertical-align: top;">
+                                    <table style="width: 100%; border-bottom: 1px solid;">
+                                        <tr>
+                                            <th style="width: 30%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">COMPONENTS</th>
+                                            <th style="width: 70%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">Amount</th>
+                                        </tr>
+                                        <ng-container>
+                                            <tr *ngFor="let head of report_data?.full_and_final?.salary_report?.heads ?? []">
+                                                <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.head_title }}</td>
+                                                <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ head?.amount ?? 0 | number:'1.2-2'}}</td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Earned Gross</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.salary_report?.gross_earning ?? 0 |number:'1.2-2' }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Other Components</th>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">Amount</th>
+                                        </tr>
+                                        <tr *ngIf="report_data?.full_and_final_data?.is_leave_encashment">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Annual Bonus/ Leave Encashment*</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">
+                                            {{report_data?.full_and_final?.leave_encashment_amount}}</td>
+                                        </tr>
+                                        <tr *ngIf="report_data?.full_and_final_data?.is_gratuity">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Gratuity</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{report_data?.full_and_final?.gratuity_amount}}</td>
+                                        </tr>
+                                        <tr *ngIf="report_data?.full_and_final?.is_notice_pay">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">One month Notice Pay</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{report_data?.full_and_final?.salary_report?.gross_earning}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Other payments</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">
+                                            {{report_data?.full_and_final?.other_contribution}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Total Income</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{report_data?.full_and_final?.total_income}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Net Payable</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{report_data?.full_and_final?.total_payable}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; ">Amount in Word (s)</td>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">
+                                            {{report_data?.amountInWords}}</td>
+                                        </tr>
+                                   
+                                    </table>
+                                </td>
+                                <td style="width: 33.34%; padding: 0; vertical-align: top;">
+                                    <table style="width: 100%; border-bottom: 1px solid;">
+                                        <tr>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">COMPONENTS</th>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px; text-align: center">Amount</th>
+                                        </tr>
+                                        <tr *ngIf="report_data?.full_and_final_data?.is_employee_pf">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">EPF</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.salary_report?.total_employee_pf_contribution ?? 0 | number:'1.2-2'}}</th>
+                                        </tr>
+                                        <tr *ngIf="report_data?.full_and_final_data?.is_employee_esic">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">ESIC</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.salary_report?.total_employee_esic_contribution ?? 0 | number:'1.2-2' }}</th>
+                                        </tr>
+                                        <tr *ngIf="report_data?.full_and_final_data?.is_ptax">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">P TAX</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.salary_report?.total_pt_wages ?? 0 | number:'1.2-2' }}</th>
+                                        </tr>
+                                        <tr *ngIf="!report_data?.full_and_final_data?.is_outstanding_incentive">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">ADVANCE</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.advance_amount ?? 0 | number:'1.2-2' }}</th>
+                                        </tr>
+                                        <tr *ngIf="!report_data?.full_and_final_data?.is_less_tds">
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">TDS</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final?.tds_amount ?? 0 | number:'1.2-2' }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">ESIC Applicable</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final_data?.is_employee_esic ? 'Yes':'No' }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">EPF Applicable</td>
+                                            <th style="width: 50%; border-top: 1px solid; border-right: 1px solid; padding: 5px 8px;">{{ report_data?.full_and_final_data?.is_employee_pf ? 'Yes':'No' }}</th>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+            <div style="height: 29.19px"></div>
+
+            <table class="template-table"
+                   style="width: 100%; border-color: #000; color: #000; border: 1px solid;">
+                <tr>
+                    <td style="width: 100%; padding: 5px 8px; height: 60px !important;">
+                        {{ report_data?.full_and_final_data?.footer_text ?? 'message and foot note signature' }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div #btns class="container text-right py-3">
+            <button
+            (click)="actionfrom = 'normal'"
+              class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+            >
+              Back
+            </button>
+            <!-- <button
+              (click)="downloadReport(); btns.hidden = true"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+            >
+              download
+            </button> -->
+          </div>
+    </div>
+</div>
+
+</div>

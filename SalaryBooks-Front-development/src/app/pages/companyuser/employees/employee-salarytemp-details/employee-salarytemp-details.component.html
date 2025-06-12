@@ -1,0 +1,253 @@
+<div id="empSalaryTempDetailsModal" tabindex="-1" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content bd-0 tx-14">
+      <div id="print-section">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0  tx-inverse">
+            <span class="text-muted tx-uppercase">Emp ID: </span
+            ><b class="mr-4 me-4">{{ (employeeDetails?.emp_id || '' | titlecase) || 'N/A'  }}</b>
+            <span class="text-muted tx-uppercase">Emp Name: </span
+            ><b class="mr-4 me-4">
+              {{ employeeDetails?.emp_first_name || '' | titlecase}}
+              {{ employeeDetails?.emp_last_name || '' | titlecase}}
+            </b>
+            <span class="text-muted tx-uppercase">Designation: </span
+            ><b class="mr-4 me-4">{{ (employeeDetails?.designation[0]?.designation_name || '' | titlecase) || 'N/A'}}</b>
+          </h6>
+          <!-- <a
+            class="text-info"
+            href="javascript:;"
+            (click)="printPackageDetails()"
+          >
+            Download PDF&nbsp;&nbsp;<i class="fa fa-download"></i>
+          </a> -->
+        </div>
+  
+        <div class="modal-body salarytemplate-details">
+          <div class="col-12">
+            <table
+              
+              class="table table-bordered define-leave-rule-table"
+            >
+              <thead class="thead-colored thead-primary text-center">
+                <tr>
+                  <th>Earning</th>
+                  <th>Deduction</th>
+                  <th>Contribution</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="vertical-align: top !important">
+                    <table class="table">
+                      <tbody>
+                        <tr *ngFor="let item of data?.heads">
+                          <td>{{ item.head_title }}</td>
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{ item.head_rate || 0 | number : "1.2-2" }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">
+                                  <ng-container [ngSwitch]="item.head_rate_type">
+                                    <ng-container *ngSwitchCase="'amount'"
+                                      >₹</ng-container
+                                    >
+                                    <ng-container *ngSwitchCase="'percent'"
+                                      >%</ng-container
+                                    >
+                                    <ng-container *NgSwitchDefault>{{
+                                      item.head_rate_type
+                                    }}</ng-container>
+                                  </ng-container>
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{ item.amount || 0 | number : "1.2-2" }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+  
+                  <td>
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td>PF (Employee Contribution)</td>
+  
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{
+                                  data?.epf_data?.emoloyee_contribution || 0
+                                    | number : "1.2-2"
+                                }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+  
+                        <tr>
+                          <td>ESI (Employee Contribution)</td>
+  
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{
+                                  data?.esic_data?.emoloyee_contribution || 0
+                                    | number : "1.2-2"
+                                }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+  
+                  <td>
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td>PF (Employer Contribution)</td>
+  
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{
+                                  data?.epf_data?.total_employer_contribution || 0
+                                    | number : "1.2-2"
+                                }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+  
+                        <tr>
+                          <td>ESI (Employer Contribution)</td>
+  
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{
+                                  data?.esic_data?.emoloyer_contribution || 0
+                                    | number : "1.2-2"
+                                }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+  
+                        <tr>
+                          <td>EDLI Charges</td>
+  
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{
+                                  data?.epf_data?.emoloyer_edlis_contribution || 0
+                                    | number : "1.2-2"
+                                }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+  
+                        <tr>
+                          <td>EPF Admin Charges</td>
+  
+                          <td>
+                            <div class="input-group">
+                              <div class="form-control">
+                                {{
+                                  data?.epf_data
+                                    ?.emoloyer_epf_admin_contribution || 0
+                                    | number : "1.2-2"
+                                }}
+                              </div>
+                              <div class="input-group-append">
+                                <span class="input-group-text">₹</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td class="text-center">
+                    <span class="badge badge-dark badge-lg mr-3">
+                      Gross Earning :
+                      {{ data?.gross_earning || 0 | number : "1.2-2" }}
+                      (₹)
+                    </span>
+                  </td>
+  
+                  <td class="text-center">
+                    <span class="badge badge-dark badge-lg mr-3">
+                      Total CTC :
+                      <b>{{ data?.ctc || 0 | number : "1.2-2" }} (₹)</b>
+                    </span>
+                  </td>
+  
+                  <td class="text-center">
+                    <span class="badge badge-dark badge-lg">
+                      Net Take Home Salary :
+                      <b>{{ data?.net_take_home || 0 | number : "1.2-2" }} (₹)</b>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button 
+        (click)="printPackageDetails()" 
+        class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2">
+          Download 
+          <!-- <i class="fa fa-download"></i> -->
+        </button>
+        
+        <button
+          type="button"
+          data-dismiss="modal"
+          aria-label="Close"
+          class="btn btn-default tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+        >
+          <span>Close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

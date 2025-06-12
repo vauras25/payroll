@@ -1,0 +1,245 @@
+var EaxtraEarning = require('../../Model/Company/ExtraEarning');
+var EaxtraEarningHead = require('../../Model/Company/ExtraEarningHeads');
+var Employee = require('../../Model/Company/employee');
+const { Validator } = require('node-input-validator');
+var crypto = require("crypto");
+var Site_helper = require('../../Helpers/Site_helper');
+module.exports = {
+    get_extra_earning_emp: async function (req, resp, next) {
+        var sortbyfield = req.body.sortbyfield
+        if(sortbyfield)
+        {
+            var sortoption = {};
+            sortoption[sortbyfield] = req.body.ascdesc == 'asc'?1:-1;
+        }
+        else{
+            var sortoption = {created_at: -1};
+        }
+        const options = {
+            page: req.body.pageno?req.body.pageno:1,
+            limit: perpage,
+            sort:    sortoption,
+          };
+        var filter_option={};
+        var document={};
+        var search_option= {$match: {$and:[ {'corporate_id':req.authData.corporate_id},{'parent_hods':{$in: [req.authData.user_id] }},{'approval_status':'approved'}]}};
+        var search_option_details= {$match: {}};
+        if(req.body.searchkey)
+        {
+            search_option={ $match: { $text: { $search: req.body.searchkey },'corporate_id':req.authData.corporate_id }};    
+        }
+        else
+        {
+            if(req.body.emp_name)
+            {
+            search_option.$match.emp_name={"$regex": req.body.emp_name, "$options": "i"};
+            search_option.$match.emp_name={"$regex": req.body.emp_name, "$options": "i"};
+            }
+            if(req.body.emp_last_name)
+            {
+            search_option.$match.emp_last_name={"$regex": req.body.emp_last_name, "$options": "i"};
+            }
+            if(req.body.email_id)
+            {
+            search_option.$match.email_id={"$regex": req.body.email_id, "$options": "i"};
+            }
+            if(req.body.emp_id)
+            {
+            search_option.$match.emp_id={"$regex": req.body.emp_id, "$options": "i"};
+            }
+            if(req.body.designation_id)
+            {
+                var designation_ids=JSON.parse(req.body.designation_id);
+                designation_ids = designation_ids.map(function(el) { return mongoose.Types.ObjectId(el) })
+                search_option_details.$match['employee_details.employment_hr_details.designation']=  {$in: designation_ids};
+            }
+            if(req.body.department_id)
+            {
+                var department_ids=JSON.parse(req.body.department_id);
+                department_ids = department_ids.map(function(el) { return mongoose.Types.ObjectId(el) })
+                search_option_details.$match['employee_details.employment_hr_details.department']=  {$in: department_ids};
+            }
+            if(req.body.branch_id)
+            {
+                var branch_ids=JSON.parse(req.body.branch_id);
+                branch_ids = branch_ids.map(function(el) { return mongoose.Types.ObjectId(el) })
+                search_option_details.$match['employee_details.employment_hr_details.branch']=  {$in: branch_ids};
+            }
+            if(req.body.client_code)
+            {
+                var client_codes=JSON.parse(req.body.client_code);
+                search_option.$match.client_code={$in: client_codes};
+            }
+            if(req.body.hod_id)
+            {
+                var hod_ids=JSON.parse(req.body.hod_id);
+                hod_ids = hod_ids.map(function(el) { return mongoose.Types.ObjectId(el) })
+                search_option.$match.emp_hod={$in: hod_ids};
+            }
+        }
+        var wage_month=req.body.wage_month;
+        var wage_year=req.body.wage_year;
+        var myAggregate = Employee.aggregate([
+            search_option,
+        
+            {$lookup:{
+            from: 'employee_details',
+            localField: '_id',
+            foreignField: 'employee_id',
+            as: 'employee_details',
+            }},
+            search_option_details,
+            {$lookup:{
+                from: 'extra_earnings',
+                localField: 'emp_id',
+                foreignField: 'emp_id',
+                as: 'extra_earnings',
+            }},
+            
+            { "$addFields": {
+            "employee_details": {
+                "$arrayElemAt": [ "$employee_details", 0 ]
+            }
+            }
+            },
+            { "$project": { 
+            "_id":1,
+            "corporate_id":1,
+            "userid":1,
+            "emp_id":1,
+            "emp_first_name":1,
+            "emp_last_name":1,
+            "emp_dob":1,
+            "pan_no":1,
+            "aadhar_no":1,
+            "email_id":1,
+            "empid":1,
+            "client_code":1,
+            "approval_status":1,
+            "employee_details.employment_hr_details":1,
+            "employee_details.annual_earnings":1,
+            extra_earnings: {
+                $filter: {
+                input: "$extra_earnings",
+                as: "extra_earnings",
+                cond: {
+                    $and: [
+                    {$eq: ["$$extra_earnings.wage_month", wage_month.toString()]},
+                    {$eq: ["$$extra_earnings.wage_year", wage_year.toString()]}
+                    ]
+                }
+                }
+            },
+            }
+            },
+        
+        ])
+        Employee.aggregatePaginate(myAggregate,options, async function (err, employees) {
+            if (err) return resp.json({ status: "error", message: err.message });
+            return resp.status(200).json({ status: "success", employees: employees });
+        });
+    },
+    add_extra_earning: async function (req, resp) {
+        const v = new Validator(req.body, {
+            emp_id: 'required',
+            head_id:'required',
+            amount:'required',
+            wage_month:'required',
+            wage_year:'required',
+          });
+          const matched = await v.check();
+        if (!matched) {
+            return resp.status(200).send({ status: 'val_err', message:"Validation error", val_msg: v.errors });
+        }
+        else{
+            var document =
+            {
+                corporate_id:req.authData.corporate_id,
+                emp_id:req.body.emp_id,
+                head_id:req.body.head_id,
+                amount:req.body.amount,
+                wage_month:req.body.wage_month,
+                wage_year:req.body.wage_year,
+                status:'active',
+                created_at: Date.now()
+            }
+            EaxtraEarning.create(document,  function (err, extra_earning) {
+                if (err) return resp.status(200).send({ status: 'error', message: err.message });
+                return resp.status(200).send({ status: 'success',message:"Extra Earning  created successfully", extra_earning: extra_earning});
+            })
+        }
+    },
+    update_extra_earning_data: async function (req, resp, next) {
+        const v = new Validator(req.body, {
+            earning_id: 'required',
+            head_id:'required',
+            amount:'required',
+            wage_month:'required',
+            wage_year:'required',
+        });
+        const matched = await v.check();
+        if (!matched) {
+            return resp.status(200).send({ status: 'val_err', message:"Validation error", val_msg: v.errors });
+        }
+        else{
+            var document =
+            {
+                head_id:req.body.head_id,
+                amount:req.body.amount,
+                wage_month:req.body.wage_month,
+                wage_year:req.body.wage_year,
+                updated_at: Date.now()
+            }
+            EaxtraEarning.updateOne({'_id':req.body.earning_id},document,  function (err, extra_earning) {
+                if (err) 
+                {
+                    return resp.status(200).send({ status: 'error', message: err.message });
+                }
+                else
+                {
+                    resp.status(200).send({ status: 'success', message:"extra earning has been updated successfully", extra_earning: extra_earning });
+                }
+            });
+        }
+    },
+    add_extra_earning_head: async function (req, resp) {
+        const v = new Validator(req.body, {
+            head_name: 'required',
+            abbreviation: 'required',
+            earning_status: 'required|in:earning,deduction',
+            head_include_in: 'required'
+          });
+          const matched = await v.check();
+        if (!matched) {
+            return resp.status(200).send({ status: 'val_err', message:"Validation error", val_msg: v.errors });
+        }
+        else{
+            var document = {
+                corporate_id:req.authData.corporate_id,
+                head_name:req.body.head_name,
+                abbreviation:req.body.abbreviation,
+                earning_status:req.body.earning_status,
+                head_include_in:req.body.head_include_in,
+                status:'active', 
+                created_at: Date.now()
+            };
+            EaxtraEarningHead.create(document,  function (err, extra_earning_head) {
+                if (err) return resp.status(200).send({ status: 'error', message: err.message });
+                return resp.status(200).send({ status: 'success',message:"Extra Earning head created successfully", extra_earning_head: extra_earning_head });
+            })
+        }
+    },
+    get_extra_earning_head: async function (req, resp, next) {
+        try{
+            await EaxtraEarningHead.find({  status:'active' ,"corporate_id":req.authData.corporate_id },'_id head_name abbreviation earning_status',  function (err, temp_head) {
+                if (!err) 
+                {
+                    return resp.status(200).send({ status: 'success', message:"", temp_head: temp_head});
+                }
+            })
+        }
+        catch(e){
+        return resp.status(200).json({ status: "error", message: e ? e.message:'Something went wrong' });
+        }
+    },
+}

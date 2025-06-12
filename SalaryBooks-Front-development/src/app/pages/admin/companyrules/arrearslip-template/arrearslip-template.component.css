@@ -1,0 +1,10 @@
+.pt-modal-logo {
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+.pt-modal-logo img {
+    width: 120px;
+    border-radius: 50%;
+    border: 2px solid #17a2b8;
+}

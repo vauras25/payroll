@@ -1,0 +1,227 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+      <a class="breadcrumb-item">Landing-Page</a>
+      <a class="breadcrumb-item active">Posts</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-home"></i>
+    <div>
+      <h4>Posts</h4>
+      <p class="mg-b-0">Add Posts And Content For Pages</p>
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30" id="letterwriting-submit-section">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-3">Add Page</h6>
+
+      <div class="form-layout form-layout-6">
+        <form [formGroup]="postForm">
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Title&nbsp;
+              <span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    postForm,
+                    'title',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-9 col-sm-9">
+              <input
+                class="form-control"
+                formControlName="title"
+                type="text"
+              />
+              <p
+                class="error-element"
+                *ngIf="
+                  postForm.controls.title.hasError('required') &&
+                  postForm.controls.title.touched
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Category&nbsp;
+              <span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    postForm,
+                    'category',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col-9 col-sm-9">
+              <ngx-select-dropdown
+              formControlName="category"
+              [options]="['Brands', 'Features', 'Testimonial', 'FAQ']"
+              class="form-control p-1"
+              [config]="{
+                search: true,
+                placeholder: 'Select One',
+                displayKey: 'label',
+                height: '250px'
+              }"
+            ></ngx-select-dropdown>
+              <p
+                class="error-element"
+                *ngIf="
+                  postForm.controls.category.hasError('required') &&
+                  postForm.controls.category.touched
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">Post Image</div>
+            <div class="col-9 col-sm-9">
+              <input
+                class="form-control"
+                formControlName="post_img"
+                type="file"
+                accept="image/*"
+                (change)="onFileChanged($event, postForm, 'img_path')"
+              />
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">Post Content</div>
+            <div class="col-9 col-sm-9 p-0">
+              <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
+            </div>
+          </div>
+
+          <div class="row no-gutters bd-1">
+            <div class="col-12 col-sm-12">
+              <button class="btn btn-info" (click)="createPost($event)" *ngIf="!editActionId">
+                <span>Submit {{editActionId}}</span>
+              </button>
+              <div *ngIf="editActionId">
+                <button type="button" (click)="cancelPostUpdation()" class="btn btn-danger mg-r-5">
+                  <span>Cancel</span>
+              </button>
+                <button type="submit" (click)="updatePost($event)" class="btn btn-info">
+                  <span>Update Post</span>
+              </button>
+            </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="bg-gray-100 bd pd-y-20 pd-x-20">
+        <form [formGroup]="postForm">
+          <div class="form-row row flex-wrap align-items-center">
+            <div class="col-sm-6 col-6 form-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Page Heading"
+                formControlName="page_title"
+              />
+            </div>
+            <div class="col-6 col-sm-6 form-group">
+              <input
+                class="form-control"
+                formControlName="post_img"
+                type="file"
+                accept="image/*"
+              />
+            </div>
+
+            <div class="col-sm-12 col-12 form-group">
+              <textarea
+                cols="30"
+                rows="10"
+                placeholder="Description"
+                class="form-control"
+                formControlName="description"
+              ></textarea>
+            </div>
+
+            <div class="col-sm-12 col-12 text-center">
+              <ng-container>
+                <button
+                  type="submit"
+                  class="submit-block btn btn-info"
+                  (click)="createPage($event)"
+                >
+                  <span>Submit</span>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </form>
+      </div> -->
+    </div>
+    <div class="br-section-wrapper mt-5">
+      <h6 class="br-section-label mb-1 mt-1">Posts</h6>
+      <div class="table-wrapper">
+        <table class="table display responsive nowrap">
+          <thead>
+            <tr>
+              <th>SL</th>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let post of postsList; let i = index">
+              <td>{{ "#" + (i + 1) }}</td>
+              <td>
+                <img class="img-thumbnail" style="max-width: 75px" [src]="Global.BACKEND_URL + '/' + post?.post_img">
+              </td>
+              <td>{{ post?.title | titlecase }}</td>
+              <td>{{ post?.category }}</td>
+              <!-- <td>{{ post?.status | titlecase}}</td> -->
+                <td>
+                <div class="br-toggle br-toggle-rounded br-toggle-primary" [class.on]="post?.status === 'active'" id="policy-last-day-of-month" (click)="updatePostStatus(post, post?.status)" >
+                  <div class="br-toggle-switch"></div>
+              </div>
+              </td>
+              <td class="text-center">
+                <div style="width: 25px; height: 25px">
+                  <i
+                    class="fa fa-pen pen-icon"
+                    (click)="setPostFormValue(post)"
+                  ></i>
+                </div>
+
+              </td>
+            </tr>
+            <tr *ngIf="!postsList.length">
+              <td colspan="100%"
+                  class="text-center"
+                  style="background-color: #f7f7f7;">No records found</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

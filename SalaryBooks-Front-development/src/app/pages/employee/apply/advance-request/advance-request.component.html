@@ -1,0 +1,188 @@
+<div class="tabheader">
+    <h5>Advance</h5>
+    <a class="editicon apply-btn" id="advanceRequest_btn" href="javascript: void(0)" data-toggle="modal" data-target="#advanceRequestModal">Apply</a>
+</div>
+<div class="table-responsive ">
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th>DATE</th>
+                <th>ADVANCE AMOUNT</th>
+                <th>RECOVERY FREQUENCY</th>
+                <th>REASON</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of advance_requests; let i = index">
+                <th>{{item.payment_booking_date | date:'dd/MM/YY'}}</th>
+                <th>{{item.advance_amount | currency:'₹'}}</th>
+                <th>{{item.recovery_frequency | titlecase}}</th>
+                <th>{{item.remarks}}</th>
+                <th>{{item.status | titlecase}}</th>
+                <th><a class="editicon " href="javascript:void(0)" (click)="getEdit(item)"><i class="fas fa-pencil-alt"></i> Edit</a>
+                </th>
+
+
+            </tr>
+            <tr *ngIf="advance_requests.length == 0">
+                <td colspan="6" class="text-center">No records found</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<app-custom-pagination [rows]="advance_requests" [paginationOptions]="paginationOptions" (onPageClicked)="fetchleaveRequest($event)"></app-custom-pagination>
+<div class="modal fade come-from-modal modal-design right" id="advanceRequestModal" tabindex="-1" role="dialog" aria-labelledby="advanceRequestModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUnitLabel">Advance</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body form-main">
+                <form [formGroup]="advancerequestForm">
+                    <div class="form-row">
+                        
+                        <div class="form-group col-12">
+                            <label>Advance Amount <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control"  placeholder="" formControlName="advance_amount">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'advance_amount', 'required')">This field is required</p>
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(advancerequestForm, 'advance_amount', 'pattern'))">Enter valid Amount</p>
+
+                        </div>
+                        <div class="form-group col-12"  *ngIf="editadvanceDetails">
+                            <label>Outstanding Amount <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" formControlName="advance_outstanding">
+
+                            <p class="error-element" *ngIf="advancerequestForm.controls.advance_outstanding.hasError('required') && ( advancerequestForm.controls.advance_outstanding.dirty || advancerequestForm.controls.advance_outstanding.touched )">This field is required</p>
+
+                            <p class="error-element" *ngIf="advancerequestForm.controls.advance_outstanding.hasError('pattern') && ( advancerequestForm.controls.advance_outstanding.dirty || advancerequestForm.controls.advance_outstanding.touched )">Please enter a valid number</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Recovery Form <span class="text-danger">*</span></label>
+                            <ngx-select-dropdown formControlName="recovery_from" [options]="recovery_items" class="form-control" [config]="{search: false, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'recovery_from', 'required')">This field is required</p>
+
+                        </div>
+                       
+                        <div class="form-group col-12">
+                            <label>Number of Installments <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder=""  formControlName="no_of_instalments">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'no_of_instalments', 'required')">This field is required</p>
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(advancerequestForm, 'no_of_instalments', 'pattern') )">Enter a valid number</p>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Recovery Frequency <span class="text-danger">*</span></label>
+                           
+                            <ngx-select-dropdown formControlName="recovery_frequency" [options]="frequencies" class="form-control" [config]="{search: false, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'recovery_frequency', 'required')">This field is required</p>
+
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Month <span class="text-danger">*</span></label>
+                            <ngx-select-dropdown formControlName="payment_start_month" [options]="monthMaster" class="form-control" [config]="{search: true, placeholder: 'Select Month'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'payment_start_month', 'required')">This field is required</p>
+
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Year <span class="text-danger">*</span></label>
+                            <ngx-select-dropdown formControlName="payment_start_year" [options]="yearMaster" class="form-control" [config]="{search: true, placeholder: 'Select Year'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'payment_start_year', 'required')">This field is required</p>
+
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label></label>
+                            
+                            <div class="table-responsive">
+                                <ng-container formArrayName="instalment_history">
+                                    <table class="table table-bordered table-striped text-center" style="border: 1px solid #e9ecef !important;">
+                                        <thead>
+                                            <tr class="bg-info">
+                                                <th colspan="100%" class="text-center text-white">Installment History</th>
+                                            </tr>
+                                            <tr>
+                                                <th>SL</th>
+                                                <th>Month</th>
+                                                <th>Year</th>
+                                                <th>Recovery From</th>
+                                                <th>Advance Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr *ngFor="let item of Global.getFormGroupArray(advancerequestForm, 'instalment_history'); let i = index" [formGroupName]="i">
+                                                <td class="text-black fw-bold">{{ i+1 }}</td>
+                                                <td>{{ item.get('instalment_month')?.value?.description ?? '-' }}</td>
+                                                <td>{{ item.get('instalment_year')?.value ?? '-' }}</td>
+                                                <td style="min-width: 180px;">
+                                                   
+
+                                                    <b>{{ item.get('recovery_from')!.value?.description }}</b>
+
+
+                                                    <p class="error-element" *ngIf="item.get('recovery_from')!.hasError('required') && ( item.get('recovery_from')!.dirty || item.get('recovery_from')!.touched )">This field is required</p>
+                                                </td>
+                                                <td>
+                                                    <ng-container *ngIf="item.get('status')!.value?.value == 'pending'">
+                                                        <input type="text" class="form-control px-2" placeholder="Enter Advance Amount" formControlName="advance_amount" (keyup)="tableAdvanceAmountChanged(i)">
+                                                    </ng-container>
+
+                                                    <ng-container *ngIf="item.get('status')!.value?.value == 'complete'">
+                                                        <b>{{ item.get('advance_amount')!.value }}</b>
+                                                    </ng-container>
+
+                                                    <p class="error-element" *ngIf="item.get('advance_amount')!.hasError('required') && ( item.get('advance_amount')!.dirty || item.get('advance_amount')!.touched )">This field is required</p>
+
+                                                    <p class="error-element" *ngIf="item.get('advance_amount')!.hasError('pattern') && ( item.get('advance_amount')!.dirty || item.get('advance_amount')!.touched )">Enter a valid amount</p>
+                                                </td>
+                                                <td style="min-width: 170px;">
+                                                    {{ item.get('status')?.value?.description ?? '-' }}
+
+                                                    <!-- <ngx-select-dropdown formControlName="status" [options]="statusMaster" class="form-control px-3" [config]="{search: false, placeholder: 'Select Status'}"></ngx-select-dropdown> -->
+
+                                                    <p class="error-element" *ngIf="item.get('status')!.hasError('pattern') && ( item.get('status')!.dirty || item.get('status')!.touched )">Enter a valid amount</p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="Global.getFormGroupArray(advancerequestForm, 'instalment_history')?.length == 0">
+                                                <td colspan="100%" class="text-center">No records found</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-container>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Reason</label>
+                            <textarea class="form-control" formControlName="remarks"></textarea>
+                            
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(advancerequestForm, 'remarks', 'required')">This field is required</p>
+
+
+                        </div>
+                        <div class="form-group col-12 mb-0">
+                            <button type="submit" class="btn btn-apply w-100" (click)="submitForm($event);" *ngIf="!advancerequestForm.value.emp_advance_id else edit_btn_blck">Apply</button>
+                            <ng-template #edit_btn_blck>
+                                <button type="submit" class="btn btn-apply w-100" (click)="updateData($event);" >Update</button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,179 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Leave Encashment Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Leave Encashment Report</h4>
+      <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <div class="card bd-0">
+
+        <div class="card-header">
+          <div class="row">
+
+
+            <div class="col-12 d-none">
+              <hr />
+            </div>
+
+
+          </div>
+        </div>
+
+        <companyuser-app-table-filter
+        #tableFilter
+        [dateFromFilter]="true"
+        [dateToFilter]="true"
+        [basicFilter]="true"
+        [isClient]="true"
+        [searchKeyFilter]="true"
+        (onFiltered)="generateMasterSheet({page: 1, options:$event})"
+      ></companyuser-app-table-filter>
+
+
+
+        <div class="card-body px-0 bd-t-0 rounded-bottom">
+
+          <!-- <app-custom-tableoption (onFilterChanged)="generateMasterSheet({page: 1, options: $event})"></app-custom-tableoption> -->
+
+          <div class="table-responsive">
+            <div class="ritz grid-container" dir="ltr">
+                <table class="waffle" cellspacing="0" cellpadding="0">
+                  <thead>
+
+                  </thead>
+                  <tbody>
+                    <tr style="height: 19px">
+
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="s3"></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="s5"></td>
+                      <td class="s4 softmerge">
+                        <div class="softmerge-inner" style="width:118px;left:-1px">Download</div>
+                      </td>
+
+                      <td class="s6">
+                        <div style="width:94px;height:19px;">
+                          <img
+                          src="assets/img/download.png"
+                          style="width:inherit;height:inherit;object-fit:scale-down;object-position:left bottom;" />
+                        </div>
+                      </td>
+
+                      <td></td>
+                      <td></td>
+                    </tr>
+
+                    <tr style="height: 19px">
+                      <th id="74719294R14" style="height: 19px;" class="row-headers-background">
+                        <div class="row-header-wrapper" style="line-height: 19px"></div>
+                      </th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="s10 softmerge" colspan="6">
+                        <div class="softmerge-inner">Late report for the Period {{range_start | date:'dd-MM-YYYY'}} to {{range_end | date:'dd-MM-YYYY'}}</div>
+                      </td>
+
+                      <td class="s12"></td>
+                      <td class="s12"></td>
+                      <td class="s12"></td>
+                      <td class="s12"></td>
+                      <td class="s12"></td>
+                    </tr>
+                    <tr style="height: 37px">
+                      <th id="74719294R15" style="height: 37px;" class="row-headers-background">
+                        <div class="row-header-wrapper" style="line-height: 37px"></div>
+                      </th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="s13"></td>
+                      <td class="s14" rowspan="2">Sl No</td>
+                      <td class="s14" rowspan="2">Emp ID</td>
+                      <td class="s14" rowspan="2">Name</td>
+                      <td class="s14" rowspan="2">Department</td>
+                      <td class="s14" rowspan="2">Designation</td>
+                      <td class="s14" rowspan="2">Branch</td>
+                      <td class="s14" rowspan="2">Client</td>
+                      <td class="s14" rowspan="2">HOD</td>
+                      <td class="s14" rowspan="2">Leave head</td>
+                      <td class="s14" rowspan="2">Encashed</td>
+                      <td class="s14" rowspan="2">Value</td>
+                      <td class="s14" rowspan="2">Encashed in WM</td>
+                    </tr>
+                    <tr style="height: 19px">
+                      <th id="74719294R16" style="height: 19px;" class="row-headers-background">
+                        <div class="row-header-wrapper" style="line-height: 19px"></div>
+                      </th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="s13"></td>
+                    </tr>
+                    <tr style="height: 19px">
+                      <th id="74719294R17" style="height: 19px;" class="row-headers-background">
+                        <div class="row-header-wrapper" style="line-height: 19px"></div>
+                      </th>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="s13"></td>
+                      <td class="s15">1</td>
+                      <td class="s16">e001</td>
+                      <td class="s16">First Name Last Name</td>
+                      <td class="s15">ABC</td>
+                      <td class="s15">ABC</td>
+                      <td class="s15">ABC</td>
+                      <td class="s15">ABC</td>
+                      <td class="s15">ABC</td>
+                      <td class="s17">Earned Leave</td>
+                      <td class="s18">14</td>
+                      <td class="s17">####</td>
+                      <td class="s17">mm-yyyy</td>
+                    </tr>
+
+
+
+
+                  </tbody>
+                </table>
+              </div>
+
+
+           </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+

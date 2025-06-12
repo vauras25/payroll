@@ -1,0 +1,264 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+<div class="br-mainpanel">
+   <div class="br-pageheader">
+      <nav class="breadcrumb pd-0 mg-0 tx-12">
+         <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+         <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+         <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+         <a class="breadcrumb-item active">TDS</a>
+      </nav>
+   </div>
+   <div class="br-pagetitle">
+      <i class="icon icon ion-ios-briefcase"></i>
+      <div>
+         <h4>TDS Declaration</h4>
+       <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+      </div>
+   </div>
+   <div class="br-pagebody">
+      <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+      <div class="br-section-wrapper" id="lwf-rule-form">
+         <form [formGroup]="tdsForm" *ngIf="tdsForm">
+         <h6 class="br-section-label mb-3"></h6>
+         <div class="">
+            <table class="table table-bordered define-lwf-rule-table nowrap table-responsive">
+               <tbody>
+                  <tr>
+                     <td class="p-0">
+                        <table class="w-100">
+                           <tbody>
+                              <tr>
+                                 <td>
+                                    <label class="tx-medium m-0">Staying in a rented house &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <input type="checkbox"  [checked]="tdsForm.value.rental_house=='Y'" (change)="toggle($event,'rental_house')">
+                                 </td>
+                              </tr>
+                              <tr [hidden]="tdsForm.value.rental_house=='N'">
+                                 <td>
+                                    <label class="tx-medium m-0">Rental Period &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <!-- <input type="date" class="form-control" formControlName="rental_from_date"> -->
+                                    <ngx-select-dropdown formControlName="rental_financial_year" [options]="yearMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Year *'}"></ngx-select-dropdown>
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.rental_financial_year.hasError('required') && ( tdsForm.controls.rental_financial_year.dirty || tdsForm.controls.rental_financial_year.touched )">This field is required</p>
+                                 </td>
+                                 <!-- <td>
+                                    <input type="date" class="form-control" formControlName="rental_to_date">
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.rental_to_date.hasError('required') && ( tdsForm.controls.rental_to_date.dirty || tdsForm.controls.rental_to_date.touched )">This field is required</p>
+                                    
+                                    </td> -->
+                                 <td>
+                                    <label class="tx-medium m-0">Amount/month &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <input type="text" class="form-control" formControlName="rental_amount">
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.rental_amount.hasError('required') && (tdsForm.controls.rental_amount.dirty || tdsForm.controls.rental_amount.touched )">This field is required</p>
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.rental_amount.hasError('pattern') && (tdsForm.controls.rental_amount.dirty || tdsForm.controls.rental_amount.touched )">Please Enter a valid amount</p>
+                                 </td>
+                              </tr>
+                              <tr [hidden]="tdsForm.value.rental_house=='N'">
+                                 <td>
+                                    <label class="tx-medium m-0">Address &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <textarea class="form-control" formControlName="address"></textarea>
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.address.hasError('required') && ( tdsForm.controls.address.dirty || tdsForm.controls.address.touched )">This field is required</p>
+                                 </td>
+                                 <td>
+                                    <label class="tx-medium m-0">Landloard Name &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <input type="text" class="form-control" formControlName="landlord_name">
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.landlord_name.hasError('required') && ( tdsForm.controls.landlord_name.dirty || tdsForm.controls.landlord_name.touched )">This field is required</p>
+                                 </td>
+                              </tr>
+                              <tr [hidden]="tdsForm.value.rental_house=='N'">
+                                 <td>
+                                    <label class="tx-medium m-0">Urbanization type &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <select class="form-control" formControlName="urbanizaion_type">
+                                       <option value="">Urbanization type</option>
+                                       <option value="metro">Metro</option>
+                                       <option value="non-metro">Non-Metro</option>
+                                    </select>
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.urbanizaion_type.hasError('required') && ( tdsForm.controls.urbanizaion_type.dirty || tdsForm.controls.urbanizaion_type.touched )">This field is required</p>
+                                 </td>
+                                 <td>
+                                    <label class="tx-medium m-0">Landloard Pan &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <input type="text" class="form-control" formControlName="landlord_pan">
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.landlord_pan.hasError('required') && ( tdsForm.controls.landlord_pan.dirty || tdsForm.controls.landlord_pan.touched )">This field is required</p>
+                                 </td>
+                              </tr>
+                              <tr [hidden]="tdsForm.value.rental_house=='N'">
+                                 <td>
+                                    <label class="tx-medium m-0">Upload Document &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td colspan="5">
+                                    <input type="file" accept="image/*" multiple="true"  (change)="onMulFileChanged($event,'rantal_document_file','rantal_document')" class="form-control" formControlName="rantal_document">
+
+                                    <p class="mt-1 text-danger" *ngIf="tdsForm.controls.rantal_document.hasError('required') && ( tdsForm.controls.rantal_document.dirty || tdsForm.controls.rantal_document.touched )">This field is required</p>
+                                    
+                                    <p class="error-element" *ngIf="tdsForm.get('rantal_document').hasError('fileSize')">
+                                       File size exceeds {{ tdsForm.get('rantal_document').getError('maxSize') }} KB.</p>
+
+                                    <ul style="list-style-type: none;margin-top:2px; padding:0;">
+                                       
+                                       <li style="display: inline-block" *ngFor="let fileItem of tdsForm.value.rantal_documents_previews;  let ccnt = index ">
+                                          <a *ngIf="fileItem" href="{{Global.BACKEND_URL}}/{{fileItem}}" target="_blank"> Doc - {{ccnt+1}} <span *ngIf="((tdsForm.value.rantal_documents_previews.length-1)!=ccnt)">|</span> &nbsp;</a>
+                                       </li>
+                                    </ul>
+                                    <p class="error-element" *ngIf="(max_upload_limit>0 && net_uploaded_size>max_upload_limit)">Max Upload Size Exceed</p>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>
+                                    <label class="tx-medium m-0">Applicable For &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <div class="form-check">
+                                       <label class="form-check-label" style="width: 104px;">
+                                       <input class="form-check-input radio-inline" type="radio" (change)="removeeightC();" formControlName="applicable_for" id="gridRadios1" value="old_regime">
+                                       OLD Regime</label>
+                                       <label class="form-check-label">
+                                       <input class="form-check-input radio-inline" type="radio" (change)="removeeightC();" formControlName="applicable_for" id="gridRadios2" value="new_regime">
+                                       NEW Regime</label>
+                                    </div>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>
+                                    <label class="tx-medium m-0">Repaying the home loan for a self-occured house property &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td>
+                                    <input type="checkbox" value="true" [checked]="tdsForm.value.house_property=='Y'" (change)="toggle($event,'house_property')">
+                                 </td>
+                                 <td>
+                                    <label class="tx-medium m-0">Do you have a let out property with or without a rental income &nbsp; <span class="text-danger">*</span>
+                                    </label>
+                                 </td>
+                                 <td colspan="2">
+                                    <input type="checkbox" value="true"  [checked]="tdsForm.value.rental_income=='Y'" (change)="toggle($event,'rental_income')">
+                                 </td>
+                              </tr>
+                              <ng-container formArrayName="eighty_c_investments" *ngIf="tdsForm.value.applicable_for=='old_regime'">
+                                 <ng-container *ngFor="let deductDataControl of deductionRows(); let i = index" [formGroupName]="i">
+                                 <ng-container *ngIf="deductionRows()[i].value.children.length==0;else child_tpl">
+                                    <tr >
+                                       <td>
+                                          {{deductionRows()[i].value.label}}
+                                       </td>
+                                       <td colspan="5">
+                                          <input type="text" class="form-control" placeholder="Amount"  [readOnly]="true" formControlName="amount">
+                                       </td>
+                                    </tr>
+                                 </ng-container>
+                                 <ng-template #child_tpl>
+                                    <ng-container formArrayName="children">
+                                       <tr *ngFor="let subItem of deductionSubItems(i).controls; let j=index" [formGroupName]="j">
+                                       <td>
+                                          {{j==0?deductionRows()[i].value.label:''}}
+                                       </td>
+                                       <td><input type="text" class="form-control" placeholder="Label"  formControlName="label"></td>
+                                       <td><input type="text" class="form-control" placeholder="Amount" (input)="changeAmount(deductionSubItems(i).controls[j].value.parent_id)" formControlName="amount"></td>
+                                       <td>
+                                          <label class="tx-medium m-0" >Upload Document&nbsp; <span class="text-danger">*</span></label>
+                                       </td>
+                                       <td>
+                                          <input type="file" [disabled]="net_uploaded_size>=max_upload_limit" accept="image/*" class="form-control" multiple="true"  (change)="onFileChanged($event, 'eighty_c_investments',i,'document_file',j)">
+                                          
+                                          
+                                          <p class="error-element" *ngIf="(max_upload_limit>0 && net_uploaded_size>max_upload_limit)">Max Upload Size Exceed</p>
+                                          <p class="error-element" *ngIf="deductionSubItems(i).controls[j].get('document_file').hasError('fileSize')">
+                                             File size exceeds {{ deductionSubItems(i).controls[j].get('document_file').getError('maxSize') }} KB.
+                                          </p>
+                                          <ul style="list-style-type: none;margin-top:2px; padding:0;">
+                                             <li style="display: inline-block" *ngFor="let fileItem of deductionSubItems(i).controls[j].value?.pre_sub_declaration_document;  let ccnt = index ">
+                                                <a *ngIf="fileItem?.file;" href="{{Global.BACKEND_URL}}/{{fileItem?.file}}" target="_blank"> Doc - {{ccnt+1}} <span *ngIf="((deductionSubItems(i).controls[j].value?.pre_sub_declaration_document.length-1)!=ccnt)">|</span> &nbsp;</a>
+                                             </li>
+                                          </ul>
+                                       </td>
+                                       <td>
+                                          <div class="">
+                                             <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows(i,deductionSubItems(i).controls[j].value.parent_id)" *ngIf="(deductionSubItems(i).controls.length-1)==j" class="btn btn-primary btn-icon mg-r-5">
+                                             <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                             </button>
+                                             <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow(i,j,deductionSubItems(i).controls[j].value.parent_id)" class="btn btn-danger btn-icon" *ngIf="deductionSubItems(i).controls.length>1">
+                                             <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                             </button>
+                                          </div>
+                                       </td>
+                                       </tr>
+                                    </ng-container>
+                                 </ng-template>
+                              </ng-container>
+                              </ng-container>   
+                              <tr >
+                                 <td>
+                                    Other
+                                 </td>
+                                 
+                                 <td colspan="2"><input type="text" class="form-control" placeholder="Amount"    formControlName="other_income_amount"></td>
+                                 <td>
+                                    <label class="tx-medium m-0" >Upload Document&nbsp; <span class="text-danger">*</span></label>
+                                 </td>
+                                 <td colspan="2">
+                                    <input type="file" [disabled]="net_uploaded_size>=max_upload_limit" accept="image/*" class="form-control" multiple="true"  formControlName="other_income_document_file" 
+                                    (change)="onMulFileChanged($event,'other_income_document','other_income_document_file')">
+                                    
+                                    <p class="error-element" *ngIf="(max_upload_limit>0 && net_uploaded_size>max_upload_limit)">Max Upload Size Exceed</p>
+                                    <p class="error-element" *ngIf="tdsForm.get('other_income_document_file').hasError('fileSize')">
+                                       File size exceeds {{ tdsForm.get('other_income_document_file').getError('maxSize') }} KB.
+                                    </p>
+                                    <!-- {{tdsDetails?.other_income_u_s_two_b | json}} -->
+                                    <ul style="list-style-type: none;margin-top:2px; padding:0;">
+                                       <li style="display: inline-block" *ngFor="let fileItem of tdsDetails?.other_income_u_s_two_b?.document;  let ccnt = index ">
+                                          <a *ngIf="fileItem?.file;" href="{{Global.BACKEND_URL}}/{{fileItem?.file}}" target="_blank"> Doc - {{ccnt+1}} <span *ngIf="((tdsDetails?.other_income_u_s_two_b?.document.length-1)!=ccnt)">|</span> &nbsp;</a>
+                                       </li>
+                                    </ul>
+                                   
+                                 </td>
+                                
+                                 </tr>
+                           </tbody>
+                        </table>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         <div class="text-center">
+            <button type="button" (click)="cancelEntry()" class="btn btn-danger pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150 mg-r-5">
+            <span>Cancel</span>
+            </button>
+            <ng-container *ngIf="!editActionId; else updateButton">
+               <button type="button" (click)="add($event)"  class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150">
+               <span>Save</span>
+               </button>
+            </ng-container>
+            <ng-template #updateButton>
+               <button type="button" (click)="add($event)" [disabled]="!tdsForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150">
+               <span>Update</span>
+               </button>
+            </ng-template>
+         </div>
+         </form>
+      </div>
+   </div>
+   <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+

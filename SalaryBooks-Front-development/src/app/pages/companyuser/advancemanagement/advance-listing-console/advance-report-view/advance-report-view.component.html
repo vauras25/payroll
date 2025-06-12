@@ -1,0 +1,409 @@
+<!-- <div class="table-wrapper mt-3" *ngIf="employees.length !== 1">
+  <div class="table-responsive">
+    <table
+      class="table table-bordered cust-table table-striped cust-reporting-table"
+    >
+      <thead>
+        <ng-container *ngFor="let module of isValueIncludemodules">
+          <tr class="title-sec">
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module?.fields?.length"
+              >
+              {{ module?.module_title }}
+            </th>
+          </tr>
+          <tr class="headings">
+            <ng-container *ngFor="let field of module?.fields">
+              <th class="column-title">
+                {{ field?.title }}
+              </th>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </thead>
+      <tbody>
+          <tr *ngFor="let employee of employees; let employeeIndex = index">
+            <ng-container *ngFor="let module of isValueInclude<ng-container *ngFor="let field of module.fields">
+                <ng-container [ngSwitch]="field.slug">
+                  <ng-container *ngSwitchCase="'sl_no'">
+                    <td>{{ employeeIndex + 1 }}</td>
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    <ng-container [ngSwitch]="field.field_type">
+                      <ng-container *ngSwitchCase="'employee_detail'">
+                        <td>
+                          {{ getReportTdValue(employee, field) ?? "N/A" }}
+                        </td>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'advance_data'">
+                        <tr *ngFor="let advance of employee.advance_modules">
+                          <td>
+                            {{ getMappingValue(field?.mapping, advance) ?? "N/A" }}
+                          </td>
+                        </tr>
+
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </tr>
+        <tr *ngIf="employees?.length == 0">
+          <td colspan="100%" class="text-center">No records found</td>
+        </tr>
+        <tr *ngIf="employees?.length == 0">
+          <td colspan="100%" class="text-center">No records found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table-wrapper mt-3" *ngIf="employees.length == 1">
+  <div class="table-responsive">
+    <table
+      class="table table-bordered cust-table table-striped cust-reporting-table"
+    >
+      <thead>
+        <ng-container *ngFor="let module of isValueIncludetr class="title-sec">
+            <th
+              class="column-title text-center"
+              [attr.colspan]="module.fields.length"
+            >
+              {{ module?.module_title }}
+            </th>
+          </tr>
+          <tr class="headings">
+            <th class="column-title" *ngFor="let field of module.fields">
+              {{ field.title }}
+            </th>
+          </tr>
+        </ng-container>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let employee of employees; let employeeIndex = index">
+          <tr *ngFor="let advance of employee.advance_modules; let employeeIndex = index">
+            <ng-container *ngFor="let module of isValueIncludeng-container *ngFor="let field of module.fields">
+                <ng-container [ngSwitch]="field.slug">
+                  <ng-container *ngSwitchCase="'sl_no'">
+                    <td>{{ employeeIndex + 1 }}</td>
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    <ng-container [ngSwitch]="field.field_type">
+                      <ng-container *ngSwitchCase="'employee_detail'">
+                        <td>
+                          {{ getReportTdValue(employee, field) ?? "N/A" }}
+                        </td>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'advance_data'">
+                        <td>
+
+                        </td>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </tr>
+        </ng-container>
+        <tr *ngIf="employees?.length == 0">
+          <td colspan="100%" class="text-center">No records found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+
+<div class="m-3">
+  <!-- <div class="text-right mt-3">
+    <button
+      type="button"
+      class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+    >
+      <span>
+        <i style="font-size: 12px" class="fa fa-file-export"></i>
+        EXPORT</span
+      >
+    </button>
+    <button
+      type="button"
+      class="btn btn-dark tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+      routerLink="/company/advance-management/listing-console"
+    >
+      <span>
+        CANCEL</span
+      >
+    </button>
+  </div> -->
+
+  <div class="mt-3">
+    <div class="table-responsive mt-3">
+      <table *ngIf="templateName !== 'Form C' && templateName !== 'Form 22-Advance Register'" class="w-100 c-table">
+        <colgroup span="3"></colgroup>
+
+        <thead>
+          <tr>
+            <th>SL No.</th>
+            <th *ngIf="isValueInclude('emp_id')">Employee ID</th>
+            <th *ngIf="isValueInclude('emp_name')">Employee Name</th>
+            <th *ngIf="isValueInclude('department')">Department</th>
+            <th *ngIf="isValueInclude('designation')">Designation</th>
+            <th *ngIf="isValueInclude('client')">Branch</th>
+            <th *ngIf="isValueInclude('branch')">Client</th>
+            <th *ngIf="isValueInclude('hod')">HOD</th>
+            <th *ngIf="isValueInclude('advance_id')">Advance Id</th>
+            <th *ngIf="isValueInclude('recover_form')">Recover Form</th>
+            <th *ngIf="isValueInclude('no_of_instalments')">
+              No Of Instalments
+            </th>
+            <th *ngIf="isValueInclude('intstalment_amount')">
+              Instalment Amount
+            </th>
+            <th *ngIf="isValueInclude('start_month')">Start Month</th>
+            <th *ngIf="isValueInclude('end_month')">End Month</th>
+            <th *ngIf="isValueInclude('advance_given')">Advance Given</th>
+            <th *ngIf="isValueInclude('advance_recovered')">
+              Advance Recovered
+            </th>
+            <th *ngIf="isValueInclude('advance_balance')">Advance Balance</th>
+            <th *ngIf="isValueInclude('opening_balance')">Opening Balance</th>
+            <th *ngIf="isValueInclude('total_advance_given')">
+              Total Advance Given
+            </th>
+            <th *ngIf="isValueInclude('total_advance_recovered')">
+              Total Advance Recovered
+            </th>
+            <th *ngIf="isValueInclude('closing_balance')">Closing Balance</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- <ng-container> -->
+          <tr *ngFor="let report of employees; let i = index">
+            <td >
+              {{ i + 1 }}
+            </td>
+
+            <td
+              *ngIf="isValueInclude('emp_id')"
+
+            >
+              {{ report?.emp_id }}
+            </td>
+            <td
+              *ngIf="isValueInclude('emp_name')"
+
+            >
+              {{ report?.emp_first_name }} {{ report?.emp_last_name }}
+            </td>
+            <td
+              *ngIf="isValueInclude('department')"
+
+            >
+              {{ report?.department?.department_name || "N/A" }}
+            </td>
+            <td
+              *ngIf="isValueInclude('designation')"
+
+            >
+              {{ report?.designation?.designation_name || "N/A" }}
+            </td>
+            <td
+              *ngIf="isValueInclude('client')"
+
+            >
+              {{ report?.branch?.branch_name || "N/A" }}
+            </td>
+            <td
+              *ngIf="isValueInclude('branch')"
+
+            >
+              {{ report?.client?.client_name || "N/A" }}
+            </td>
+            <td
+              *ngIf="isValueInclude('hod')"
+
+            >
+              {{ report?.hod?.first_name || "N/A" }}{{ report?.hod?.last_name }}
+            </td>
+            <td *ngIf="isValueInclude('advance_id')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">{{ advance.id || 0 }}</td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('recover_form')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{ advance.recovery_from || "N/A" | titlecase }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('no_of_instalments')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{ +advance.no_of_instalments || 0 | number }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('intstalment_amount')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{
+                    +advance.advance_amount / +advance.no_of_instalments || 0
+                      | number
+                  }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('start_month')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{ utilizeMonth(advance.payment_start_month) || "N/A" }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('end_month')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{ utilizeMonth(advance.payment_start_month) || "N/A" }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('advance_given')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{ +advance.advance_amount || 0 | number }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('advance_recovered')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{
+                    +advance.advance_amount - +remaining_amount || 0 | number
+                  }}
+                </td>
+              </tr>
+            </td>
+            <td *ngIf="isValueInclude('advance_balance')">
+              <span *ngIf="!report.advance_modules.length">0</span>
+              <tr
+                *ngFor="let advance of report.advance_modules"
+                style="
+                  background-color: transparent !important;
+                  white-space: nowrap;
+                  border: none !important;
+                "
+                class="border-0"
+              >
+                <td class="px-0 py-1 border-0">
+                  {{ +advance.advance_outstanding || 0 | number }}
+                </td>
+              </tr>
+            </td>
+            <td class="text-bottom" *ngIf="isValueInclude('opening_balance')">
+              {{ report?.advance_module?.opening_balance | number }}
+            </td>
+            <td
+              class="text-bottom"
+              *ngIf="isValueInclude('total_advance_given')"
+            >
+              {{ report?.advance_module?.advance_amount | number }}
+            </td>
+            <td
+              class="text-bottom"
+              *ngIf="isValueInclude('total_advance_recovered')"
+            >
+              {{ report?.advance_module?.advance_recovered | number }}
+            </td>
+            <td class="text-bottom" *ngIf="isValueInclude('closing_balance')">
+              {{
+                report?.advance_module?.advance_amount -
+                  report?.advance_module?.advance_recovered | number
+              }}
+            </td>
+          </tr>
+          <!-- </ng-container> -->
+        </tbody>
+      </table>
+      <advance-form-c [company]="company" [employees]="employees" *ngIf="templateName === 'Form C'"></advance-form-c>
+      <advance-form-twentytwo [company]="company" [employees]="employees" *ngIf="templateName === 'Form 22-Advance Register'"></advance-form-twentytwo>
+    </div>
+  </div>
+</div>

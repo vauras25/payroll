@@ -1,0 +1,97 @@
+/* .btn {
+  min-width: 120px;
+} */
+th{
+    white-space: nowrap;
+}
+
+thead tr {
+    font-size: 12px !important;
+    background-color: #EDF2F2;
+    border-bottom: 1px solid grey;
+}
+
+tbody tr {
+    background-color: #fff;
+    color: #000;
+    font-size: 12px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+td {
+    border: none;
+    border-left: 1px solid #dee2e6;
+    border-collapse: collapse;
+}
+
+td:first-child {
+    border: none;
+}
+
+.actionBtn {
+    border: 1px solid #E3E3EE;
+    border-radius: 4px;
+    background: #F6F6F9;
+    padding: 10px;
+}
+
+tr:last-child {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.c-table {
+    /* margin:10px  0px; */
+    box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+        1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+}
+
+.c-table .c-tr .c-td,
+.c-th {
+    box-shadow: 1px 0 0 0 #000, 0 1px 0 0 #000, 1px 1px 0 0 #000,
+        1px 0 0 0 #000 inset, 0 1px 0 0 #000 inset;
+    padding: 6px 12px;
+    width: 25%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.c-th {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    background-color: rgba(20, 20, 20, 0.822);
+    color: #fff;
+}
+
+.c-td {
+    font-size: 13px;
+    white-space: nowrap;
+    color: #000;
+}
+
+.c-table .c-tr label {
+    margin: 0px;
+    display: flex;
+}
+
+input[type=checkbox] {
+    accent-color: #17A3B4;
+}
+
+input[type=checkbox]:read-only {
+    pointer-events: none;
+}
+
+.table.employee-table td {
+    border-bottom: 1px solid #dee2e6 !important;
+    border-left: 1px solid #dee2e6 !important;
+}
+
+.table.employee-table {
+    border-right: 1px solid #dee2e6;
+    border-top: 1px solid #dee2e6;
+}

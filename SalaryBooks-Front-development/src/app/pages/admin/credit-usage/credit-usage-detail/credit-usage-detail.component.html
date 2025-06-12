@@ -1,0 +1,221 @@
+<div class="br-pagebody pd-x-20 pd-sm-x-30">
+    <div class="br-section-wrapper">
+        <h6 class="br-section-label mb-3">Search User</h6>
+
+        <div class="card" style="border:0px;">
+            <form [formGroup]="subscriptionUserSearchForm">
+                <div class="card-block pd-0">
+                    <div class="row row-sm mg-t-20">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="form-group mg-b-0">
+                                <label class="d-block">From</label>
+                                <input class="form-control" type="month" formControlName="wage_from_date">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="form-group mg-b-0">
+                                <label class="d-block">To</label>
+                                <input class="form-control" type="month" formControlName="wage_to_date">
+                            </div>
+                        </div>
+                    
+                        
+                        
+                    </div>
+
+                    <button (click)="fetch()" class="btn btn-info tx-11 tx-spacing-1 tx-uppercase tx-semibold tx-mont pd-y-12 pd-x-30 mg-t-30">
+                        <span>Search</span>
+                    </button>
+                  
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="br-pagebody pd-x-20 pd-sm-x-30">
+   
+    
+    <div class="br-section-wrapper">
+        
+            <h6 class="br-section-label">Credit Usage
+            </h6>
+            
+           <div style="float: right;">
+            <button
+            type="button"
+            class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            style="float: right;"
+            [disabled]="
+                !anyRowsChecked()
+              "
+           (click)="exportData();"   
+           style="margin-bottom:5px;"
+          >
+            <span
+              ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+              >Export</span
+            >
+            </button>
+
+            <button
+            type="button"
+            class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+            
+            
+           (click)="cancellData();"   
+           style="margin-bottom:5px;"
+          >
+            <span>Cancel</span>
+            </button>
+           </div>
+       
+            
+            <div class="table-wrapper mt-1" *ngIf="showContent" >
+
+              
+
+                <table class="table display responsive nowrap wd-100p"   datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><input type="checkbox"  [attr.checked]="
+                                rowCheckedAll == true ? 'checked' : null
+                                " [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"></th>
+                            <th class="text-center">SL No</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Particulars</th>
+                            <th class="text-center"></th>
+                            <th class="text-center">Addition</th>
+                            <th class="text-center">Deduction</th>
+                            <th class="text-center">Balance</th>
+                            <th class=""></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody >
+                      
+
+                        <ng-container *ngFor="let row of rows;">
+                       
+                        <tr  *ngFor="let item of row?.company_credit_history_logs;let i=index">
+                                <td class="text-center">
+                                    <label
+                                    class="align-items-center"
+                                    [for]="'checkrow-' + (item?.sl_no)"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="mr-2"
+                                      [attr.checked]="
+                                      item?.checked == true ? 'checked' : null
+                                      "
+                                      id="checkrow-{{ item?.sl_no }}"
+                                      [attr.data-checkbox-id]="row?._id"
+                                      (click)="rowCheckBoxChecked($event, row)"
+                                    />
+                                   
+                                  </label>    
+                
+                
+                                </td>
+                                <td class="text-center"> {{
+                                    item?.sl_no
+                                  }}</td>
+                                <td class="text-center">{{item?.created_at | date:'dd/MM/YYYY'}}</td>
+                                <td class="text-center">{{item?.particular}}</td>
+                                <td class="text-center">{{item?.inv_id ?? 'N/A'}}</td>
+                                <td class="text-center">{{(item?.credited_amnt | number:'1.2-2') ??''}}</td>
+                                <td class="text-center">{{((item?.deduct_amnt | number:'1.2-2')) ?? '' }}</td>
+                                <td class="text-center">{{(item?.credit_balance | number:'1.2-2') ?? '' }}</td>
+                               
+                                <td class="text-center">
+                                    <button class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" (click)="viewData(item)"  data-placement="top" title="View" >
+                                        <div style="width:25px; height:25px;"><i class="fa fa-eye" aria-hidden="true"></i></div>
+                                    </button>
+                                </td>
+                            
+                            
+            
+                        </tr>
+                    </ng-container>
+                    </tbody>
+                  
+                </table>
+            </div>
+       
+      
+        
+       
+    </div>
+</div>    
+
+<button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+<div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-header pd-x-20">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold"></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                <div class="">
+                    <table class="table display responsive nowrap wd-100p employee-table" >
+                    <!-- <tr>
+                        <td colspan="3">
+
+                        </td>
+                    </tr>     -->
+                    <ng-container *ngIf="creditDetails?.type=='credit_coupon' || creditDetails?.type=='credit'">
+                       
+                        <iframe frameBorder="0" *ngIf="creditDetails?.file_path!=''" [src]="creditDetails?.file_path"  style="height: 800px;width:100%;border:none;" ></iframe>
+
+                    </ng-container>
+                    <ng-container *ngIf="creditDetails?.type=='consumed'">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Credits</td>
+                        </tr>
+                        <tr>
+                            <td>Plan Rental</td>
+                            <td>{{creditDetails?.plan}}</td>
+                            <td>{{creditDetails?.credit_balance ?? 0}}</td>
+                        </tr>
+                        <tr>
+                            <td>Package</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Free Employees</td>
+                            <td>{{creditDetails?.total_free_employee}}</td>
+                            <td>---</td>
+                        </tr>
+                        <tr>
+                            <td>Free Sub Admin</td>
+                            <td>{{creditDetails?.total_free_staff}}</td>
+                            <td>---</td>
+                        </tr>
+                        <tr>
+                            <td>Additional Employess</td>
+                            <td>{{creditDetails?.total_additional_employee}}</td>
+                            <td>{{creditDetails?.total_employee_cost ?? 0}}</td>
+                        </tr>
+                        <tr>
+                            <td>Additional Sub-Admin</td>
+                            <td>{{creditDetails?.total_additional_staff}}</td>
+                            <td>{{creditDetails?.total_staff_cost ?? 0}}</td>
+                        </tr>
+                    </ng-container>
+                        
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

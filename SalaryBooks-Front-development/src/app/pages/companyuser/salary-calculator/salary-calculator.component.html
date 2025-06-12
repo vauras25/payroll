@@ -1,0 +1,404 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashbaord</a>
+            <span class="breadcrumb-item active">Salary BreakUp</span>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-calculator"></i>
+        <div>
+            <h4>Salary BreakUp</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <!-- Calculation Form -->
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="salaryCalculationForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Salary Template&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'salary_template', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="salary_template" [options]="salaryTemplateMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}" (searchChange)="salaryTmpSearch($event)" [class.error]="salaryCalculationForm.controls.salary_template.dirty || salaryCalculationForm.controls.salary_template.touched"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="salaryCalculationForm.controls.salary_template.hasError('required') && ( salaryCalculationForm.controls.salary_template.dirty || salaryCalculationForm.controls.salary_template.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            State&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'state', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="state" [options]="stateMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}" [class.error]="salaryCalculationForm.controls.state.dirty || salaryCalculationForm.controls.state.touched"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="salaryCalculationForm.controls.state.hasError('required') && ( salaryCalculationForm.controls.state.dirty || salaryCalculationForm.controls.state.touched )">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Table View&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'table_view', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label class="ckbox mg-t-15">
+                              <input type="checkbox" formControlName="table_view">
+                              <span>YES</span>
+                            </label>
+
+                            <p class="error-element" *ngIf="salaryCalculationForm.controls.table_view.hasError('required') && ( salaryCalculationForm.controls.table_view.dirty || salaryCalculationForm.controls.table_view.touched )">This field is required</p>
+                        </div>
+
+                        <ng-container *ngIf="calculate_type == 'grosstoctc'">
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Amount&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'amount', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input type="text" class="form-control pd-y-12" placeholder="Enter Amount" formControlName="amount">
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.amount.hasError('required') && ( salaryCalculationForm.controls.amount.dirty || salaryCalculationForm.controls.amount.touched )">This field is required</p>
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.amount.hasError('pattern') && ( salaryCalculationForm.controls.amount.dirty || salaryCalculationForm.controls.amount.touched )">Enter valid number</p>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="calculate_type == 'ctctogross'">
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                From Amount&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'from_amount', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input type="text" class="form-control pd-y-12" placeholder="Enter Amount" formControlName="from_amount">
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.from_amount.hasError('required') && ( salaryCalculationForm.controls.from_amount.dirty || salaryCalculationForm.controls.from_amount.touched )">This field is required</p>
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.from_amount.hasError('pattern') && ( salaryCalculationForm.controls.from_amount.dirty || salaryCalculationForm.controls.from_amount.touched )">Enter valid number</p>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <ng-container *ngIf="calculate_type == 'ctctogross'">
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                To Amount&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'to_amount', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input type="text" class="form-control pd-y-12" placeholder="Enter Amount" formControlName="to_amount">
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.to_amount.hasError('required') && ( salaryCalculationForm.controls.to_amount.dirty || salaryCalculationForm.controls.to_amount.touched )">This field is required</p>
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.to_amount.hasError('pattern') && ( salaryCalculationForm.controls.to_amount.dirty || salaryCalculationForm.controls.to_amount.touched )">Enter valid number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Amount Span&nbsp;<span *ngIf="Global.isValidationAvailable(salaryCalculationForm, 'amount_span', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input type="text" class="form-control pd-y-12" placeholder="Enter Amount" formControlName="amount_span">
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.amount_span.hasError('required') && ( salaryCalculationForm.controls.amount_span.dirty || salaryCalculationForm.controls.amount_span.touched )">This field is required</p>
+
+                                <p class="error-element" *ngIf="salaryCalculationForm.controls.amount_span.hasError('pattern') && ( salaryCalculationForm.controls.amount_span.dirty || salaryCalculationForm.controls.amount_span.touched )">Enter valid number</p>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12" style="border-right: 1px solid #ced4da;">
+                            <button type="button" (click)="resetCalculatedData(true)" class="btn btn-danger pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 wd-150 mg-r-10"><span>Reset</span></button>
+                            <button type="submit" (click)="submit($event)" class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 wd-150"><span>Calculate</span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Gross to CTC Calculation Result -->
+            <div class="row" *ngIf="this.calculate_type == 'grosstoctc' && this.calulatedSalaryData">
+                <!-- <div class="row"> -->
+                <div class="col-12 mt-4">
+                    <table class="table table-bordered define-leave-rule-table">
+                        <thead class="thead-colored thead-primary text-center">
+                            <tr>
+                                <th>Earning</th>
+                                <th>Deduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="vertical-align: top !important;">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr *ngFor="let item of calulatedSalaryData?.heads">
+                                                <ng-container *ngIf="item.head_type == 'earning'">
+                                                    <td >{{item.head_title}}</td>
+    
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input class="form-control" placeholder="N/A" readonly value="{{Global.viewRupeeFormat(item.head_rate)}}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                  <ng-container [ngSwitch]="item.head_rate_type">
+                                                                    <ng-container *ngSwitchCase="'amount'">₹</ng-container>
+                                                                    <ng-container *ngSwitchCase="'percent'">%</ng-container>
+                                                                    <ng-container *NgSwitchDefault>{{item.head_rate_type}}</ng-container>
+                                                                  </ng-container>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+    
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input class="form-control" placeholder="N/A" readonly value="{{Global.viewRupeeFormat(item.amount)}}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">₹</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td>
+                                    <table class="table">
+                                        <tbody>
+                                            <!-- <tr>
+                                                <td>Special Deduction</td>
+                                                <td colspan="2"><input class="form-control " placeholder="N/A" readonly></td>
+                                            </tr> -->
+                                            <tr>
+                                                <td>PF</td>
+
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input class="form-control" placeholder="N/A" readonly value="{{ (calulatedSalaryEpfoTemp?.pf_employee_contribution) ? Global.viewRupeeFormat(calulatedSalaryEpfoTemp.pf_employee_contribution): 0 }}">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input class="form-control" placeholder="N/A" readonly value="{{ (calulatedSalaryData?.epf_data?.emoloyee_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.epf_data.emoloyee_contribution): 0 }}">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">₹</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>ESI</td>
+
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input class="form-control" placeholder="N/A" readonly value="{{ (calulatedSalaryEsicTemp?.employee_contribution) ? Global.viewRupeeFormat(calulatedSalaryEsicTemp.employee_contribution): 0 }}">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input class="form-control " placeholder="N/A" readonly value="{{ (calulatedSalaryData?.esic_data?.emoloyee_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.esic_data.emoloyee_contribution): 0 }}">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">₹</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>PT (₹ As per PT rate slab)</td>
+                                                <td><input class="form-control " placeholder="N/A" readonly value="{{ (calulatedSalaryData?.p_tax_amount) ? Global.viewRupeeFormat(calulatedSalaryData.p_tax_amount): 0 }}"></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+
+                                            <!-- <tr>
+                                                <td>TDS (₹ As per current financial year)</td>
+                                                <td><input class="form-control " placeholder="N/A" readonly></td>
+                                                <td>&nbsp;</td>
+                                            </tr> -->
+
+                                            <tr>
+                                                <td>Voluntary PF</td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input class="form-control " placeholder="N/A" readonly value="{{ (calulatedSalaryData?.voluntary_pf_amount) ? Global.viewRupeeFormat(calulatedSalaryData.voluntary_pf_amount): 0 }}">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">₹</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr *ngFor="let item of calulatedSalaryData?.heads">
+                                                <ng-container *ngIf="item.head_type == 'deduction'">
+                                                    <td >{{item.head_title}}</td>
+    
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input class="form-control" placeholder="N/A" readonly value="{{Global.viewRupeeFormat(item.head_rate)}}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                  <ng-container [ngSwitch]="item.head_rate_type">
+                                                                    <ng-container *ngSwitchCase="'amount'">₹</ng-container>
+                                                                    <ng-container *ngSwitchCase="'percent'">%</ng-container>
+                                                                    <ng-container *NgSwitchDefault>{{item.head_rate_type}}</ng-container>
+                                                                  </ng-container>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+    
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <input class="form-control" placeholder="N/A" readonly value="{{Global.viewRupeeFormat(item.amount)}}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">₹</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-center">
+                                    <span class="badge badge-dark badge-lg">
+                                        Gross Earning : {{ (calulatedSalaryData?.gross_earning) ? Global.viewRupeeFormat(calulatedSalaryData.gross_earning): 0 }} (₹)
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge badge-dark badge-lg">
+                                        Gross Deduct : {{ (calulatedSalaryData?.gross_deduct) ? Global.viewRupeeFormat(calulatedSalaryData.gross_deduct): 0 }} (₹)
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    <span class="badge badge-dark badge-lg mx-2">
+                                        Total CTC : <b>{{ (calulatedSalaryData?.ctc_amount) ? Global.viewRupeeFormat(calulatedSalaryData.ctc_amount): 0 }} (₹)</b>
+                                    </span>
+
+                                    <span class="badge badge-dark badge-lg mx-2">
+                                        Net Take Home Salary : <b>{{ (calulatedSalaryData?.net_take_home) ? Global.viewRupeeFormat(calulatedSalaryData.net_take_home): 0 }} (₹)</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CTC to Gross Calculation Result -->
+            <div class="row" *ngIf="this.calculate_type == 'ctctogross' && Global.checkIfArray(this.calulatedSalaryData)">
+                <div class="col-12 mt-4">
+                    <table class="table table-bordered define-leave-rule-table" id="ctctogross-datatable" datatable [dtOptions]="ctcgrossDatabale">
+                        <thead class="bg-primary text-center">
+                            <tr>
+                                <th class="text-white">Sl</th>
+                                <th class="text-white">CTC Amount</th>
+                                <th class="text-white">Gross Earning</th>
+                                <!-- <th class="text-white">Gross Deduct</th> -->
+                                <th class="text-white">Net Take Home Salary</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="this.calculate_type == 'grosstoctc'">
+        <!-- Employer EPF Contribution -->
+        <div class="br-pagebody" *ngIf="this.calulatedSalaryData">
+            <!-- <div class="br-pagebody"> -->
+            <div class="br-section-wrapper pd-30">
+                <h6 class="br-section-label mb-3">Employer EPF Contribution</h6>
+                <table class="table table-bordered table-hover" id="datatable1">
+                    <thead class="thead-colored thead-info">
+                        <tr>
+                            <th scope="col">Employer EPF Contribution</th>
+                            <th scope="col">Employer EPS Contribution</th>
+                            <th scope="col">Employer EDLIS Contribution</th>
+                            <th scope="col">Employer EPF Admin Contribution</th>
+                            <th scope="col">Employer EDLIS Admin Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Rate : <span class="contribution-per p-green">{{ (calulatedSalaryEpfoTemp?.pf_employer_contribution) ? Global.viewRupeeFormat(calulatedSalaryEpfoTemp.pf_employer_contribution) : 0 }} %</span><br>
+                                <hr> Actual Cost (₹) : <span class="contribution-per p-ghray">{{ (calulatedSalaryData?.epf_data?.emoloyer_pf_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.epf_data.emoloyer_pf_contribution) : 0 }} (₹)</span><br>
+                            </td>
+                            <td>
+                                Rate : <span class="contribution-per p-green">{{ (calulatedSalaryEpfoTemp?.pension_employer_contribution) ? Global.viewRupeeFormat(calulatedSalaryEpfoTemp.pension_employer_contribution) : 0 }} %</span><br>
+                                <hr> Actual Cost (₹) : <span class="contribution-per p-ghray">{{ (calulatedSalaryData?.epf_data?.emoloyer_eps_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.epf_data.emoloyer_eps_contribution) : 0 }} (₹)</span><br>
+                            </td>
+                            <td>
+                                Rate : <span class="contribution-per p-green">{{ (calulatedSalaryEpfoTemp?.edli_employer_contribution) ? Global.viewRupeeFormat(calulatedSalaryEpfoTemp.edli_employer_contribution) : 0 }} %</span><br>
+                                <hr> Actual Cost (₹) : <span class="contribution-per p-ghray">{{ (calulatedSalaryData?.epf_data?.emoloyer_edlis_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.epf_data.emoloyer_edlis_contribution) : 0 }} (₹)</span><br>
+                            </td>
+                            <td>
+                                Rate : <span class="contribution-per p-green">{{ (calulatedSalaryEpfoTemp?.admin_charges) ? Global.viewRupeeFormat(calulatedSalaryEpfoTemp.admin_charges) : 0 }} %</span><br>
+                                <hr> Actual Cost (₹) : <span class="contribution-per p-ghray">{{ (calulatedSalaryData?.epf_data?.emoloyer_epf_admin_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.epf_data.emoloyer_epf_admin_contribution) : 0 }} (₹)</span><br>
+                            </td>
+                            <td>
+                                Rate : <span class="contribution-per p-green">{{ (calulatedSalaryEpfoTemp?.edli_admin_charges) ? Global.viewRupeeFormat(calulatedSalaryEpfoTemp.edli_admin_charges) : 0 }} %</span><br>
+                                <hr> Actual Cost (₹) : <span class="contribution-per p-ghray">{{ (calulatedSalaryData?.epf_data?.emoloyer_edlis_admin_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.epf_data.emoloyer_edlis_admin_contribution) : 0 }} (₹)</span><br>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="5">Total Employer PF Contribution: <span class="contribution-per p-ghray" style="float: inherit;margin-left: 5px;">{{ (calulatedSalaryData?.total_employeer_pf_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.total_employeer_pf_contribution) : 0 }} (₹)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!-- Employer ESIC Contributio -->
+        <div class="br-pagebody" *ngIf="this.calulatedSalaryData">
+            <!-- <div class="br-pagebody"> -->
+            <div class="br-section-wrapper pd-30">
+                <h6 class="br-section-label mb-3">Employer ESIC Contribution</h6>
+                <table class="table table-bordered table-hover" id="datatable2">
+                    <thead class="thead-colored thead-info">
+                        <tr>
+                            <th scope="col">Employer ESIC Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Rate : <span class="contribution-per p-green" style="float: inherit; margin-left: 5px;">{{ (calulatedSalaryEsicTemp?.employer_contribution) ? Global.viewRupeeFormat(calulatedSalaryEsicTemp.employer_contribution) : 0 }} %</span><br>
+                                <hr> Actual Cost (₹) : <span class="contribution-per p-ghray" style="float: inherit; margin-left: 5px;">{{ (calulatedSalaryData?.esic_data?.emoloyer_contribution) ? Global.viewRupeeFormat(calulatedSalaryData.esic_data.emoloyer_contribution): 0 }} (₹)</span><br>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </ng-container>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

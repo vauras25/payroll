@@ -1,0 +1,505 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Bonus Management</a>
+      <a class="breadcrumb-item active">Bonus Applied</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-cash"></i>
+    <div>
+      <h4>Bonus Management</h4>
+      <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper">
+
+      <form>
+        <div class="row">
+          <div class="col-sm-4">
+            <ngx-select-dropdown
+              formControlName="template"
+              class="form-control p-1"
+              [config]="{
+                search: true,
+                placeholder: 'Select Custom Template',
+                displayKey: 'template_name',
+                height: '250px'
+              }"
+            ></ngx-select-dropdown>
+          </div>
+
+          <div class="col-sm-2">
+            <button
+              type="submit"
+              class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+              [disabled]="true" >
+              <i style="font-size: 15px" class="fa fa-file-invoice-dollar mr-1"></i>
+              Payment
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <button
+              type="submit"
+              class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+              [disabled]="true">
+            <i style="font-size: 15px" class="fas fa-tasks mr-1"></i>
+              Compliance
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <button
+              type="submit"
+              class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+              [disabled]="true">
+
+              <i style="font-size: 15px" class="fa fa-file-excel mr-1"></i>
+              Download
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <button
+              type="submit"
+              class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+              [disabled]="true"
+            >
+            <i style="font-size: 15px" class="fa fa-file-invoice-dollar mr-1"></i>
+              BONUS SLIP
+            </button>
+          </div>
+        </div>
+      </form>
+      <br />
+
+      <div class="card-body px-0 bd-t-0 rounded-bottom">
+        <div class="font-16">Incentive Summary Chart for the period</div>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered cust-table table-striped"
+            id="salarysheet-report-table"
+            #salarysheetreporttable
+          >
+            <thead>
+              <tr class="title-sec text-center">
+                <th colspan="10">Wage Month 1</th>
+              </tr>
+              <tr class="title-sec">
+                <th style="min-width:20px; white-space:nowrap">SL No.</th>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Client</th>
+                <th>Branch</th>
+                <th>HOD</th>
+                <th>Incentive Accumulated</th>
+                <th>Incentive Setteled</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>1234D55</td>
+                <td>John</td>
+                <td>Development</td>
+                <td>Developer</td>
+                <td>John Doe</td>
+                <td>Ivan</td>
+                <td>Debasish Jana</td>
+                <td>lorem ipsum</td>
+                <td>lorem ipsum</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1234D55</td>
+                <td>John</td>
+                <td>Development</td>
+                <td>Developer</td>
+                <td>John Doe</td>
+                <td>Ivan</td>
+                <td>Debasish Jana</td>
+                <td>lorem ipsum</td>
+                <td>lorem ipsum</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1234D55</td>
+                <td>John</td>
+                <td>Development</td>
+                <td>Developer</td>
+                <td>John Doe</td>
+                <td>Ivan</td>
+                <td>Debasish Jana</td>
+                <td>lorem ipsum</td>
+                <td>lorem ipsum</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1234D55</td>
+                <td>John</td>
+                <td>Development</td>
+                <td>Developer</td>
+                <td>John Doe</td>
+                <td>Ivan</td>
+                <td>Debasish Jana</td>
+                <td>lorem ipsum</td>
+                <td>lorem ipsum</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <app-custom-pagination
+          ></app-custom-pagination>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bonus Update Modal -->
+  <button
+    id="updateBonusModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#updateBonusModal"
+  ></button>
+  <div id="updateBonusModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Update Bonus
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="bonusUpdateForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12 mb-3">
+                <label>Bonus Value <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Bonus Value"
+                  formControlName="bonus_value"
+                />
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    bonusUpdateForm.controls.bonus_value.hasError('required') &&
+                    (bonusUpdateForm.controls.bonus_value.dirty ||
+                      bonusUpdateForm.controls.bonus_value.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-12 mb-3">
+                <label
+                  >Exgratia Status <span class="text-danger">*</span></label
+                >
+                <ngx-select-dropdown
+                  formControlName="exgratia_status"
+                  [options]="exgratiaStatusMaster"
+                  class="form-control p-1"
+                  [config]="{ search: false, placeholder: 'Select One' }"
+                ></ngx-select-dropdown>
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    bonusUpdateForm.controls.exgratia_status.hasError(
+                      'required'
+                    ) &&
+                    (bonusUpdateForm.controls.exgratia_status.dirty ||
+                      bonusUpdateForm.controls.exgratia_status.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col-lg-12 mb-3">
+                <label
+                  >From Month / Year <span class="text-danger">*</span></label
+                >
+                <div class="row">
+                  <div class="col-lg-6">
+                    <ngx-select-dropdown
+                      formControlName="bonus_from_month"
+                      [options]="monthMaster"
+                      class="form-control p-1"
+                      [config]="{ search: false, placeholder: 'Select Month' }"
+                    ></ngx-select-dropdown>
+                    <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        bonusUpdateForm.controls.bonus_from_month.hasError(
+                          'required'
+                        ) &&
+                        (bonusUpdateForm.controls.bonus_from_month.dirty ||
+                          bonusUpdateForm.controls.bonus_from_month.touched)
+                      "
+                    >
+                      This field is required
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="bonus_from_year"
+                      placeholder="Enter Year"
+                    />
+
+                    <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        bonusUpdateForm.controls.bonus_from_year.hasError(
+                          'required'
+                        ) &&
+                        (bonusUpdateForm.controls.bonus_from_year.dirty ||
+                          bonusUpdateForm.controls.bonus_from_year.touched)
+                      "
+                    >
+                      This field is required
+                    </p>
+
+                    <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        (bonusUpdateForm.controls.bonus_from_year.hasError(
+                          'pattern'
+                        ) ||
+                          bonusUpdateForm.controls.bonus_from_year.hasError(
+                            'minlength'
+                          ) ||
+                          bonusUpdateForm.controls.bonus_from_year.hasError(
+                            'maxlength'
+                          )) &&
+                        (bonusUpdateForm.controls.bonus_from_year.dirty ||
+                          bonusUpdateForm.controls.bonus_from_year.touched)
+                      "
+                    >
+                      Enter a valid year
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12 mb-3">
+                <label
+                  >To Month / Year <span class="text-danger">*</span></label
+                >
+                <div class="row">
+                  <div class="col-lg-6">
+                    <ngx-select-dropdown
+                      formControlName="bonus_to_month"
+                      [options]="monthMaster"
+                      class="form-control p-1"
+                      [config]="{ search: false, placeholder: 'Select Month' }"
+                    ></ngx-select-dropdown>
+                    <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        bonusUpdateForm.controls.bonus_to_month.hasError(
+                          'required'
+                        ) &&
+                        (bonusUpdateForm.controls.bonus_to_month.dirty ||
+                          bonusUpdateForm.controls.bonus_to_month.touched)
+                      "
+                    >
+                      This field is required
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="bonus_to_year"
+                      placeholder="Enter Year"
+                    />
+
+                    <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        bonusUpdateForm.controls.bonus_to_year.hasError(
+                          'required'
+                        ) &&
+                        (bonusUpdateForm.controls.bonus_to_year.dirty ||
+                          bonusUpdateForm.controls.bonus_to_year.touched)
+                      "
+                    >
+                      This field is required
+                    </p>
+
+                    <p
+                      class="mt-1 mb-0 text-danger"
+                      *ngIf="
+                        (bonusUpdateForm.controls.bonus_to_year.hasError(
+                          'pattern'
+                        ) ||
+                          bonusUpdateForm.controls.bonus_to_year.hasError(
+                            'minlength'
+                          ) ||
+                          bonusUpdateForm.controls.bonus_to_year.hasError(
+                            'maxlength'
+                          )) &&
+                        (bonusUpdateForm.controls.bonus_to_year.dirty ||
+                          bonusUpdateForm.controls.bonus_to_year.touched)
+                      "
+                    >
+                      Enter a valid year
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="col-lg-12 mb-3"
+                id="bonuswage-month"
+                style="display: none"
+              >
+                <label>Disburse In <span class="text-danger">*</span></label>
+                <input
+                  type="date"
+                  class="form-control"
+                  formControlName="bonus_wage_month"
+                />
+                <p
+                  class="mt-1 mb-0 text-danger"
+                  *ngIf="
+                    bonusUpdateForm.controls.bonus_wage_month.hasError(
+                      'required'
+                    ) &&
+                    (bonusUpdateForm.controls.bonus_wage_month.dirty ||
+                      bonusUpdateForm.controls.bonus_wage_month.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!bonusUpdateForm.valid"
+              (click)="updateBonus($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bonus Import Modal -->
+  <button
+    id="bonusImportModalOpen"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#bonusImportModal"
+  ></button>
+  <div
+    id="bonusImportModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Import bonus Data
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="bonusImportForm">
+          <div class="modal-body pd-20">
+            <div class="row">
+              <div class="col-lg-12">
+                <label>Select File</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  formControlName="file"
+                  accept=".csv"
+                  (change)="
+                    onImportFileChanged(
+                      $event,
+                      bonusImportForm,
+                      'file',
+                      'file_source'
+                    )
+                  "
+                />
+
+                <p
+                  class="mt-1 text-danger"
+                  *ngIf="
+                    bonusImportForm.controls.file.hasError('required') &&
+                    (bonusImportForm.controls.file.dirty ||
+                      bonusImportForm.controls.file.touched)
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              (click)="getSampleImportCsv()"
+              type="button"
+              class="btn btn-info tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Sample CSV</span>
+            </button>
+
+            <button
+              [disabled]="!bonusImportForm.valid"
+              (click)="importData($event)"
+              type="button"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Import</span>
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-secondary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,167 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item" routerLink="/company/settings"
+        >Company Settings</a
+      >
+      <a
+        class="breadcrumb-item"
+        routerLink="/company/settings"
+        [queryParams]="{ active: 'mastersettings' }"
+        >Master</a
+      >
+      <a class="breadcrumb-item active">Letter Writing</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-home"></i>
+    <div>
+      <h4>Letter Writing</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30" id="letterwriting-submit-section">
+    <div *ngIf="Global.checkCompanyModulePermission({
+      company_module: 'master',
+      company_sub_module:'letter_writer',
+      company_sub_operation: ['add','edit'],
+      company_strict: true
+    })" class="br-section-wrapper">
+      <h6
+        class="br-section-label mb-3"
+        *ngIf="editActionId == ''; else editHeader"
+      >
+        Add Template
+      </h6>
+      <ng-template #editHeader>
+        <h6 class="br-section-label mb-3">Edit Template</h6>
+      </ng-template>
+
+      <div class="bg-gray-100 bd pd-y-20 pd-x-20">
+        <form [formGroup]="letterWritingForm">
+          <div class="form-row row flex-wrap align-items-center">
+            <div class="col-sm-12 col-12 form-group">
+              <input
+                formControlName="template_name"
+                type="text"
+                class="form-control mg-t-10 mg-md-t-0 mb-2"
+                placeholder="Template Name"
+              />
+            </div>
+            <div class="col-sm-12 col-12 form-group">
+              <ckeditor [editor]="Editor" formControlName="msg_box"></ckeditor>
+            </div>
+
+            <ul class="suggest-text">
+              <li
+                class="mx-1 my-1"
+                *ngFor="let item of shortCodeMaster"
+                (click)="this.copyToClpboard(item.value)"
+              >
+                {{ item.description }}
+              </li>
+            </ul>
+
+            <div class="col-12">
+              <hr class="mt-0" />
+            </div>
+
+            <div class="col-sm-12 col-12 text-center">
+              <ng-container *ngIf="editActionId == '' && Global.checkCompanyModulePermission({
+                company_module: 'master',
+                company_sub_module:'letter_writer',
+                company_sub_operation: ['add'],
+                company_strict: true})">
+                <button
+                  type="submit"
+                  class="submit-block btn btn-info"
+                  (click)="create($event)"
+                  [disabled]="!letterWritingForm.valid"
+                >
+                  <span>Submit</span>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="editActionId && Global.checkCompanyModulePermission({
+                company_module: 'master',
+                company_sub_module:'letter_writer',
+                company_sub_operation: ['edit'],
+                company_strict: true})">
+                <button
+                  type="submit"
+                  class="submit-block btn btn-info"
+                  (click)="update($event)"
+                  [disabled]="!letterWritingForm.valid"
+                >
+                  <span>Update</span>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf=" Global.checkCompanyModulePermission({
+      company_module: 'master',
+      company_sub_module:'letter_writer',
+      company_sub_operation: ['view'],
+      company_strict: true})" class="br-section-wrapper mt-5">
+      <h6 class="br-section-label mb-1 mt-1">Template List</h6>
+      <div class="table-wrapper">
+        <table
+          class="table display responsive nowrap wd-100p"
+          datatable
+          [dtOptions]="dtOptions"
+          id="my-datatable"
+        >
+          <thead>
+            <tr>
+              <th class="wd-15p">SL</th>
+              <th class="wd-15p text-center">Status</th>
+              <th class="wd-25p text-center">Action</th>
+              <th class="wd-15p">Template Name</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button
+    id="viewTemplate"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#viewTemplateModel"
+  ></button>
+  <div id="viewTemplateModel" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content p-3">
+        <div class="modal-header px-3 py-1">
+          <h4 class="text-dark p-0">
+            {{templateData?.template_name || '--' | titlecase}}
+          </h4>
+        </div>
+        <div
+          class="tablemain px-3 mt-3"
+          style="
+            width: 100%;
+            margin: 0 auto;
+            border: solid 1px #333;
+            padding: 32px;
+          "
+        >
+        <div [innerHTML]="templateData?.msg_box || ''"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

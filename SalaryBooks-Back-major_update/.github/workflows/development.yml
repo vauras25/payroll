@@ -1,0 +1,23 @@
+# on:
+#   push:
+#     branches: 
+#       - development
+# name: 🚀 Deploy Dev Website On Push on Dev Server
+# jobs:
+#   web-deploy:
+#     name: 🎉 Deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: 🚚 Get latest code
+#       uses: actions/checkout@v4
+    
+#     - name: Copy .env
+#       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    
+#     - name: 📂 Sync files
+#       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+#       with:
+#         server: ${{ vars.FTP_HOST }}
+#         username: ${{ vars.FTP_USERNAME }}
+#         password: ${{ vars.FTP_PASSWORD }}
+#         server-dir: ${{ vars.SERVER_DIR }}

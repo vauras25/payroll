@@ -1,0 +1,276 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Address</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Address Details
+
+                <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'addressdetails'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section">
+                <form [formGroup]="employeeAddressForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Residence no
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'resident_no', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="resident_no">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'resident_no', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Residence name
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'residential_name', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="residential_name">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'residential_name', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Road/road
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'road', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="road">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'road', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Locality/Area
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'locality', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="locality">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'locality', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            City/Town
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'city', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="city">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'city', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            District
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'district', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="district">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'district', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            State
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'state', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                          <ngx-select-dropdown formControlName="state" [options]="stateMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <!-- <input formControlName="state" class="form-control" type="text"> -->
+                            <!-- <p class="error-element" *ngIf="employeeAddressForm.controls.state.hasError('required') && (employeeAddressForm.controls.state.dirty)">This field is required</p> -->
+                            <!-- <input class="form-control" type="text" formControlName="state"> -->
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'state', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Pincode
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'pincode', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="pincode">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'pincode', 'required')">This field is required</p>
+
+                            <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeAddressForm, 'pincode', 'pattern') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'minlength') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'maxlength'))">Enter valid Pincode</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Country
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'country', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="country">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'country', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst">
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-6 col-sm-6">
+                            Is current Residential Address is different from the above
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'diff_current_add', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-6">
+                            <label class="rdiobox">
+                                <input formControlName="diff_current_add" type="radio" value="yes">
+                                <span>Yes</span>
+                            </label>
+                            <label class="rdiobox">
+                                <input formControlName="diff_current_add" type="radio" value="no">
+                                <span>No</span>
+                            </label>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'diff_current_add', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div id="current-address-fields">
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Current Residence no
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_resident_no', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_resident_no">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_resident_no', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Current Residence name
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_residential_name', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_residential_name">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_residential_name', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Current Road/road
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_road', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_road">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_road', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Current Locality/Area
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_locality', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_locality">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_locality', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Current City/Town
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_city', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_city">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_city', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Current District
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_district', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_district">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_district', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Current State
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_state', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_state">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_state', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Current Pincode
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_pincode', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_pincode">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_pincode', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeAddressForm, 'curr_pincode', 'pattern') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'minlength') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'maxlength'))">Enter valid Pincode</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Current Country
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeAddressForm, 'curr_country', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="curr_country">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_country', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-6 col-sm-6 sameasfirst">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info text-uppercase" (click)="updateEmployeeAddress($event)"><span>Update</span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

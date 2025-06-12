@@ -1,0 +1,134 @@
+<div class="table-responsive mt-3">
+    <div class="table-responsive mt-3">
+       <table class="table nowrap wd-100p employee-table">
+          <thead>
+              <tr >
+                 <th class="text-center" colspan="5">REGISTER OF ADVANCES</th>
+                 <th colspan="6"></th>
+                 
+              </tr>
+              <tr>
+                 <th class="text-center" colspan="5">FORM XXII,See Rule-78 (1) (a) (ii)</th>
+                 <th colspan="6"></th>
+              </tr>
+              <tr>
+                 
+                 <th class="text-center" colspan="5">{{company?.establishment_name}}</th>
+                 <th colspan="6"></th>
+              </tr>
+             
+              <tr >
+                 <th  rowspan="2" >Sl.No</th>
+                 <th  rowspan="2">Name Of the Employee</th>
+                 <th  rowspan="2">Father&#39;s/ Husband&#39;s  Name</th>
+                 <th  rowspan="2">Designation/Nature of Employment</th>
+                 <th  rowspan="2">Wage Peroid and Wages Payable</th>
+                 <th  rowspan="2">Date and Amount of Advance Given</th>
+                 <th  rowspan="2">Purpose(s) for Which Advance made</th>
+                 <th  rowspan="2">No of Instalments by which Advance to be Repaid</th>
+                 <th  rowspan="2">Date and Amount of Each Instalment was Paid</th>
+                 <th  rowspan="2">Date on which Last Instalment Was Repaid</th>
+                 <th  rowspan="2">Remarks</th>
+              </tr>
+           </thead>
+          <tbody>
+             
+             <!-- <tr >
+                <td >1</td>
+                <td >2</td>
+                <td >3</td>
+                <td >4</td>
+                <td >5</td>
+                <td >6</td>
+                <td >7</td>
+                <td >8</td>
+                <td >9</td>
+                <td >10</td>
+                <td >11</td>
+               
+             </tr> -->
+             <tr *ngFor="let employee of employees; let i=index">
+                <td class="s34" style="width: 3%;">{{i+1}}</td>
+                <td class="s35">{{employee?.emp_first_name}} {{employee?.emp_last_name}}</td>
+                <td class="s35">{{employee?.emp_father_name || 'N/A'}}</td>
+                <td class="s35">{{employee?.designation?.designation_name || 'N/A'}}</td>
+                <td class="s34">N/A</td>
+                <td class="s36">{{employee?.advance_module?.date ?  employee?.advance_module?.date  + ' &amp;' : ''}}  {{employee?.advance_module?.total_amount | number:"00.00"}}</td>
+                <td class="s37">N/A</td>
+                <td class="s38">{{employee?.advance_module?.no_of_instalments}}</td>
+                <td class="s39">{{employee?.advance_module?.current?.month ? getMonth(employee?.advance_module?.current?.month) : 'N/A'}} {{employee?.advance_module?.current?.year}} &amp; {{employee?.advance_module?.current?.amount | number}}</td>
+                <td class="s40">{{employee?.advance_module?.previous?.month ? getMonth(employee?.advance_module?.previous?.month): 'N/A'}} {{employee?.advance_module?.previous?.year}} &amp; {{employee?.advance_module?.previous?.amount | number}}</td>
+                <td class="s41">{{employee?.advance_module?.remarks || 'N/A'}}</td>
+                
+             </tr>
+             <!-- <tr style="height: 22px">
+                <td class="s34">2</td>
+                <td class="s35">NIRMAL CHANDRA DAS</td>
+                <td class="s35">LATE MANAMOHAN DAS</td>
+                <td class="s35">Driver</td>
+                <td class="s34"></td>
+                <td class="s36">21/10/2022 &amp; 10000.00</td>
+                <td class="s37">Salary Advance (client)</td>
+                <td class="s38">5</td>
+                <td class="s38">31-Dec-2022 &amp; 2000.00</td>
+                <td class="s38">30-Nov-22</td>
+                <td class="s37"></td>
+                
+             </tr>
+             <tr >
+                <td class="s34">3</td>
+                <td class="s35">RAKESH MALLICK</td>
+                <td class="s35">GOPAL CHANDRA MALLICK</td>
+                <td class="s35">Security Guard</td>
+                <td class="s34"></td>
+                <td class="s36">16/12/2022 &amp; 5000.00</td>
+                <td class="s37">Salary advance (vaspl)</td>
+                <td class="s38">2</td>
+                <td class="s38">31-Dec-2022 &amp; 2500.00</td>
+                <td class="s38"></td>
+               
+             </tr>
+             <tr >
+                <td class="s34">4</td>
+                <td class="s35">JAYDEB KUNDU</td>
+                <td class="s35">LT.GANESH KUNDU</td>
+                <td class="s35">Technician</td>
+                <td class="s34"></td>
+                <td class="s36">16/12/2022 &amp; 1000.00</td>
+                <td class="s37">Salary advance (vaspl)</td>
+                <td class="s38">1</td>
+                <td class="s38">31-Dec-2022 &amp; 1000.00</td>
+                <td class="s38"></td>
+                
+             </tr>
+             <tr >
+                <td class="s34">5</td>
+                <td class="s35">MD NASIM</td>
+                <td class="s35">LT  MOHAMMAD ASLAM</td>
+                <td class="s35">Helper</td>
+                <td class="s34"></td>
+                <td class="s36">18/11/2022 &amp; 10000.00</td>
+                <td class="s37">Salary Advance (client)</td>
+                <td class="s38">11</td>
+                <td class="s38">31-Dec-2022 &amp; 0.00</td>
+                <td class="s38">30-Nov-22</td>
+                <td class="s37"></td>
+                
+             </tr>
+             <tr >
+                <td class="s34">6</td>
+                <td class="s35">BHOLANATH MONDAL</td>
+                <td class="s35">LT HARENDRA MONDAL</td>
+                <td class="s35">FURNESS HELPER</td>
+                <td class="s34"></td>
+                <td class="s36">16/12/2022 &amp; 1000.00</td>
+                <td class="s37">Salary Advance (client)</td>
+                <td class="s38">1</td>
+                <td class="s38">31-Dec-2022 &amp; 1000.00</td>
+                <td class="s38"></td>
+               
+             </tr> -->
+          </tbody>
+       </table>
+    </div>
+ </div>

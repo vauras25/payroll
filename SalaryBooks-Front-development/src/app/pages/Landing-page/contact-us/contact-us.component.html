@@ -1,0 +1,80 @@
+
+  <section class="h-bg">
+      <div class="container">
+          <div class="banner-text">
+          <h1>{{contactPageData?.page_title}}</h1>
+          <p>{{contactPageData?.page_content}}</p>
+      </div>
+          <div class="b-img mt-4 d-flex align-items-center justify-content-center">
+              <div class="call-btn"><a routerLink="/"><i class="bi bi-telephone-fill"></i> +91 76050 60599</a></div>
+                <div class="email-btn"><a routerLink="/"><i class="bi bi-envelope-fill"></i> namaste@vauras.co.in</a></div>
+          </div>
+
+          <div class="main-area plan-area">
+              <div class="container">
+                  <div class="p-box contact-box c-wrapper d-flex justify-content-center">
+                      <div class="map-box">
+                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15272021.458313726!2d73.73009345033246!3d20.851045944333897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1680088403339!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                      </div>
+                      <div class="contact-box">
+                          <h3>Send a message</h3>
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <div class="form-group">
+                                  <input type="text" placeholder="First name" class="form-control"/>
+                                  </div>
+                              </div>
+                              <div class="col-lg-6">
+                                  <div class="form-group">
+                                  <input type="text" placeholder="Last name" class="form-control"/>
+                                  </div>
+                              </div>
+                              <div class="col-lg-12">
+                                  <div class="form-group">
+                                  <input type="email" placeholder="Enter your email address" class="form-control"/>
+                                  </div>
+                              </div>
+                              <div class="col-lg-12">
+                                  <div class="form-group">
+                                  <input type="text" placeholder="Phone number" class="form-control"/>
+                                  </div>
+                              </div>
+                              <div class="col-lg-12">
+                                  <div class="form-group">
+                                  <textarea name="Message" class="form-control" id="" placeholder="Message"></textarea>
+                                  </div>
+                              </div>
+                              <div class="col-lg-9">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                      <label class="form-check-label" for="flexCheckDefault">
+                                          Subscribe newsletter
+                                      </label>
+                                    </div>
+                              </div>
+                              <div class="col-lg-3">
+                                  <input type="button" name="Send" value="Send" class="btn-submit"/>
+                              </div>
+                          </div>
+                      </div>
+
+
+                  </div>
+
+              </div>
+          </div>
+          </div>
+
+  </section>
+
+  <section class="social-area">
+      <div class="container">
+          <h3>We are just a text away</h3>
+          <div class="f-social">
+            <ng-container *ngFor="let item of socialLinksData?.social_links">
+              <a *ngIf="item?.link" [href]="item?.link" target="_blank"><i class="bi bi-{{item.slug_name}}"></i></a>
+            </ng-container>
+          </div>
+      </div>
+  </section>
+

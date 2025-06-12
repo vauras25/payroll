@@ -1,0 +1,119 @@
+<div #btns  class="container text-right py-3">
+  <a (click)="closeWindow();">
+      <button
+  
+      class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+    >
+      Cancel
+    </button>
+  </a>
+ 
+  <button
+    (click)="printDoc(btns)"
+    class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+  >
+    Print
+  </button>
+</div>
+<div class="container" *ngIf="rows.length>0">
+    <div class="row my-4">
+      <div class="col-md-12">
+        <h3 class="text-center text-uppercase">FORM IV</h3>
+        <h3 class="text-center text-uppercase">OVERTIME REGISTER FOR WORKERS</h3>
+        <h3 class="text-center text-uppercase">[Rule 25(2)]</h3>
+
+      </div>
+    </div>
+  
+    <div class="row" *ngFor="let data of rows;let i=index">
+      <div class="col-md-12">
+        <table class="w-100 table table-bordered table-striped">
+          <tbody>
+            <tr>
+                <td colspan="3">Month ending ……… 20….</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Serial No</td>
+              <th>{{reportFilter?.sl_no ?? (i+1)}}</th>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Name</td>
+                <th>{{data?.emp_first_name}} {{data?.emp_last_name}}</th>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Father’s/Husband’s name</td>
+                <th>{{data?.emp_father_name}}</th>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Sex</td>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Designation and Department
+
+                </td>
+                <th>{{data?.designation?.designation_name}} &amp; {{data?.department?.department_name}}</th>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Date on which overtime worked</td>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Extent of overtime on each occasion</td>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Total overtime worked or production</td>
+                <th>{{data.employee_monthly_reports?(data?.employee_monthly_reports?.attendance_summaries?.total_overtime | number:'1.2-2' ):'N/A'}}</th>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Normal Hours</td>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Normal rate</td>
+                <th>{{data?.employee_details?.template_data?.overtime_temp_data?.overtime_rate | currency:'₹'}}</th>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>Overtime rate</td>
+                <th>{{data.employee_monthly_reports?(data?.employee_monthly_reports?.ot_report?.overtime_wages | currency:'₹'):'N/A'}}</th>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Normal earning</td>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>Overtime earning</td>
+                <th>{{data.employee_monthly_reports?(data?.employee_monthly_reports?.ot_report?.gross_earning | currency:'₹' ):'N/A'}}</th>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>Total earning</td>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>Date on which overtime payment made</td>
+                <th>N/A</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    
+
+  

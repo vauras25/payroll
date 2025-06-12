@@ -1,0 +1,190 @@
+lang_key,English ,French
+sign_in,Admin Sign In,Connexion à l'administration
+min_length,Please enter at least {0}  characters.,Veuillez saisir au moins {0} caractères.
+max_length,Please enter not more than {0}  characters.,Veuillez ne pas saisir plus de {0} caractères.
+phone_remote,This Phone no already exist ,Ce téléphone nexiste pas déjà
+email_remote,This Email already exist ,Cet e-mail existe déjà
+password_confirm,Password And confirm password should be same,Le mot de passe et le mot de passe de confirmation doivent être identiques
+login_success,Successfully login,Connexion réussie
+dashboard,Dashboard,Tableau de bord
+orders,Orders,Commandes
+ordered,Ordered,Commandé
+completed,Completed,Terminé
+canceled,Canceled,Annulé
+Customers,Customer,Client
+customer,Customer,Client
+name,Name ,Nom 
+email,Email,Email
+phone_number,Phone number,Numéro de téléphone
+status,Status,Statut
+action,Action,Action
+delete_user_confirmation,Are you sure want to delete user?,Vous voulez vraiment supprimer un utilisateur ?
+delete,Delete,Supprimer
+close,Close,Fermer
+user_delete_success,User deleted Successfully,Utilisateur supprimé avec succès
+add_new,Add new,Ajouter un nouveau
+add_customer,Add Customers,Ajouter des clients
+first_name,First name,Prénom
+lase_name,Last Name,Nom
+phone_number,Phone number,Numéro de téléphone
+email_id,Email ID,Adresse électronique
+password,Password,Mot de passe
+confirm_pasword,Confirm Password,Confirmer le mot de passe
+dob,Date of Birth,Date de naissance
+street_address,Street Address,Adresse
+city,City ,Ville 
+state,State,État
+country,Country,Pays
+zip_code,Zip Code,Code postal
+save,Save,Sauvegarder
+back,Back,Retour
+save,Save,Sauvegarder
+user_save_success,User Saved Successfully,Utilisateur sauvegardé avec succès
+shop,Shops,Restaurant
+owner_manager,Owner/Manager,Propriétaire/gestionnaire
+action,Action,Action
+previous,Previous,Précédent
+next,Next,Suivant
+approval_confirmation,Are you sure you want to approve,Êtes-vous sûr de vouloir approuver
+decline_confirmation,Are you sure want to decline?,Vous voulez vraiment refuser ?
+change_status_confirmation,Are you sure want to change status?,Êtes-vous sûr de vouloir changer de statut ?
+update_page,Update page,Page de mise à jour
+title,Title,Titre
+meta_title,Meta Title,Méta titre
+meta_desc,Meta description,Meta description
+page_content,Page Content,Contenu de la page
+page_save_msg,Page Saved successfully,Page sauvegardée avec succès
+category_pages,Category Pages,Pages des catégories
+add_new_category,Add new,Ajouter un nouveau
+update_category,Update Category,Catégorie de mise à jour
+new_category,New Category,Nouvelle catégorie
+parent_category,Parent Category,Catégorie de parents
+chose_file,Choose file,Choisissez un fichier
+no_file_chosen,No File chosen,Pas de dossier choisi
+image,Image,Image
+category_save_success,Category saved successfully,Catégorie sauvegardée avec succès
+withdrawals,Withdrawals,Retraits
+time,Time,Heure
+restaurant,Restaurant,Restaurant
+available_balance,Available Balance,Solde disponible
+requested_amount,Requested Amount,Montant demandé
+pending,Pending,En attente
+cacel,Cancel,Annuler
+processing,Processing,Traitement
+from,From ,Tiré de 
+to,To,À l'adresse suivante :
+transactions,Transactions,Transactions
+registered_on,Registered on,Enregistré le
+tran_id,Txn. Id,Txn. Id
+order_id,Order Id,Commande Id
+amount,Amount,Montant
+success,Success,Succès
+setting,Settling,S'installer
+admin_commission,Admin Commission,Commission Admin
+setting_save_success,Settings saved successfully,Paramètres enregistrés avec succès
+logout,Logout,Déconnexion
+showing,Showing ,asdasdas
+update,Update,Mettre à jour
+notification,Notifications,Notifications
+sms,SMS,SMS
+address,Address,Address
+details,Details,Details
+all_orders,All Orders,All Orders
+accepted,Accepted,Accepted
+prepared,Prepared,Prepared
+delivered,Delivered,delivered
+decline,Decline,decline
+order_no,Order No,Order no
+review_ratings,Review And Ratings,Review And Ratings
+rating,Rating,Rating
+comment,Comment,Comment
+business,Business,Business
+add_restaurant,Add Restaurant,Add Restaurant
+restaurant_location,Resturant Location,Resturant Location
+restaurant_description,Resturant Description,Resturant Description
+payment_option,Payment Option,Payment Option
+online,Online,Online
+category,Category,Category
+cost_for_two,Cost for Two,Cost for Two
+restaurant_name,Restaurant Name,Restaurant Name
+edit,Edit,Edit
+cancle,Cancle,Cancle
+opening_hours,Opening Hours,Opening Hours
+closing_hours,Closing Hours,Closing Hours
+availability,Availability,Availability
+vat_no,VAT Number,VAT Number
+vat_charges,VAT Chargs,VAT Chargs
+sort_code,Sort Code,Sort Code
+account_name,Account Name,Account Name
+account_number,Account Number,Account Number
+restaurant_open,Restaurant Open,Restaurant Open
+veg_available,Veg Available,Veg Available
+halal_certified,Halal Certified,Halal Certified
+commission_per_order,Commission per order,Commission per order
+default,Default,Default
+information,Information,Information
+items,items,items
+add_ons,Add ons,Add ons
+balance,Balance,Balance
+settings,Settings,Settings
+bank_details,Bank Details,Bank Details
+service_tax,Service & Tax,Service & Tax
+restaurant_documents,Restaurant  Documents,Restaurant  Documents
+restaurant_images,Restaurant Images,Restaurant Images
+restaurant_availability,Restaurant Availability,Restaurant Availability
+restaurant_details,Restaurant details,Restaurant details
+user_information,User Information,User Information
+new_restaurant,New Restaurant,New Restaurant
+order_details,Order Details,Order Details
+update_account,Update Account,Update Account
+update_item,Update Item,Update Item
+add_items,Add Item,Add Item
+show_image,Show Image,Show Image
+delete_user_confirmation,Are you sure want to delete category?,Are you sure want to delete category?
+description,Description,Description
+show_category_image,Show this category item images,Show this category item images
+active,Active,Active
+inactive,Inactive,Inactive
+delete_addon_confirmation,Are you sure want to delete ?,Are you sure want to delete ?
+price,Price,Price
+available,Available,Available
+customizable,Customizable,Customizable
+delete_food_confirmation,Are you sure want to delete food?,Are you sure want to delete food?
+item_name,Item Name,Item Name
+actual_price,Actual Price,Actual Price
+discount,Discount,Discount
+selling_price,Selling Price,Selling Price
+item_available,Item Available,Item Available
+opening_hours,Opening Hours,Opening Hours
+closing_hours,Closing Hours,Closing Hours
+vegetable,Vegetable,Vegetable
+customizable,Customizable,Customizable
+type,Type,Type
+charge,Charge,Charge
+delete_order_confirmation,Are you sure want to delete order?,Are you sure want to delete order?
+change_status,Change Status,Change Status
+cancel_order,Cancel Order,Cancel Order
+order_on,Orderd On,Orderd On
+qty,Qty,Qty
+sub_total,Sub Total,Sub Total
+restaurant_charge,Restaurant Charge,Restaurant Charge
+total,Total,Total
+order_timeline,Order Timeline,Order Timeline
+commission,Commission,Commission
+billing_amount,Billing Amount,Billing Amount
+admin_benefit,Admin Benefit,Admin Benefit
+cancel_note,Cancel Note,Cancel Note
+pages,Pages,Pages
+compeleted,Compeleted,Compeleted
+logout,Logout,Logout
+language,Language,Language
+users,Users,Users
+no_records_available,No records available,No records available
+previous_page,Previous Page,Previous 
+first_page,First Page,First Page
+next_page,Next Page,Next
+last_page,Last Page,Last Page
+serach,Search,Search
+table_page,Page,Page
+of,Of,Of
+owner_manager,Owner / Manager,Owner / Manager

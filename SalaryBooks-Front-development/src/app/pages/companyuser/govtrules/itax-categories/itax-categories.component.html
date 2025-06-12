@@ -1,0 +1,290 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+      <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'govrules'}">Government Rules</a>
+      <a class="breadcrumb-item active">Income Tax Categories</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon icon ion-card"></i>
+    <div>
+      <h4>Income Tax Categories</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30" id="category-submit-section">
+    <div class="br-section-wrapper">
+      <h6
+        class="br-section-label mb-3 align-items-center mb-3"
+        *ngIf="editActionId == ''; else editHeader"
+      >
+        Add Category
+        <button
+          (click)="openTemplateLibrary()"
+          class="btn btn-primary btn-sm float-right"
+        >
+          <i class="fa fa-copy"></i> Copy Default Template
+        </button>
+      </h6>
+      <ng-template #editHeader>
+        <h6 class="br-section-label mb-3">Edit Category</h6>
+      </ng-template>
+
+      <div class="form-layout form-layout-7">
+        <form [formGroup]="categoryForm">
+          <div class="row no-gutters">
+            <div class="col-5 col-sm-4">
+              Category Name&nbsp;<span class="text-danger">*</span>
+            </div>
+            <div class="col-7 col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="category_name"
+                placeholder="Enter Category Name"
+              />
+              <p
+                class="error-element"
+                *ngIf="
+                  categoryForm.controls.category_name.hasError('required') &&
+                  categoryForm.controls.category_name.dirty
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-5 col-sm-4">
+              Age Lower Limit&nbsp;<span class="text-danger">*</span>
+            </div>
+            <div class="col-7 col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="age_lower_limit"
+                placeholder="Enter Age Lower Limit"
+              />
+              <p
+                class="error-element"
+                *ngIf="
+                  categoryForm.controls.age_lower_limit.hasError('required') &&
+                  categoryForm.controls.age_lower_limit.dirty
+                "
+              >
+                This field is required
+              </p>
+              <p
+                class="error-element"
+                *ngIf="
+                  categoryForm.controls.age_lower_limit.hasError('pattern') &&
+                  categoryForm.controls.age_lower_limit.dirty
+                "
+              >
+                The value should be numeric
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-5 col-sm-4">
+              Age Upper Limit&nbsp;<span class="text-danger">*</span>
+            </div>
+            <div class="col-7 col-sm-8">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="age_upper_limit"
+                placeholder="Enter Age Upper Limit"
+              />
+              <p
+                class="error-element"
+                *ngIf="
+                  categoryForm.controls.age_upper_limit.hasError('required') &&
+                  categoryForm.controls.age_upper_limit.dirty
+                "
+              >
+                This field is required
+              </p>
+              <p
+                class="error-element"
+                *ngIf="
+                  categoryForm.controls.age_upper_limit.hasError('pattern') &&
+                  categoryForm.controls.age_upper_limit.dirty
+                "
+              >
+                The value should be numeric
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-5 col-sm-4">
+              Gender&nbsp;<span class="text-danger">*</span>
+            </div>
+            <div class="col-7 col-sm-8">
+              <ngx-select-dropdown
+                formControlName="gender"
+                [options]="genderMaster"
+                class="form-control"
+                [config]="{
+                  search: true,
+                  placeholder: 'Choose One',
+                  height: '200px'
+                }"
+              ></ngx-select-dropdown>
+              <p
+                class="error-element"
+                *ngIf="
+                  categoryForm.controls.gender.hasError('required') &&
+                  categoryForm.controls.gender.dirty
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-5 col-sm-4"></div>
+
+            <div class="col-7 col-sm-8">
+              <button
+                type="submit"
+                [disabled]="!categoryForm.valid"
+                (click)="create($event)"
+                class="btn btn-info"
+                *ngIf="editActionId == ''; else editButtonSection"
+              >
+                <span>Add Category</span>
+              </button>
+
+              <ng-template #editButtonSection>
+                <button
+                  type="button"
+                  (click)="cancelEdit()"
+                  class="btn btn-danger mg-r-5"
+                >
+                  <span>Cancel Editing</span>
+                </button>
+                <button
+                  type="submit"
+                  [disabled]="!categoryForm.valid"
+                  (click)="update($event)"
+                  class="btn btn-info"
+                >
+                  <span>Update Category</span>
+                </button>
+              </ng-template>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-3">Category List</h6>
+
+      <div class="table-wrapper">
+        <!-- <div class="table-responsive"> -->
+        <table
+          class="table display responsive nowrap wd-100p"
+          datatable
+          [dtOptions]="dtOptions"
+          id="my-datatable"
+        >
+          <thead>
+            <tr>
+              <th class="wd-15p">SL</th>
+              <th class="wd-25p text-center">Action</th>
+              <th class="wd-15p">Category</th>
+              <th class="wd-15p">Age From</th>
+              <th class="wd-15p">Age to</th>
+              <th class="wd-15p">Gender</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+
+  <button
+    id="librarymmodalbutton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#librarymodal"
+  ></button>
+  <div id="librarymodal" tabindex="-1" class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            View Template Library
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pd-20">
+          <div class="">
+            <table class="table display responsive nowrap wd-100p template-table">
+              <thead>
+                <tr>
+                  <th class="">SL No</th>
+                  <th class="">Action</th>
+                  <th class="">Category</th>
+                  <th class="">FY From</th>
+                  <th class="">FY To</th>
+                  <th class="">Gender</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let template of categoryLibraryTemplates; let i = index">
+                  <td>{{i + 1}}</td>
+                  <td>
+                    <button
+                    (click)="cloneItem(template)"
+                      class="btn btn-primary btn-icon mx-1">
+                      <div style="width: 25px; height: 25px">
+                        <i class="fa fa-copy"></i>
+                      </div>
+                    </button>
+                  </td>
+                  <td>{{ template?.category_name ?? 'N/A' }}</td>
+                  <td>{{ template?.age_lower_limit ?? 'N/A' }}</td>
+                  <td>{{ template?.age_upper_limit ?? 'N/A' }}</td>
+                  <td>{{ template?.gender ?? 'N/A' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn text-uppercase btn-secondary tx-size-xs"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

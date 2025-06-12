@@ -1,0 +1,241 @@
+<div>
+  <h5 class="text-center">Tax Invoice</h5>
+  <a id="t.32eb4d2db1863fe7058a03a57423037203aa5274"></a><a id="t.0"></a>
+  <table>
+    <tr>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span>Invoice No. </span></p>
+      </td>
+      <td colspan="2" rowspan="1">
+        <p><span>Dated</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" rowspan="1" [innerHTML]="templateData?.com_address">
+        <!-- <p><span>PAYROLL SOFTWARE &nbsp;</span></p>
+        <p><span>Kolkata, West Bengal, India </span></p>
+        <p><span>GSTIN: 19ABDCDSFS12345 </span></p>
+        <p><span>Email: payroll@ivanfotech.com Mobile: 98754653210</span></p> -->
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span>N/A </span></p>
+      </td>
+      <td colspan="2" rowspan="1">
+        <p><span>DD/MM/YYYY</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>Buyer (Bill to)</span></p>
+      </td>
+    </tr>
+    <!-- <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>DJ &amp; CO</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>en 35 saltlake sector v kolkata WB 700091</span></p>
+      </td>
+    </tr> -->
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>GSTIN/UIN:N/A</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>PAN/IT No: N/A</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>State Name : {{templateData?.com_state_name}}, Code : {{templateData?.com_state_code}}</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>Place of Supply : N/A</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>Description </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span>HSN/SAC </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span>GST </span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>Amount</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>Payment for Credit Token </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p>{{templateData?.hsn_sac  }}</p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span>0% </span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>0.00</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>IGST @0% </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>0.00</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>CGST @0% </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>0.00</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>SGST @0% </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>0.00</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>Round Off </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>0.00</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p><span>Total </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span></span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>0.00</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1">
+        <p><span>Amount Chargeable (in words) </span></p>
+      </td>
+      <td colspan="4" rowspan="1">
+        <p><span>Zero </span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1">
+        <p><span>Tax Amount (in words) : </span></p>
+      </td>
+      <td colspan="4" rowspan="1">
+        <p><span>Zero </span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1">
+        <p><span>Remarks: </span></p>
+      </td>
+      <td colspan="4" rowspan="1">
+        <p><span>Company&#39;s Bank Details</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="1">
+        <p><span>BILL NO : N/A</span></p>
+      </td>
+      <td colspan="4" rowspan="1" [innerHTML]="templateData?.com_bank_details">
+        <!-- <p><span>Account Number : 74859612358450 </span></p>
+        <p><span>IFSC Code: ICICI7485AV </span></p>
+        <p><span>A/C Name: James Bond</span></p> -->
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>Buyer&#39;s VAT TIN : N/A</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>Company&#39;s PAN : N/A</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+        <p><span>Declaration:</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" rowspan="1">
+       {{templateData?.declaration}}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" rowspan="1">
+        <p><span>Customer&#39;s Seal and Signature </span></p>
+      </td>
+      <td colspan="3" rowspan="1">
+        <p><span>Prepared by </span></p>
+      </td>
+      <td colspan="2" rowspan="1">
+        <p><span>Prepared by </span></p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p><span>Authorised Signatory</span></p>
+      </td>
+    </tr>
+  </table>
+  <p><span></span></p>
+  <p><span></span></p>
+  <p>
+    {{templateData?.footer_text}}
+    <!-- <span
+      >This is a computer generated invoice, hence doesn&#39;t need any
+      signature</span
+    > -->
+  </p>
+</div>

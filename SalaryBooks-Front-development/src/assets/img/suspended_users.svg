@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_4269" data-name="Group 4269" transform="translate(-624.998 -117.909)">
+    <rect id="Rectangle_2523" data-name="Rectangle 2523" width="24" height="24" transform="translate(624.998 117.909)" fill="none"/>
+    <path id="Path_3205" data-name="Path 3205" d="M9.408,6.685A3.751,3.751,0,1,0,8,3.756,3.758,3.758,0,0,0,9.408,6.685" transform="translate(622.818 122.086)" fill="#17a3b4"/>
+    <path id="Subtraction_4" data-name="Subtraction 4" d="M7,7.512H.938A.94.94,0,0,1,0,6.573,6.542,6.542,0,0,1,4.226.444,6.193,6.193,0,0,1,6.572,0c.094,0,.2,0,.311.008A7.634,7.634,0,0,0,7,7.51Z" transform="translate(627.998 130.388)" fill="#17a3b4" stroke="rgba(0,0,0,0)" stroke-width="1"/>
+    <g id="Group_4268" data-name="Group 4268" transform="translate(636.127 128.609)">
+      <g id="Ellipse_262" data-name="Ellipse 262" transform="translate(-0.001 0)" fill="#fff" stroke="#17a3b4" stroke-width="1.5">
+        <ellipse cx="5.436" cy="5.436" rx="5.436" ry="5.436" stroke="none"/>
+        <ellipse cx="5.436" cy="5.436" rx="4.686" ry="4.686" fill="none"/>
+      </g>
+      <line id="Line_433" data-name="Line 433" y1="4.141" x2="9.663" transform="translate(0.688 3.45)" fill="none" stroke="#17a3b4" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

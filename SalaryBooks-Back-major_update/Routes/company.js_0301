@@ -1,0 +1,376 @@
+let express = require('express');
+var middleware = require('../Middleware/middleware');
+let router = express.Router();
+var CompanyInfoController = require('../Controller/Company/Company_infoController');
+var epfoController = require('../Controller/Admin/GovRules/EpfoController');
+var esicController = require('../Controller/Admin/GovRules/EsicController');
+var bonusController = require('../Controller/Admin/GovRules/BonusController');
+var gratuityController = require('../Controller/Admin/GovRules/GratuityController');
+var TaxslabController = require('../Controller/Admin/GovRules/TaxslabController');
+var TDSruleController = require('../Controller/Admin/ComRules/TDSruleController');
+var Ptax_ruleController = require('../Controller/Admin/ComRules/Ptax_ruleController');
+var BonusPolicyController = require('../Controller/Admin/ComRules/BonusPolicyController');
+var OvertimePolicyController = require('../Controller/Admin/ComRules/OvertimePolicyController');
+var AttendanceController = require('../Controller/Admin/ComRules/AttendanceController');
+var IncentivePolicyController = require('../Controller/Admin/ComRules/IncentivePolicyController');
+var EmployeeController = require('../Controller/Company/EmployeeController');
+var designationController = require('../Controller/Admin/DesignationController');
+var departmentController = require('../Controller/Admin/DepartmentController');
+var DispensaryController = require('../Controller/Company/DispensaryController');
+var RoleController = require('../Controller/Company/RoleController');
+var StaffController = require('../Controller/Company/StaffController');
+var EmployeePackage = require('../Controller/Company/Employee_package');
+var PayslipTempController = require('../Controller/Admin/ComRules/PayslipTempController');
+var BonusslipTempController = require('../Controller/Admin/ComRules/BonusslipTempController');
+var ArrearslipTempController = require('../Controller/Admin/ComRules/ArrearslipTempController');
+var SalaryTemplateController = require('../Controller/Admin/ComRules/SalaryTemplateController');
+var StaffAccountController = require('../Controller/Staff/AccountController');
+var ComAttendanceController = require('../Controller/Company/ComAttendanceController');
+var LeaveRuleController = require('../Controller/Admin/ComRules/LeaveRuleController');
+var LwfruleController = require('../Controller/Admin/ComRules/LwfruleController');
+const SalaryCalculator = require('../Controller/Company/SalaryCalculator');
+var ClientController = require('../Controller/Company/ClientController');
+var ShiftController = require('../Controller/Company/ShiftController');
+var PaymentController = require('../Controller/Company/PaymentController');
+var LetterWritingController = require('../Controller/Company/LetterWritingController');
+var ExpenseController = require('../Controller/Company/ExpenseController');
+var SalaryReportController = require('../Controller/Company/SalaryReportController');
+var BonusReportController = require('../Controller/Company/BonusReportController');
+var IncentiveReportController = require('../Controller/Company/IncentiveReportController');
+var ExtraEarningController = require('../Controller/Company/ExtraEarningController'); 
+var AdvanceManagementController = require('../Controller/Company/AdvanceManagementController'); 
+var RevisionController = require('../Controller/Company/RevisionController');
+
+router.post('/get-account',  StaffAccountController.get_account_details);
+router.post('/get-company-data', CompanyInfoController.get_company_data);
+router.post('/update-company-logo', CompanyInfoController.update_company_logo);
+router.post('/get-company-branch', CompanyInfoController.get_company_branch);
+router.post('/update-company-details', CompanyInfoController.update_company_details);
+router.post('/update-company-establishment', CompanyInfoController.update_company_establishment_details);
+router.post('/update-company-reg-ofc-address', CompanyInfoController.update_company_reg_office_address);
+router.post('/update-company-comm-ofc-address', CompanyInfoController.update_company_communication_office_address);
+router.post('/update-company-epf', CompanyInfoController.update_company_epf);
+router.post('/update-company-esic', CompanyInfoController.update_company_esic);
+router.post('/update-company-p-tax', CompanyInfoController.update_company_professional_tax);
+router.post('/update-company-branch', CompanyInfoController.update_company_branch_details);
+router.post('/update-company-partner', CompanyInfoController.update_company_partners_details);
+router.post('/update-company-preference-settings', CompanyInfoController.update_company_preference_settings);
+
+router.post('/get_permission_module', RoleController.get_permission_module_list);
+
+router.post('/role-list', RoleController.get_role_list);
+router.post('/create_role', RoleController.add_role);
+router.post('/view_role', RoleController.role_details);
+router.post('/update_role', RoleController.update_role_data);
+router.post('/update_role_status', RoleController.update_role_status);
+router.post('/update_role_approval', RoleController.update_role_approval);
+
+router.post('/create_staff', StaffController.add_staff_data);
+router.post('/get_staff', StaffController.get_staff_list);
+router.post('/update_staff', StaffController.update_staff_data);
+router.post('/update_staff_password', StaffController.update_staff_password);
+router.post('/delete_staff', StaffController.delete_staff_data);
+
+router.post('/create_epfo', middleware.checkComPermission({"gov_pf_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_pf_rule" :{ $in :['add']}}]), epfoController.add_epfo_rule);
+router.post('/get_epfo_rule',  middleware.checkComPermission({"gov_pf_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_pf_rule" :{ $in :['view']}}]), epfoController.get_epfo_rule);
+router.post('/update_epfo_rule', middleware.checkComPermission({"gov_pf_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_pf_rule" :{ $in :['edit']}}]), epfoController.update_epfo_rule);
+router.post('/delete_epfo_rule', middleware.checkComPermission({"gov_pf_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_pf_rule" :{ $in :['delete']}}]), epfoController.delete_epfo_data);
+router.post('/get_active_epfo_rule',middleware.checkComPermission({"gov_pf_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_pf_rule" :{ $in :['view']}}]), epfoController.get_active_epfo_rule);
+
+router.post('/create_esic',middleware.checkComPermission({"gov_esic_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_esic_rule" :{ $in :['add']}}]), esicController.add_esic_rule);
+router.post('/get_esic_rule',middleware.checkComPermission({"gov_esic_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_esic_rule" :{ $in :['view']}}]), esicController.get_esic_rule);
+router.post('/update_esic_rule',middleware.checkComPermission({"gov_esic_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_esic_rule" :{ $in :['edit']}}]), esicController.update_esic_rule);
+router.post('/delete_esic_rule',middleware.checkComPermission({"gov_esic_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_esic_rule" :{ $in :['delete']}}]), esicController.delete_esic_data);
+router.post('/get_active_esic_rule',middleware.checkComPermission({"gov_esic_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_esic_rule" :{ $in :['view']}}]), esicController.get_active_esic_rule);
+
+router.post('/create_bonus',middleware.checkComPermission({"gov_bonus_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_bonus_rule" :{ $in :['add']}}]), bonusController.add_bonus_rule);
+router.post('/get_bonus_rule',middleware.checkComPermission({"gov_bonus_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_bonus_rule" :{ $in :['view']}}]), bonusController.get_bonus_rule);
+router.post('/update_bonus_rule',middleware.checkComPermission({"gov_bonus_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_bonus_rule" :{ $in :['edit']}}]), bonusController.update_bonus_rule);
+router.post('/delete_bonus_rule',middleware.checkComPermission({"gov_bonus_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_bonus_rule" :{ $in :['delete']}}]), bonusController.delete_bonus_data);
+router.post('/get_active_bonus_rule',middleware.checkComPermission({"gov_bonus_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_bonus_rule" :{ $in :['view']}}]), bonusController.get_active_bonus_rule);
+
+router.post('/create_gratuity',middleware.checkComPermission({"gov_gratuity_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_gratuity_rule" :{ $in :['add']}}]), gratuityController.add_gratuity_rule);
+router.post('/get_gratuity_rule',middleware.checkComPermission({"gov_gratuity_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_gratuity_rule" :{ $in :['view']}}]), gratuityController.get_gratuity_rule);
+router.post('/update_gratuity_rule',middleware.checkComPermission({"gov_gratuity_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_gratuity_rule" :{ $in :['edit']}}]), gratuityController.update_gratuity_rule);
+router.post('/delete_gratuity_rule',middleware.checkComPermission({"gov_gratuity_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_gratuity_rule" :{ $in :['delete']}}]), gratuityController.delete_gratuity_data);
+router.post('/get_active_gratuity_rule',middleware.checkComPermission({"gov_gratuity_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_gratuity_rule" :{ $in :['view']}}]), gratuityController.get_active_gratuity_rule);
+
+router.post('/create_tax_category', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule_cat" :{ $in :['add']}}]), TaxslabController.add_tax_category);
+router.post('/get_tax_categories', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule_cat" :{ $in :['view']}}]), TaxslabController.get_taxslab_categories);
+router.post('/update_tax_category', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule_cat" :{ $in :['edit']}}]), TaxslabController.update_tax_category);
+router.post('/delete_tax_category', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule_cat" :{ $in :['delete']}}]), TaxslabController.delete_tax_category);
+
+router.post('/validate_financial_year',  middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['view']}}]), TaxslabController.validate_financial_year);
+router.post('/create_taxslab', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['add']}}]), TaxslabController.add_taxslab_rule);
+router.post('/get_taxslabs',  middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['view']}}]), TaxslabController.get_taxslab_list);
+router.post('/update_taxslab_rule', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['delete']}}]), TaxslabController.update_taxslab_rule);
+router.post('/delete_taxslab_data', middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['delete']}}]), TaxslabController.delete_taxslab_data);
+
+router.post('/create_attendance_rule', AttendanceController.add_attendance_rule);
+router.post('/get_attendance_rule', AttendanceController.get_attendance_policy);
+router.post('/update_attendance_rule', AttendanceController.update_attendance_rule);
+router.post('/delete_attendance_rule', AttendanceController.delete_attendance_rule);
+router.post('/get_attendance_library', AttendanceController.get_attendance_policy_library);
+router.post('/update_attendance_rule_active_status', AttendanceController.update_active_status);
+
+router.post('/create_incentive_policy', IncentivePolicyController.add_incentive_policy);
+router.post('/get_incentive_policy', IncentivePolicyController.get_incentive_policy);
+router.post('/update_incentive_policy', IncentivePolicyController.update_incentive_policy);
+router.post('/delete_incentive_policy', IncentivePolicyController.delete_incentive_policy);
+router.post('/get_incentive_library', IncentivePolicyController.get_incentive_library);
+router.post('/update_incentive_policy_active_status', IncentivePolicyController.update_active_status);
+
+router.post('/create_bonus_policy', BonusPolicyController.add_bonus_policy);
+router.post('/get_bonus_policy', BonusPolicyController.get_bonus_policy);
+router.post('/update_bonus_policy', BonusPolicyController.update_bonus_policy);
+router.post('/delete_bonus_policy', BonusPolicyController.delete_bonus_policy);
+router.post('/get_bonus_rule_library', BonusPolicyController.get_bonus_rule_library);
+router.post('/update_bonus_policy_active_status', BonusPolicyController.update_active_status);
+
+router.post('/get_clients', ClientController.get_clients);
+router.post('/add_client', ClientController.add_client);
+router.post('/update_client_data', ClientController.update_client_data);
+router.post('/update_client_status', ClientController.update_client_status);
+router.post('/delete_client', ClientController.delete_client);
+
+router.post('/create_overtime_policy', OvertimePolicyController.add_overtime_policy);
+router.post('/get_overtime_policy', OvertimePolicyController.get_overtime_policy);
+router.post('/update_overtime_policy', OvertimePolicyController.update_overtime_policy);
+router.post('/delete_overtime_policy', OvertimePolicyController.delete_overtime_policy);
+router.post('/get_overtime_library', OvertimePolicyController.get_overtime_library);
+router.post('/update_overtime_policy_active_status', OvertimePolicyController.update_active_status);
+
+router.post('/get_payslip_temp_library', PayslipTempController.get_payslip_temp_library);
+router.post('/create_payslip_temp', PayslipTempController.add_payslip_temp);
+router.post('/get_payslip_temp', PayslipTempController.get_payslip_temp);
+router.post('/update_payslip_temp', PayslipTempController.update_payslip_temp);
+router.post('/delete_payslip_temp', PayslipTempController.delete_payslip_temp);
+
+router.post('/get_bonus_slip_library', BonusslipTempController.get_bonus_slip_library);
+router.post('/create_bonus_slip_temp', BonusslipTempController.add_bonus_slip_temp);
+router.post('/get_bonus_slip_temp', BonusslipTempController.get_bonus_slip_temp);
+router.post('/update_bonus_slip_temp', BonusslipTempController.update_bonus_slip_temp);
+router.post('/delete_bonus_slip_temp', BonusslipTempController.delete_bonus_slip_temp);
+
+router.post('/get_arrear_slip_library', ArrearslipTempController.get_arrear_slip_library);
+router.post('/get_arrear_slip_master_data', ArrearslipTempController.get_master_data);
+router.post('/create_arrears_slip_temp', ArrearslipTempController.add_arrear_slip_temp);
+router.post('/get_arrears_slip_temp', ArrearslipTempController.get_arrear_slip_temp);
+router.post('/update_arrears_slip_temp', ArrearslipTempController.update_arrear_slip_temp);
+router.post('/delete_arrears_slip_temp', ArrearslipTempController.delete_arrear_slip_temp);
+
+router.post('/create_tds_policy',middleware.checkComPermission({"gov_tds_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_tds_rule" :{ $in :['add']}}]), TDSruleController.add_tds_policy);
+router.post('/get_tds_policy',middleware.checkComPermission({"gov_tds_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_tds_rule" :{ $in :['view']}}]), TDSruleController.get_tds_policy);
+router.post('/update_tds_policy',middleware.checkComPermission({"gov_tds_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_tds_rule" :{ $in :['edit']}}]), TDSruleController.update_tds_policy);
+router.post('/delete_tds_policy',middleware.checkComPermission({"gov_tds_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_tds_rule" :{ $in :['delete']}}]), TDSruleController.delete_tds_policy);
+router.post('/get_tds_policy_library',middleware.checkComPermission({"gov_tds_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_tds_rule" :{ $in :['view']}}]), TDSruleController.get_tds_policy_library);
+router.post('/update_tds_policy_active_status',middleware.checkComPermission({"gov_tds_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_tds_rule" :{ $in :['view']}}]), TDSruleController.update_active_status);
+
+router.post('/get_state_list',middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['view']}}]), Ptax_ruleController.get_states);
+router.post('/get_ptax_rule',middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['view']}}]), Ptax_ruleController.get_ptax_rule);
+router.post('/create_ptax_rule',middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['add']}}]), Ptax_ruleController.add_ptax_rule);
+router.post('/update_ptax_rule',middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['edit']}}]), Ptax_ruleController.update_ptax_rule);
+router.post('/delete_ptax_rule',middleware.checkComPermission({"gov_ptax_rule.rule_type" :'customizable'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['delete']}}]), Ptax_ruleController.delete_ptax_rule);
+router.post('/get_ptax_rule_library',middleware.checkComPermission({"gov_ptax_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['view']}}]), Ptax_ruleController.get_ptax_rule_library);
+router.post('/update_ptax_rule_active_status',middleware.checkComPermission({"gov_ptax_rule.rule_apply" :'yes'}),middleware.checkStaffPermission([{"modules.gov_ptax_rule" :{ $in :['view']}}]), Ptax_ruleController.update_active_status);
+
+router.post('/department-list', departmentController.get_department);
+router.post('/create_department', departmentController.add_department);
+router.post('/view_department', departmentController.department_details);
+router.post('/update_department', departmentController.update_department_data);
+router.post('/update_department_status', departmentController.update_department_status);
+router.post('/delete_department', departmentController.delete_department);
+
+router.post('/designation-list', designationController.get_designation);
+router.post('/create_designation', designationController.add_designation);
+router.post('/view_designation', designationController.designation_details);
+router.post('/update_designation', designationController.update_designation_data);
+router.post('/update_designation_status', designationController.update_designation_status);
+router.post('/delete_designation', designationController.delete_designation);
+
+router.post('/add-dispensary', DispensaryController.add_dispensary_data);
+router.post('/get-dispensary', DispensaryController.get_dispensary_list);
+
+router.post('/employee-package-master', EmployeePackage.get_package_master);
+router.post('/employee-package', EmployeePackage.get_package_list);
+router.post('/add-employee-package', EmployeePackage.add_package_data);
+router.post('/update-employee-package', EmployeePackage.update_package_data);
+
+router.post('/add-salary-template', SalaryTemplateController.add_salary_template_data);
+router.post('/get-salary-template', SalaryTemplateController.get_salary_template_list);
+router.post('/update-salary-template', SalaryTemplateController.update_salary_template_data);
+router.post('/get-salary-template-head', SalaryTemplateController.get_template_head);
+router.post('/add-salary-template-head', SalaryTemplateController.add_salary_template_head);
+router.post('/get-salary-template-library', SalaryTemplateController.get_salary_template_library);
+router.post('/get-salary-template-head-library', SalaryTemplateController.get_salary_template_head_library);
+
+
+router.post('/add-employee', EmployeeController.add_employee_data);
+router.post('/employee_bulk_update', EmployeeController.employee_bulk_update);
+router.post('/activate-new-employee', EmployeeController.active_new_employee);
+router.post('/get-employee', EmployeeController.get_employee_list);
+router.post('/update-employee-status', EmployeeController.update_employee_status);
+router.post('/update-employee-details', EmployeeController.update_employee_details);
+router.post('/update-employee-address', EmployeeController.update_employee_address);
+router.post('/update-employee-employment', EmployeeController.update_employment_details);
+router.post('/update-employee-pf-esic', EmployeeController.update_pf_esic_details);
+router.post('/update-employee-hr-details', EmployeeController.update_employee_hr_details);
+router.post('/get-employee-master', EmployeeController.get_master_data);
+router.post('/update-employee-bank', EmployeeController.update_bank_details);
+router.post('/update-employee-assets', EmployeeController.update_employee_assets_details);
+router.post('/update-employee-fam-member', EmployeeController.update_employee_family_details);
+router.post('/update-employee-training', EmployeeController.update_employee_training_details);
+router.post('/update-employee-other-details', EmployeeController.update_employee_other_details);
+router.post('/update-employee-disciplinary-details', EmployeeController.update_employee_disciplinary_details);
+router.post('/update-employee-contract', EmployeeController.update_employee_contract_details);
+router.post('/update-employee-accident-details', EmployeeController.update_employee_accident_details);
+router.post('/update-employee-extra-curricular', EmployeeController.update_employee_extra_curricular);
+router.post('/update-employee-education', EmployeeController.update_employee_education);
+router.post('/update-employee-full-and-final-details', EmployeeController.update_employee_full_and_final_details);
+router.post('/get-employee-details', EmployeeController.get_employee_details);
+router.post('/export-employee-list', EmployeeController.export_employee_list);
+router.post('/export-sample-employee-file', EmployeeController.export_sample_xlsx_file);
+router.post('/import-employee-data', EmployeeController.import_employee_data);
+router.post('/get-unapproved-employees', EmployeeController.get_Unapproved_employee);
+router.post('/employee-bulk-approve', EmployeeController.employee_bulk_approve);
+router.post('/update-earning-amount', EmployeeController.update_employee_annual_earning_details);
+router.post('/get-employee-folders', EmployeeController.get_employee_folders);
+router.post('/get-employee-files', EmployeeController.get_employee_files);
+
+
+
+
+router.post('/get-attendance-configuration', ComAttendanceController.get_attendance_configuration);
+router.post('/add-weekly-holidays', ComAttendanceController.add_weekly_holidays);
+router.post('/get-weekly-holidays', ComAttendanceController.get_weekly_holidays);
+router.post('/update-weekly-holidays', ComAttendanceController.update_weekly_holidays);
+router.post('/add-yearly-holidays', ComAttendanceController.add_yearly_holidays);
+router.post('/get-yearly-holidays', ComAttendanceController.get_yearly_holidays);
+router.post('/update-yearly-holidays', ComAttendanceController.update_yearly_holidays);
+router.post('/add-attendance-data', ComAttendanceController.add_attendance_data);
+router.post('/import-attendance-data', ComAttendanceController.import_attendance_data);
+router.post('/get-attendance-data', ComAttendanceController.get_attendance_data);
+router.post('/get-attendance-register', ComAttendanceController.get_attendance_register);
+router.post('/update-attendance-register', ComAttendanceController.update_attendance_register);
+router.post('/bulk-update-attendance-data', ComAttendanceController.bulk_update_attendance_data);
+router.post('/update-attendance-data', ComAttendanceController.update_attendance_data);
+router.post('/approve-attendance-data', ComAttendanceController.approve_attendance_data);
+router.post('/after-cutoff-approve-attendance-data', ComAttendanceController.approve_attendance_ac_data);
+router.post('/get-attendance-summary', ComAttendanceController.get_attendance_summary);
+router.post('/export-sample-attendance-file', ComAttendanceController.export_sample_attendance_data);
+
+router.post('/add-template-head', LeaveRuleController.add_template_head);
+router.post('/get-template-head', LeaveRuleController.get_template_head);
+router.post('/get-leave-rule', LeaveRuleController.get_leave_rule_policy);
+router.post('/add-leave-rule', LeaveRuleController.add_leave_rule);
+router.post('/update-leave-rule', LeaveRuleController.update_leave_rule);
+router.post('/delete-leave-rule', LeaveRuleController.delete_leave_rule);
+router.post('/get-leave-template-library', LeaveRuleController.get_salary_template_library);
+router.post('/get-leave-template-head-library', LeaveRuleController.get_salary_template_head_library);
+
+router.post('/get-lwf-rule', LwfruleController.get_lwf_rule_policy);
+router.post('/add-lwf-rule', LwfruleController.add_lwf_rule);
+router.post('/update-lwf-rule', LwfruleController.update_lwf_rule);
+router.post('/delete-lwf-rule', LwfruleController.delete_lwf_rule);
+router.post('/get-lwf-rule-library', LwfruleController.get_lwf_rule_library);
+
+router.post('/salary-calculator-master', SalaryCalculator.get_master_data);
+router.post('/calculate-salary', SalaryCalculator.calculate_salary);
+router.post('/calculate-salary-range', SalaryCalculator.calculate_salary_range);
+
+
+router.post('/get-shift', ShiftController.get_shift);
+router.post('/add-shift', ShiftController.add_shift);
+router.post('/update-shift', ShiftController.update_shift);
+router.post('/delete-shift', ShiftController.delete_shift);
+router.post('/get-active-shift', ShiftController.get_active_shift);
+router.post('/get-shift-employee', ShiftController.get_employee_list);
+router.post('/update-employee-shift', ShiftController.update_employee_shift);
+router.post('/shift-details', ShiftController.shift_details);
+router.post('/emp-update-shift-details', ShiftController.emp_update_shift_details);
+router.post('/emp-update-shift-rate', ShiftController.emp_update_shift_rate);
+router.post('/update-employee-shift-rate', ShiftController.update_employee_shift_rate);
+
+router.post('/get-order-id', PaymentController.get_order_id);
+router.post('/verify-order-id', PaymentController.verify_order_id);
+router.post('/get-credit-setting-value', PaymentController.get_credit_setting_value);
+router.post('/check-coupon-code', PaymentController.check_coupon_code);
+router.post('/get-payment-history', PaymentController.get_payment_history);
+
+router.post('/get-letter-template', LetterWritingController.get_LW_template);
+router.post('/create-letter-template', LetterWritingController.create_LW_template);
+router.post('/update-letter-template', LetterWritingController.update_LW_template);
+router.post('/update-letter-template-status', LetterWritingController.update_LW_template_status);
+router.post('/delete-letter-template', LetterWritingController.delete_LW_template);
+router.post('/letter-writting-report', LetterWritingController.letter_writting_report);
+
+router.post('/get-bank-sheet-list', PaymentController.get_sheet_template_list);
+router.post('/add-bank-sheet', PaymentController.add_sheet_template);
+router.post('/update-bank-sheet', PaymentController.update_sheet_template_data);
+router.post('/delete-bank-sheet', PaymentController.delete_sheet_template_data);
+
+router.post('/get-expenses', ExpenseController.get_expenses);
+router.post('/add-expense', ExpenseController.add_expenses);
+
+
+router.post('/hold-employee-salary', SalaryReportController.hold_employee_salary);
+router.post('/get-hold-salary-employee', SalaryReportController.generate_hold_salary_employee_list);
+router.post('/remove-from-hold-salary-list', SalaryReportController.remove_from_hold_salary_list);
+router.post('/generate-earning-sheet', middleware.getCompanyData, SalaryReportController.generate_earning_sheet);
+router.post('/get-master-sheet-data', SalaryReportController.get_master_sheet_data);
+router.post('/export-master-sheet-data', SalaryReportController.export_master_sheet);
+router.post('/generate-instruction-report', SalaryReportController.generate_instruction_report);
+router.post('/get-bank-payment-data', SalaryReportController.get_bank_payment_data);
+router.post('/confirm-bank-payment', SalaryReportController.confirm_bank_payment);
+router.post('/delete-bank-payment-ref-file', SalaryReportController.delete_bank_payment_ref_file);
+router.post('/generate-pf-report', SalaryReportController.generate_pf_report);
+router.post('/get-challan-data', SalaryReportController.get_challan_data);
+router.post('/confirm-challan-payment', SalaryReportController.confirm_challan_payment);
+router.post('/delete-challan-ref-file', SalaryReportController.delete_challan_ref_file);
+router.post('/get-challan-form-data', SalaryReportController.challan_form_data);
+
+router.post('/generate-esic-report', SalaryReportController.generate_esic_report);
+router.post('/get-esic-challan-data', SalaryReportController.get_esic_challan_data);
+router.post('/get-esic-challan-form-data', SalaryReportController.esic_challan_form_data);
+router.post('/confirm-esic-challan-payment', SalaryReportController.confirm_esic_challan_payment);
+router.post('/delete-esic-challan-ref-file', SalaryReportController.delete_esic_challan_ref_file);
+
+
+router.post('/update-bonus-data', BonusReportController.generate_bonus_report);
+router.post('/get-bonus-form', BonusReportController.get_bonus_form);
+router.post('/import-bonus', BonusReportController.import_bonus_data);
+router.post('/export-bonus-sample-file', BonusReportController.export_bonus_sample_file);
+
+
+router.post('/update-incentive-data', IncentiveReportController.generate_incentive_report);
+router.post('/get-incentive-form', IncentiveReportController.get_incentive_form);
+
+router.post('/create-earning-sheet-template', SalaryReportController.create_earning_sheet_template);
+router.post('/get-earning-sheet-template', SalaryReportController.get_earning_sheet_template_list);
+router.post('/generate-earning-sheet-employee-list', SalaryReportController.generate_employee_list_earning_sheet);
+
+router.post('/get-extra-earning',  ExtraEarningController.get_extra_earning_emp);
+router.post('/add-extra-earning-data', ExtraEarningController.add_extra_earning);
+router.post('/update-extra-earning-data', ExtraEarningController.update_extra_earning_data);
+router.post('/add-extra-earning-head', ExtraEarningController.add_extra_earning_head);
+router.post('/get-extra-earning-head', ExtraEarningController.get_extra_earning_head);
+
+router.post('/add-advance-data', AdvanceManagementController.add_advance_data);
+router.post('/update-advance-data', AdvanceManagementController.update_advance_data);
+router.post('/get-advance-data', AdvanceManagementController.get_advance_data);
+router.post('/import-advance-data',  AdvanceManagementController.import_advance_data);
+router.post('/export-advance-data', AdvanceManagementController.export_advance_sample_file);
+
+
+
+router.post('/get-revision-emp-list', RevisionController.get_employee_revision_list);
+router.post('/update-revision-emp-data', RevisionController.update_employee_revision_data);
+router.post('/update-checked-revision-emp-data', RevisionController.update_checked_employee_revision_data);
+router.post('/get-revision-log', RevisionController.get_employee_revision_data);
+router.post('/get-filtered-revision-emp-list', RevisionController.get_filter_revision_employee_list);
+router.post('/run-revision-payroll', middleware.getCompanyData, RevisionController.run_revision_payroll);
+router.post('/get-revision-master-report',  RevisionController.get_revision_report);
+router.post('/calculate-attendance-data',RevisionController.calculate_attendance_data);
+router.post('/get-total-revision-master-report',RevisionController.calculate_total_revision);
+
+module.exports = router;

@@ -1,0 +1,296 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Appraisal Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Appraisal Report</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody" *ngIf="!isViewReportDetails">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter
+        [yearFilter]="true"
+        (onFiltered)="employeeListFilter = $event; fetchAppraisalListing()"
+      >
+      </companyuser-app-table-filter>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex">
+          <label for="option-1" class="m-0">
+            <input
+              (change)="
+                reportListType = 'summary'; fetchAppraisalListing()
+              "
+              type="radio"
+              name="salary_type"
+              id="option-1"
+              value="salary"
+              checked
+            />
+            Summary Report
+          </label>
+          <label for="option-2" class="m-0 ml-3">
+            <input
+              (change)="
+                reportListType = 'detailed'; fetchAppraisalListing()
+              "
+              type="radio"
+              name="salary_type"
+              id="option-2"
+              value="detailed"
+            />
+            Detailed
+          </label>
+        </div>
+        <div>
+          <button
+            [disabled]="!anyRowsChecked()"
+            class="btn btn-info mt-3"
+            (click)="viewReportDetail()"
+          >
+            View Report
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <div class="table-responsive mt-3">
+          <app-custom-tableoption
+          [searchable]="true"
+          (onFilterChanged)="reportPaginationOptions.limit = +$event?.length ;reportTableFilterOptions.searchkey = $event.searchkey; fetchAppraisalListing()"
+        ></app-custom-tableoption>
+          <table class="w-100 c-table">
+            <colgroup span="3"></colgroup>
+
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    [value]="rowCheckedAll"
+                    (change)="allRowsCheckboxChecked($event)"
+                  />
+                  SL No.
+                </th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Branch</th>
+                <th>Client</th>
+                <th>HOD</th>
+                <th *ngIf="reportListType == 'detailed'" colspan="2">Head</th>
+                <th>Self Assign Rating(%)</th>
+                <th>Level 1 Assign Rating(%)</th>
+                <th>Level 2 Assign Rating(%)</th>
+                <th>Overall Rating(%)</th>
+              </tr>
+              <tr *ngIf="reportListType == 'detailed'">
+                <th colspan="8"></th>
+                <th>Name</th>
+                <th>Value(%)</th>
+                <th colspan="3"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let report of employeesListing; let i = index">
+                <td>
+                  <label
+                    class="d-flex align-items-center"
+                    [for]="'checkrow-' + (i + 1)"
+                  >
+                    <input
+                      type="checkbox"
+                      class="mr-2"
+                      [attr.checked]="
+                        report?.checked == true ? 'checked' : null
+                      "
+                      id="checkrow-{{ i + 1 }}"
+                      [attr.data-checkbox-id]="report?._id"
+                      (click)="rowCheckBoxChecked($event, report)"
+                    />
+                    {{
+                      Global.getTableSerialNumber(
+                        i,
+                        reportPaginationOptions.limit,
+                        reportPaginationOptions.page
+                      )
+                    }}
+                  </label>
+                </td>
+
+                <td>{{ report?.emp_id }}</td>
+                <td>
+                  {{ report?.emp_first_name }} {{ report?.emp_last_name }}
+                </td>
+                <td>{{ report?.department?.department_name || "N/A" }}</td>
+                <td>{{ report?.designation?.designation_name || "N/A" }}</td>
+                <td>{{ report?.branch?.branch_name || "N/A" }}</td>
+                <td>{{ report?.client?.client_name || "N/A" }}</td>
+                <td>
+                  {{ report?.hod?.first_name || "N/A" }}
+                  {{ report?.hod?.last_name }}
+                </td>
+                <ng-container *ngIf="reportListType == 'detailed'">
+                  <td>
+                    <tr
+                      style="
+                        background-color: transparent !important;
+                        white-space: nowrap;
+                      "
+                      class="border-0"
+                      *ngFor="let head of getAppraisalheads(report?.appraisals)"
+                    >
+                      <td class="px-0 py-1">
+                        {{ head?.name | titlecase }}
+                      </td>
+                    </tr>
+                  </td>
+                  <td>
+                    <tr
+                      style="background-color: transparent !important"
+                      class="border-0"
+                      *ngFor="let head of getAppraisalheads(report?.appraisals)"
+                    >
+                      <td class="px-0 py-1">
+                        {{ head?.value }}
+                      </td>
+                    </tr>
+                  </td>
+                  <td>
+                    <tr
+                      style="background-color: transparent !important"
+                      class="border-0"
+                      *ngFor="
+                        let head of getAppraisalheadsAssignValue(
+                          report,
+                          report?.appraisals,
+                          'self_assignee'
+                        )
+                      "
+                    >
+                      <td class="px-0 py-1">
+                        {{ head?.assign_value || 0 }}
+                      </td>
+                    </tr>
+                  </td>
+                  <td>
+                    <tr
+                      style="background-color: transparent !important"
+                      class="border-0"
+                      *ngFor="
+                        let head of getAppraisalheadsAssignValue(
+                          report,
+                          report?.appraisals,
+                          'lvl_1_assignee'
+                        )
+                      "
+                    >
+                      <td class="px-0 py-1">
+                        {{ head?.assign_value || 0 }}
+                      </td>
+                    </tr>
+                  </td>
+                  <td>
+                    <tr
+                      style="background-color: transparent !important"
+                      class="border-0"
+                      *ngFor="
+                        let head of getAppraisalheadsAssignValue(
+                          report,
+                          report?.appraisals,
+                          'lvl_2_assignee'
+                        )
+                      "
+                    >
+                      <td class="px-0 py-1">
+                        {{ head?.assign_value || 0 }}
+                      </td>
+                    </tr>
+                  </td>
+                </ng-container>
+                <td *ngIf="reportListType == 'summary'">
+                  {{
+                    getAppraisalheadsTotalValue(
+                      report,
+                      report?.appraisals,
+                      "self_assignee"
+                    )
+                  }}
+                </td>
+                <td *ngIf="reportListType == 'summary'">
+                  {{
+                    getAppraisalheadsTotalValue(
+                      report,
+                      report?.appraisals,
+                      "lvl_1_assignee"
+                    )
+                  }}
+                </td>
+                <td *ngIf="reportListType == 'summary'">
+                  {{
+                    getAppraisalheadsTotalValue(
+                      report,
+                      report?.appraisals,
+                      "lvl_2_assignee"
+                    )
+                  }}
+                </td>
+
+                <td >{{ report?.overallRating }}</td>
+              </tr>
+              <tr *ngIf="employeesListing.length == 0">
+                <td
+                  colspan="100%"
+                  class="text-center"
+                  style="background-color: #f7f7f7"
+                >
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <app-custom-pagination
+        [rows]="employeesListing"
+        [paginationOptions]="reportPaginationOptions"
+        (onPageClicked)="reportPaginationOptions.page = $event; fetchAppraisalListing()"
+      ></app-custom-pagination>
+    </div>
+  </div>
+
+  <div class="br-pagebody" *ngIf="isViewReportDetails">
+    <div class="br-section-wrapper pd-10">
+      <div class="d-flex justify-content-between align-items-center">
+        <div></div>
+        <div>
+          <button class="btn btn-info mt-3 mr-2" (click)="downloadExcelReport($event)">Download</button>
+          <button class="btn mt-3 ml-3" (click)="isViewReportDetails = false; fetchAppraisalListing()">
+            Cancel
+          </button>
+        </div>
+      </div>
+      <app-export-appraisal-report
+        [employeesListing]="employeesListing"
+        [reportListType]="reportListType"
+      ></app-export-appraisal-report>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

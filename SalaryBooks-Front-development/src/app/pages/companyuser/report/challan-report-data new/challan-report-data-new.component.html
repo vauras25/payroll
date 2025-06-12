@@ -1,0 +1,257 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Reports</a>
+      <a
+        class="breadcrumb-item"
+        routerLink="/company/reports/instruction-report"
+        >Instruction Report</a
+      >
+      <a class="breadcrumb-item active"
+        >Challan Data/Confirm</a
+      >
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Challan Data/Confirm
+      </h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody pd-x-20 pd-sm-x-30">
+    <div class="br-section-wrapper mt-5">
+      <!-- <companyuser-app-table-filter
+        [monthFilter]="true"
+        [yearFilter]="true"
+        [challanType]="true"
+      >
+        <div addOn_btn1 class="col-sm-2 col-12">
+          <button
+            [disabled]="true"
+            class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+          >
+            <i class="fa fa-refresh" aria-hidden="false"></i>
+            <i style="font-size: 10px" class="fa">&#xf021;</i>
+            Reset
+          </button>
+        </div>
+      </companyuser-app-table-filter> -->
+      <div class="d-flex align-items-center">
+        <div class="my-3 d-flex align-items-center mr-3">
+          <div class="mr-2">Challan For : </div>
+          <div class="d-flex">
+            <div class="switch" [class.actve-tab]="challanType === 'pf'">
+              <label class="d-flex mb-0" for="pf"
+                ><input class="mr-1" type="radio" id="pf" name="type" [checked]="challanType === 'pf'" (change)="challanType ='pf'; fetchChallanData()" />
+                PF</label
+              >
+            </div>
+            <div class="switch" [class.actve-tab]="challanType === 'esic'">
+              <label class="d-flex mb-0" for="esi"
+                ><input class="mr-1" type="radio" id="esi" name="type" [checked]="challanType === 'esic'" (change)="challanType ='esic'; fetchChallanData()" />
+                ESI</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="my-3 d-flex align-items-center">
+          <div class="mr-2">Challan Type : </div>
+          <div class="d-flex">
+            <div class="d-flex mr-3">
+              <div class="switch" [class.actve-tab]="challanFor === 'ECR'">
+                <label class="d-flex mb-0" for="ecr"
+                  ><input
+                    class="mr-1"
+                    type="radio"
+                    id="ecr"
+                    name="type2"
+                    (change)="challanFor ='ECR'; fetchChallanData()"
+                    checked
+                  />
+                  ECR</label
+                >
+              </div>
+              <div class="switch" [class.actve-tab]="challanFor === 'ARREAR'">
+                <label class="d-flex mb-0" for="Arrear"
+                  ><input class="mr-1" type="radio" id="Arrear" name="type2"
+                  (change)="challanFor ='ARREAR'; fetchChallanData()" />
+                  Arrear</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-12">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search..."
+          (input)="searchByKeyword = $event?.target?.value; fetchChallanData()"
+        />
+      </div>
+      </div>
+      <div class="table-wrapper">
+        <app-custom-tableoption
+        [searchable]="false"
+        (onFilterChanged)="reportPaginationOptions.limit = +$event?.length ; fetchChallanData()"
+      ></app-custom-tableoption>
+        <table class="table display responsive nowrap wd-100p">
+          <thead>
+            <tr>
+              <th class="text-left">SL No.</th>
+              <th>File Id</th>
+              <th>Wage Month</th>
+              <th>Challan Type</th>
+              <th>Challan Amt</th>
+              <th>Action</th>
+              <th>Confirmation Log</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let challanData of challanDataListing; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{challanData?.file_id}}</td>
+              <td>{{formatmonth(challanData?.wage_month)}}</td>
+              <td>{{challanData?.challan_type}}</td>
+              <td>{{challanData?.total_challan_amount}}</td>
+              <td class="d-flex align-items-center">
+                <button *ngIf="challanType === 'pf' && Global.checkCompanyModulePermission({
+                  company_module: 'compliance',
+                  company_sub_module: 'challan_data',
+                  company_sub_operation: ['download'],
+                  company_strict: true
+                })"
+                  class="btn btn-primary btn-icon mx-1"
+                  (click)="downloadSheet(challanData?._id, 'text', challanData?.file_id)"
+                >
+                  <div style="width: 25px; height: 25px">
+                    <i class="fa fa-file-word"></i>
+                  </div>
+                </button>
+                <button
+                *ngIf="Global.checkCompanyModulePermission({
+                  company_module: 'compliance',
+                  company_sub_module: 'challan_data',
+                  company_sub_operation: ['download'],
+                  company_strict: true
+                })"
+                  class="btn btn-info btn-icon mx-1"
+                  (click)="downloadSheet(challanData?._id, 'excel', challanData?.file_id)"
+                >
+                  <div style="width: 25px; height: 25px">
+                    <i class="fa fa-file-excel"></i>
+                  </div>
+                </button>
+                <button  *ngIf="challanData.status == 'active' && Global.checkCompanyModulePermission({
+                  company_module: 'compliance',
+                  company_sub_module: 'challan_data',
+                  company_sub_operation: ['confirm'],
+                  company_strict: true
+                })"
+                  class="btn btn-success btn-icon mx-1"
+                  [routerLink]="'/company/reports/'+this.challanType+'-challan-report/data/'+challanData.file_id+'/confirm'"
+                >
+                  <div style="width: 25px; height: 25px">
+                    <i class="fa fa-check"></i>
+                  </div>
+                </button>
+                <button
+                *ngIf="challanData.status == 'active' && Global.checkCompanyModulePermission({
+                  company_module: 'compliance',
+                  company_sub_module: 'challan_data',
+                  company_sub_operation: ['delete'],
+                  company_strict: true
+                })"
+                  class="btn btn-danger btn-icon mx-1"
+                  (click)="deleteSheet(challanData)"
+                >
+                  <div style="width: 25px; height: 25px">
+                    <i class="fa fa-trash"></i>
+                  </div>
+                </button>
+              </td>
+              <td>{{challanData?.confirmation_log || 'N/A'}}</td>
+            </tr>
+            <tr *ngIf="challanDataListing.length == 0">
+              <td
+                colspan="100%"
+                class="text-center"
+                style="background-color: #f7f7f7"
+              >
+                No records found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <app-custom-pagination
+        [rows]="challanDataListing"
+        [paginationOptions]="reportPaginationOptions"
+        (onPageClicked)="fetchChallanData()"
+        ></app-custom-pagination>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <button
+    id="confirmationModalButton"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#confirmationModal"
+  ></button>
+  <div id="confirmationModal" tabindex="-1" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Confirm Sheet
+            <small>File ID: {{ sheetConfirmationDetails?.file_id }}</small>
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="confirmationForm">
+          <div class="modal-body pd-25">
+            <div class="row">
+              <div class="col-lg-12">
+                <textarea
+                  class="form-control"
+                  formControlName="remarks"
+                  placeholder="Remarks"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              [disabled]="!confirmationForm.valid"
+              (click)="confirmSheet($event)"
+              class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+            >
+              <span>Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

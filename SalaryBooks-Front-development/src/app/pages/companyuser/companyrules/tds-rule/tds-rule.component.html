@@ -1,0 +1,284 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a>
+            <a class="breadcrumb-item" routerLink="/company/settings" [queryParams]="{active: 'comprules'}">Company Rules</a>
+            <a class="breadcrumb-item active">TDS Template</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>TDS Template</h4>
+            <p class="mg-b-0">
+                <!-- Lorem Ipsum is simply dummy text of the printing and typesetting -->
+            </p>
+        </div>
+    </div>
+
+    <div  class="br-pagebody pd-x-20 pd-sm-x-30" id="tdsrule-submit-section" *ngIf="preferenceGroup.includes('customizable') && Global.checkCompanyModulePermission({
+        company_module: 'company_rules_2',
+        company_sub_module: 'tds_template',
+        company_sub_operation: ['add', 'edit'],
+        company_strict:true
+      }) ">
+        <div  class="br-section-wrapper">
+
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">
+                Define TDS Template
+
+                <button (click)="openTemplateLibrary()" class="btn btn-primary btn-sm float-right"><i class="fa fa-book"></i> Template Library</button>
+            </h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Update TDS Template</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="tdsRuleForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Template Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" type="text" formControlName="template_name">
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.template_name.hasError('required') && (tdsRuleForm.controls.template_name.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Method of Application&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="application_methode" [options]="applicationMethodMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.application_methode.hasError('required') && (tdsRuleForm.controls.application_methode.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Frequency&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="frequency" [options]="frequencyMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.frequency.hasError('required') && (tdsRuleForm.controls.frequency.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Deadline Day&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="deadline_day" [options]="deadlineDayMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.deadline_day.hasError('required') && (tdsRuleForm.controls.deadline_day.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Deadline Month&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="deadline_month" [options]="deadlineMonthMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.deadline_month.hasError('required') && (tdsRuleForm.controls.deadline_month.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Income Tax Slab&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="income_tax_slab" [options]="incomeTaxSlabsList" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px', displayKey:'template_name'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.income_tax_slab.hasError('required') && (tdsRuleForm.controls.income_tax_slab.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            TDS Rule&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="tds_rule" [options]="tdsDeductionRulesList" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px',displayKey:'template_name'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.tds_rule.hasError('required') && (tdsRuleForm.controls.tds_rule.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Regime&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="regime" [options]="regimeMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.regime.hasError('required') && (tdsRuleForm.controls.regime.dirty)">This field is required</p>
+                        </div>
+
+                       
+                    </div>
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="tdsRuleForm.controls.publish_status.hasError('required') && (tdsRuleForm.controls.publish_status.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst"></div>
+                    </div> -->
+
+                    <div class="row no-gutters bd-1" style="border-right: 1px solid #ced4da;">
+                        <div class="col-12 col-sm-12">
+                            <button type="submit" [disabled]="!tdsRuleForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="!editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'company_rules_2',
+                                company_sub_module: 'tds_template',
+                                company_sub_operation: ['add'],
+                                company_strict:true
+                              }) ">
+                                <span>Save</span>
+                            </button>
+
+                            <div *ngIf="editActionId && Global.checkCompanyModulePermission({
+                                company_module: 'company_rules_2',
+                                company_sub_module: 'tds_template',
+                                company_sub_operation: ['edit'],
+                                company_strict:true
+                              }) ">
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel</span>
+                                </button>
+                                <button type="submit" [disabled]="!tdsRuleForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Template</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody" *ngIf="preferenceGroup.includes('customizable'); else defaultTemplateTable">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">TDS Template</h6>
+
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Status</th>
+                            <th class="">Action</th>
+                            <th class="">Template</th>
+                            <th class="">Method</th>
+                            <th class="">Frequency</th>
+                            <th class="">Deadline</th>
+                            <th class="">Income Tax Slab</th>
+                            <th class="">TDS Rule </th>
+                            <th class="">Regime</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #defaultTemplateTable>
+        <div class="br-pagebody">
+            <div class="br-section-wrapper" *ngIf="preferenceGroup.includes('default');">
+                <h6 class="br-section-label mb-3">Default TDS Templates</h6>
+
+                <div class="table-wrapper">
+                    <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                        <thead>
+                            <tr>
+                                <th class="">SL No</th>
+                                <th class="">Action</th>
+                                <th class="">Template</th>
+                                <th class="">Method</th>
+                                <th class="">Frequency</th>
+                                <th class="">Deadline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-container *ngIf="preferenceGroup.includes('customizable')">
+        <button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+        <div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content tx-size-sm">
+                    <div class="modal-header pd-x-20">
+                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Edit History</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body pd-20">
+                        <div class="">
+                            <table class="table display responsive nowrap wd-100p table-responsive" datatable [dtOptions]="dtOptionsHistory" id="history-datatable">
+                                <thead>
+                                    <th class="">SL No</th>
+                                    <th class="">Time</th>
+                                    <th class="">Updated By</th>
+                                    <th class="">Template</th>
+                                    <th class="">Method</th>
+                                    <th class="">Frequency</th>
+                                    <th class="">Deadline</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="librarymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#librarymodal"></button>
+        <div id="librarymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content tx-size-sm">
+                    <div class="modal-header pd-x-20">
+                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Template Library</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body pd-20">
+                        <div class="">
+                            <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptionsLibrary" id="library-datatable">
+                                <thead>
+                                    <tr>
+                                        <th class="">SL No</th>
+                                        <th class="">Action</th>
+                                        <th class="">Template</th>
+                                        <th class="">Method</th>
+                                        <th class="">Frequency</th>
+                                        <th class="">Deadline</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,88 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Disciplinary Action</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">Employee Disciplinary Action</h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section">
+                <form [formGroup]="employeeDisciplinaryActionForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Type&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryActionForm, 'disciplinary_type', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="disciplinary_type">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryActionForm, 'disciplinary_type', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Description&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryActionForm, 'description', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="description"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryActionForm, 'description', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Comments&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryActionForm, 'comments', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="comments"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryActionForm, 'comments', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Details Image File&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryActionForm, 'disciplinary_file_image', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="operation == 'view'">
+                                <button *ngIf="employee_details?.emp_det?.employment_disciplinary_details?.disciplinary_file_image; else noCancelChequeImage" (click)="Global.imageViewer(Global.BACKEND_URL + '/' + employee_details.emp_det?.employment_disciplinary_details?.disciplinary_file_image)"
+                                    class="btn btn-primary">
+                                    View Document Image
+                                </button>
+                                <ng-template #noCancelChequeImage>
+                                    N/A
+                                </ng-template>
+                            </ng-container>
+
+                            <ng-container *ngIf="operation == 'edit'">
+                                <input class="form-control" type="file" accept="image/*" formControlName="disciplinary_file_image" (change)="onFileChanged($event, employeeDisciplinaryActionForm, 'disciplinary_file_image', 'disciplinary_file_image_file')">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryActionForm, 'disciplinary_file_image', 'required')">This field is required</p>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info" (click)="updateDisciplinaryAction($event)"><span>Update</span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

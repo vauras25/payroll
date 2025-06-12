@@ -1,0 +1,708 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Reports</a>
+            <a class="breadcrumb-item" routerLink="/company/reports/instruction-report">Instruction Report</a>
+            <a class="breadcrumb-item" routerLink="/company/reports/instruction-report/data"><span class="text-uppercase">{{this.challanType}}</span> Challan Data</a>
+            <a class="breadcrumb-item active">Confirm</a>            
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>Confirm <span class="text-uppercase">{{this.challanType}}</span> Challan Data</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <ng-container [ngSwitch]="challanType">
+        <ng-container *ngSwitchCase="'pf'">
+            <form [formGroup]="pfConfirmationForm">
+                <div class="br-pagebody pd-x-20 pd-sm-x-30 pd-y-20">
+                    <div class="br-section-wrapper mb-4">
+                        <h4 class="br-section-label mb-1 text-center">COMBINED CHALLAN OF A/C NO. 01, 02, 10, 21 &amp; 22</h4>
+                        <h6 class="text-center">With EMPLOYEES' PROVIDENT FUND ORGANISATION</h6>
+        
+                        <div class="table-wrapper mt-4">
+                            <table border="0" cellspacing="2" cellpadding="0" style="margin: 0;border: none; padding:0; font-weight: 600; color: #3e3e3e; box-sizing: border-box; padding:0 0 30px; font-weight: normal; letter-spacing: 0.1px; width:100%;">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 100%;"></td>
+                                        <td>
+                                            <tr>
+                                                <th style="min-width: 100px;">TRRN</th>
+                                                <td style="min-width: 100px; padding: 5px 0;">
+                                                    <input formControlName="trrn" type="text" class="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th style="min-width: 100px;">ECR Id</th>
+                                                <td style="min-width: 100px; padding: 5px 0;">
+                                                    <input formControlName="ecr_id" type="text" class="">
+                                                </td>
+                                            </tr>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td colspan="100%" style="height: 20px;"></td>
+                                    </tr>
+        
+                                    <tr>
+                                        <td>
+                                            <tr>
+                                                <th>Establishment Code & Name</th>
+                                                <td>
+                                                    <tr>
+                                                        <td style="padding: 5px 10px;">
+                                                            {{ companyData?.establishment?.trade_licence_no ?? '-' }}
+                                                        </td>
+                                                        <td style="padding: 5px 10px;">
+                                                            {{ companyData?.details?.establishment_name ?? '-' }}
+                                                        </td>
+                                                    </tr>
+                                                </td>
+                                            </tr>
+        
+                                            <tr>
+                                                <th>Address</th>
+                                                <td style="padding: 5px 10px;">
+                                                    {{ companyData?.establishment?.trade_licence_no ?? '-' }}                                            
+                                                </td>
+                                            </tr>
+                                        </td>
+        
+                                        <td>
+                                            <tr>
+                                                <th style="padding: 5px 10px; min-width: 100px; text-align: center;">Month</th>
+                                                <th style="padding: 5px 10px; min-width: 100px; text-align: center;">Year</th>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 5px 10px; min-width: 100px; text-align: center;">September</td>
+                                                <td style="padding: 5px 10px; min-width: 100px; text-align: center;">2022</td>
+                                            </tr>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+        
+                            <table border="0" cellspacing="2" cellpadding="0" align="center" style="margin: 0; border: none; padding:0; font-weight: 600; color: #3e3e3e; box-sizing: border-box; padding:0 0 30px; font-weight: normal; letter-spacing: 0.1px; width:100%; margin-top: 30px; margin-bottom: 10px;">
+                                <thead>
+                                    <tr>
+                                        <td style="padding-bottom: 10px; width: 300px; text-align: left;"></td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-size: 14px; font-weight: 500;">
+                                            EPF
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-size: 14px; font-weight: 500;">
+                                            EPS
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-size: 14px; font-weight: 500;">
+                                            EDLI
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                            Total Subscribers
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-weight: 500; font-size: 14px;">
+                                            {{ fileData?.total_epf_emp }}
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-weight: 500; font-size: 14px;">
+                                            {{ fileData?.total_eps_emp }}
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-weight: 500; font-size: 14px;">
+                                            {{ fileData?.total_edli_emp }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                            Total Wages
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-weight: 500; font-size: 14px;">
+                                            {{ fileData?.total_epf }}
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-weight: 500; font-size: 14px;">
+                                            {{ fileData?.total_eps }}
+                                        </td>
+                                        <td style="padding-bottom: 10px; text-align: center; font-weight: 500; font-size: 14px;">
+                                            {{ fileData?.total_edli }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+        
+                            <table cellspacing="0" cellpadding="8px" align="center" style="width:100%; margin: 0; color: #3e3e3e; font-size: 12px;box-sizing: border-box; padding:0; font-weight: 600; letter-spacing: 0.1px;" formGroupName="challan_details">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600;">SL.</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600;">PARTICULARS</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600; text-align: center;">A/C.01 (Rs.)</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600; text-align: center;">A/C.02 (Rs.)</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600; text-align: center;">A/C.10 (Rs.)</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600; text-align: center;">A/C.21 (Rs.)</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600; text-align: center;">A/C.22 (Rs.)</th>
+                                        <th scope="col" style="font-size: 14px; border-top: solid 1px #000; border-bottom: solid 1px #000; padding: 10px; font-weight: 600; text-align: center;">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    <tr>
+                                        <td style="font-size: 14px;">1</td>
+                                        <td style="font-size: 14px;">Administration Charges</td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            <input type="number" style="width: 100px; text-align: center;" formControlName="acc2_admin_charge">
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            <input type="number" style="width: 100px; text-align: center;" formControlName="acc22_admin_charge">
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            {{ pfConfirmationForm.get('challan_details')?.get('total_admin_charge')?.value ?? 0 }}
+                                        </td>
+                                    </tr>
+        
+                                    <tr>
+                                        <td style="font-size: 14px;">2</td>
+                                        <td style="font-size: 14px;">Employer's Share of Cont.</td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            <input type="number" style="width: 100px; text-align: center;" formControlName="acc1_er_cont">
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            <input type="number" style="width: 100px; text-align: center;" formControlName="acc10_er_cont">
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            <input type="number" style="width: 100px; text-align: center;" formControlName="acc21_er_cont">
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            {{ pfConfirmationForm.get('challan_details')?.get('total_er_cont')?.value ?? 0 }}
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td style="font-size: 14px;">3</td>
+                                        <td style="font-size: 14px;">Employee's Share of Cont.</td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            <input type="number" style="width: 100px; text-align: center;" formControlName="acc1_ee_cont">
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            0
+                                        </td>
+                                        <td style="font-size: 14px; text-align: center;">
+                                            {{ pfConfirmationForm.get('challan_details')?.get('total_ee_cont')?.value ?? 0 }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="7" style="font-size: 14px; padding: 10px; border-top: solid 1px #000; border-bottom: solid 1px #000;" class="text-capitalize">
+                                            Grand Total : {{ Global.convertNumberToWords( pfConfirmationForm.get('challan_details')?.get('total_remittance_emp')?.value ?? 0 ) ?? '-' }}
+                                        </td>
+                                        <td style="font-size: 14px; padding: 10px; border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: center;">
+                                            {{ pfConfirmationForm.get('challan_details')?.get('total_remittance_emp')?.value ?? 0 }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+        
+                            <table border="0" cellspacing="2" cellpadding="0" align="center" style="margin: 0;border: none; padding: 0px; font-weight: 600; color: #3e3e3e; box-sizing: border-box; padding:0 0 30px; font-weight: normal; letter-spacing: 0.1px; width:100%; margin-top: 20px;" formGroupName="challan_details">
+                                <tbody>
+                                    <tr>
+                                        <td>This is system generated challan on</td>
+                                        <td>
+                                            <input type="date" class="mx-1" formControlName="challan_gen_date">
+                                            <input type="time" class="mx-1" formControlName="challan_gen_time">
+                                        </td>
+                                        
+                                        <!-- <td>Advance</td>
+                                        <td>
+                                            <input type="number">
+                                        </td> -->
+        
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+        
+                            <table border="0" cellspacing="2" cellpadding="0" align="center" style="margin: 0;border: none; padding:0; font-weight: 600; color: #3e3e3e; box-sizing: border-box; padding:0 0 30px; font-weight: normal; letter-spacing: 0.1px; width:100%;">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table border="0" cellspacing="2" cellpadding="0" align="center" style="margin: 0;border: none; padding:0; font-weight: 600; color: #3e3e3e; box-sizing: border-box; padding:0 0 30px; font-weight: normal; letter-spacing: 0.1px; width:100%; margin-bottom: 10px; margin-top: 20px;">
+                                                <tbody>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            A/c no 1 (Employer share)
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="gov_acc1_er_cont">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            A/c no 10 (Pension Fund)
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="gov_acc10_pension_fund">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            A/c no 1 (Employee share)
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="gov_acc1_ee_cont">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            A/c no 2 (Employer share)	
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="gov_acc2_er_cont">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            A/c no 21 (EDLI)	
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="gov_acc21_edli">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            A/c no 22 (EDLI Admin)
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="gov_acc22_edli_admin">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            Total of Govt Schemes Rs
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="total_gov_schemes">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr formGroupName="challan_details">
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            Total remittance by employer Rs.
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="total_remittance_emp">
+                                                        </td>                                                
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-bottom: 10px; text-align:left; font-weight: 500; font-size: 14px;">
+                                                            Total amount
+                                                        </td>
+                                                        <td style="padding-bottom: 10px; text-align: left; font-weight: 500; font-size: 14px;">
+                                                            <input type="number" formControlName="total_amount">
+                                                        </td>                                                
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>                                
+                                    </tr>
+                                </tbody>
+                            </table>
+        
+                            <div class="row">
+                                <div class="col-md-12"><hr></div>
+                            </div>
+        
+                            <table class="table-bordered" cellspacing="0" cellpadding="8px" align="center" style="width:100%; margin: 0;border: 1px solid #7a7a7a; color: #3e3e3e; font-size: 12px;box-sizing: border-box; padding:0; font-weight: 600; letter-spacing: 0.1px;">
+                                <tfoot>
+                                    <tr>
+                                        <td>Upload File : </td>
+                                        <td>
+                                            <input type="file" formControlName="challan_details_file" (change)="Global.onFileUploaded(pfConfirmationForm, $event, 'challan_details_file_source')">
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+        
+                    <div class="br-section-wrapper mb-4">
+                        <h4 class="br-section-label mb-1 text-center text-uppercase">Update ECR Details</h4>
+        
+                        <div class="table-wrapper mt-4" id="ecr-details-table">
+                            <table class="table-bordered" cellspacing="0" cellpadding="8px" align="center" style="width:100%; margin: 0;border: 1px solid #7a7a7a; color: #3e3e3e; font-size: 12px;box-sizing: border-box; padding:0; font-weight: 600; letter-spacing: 0.1px;">
+                                <tbody formGroupName="ecr_details"> 
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Return Month</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <select formControlName="return_month">
+                                                <ng-container *ngFor="let month of Global.monthMaster">
+                                                    <option value="{{ month.index }}">{{ month.description }}</option>
+                                                </ng-container>
+                                            </select>
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Return Year</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="return_year">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Wage Month</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <select formControlName="wage_month">
+                                                <ng-container *ngFor="let month of Global.monthMaster">
+                                                    <option value="{{ month.index }}">{{ month.description }}</option>
+                                                </ng-container>
+                                            </select>
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Wage Year</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="wage_year">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Uploaded Date & Time</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="datetime-local" formControlName="uploaded_date_time">
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">TRRN</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            {{ pfConfirmationForm.get('ecr_details')?.get('trrn')?.value ?? 'NA' }}
+                                            <!-- <input type="text" formControlName="trrn"> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">ECR ID</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            {{ pfConfirmationForm.get('ecr_details')?.get('ecr_id')?.value ?? 'NA' }}                                    
+                                            <!-- <input type="text" formControlName="ecr_id"> -->
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">ECR Type</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <select formControlName="ecr_type">
+                                                <option value="ECR">ECR</option>
+                                                <option value="Arrear">Arrear</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Contribution Rate (In %)</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="contribution_rate">
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Salary disbursement date</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="date" formControlName="salary_dis_date">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Exemption Status</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <select formControlName="exem_status">
+                                                <option value="Exempted">Exempted</option>
+                                                <option value="Unexempted">Unexempted</option>
+                                            </select>
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Total Members                                </td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            {{ pfConfirmationForm.get('ecr_details')?.get('total_mem')?.value ?? "0" }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Total EPF contribution Remitted</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="total_epf_cont_remi">
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Total EPS contribution Remitted</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="total_eps_cont_remi">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Total EPF-EPS Contribution Remitted</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="total_epf_eps_cont_remi">
+                                        </td>
+        
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">Total Refund Advance</td>
+                                        <td style="border-top: 1px solid #7a7a7a; border-right: 1px solid #7a7a7a; min-width: 200px;">
+                                            <input type="number" formControlName="total_refund_advance">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Upload File</td>
+                                        <td>
+                                            <input type="file" formControlName="ecr_details_file" (change)="Global.onFileUploaded(pfConfirmationForm, $event, 'ecr_details_file_source')">
+                                        </td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>   
+                    
+                    <div class="br-section-wrapper mb-4">
+                        <h4 class="br-section-label mb-1 text-center text-uppercase">Payment Confirmation</h4>
+                        <div class="table-wrapper mt-4" id="payment-confirmation-table">
+                            <table class="table-bordered" cellspacing="0" cellpadding="8px" align="center" style="width:100%; margin: 0;border: 1px solid #7a7a7a; color: #3e3e3e; font-size: 12px;box-sizing: border-box; padding:0; font-weight: 600; letter-spacing: 0.1px; ">
+                                <tbody formGroupName="payment_confirmation"> 
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">TRRN No : </td>
+                                        <td>
+                                            {{ pfConfirmationForm.get('payment_confirmation')?.get('trrn')?.value ?? 'NA' }}                                    
+                                            <!-- <input type="text" formControlName="trrn"> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Status : </td>
+                                        <td class="text-uppercase">
+                                            {{ pfConfirmationForm.get('payment_confirmation')?.get('challan_status')?.value ?? 'NA' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Generated on : </td>
+                                        <td>
+                                            <input type="date" formControlName="challan_gen_on">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Type : </td>
+                                        <td>
+                                            <select formControlName="challan_type">
+                                                <option value="Monthly Contribution Challan">Monthly Contribution Challan</option>
+                                                <option value="Arrear Challan">Arrear Challan</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Total Amount : </td>
+                                        <td>
+                                            {{ pfConfirmationForm.get('payment_confirmation')?.get('total_amount')?.value ?? '0' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Account-1 Amount Rs. : </td>
+                                        <td>
+                                            <input type="number" formControlName="acc1_amount">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Account-2 Amount Rs. : </td>
+                                        <td>
+                                            <input type="number" formControlName="acc2_amount">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Account-10 Amount Rs. : </td>
+                                        <td>
+                                            <input type="number" formControlName="acc10_amount">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Account-21 Amount Rs. : </td>
+                                        <td>
+                                            <input type="number" formControlName="acc21_amount">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Account-22 Amount Rs. : </td>
+                                        <td>
+                                            <input type="number" formControlName="acc22_amount">
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Payment Confirmation : </td>
+                                        <td>
+                                            <input type="text" formControlName="payment_confirmation">
+                                        </td>
+                                    </tr> -->
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">CRN : </td>
+                                        <td>
+                                            <input type="text" formControlName="crn">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Presentation Date : </td>
+                                        <td>
+                                            <input type="date" formControlName="presentation_date">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Realization Date : </td>
+                                        <td>
+                                            <input type="date" formControlName="realization_date">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Date of Credit : </td>
+                                        <td>
+                                            <input type="date" formControlName="date_of_credit">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Total Govt. Benefit : </td>
+                                        <td>
+                                            {{ pfConfirmationForm.get('payment_confirmation')?.get('total_gov_benefit')?.value ?? '0' }}
+                                        </td>
+                                    </tr>                            
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Due Date : </td>
+                                        <td>
+                                            <input type="date" formControlName="due_date">
+                                        </td>                                
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Upload Payment Confirmation : </td>
+                                        <td>
+                                            <input type="file" formControlName="payment_confirm_file" (change)="Global.onFileUploaded(pfConfirmationForm, $event, 'payment_confirm_file_source')">
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+        
+                    <div class="row mt-5">
+                        <div class="col-md-4 offset-md-4">
+                            <button class="btn btn-md btn-primary btn-block" type="submit" (click)="submitPfConfirmation($event)">
+                                <span>Submit & Confirm</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </ng-container>  
+        
+        <ng-container *ngSwitchCase="'esic'">
+            <form [formGroup]="esicConfirmationForm">
+                <div class="br-pagebody pd-x-20 pd-sm-x-30 pd-y-20">
+                    <div class="br-section-wrapper mb-4">
+                        <h4 class="br-section-label mb-1 text-center">Payment Confirmation</h4>
+
+                        <div class="table-wrapper mt-4" id="payment-confirmation-table">
+                            <table class="table-bordered" cellspacing="0" cellpadding="8px" align="center" style="width:100%; margin: 0;border: 1px solid #7a7a7a; color: #3e3e3e; font-size: 12px;box-sizing: border-box; padding:0; font-weight: 600; letter-spacing: 0.1px; ">
+                                <tbody> 
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Transaction Status : </td>
+                                        <td class="text-center">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Employers Code No : </td>
+                                        <td class="">
+                                            <input type="text" formControlName="empr_code">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Employers Name : </td>
+                                        <td class="">
+                                            {{ esicConfirmationForm.get('empr_name')?.value }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Period : </td>
+                                        <td class="">
+                                            September 2022
+                                            <!-- {{ esicConfirmationForm.get('empr_name')?.value }} -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Number : </td>
+                                        <td class="">
+                                            <input type="text" formControlName="challan_number">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Created Date : </td>
+                                        <td class="">
+                                            <input type="date" formControlName="challan_created">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Challan Submitted Date : </td>
+                                        <td class="">
+                                            <input type="date" formControlName="challan_submited">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Amount Paid : </td>
+                                        <td class="">
+                                            <input type="number" formControlName="total_amount">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Transaction Number : </td>
+                                        <td class="">
+                                            <input type="text" formControlName="tran_number">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Due Date : </td>
+                                        <td class="">
+                                            <input type="date" formControlName="due_date">
+                                        </td>
+                                    </tr>                                
+                                    <tr>
+                                        <td style="border-right: 1px solid #7a7a7a;">Upload Payment Receipt : </td>
+                                        <td>
+                                            <input type="file" formControlName="esic_challan_details_file" (change)="Global.onFileUploaded(esicConfirmationForm, $event, 'esic_challan_details_file_source')">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-md-4 offset-md-4">
+                            <button class="btn btn-md btn-primary btn-block" type="submit" (click)="submitEsicConfirmation($event)">
+                                <span>Submit & Confirm</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+    </ng-container>
+    
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>    
+</div>

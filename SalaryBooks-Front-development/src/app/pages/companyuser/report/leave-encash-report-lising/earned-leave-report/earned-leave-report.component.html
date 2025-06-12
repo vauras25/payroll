@@ -1,0 +1,61 @@
+<div class="table-responsive">
+  <div class="table-responsive mt-3">
+    <table  class="table display responsive nowrap wd-100p employee-table">
+        <thead>
+            <tr >
+                <th  rowspan="2">Sl No</th>
+                <th  rowspan="2">Emp ID</th>
+                <th  rowspan="2">Name</th>
+                <th  rowspan="2">Department</th>
+                <th  rowspan="2">Designation</th>
+                <th  rowspan="2">Branch</th>
+                <th  rowspan="2">Client</th>
+                <th  rowspan="2">HOD</th>
+                <th  rowspan="2">Opening Balance</th>
+                <th  rowspan="2">Pay Days</th>
+                <th  rowspan="2">Leave Earned</th>
+                <th  rowspan="2">Leave Head </th>
+                <th  rowspan="2">Availed</th>
+                <th  rowspan="2">Encashed</th>
+                <th  rowspan="2">Lapsed</th>
+                <th  rowspan="2">Closing Balance</th>
+                <th  rowspan="2">Carry Forward</th>    
+               
+            </tr>
+          </thead>
+          <tbody>
+           
+            
+            <tr  *ngFor="let item of leaveData;let i=index">
+             
+              <td>
+                {{
+                  Global.getTableSerialNumber(
+                    i,
+                    paginationOptions.limit,
+                    paginationOptions.page
+                  )
+                }}
+              </td>
+              <td class="s16">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+              <td >{{item?.emp_id}}</td>
+              <td class="s16">{{item?.department[0]?.department_name}}</td>
+              <td >{{item?.designation[0]?.designation_name}}</td>
+              <td >{{item?.branch[0]?.branch_name}}</td>
+              <td >{{item?.client?.client_code}}</td>
+              <td >{{item?.hod?.first_name}} {{item?.hod?.last_name}}</td>
+              <td >{{item?.opening_balance_sum | number:'1.2-2'}}</td>
+              <td >{{item?.paydays | number:'1.2-2'}}</td>
+              <td >{{item?.leave_earned_sum | number:'1.2-2'}}</td>
+              <td ></td>
+              <td >{{item?.availed_sum | number:'1.2-2'}}</td>
+              <td >{{item?.encashed_sum | number:'1.2-2'}}</td>
+              <td >{{item?.lapsed_sum | number:'1.2-2'}}</td>
+              <td >{{item?.closing_balance_sum | number:'1.2-2'}}</td>
+              <td >{{item?.carry_forward_sum | number:'1.2-2'}}</td>
+            </tr>
+            
+          </tbody>
+    </table>  
+  </div>
+</div>

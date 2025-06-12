@@ -1,0 +1,75 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Employee Vault</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Vault
+
+                <!-- <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'education'}">
+                    <i class="fa fa-print"></i>
+                </a> -->
+            </h5>
+            <div class="psbodymain">
+        
+                <div class="righttab-details">
+                    <div class="tab-content" >
+                        <div class="">
+                            <div class="tabheader">
+                                <h5>File Lists</h5>
+                            </div>
+                            <div class="table-main">
+                                <div class="form-row">
+                                    <div class="col-md-4" *ngFor="let item of rows; let i = index">
+                                        <a class="folder-box" title="{{item.file_name}}" href="{{Global.BACKEND_URL}}/{{item.file_path}}" target="_blank">
+                                           <img src="{{Global.BACKEND_URL}}/{{item.file_path}}" class="img-fluid">
+                                            <h3>{{item.file_name}}</h3>
+                                        </a>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+<div id="image-viewer-modal" tabindex="-1" class="modal fade animated fadeInLeftBig">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0">
+            <div class="modal-body pd-0">
+                <div class="row flex-row-reverse no-gutters">
+                    <div class="col-lg-12">
+                        <button style="position: absolute; color: white; right: 0;" type="button" class="close mg-t-2 mg-r-2 text-dark" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <div class="p-3 pt-2 mt-2">
+                            <img src="" alt="" id="image-src" class="w-100 img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

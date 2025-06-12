@@ -1,0 +1,33 @@
+table{
+    border-collapse: collapse;
+}
+.table td {
+    vertical-align: initial !important;
+    border: 1px solid #dee2e6;
+}
+
+/* .define-lwf-rule-table ngx-select-dropdown {
+    width: 200px;
+    padding: 4px;
+} */
+
+table.nowrap th,
+table.nowrap td {
+    white-space: nowrap;
+    vertical-align: middle !important;
+}
+
+.form-control.ng-touched.ng-valid {
+    border-color: inherit !important;
+}
+
+table tr td:last-child{
+    border-right: 1px solid #dee2e6;
+}
+
+th{
+    border: 1px solid #dee2e6 !important;
+}
+td{
+    border: 1px solid #dee2e6 !important;
+}

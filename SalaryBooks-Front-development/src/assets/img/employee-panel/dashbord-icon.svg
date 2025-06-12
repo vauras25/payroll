@@ -1,0 +1,9 @@
+<svg id="Component_43" data-name="Component 43" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <rect id="Rectangle_1829" data-name="Rectangle 1829" width="20" height="20" fill="none"/>
+  <g id="Group_2997" data-name="Group 2997" transform="translate(2 2)">
+    <rect id="Rectangle_1587" data-name="Rectangle 1587" width="7.385" height="7.385" rx="2" transform="translate(0 0)" fill="#fff"/>
+    <rect id="Rectangle_1588" data-name="Rectangle 1588" width="7.385" height="7.385" rx="2" transform="translate(8.615 0)" fill="#fff" opacity="0.52"/>
+    <rect id="Rectangle_1589" data-name="Rectangle 1589" width="7.385" height="7.385" rx="2" transform="translate(0 8.615)" fill="#fff"/>
+    <rect id="Rectangle_1590" data-name="Rectangle 1590" width="7.385" height="7.385" rx="2" transform="translate(8.615 8.615)" fill="#fff"/>
+  </g>
+</svg>

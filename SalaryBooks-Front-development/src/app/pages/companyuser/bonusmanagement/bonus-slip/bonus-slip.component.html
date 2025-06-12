@@ -1,0 +1,251 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item active">Reports</a>
+      <a class="breadcrumb-item">Bonus Slip</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon ion-document-text"></i>
+    <div>
+      <h4>Bonus Slip</h4>
+      <!-- <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p> -->
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper pd-10">
+      <companyuser-app-table-filter 
+      *ngIf="!isBatchDownloading"
+        [searchKeyFilter]="true"
+        [monthFilter]="true"
+        [yearFilter]="true"
+        (onFiltered)="fetchEmployees({ page: 1, filter: $event })"
+      >
+        <div addOn_btn1 class="col-sm-2 col-12">
+          <button
+            [disabled]="true"
+            class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+          >
+            <i class="fa fa-refresh" aria-hidden="false"></i>
+            <i style="font-size: 10px" class="fa">&#xf021;</i>
+            Reset
+          </button>
+        </div>
+      </companyuser-app-table-filter>
+      <div class="card bd-0" >
+        <div class="card-header" *ngIf="!isBatchDownloading">
+          <div class="d-flex justify-content-end align-items-center" >
+            <button
+              [disabled]="!anyRowsChecked() || !employees.length"
+              type="button"
+              class="btn btn-block btn-info pd-x-12 h-100 mr-3"
+              style="font-size: 13px; min-width: 120px; max-width: 160px"
+            >
+              <i class="fa fa-envelope mr-1"></i>
+              SEND VIA @MAIL
+            </button>
+            <button
+            [disabled]="!anyRowsChecked() || !employees.length"
+            (click)="downloadBatch()"
+              type="button"
+              class="btn btn-block btn-info pd-x-12 h-100 mt-0"
+              style="font-size: 13px; min-width: 120px; max-width: 160px"
+            >
+              <i class="fa fa-download mr-1"></i>
+              <!-- <i style="font-size: 16px" class="fa mr-1">&#xf1c6;</i> -->
+              Download Batch
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body px-0 bd-t-0 pt-0 rounded-bottom" *ngIf="!isBatchDownloading">
+
+          <div class="finacial-tbl">
+            <app-custom-tableoption
+            [searchable]="false"
+            (onFilterChanged)="employeePaginationOptions.limit = +$event?.length ; fetchEmployees({ page:employeePaginationOptions.page})"
+          ></app-custom-tableoption>
+            <!-- <div class="table-responsive"> -->
+            <table class="w-100">
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    <label class="d-flex align-items-center mb-0" for="srNo">
+                      <input
+                        class="mb-0 mr-1"
+                        (change)="allRowsCheckboxChecked($event)"
+                        type="checkbox"
+                        name="item"
+                        id="srNo"
+                      />
+                      SL No.
+                    </label>
+                  </th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Client</th>
+                  <th>Branch</th>
+                  <th>Department</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let report of employees; let i = index">
+                  <tr>
+                    <td
+
+                    >
+                      <label
+                        class="d-flex align-items-center"
+                        [for]="'checkrow-' + (i + 1)"
+                      >
+                        <input 
+                          type="checkbox"
+                          class="mr-2"
+                          [attr.checked]="
+                            report?.checked == true ? 'checked' : null
+                          "
+                          id="checkrow-{{ i + 1 }}"
+                          [attr.data-checkbox-id]="report?.employee_id"
+                          (click)="rowCheckBoxChecked($event, report)"
+                        />
+                        {{
+                          Global.getTableSerialNumber(
+                            i,
+                            employeePaginationOptions.limit,
+                            employeePaginationOptions.page
+                          )
+                        }}
+                      </label>
+                    </td>
+
+                    <td
+
+                    >
+                      {{ report?.emp_id ?? "N/A" }}
+                    </td>
+                    <td
+
+                    >
+                      {{ report?.emp_data?.emp_first_name | titlecase}} {{ report?.emp_data?.emp_last_name }}
+                    </td>
+                    <td
+
+                    >
+                      {{ report?.emp_data?.client?.client_code | titlecase}}
+                    </td>
+                    <td
+
+                    >
+                      {{ report?.branch?.branch_name || 'N/A'}}
+                    </td>
+                    <td
+
+                    >
+                      {{ report?.department?.department_name || 'N/A' }}
+                    </td>
+                    <td class="text-center">
+                      <button
+                      (click)="viewBonusSlipTemplate(report?.employee_id)"
+                        class="btn btn-primary btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="View"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-eye"></i>
+                        </div>
+                      </button>
+                      <button
+                        (click)="downloadBatch(true, report?.employee_id)"
+                        class="btn btn-primary btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Download"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-download"></i>
+                        </div>
+                      </button>
+                      <button
+                        class="btn btn-primary btn-icon mx-1"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Send Email"
+                      >
+                        <div style="width: 25px; height: 25px">
+                          <i class="fa fa-envelope"></i>
+                        </div>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="employees?.length == 0">
+                  <td colspan="100%"
+                      class="text-center"
+                      style="background-color: #f7f7f7">
+                    No records found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- </div> -->
+          </div>
+
+          <app-custom-pagination></app-custom-pagination>
+        </div>
+
+        <div class="d-flex justify-content-end align-items-center p-4" *ngIf="isBatchDownloading">
+          <button
+          (click)="cancelReportDownloading()"
+            type="button"
+            class="btn btn-block btn-dark pd-x-12 h-100 mr-3"
+            style="font-size: 13px; min-width: 120px; max-width: 160px"
+          >
+            Cancel
+          </button>
+          <button
+      
+          (click)="downloadBatch(true)"
+            type="button"
+            class="btn btn-block btn-primary pd-x-12 h-100 mt-0"
+            style="font-size: 13px; min-width: 120px; max-width: 160px"
+          >
+            Download
+          </button>
+        </div>
+
+        <div class="p-5" *ngIf="isBatchDownloading">
+          <app-bonus-slip-report-view [rows]="reportListing"></app-bonus-slip-report-view>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+
+  <button
+  id="viewBonusSlipTemplate"
+  [hidden]="true"
+  data-toggle="modal"
+  data-target="#viewTemplateModel"
+></button>
+<div id="viewTemplateModel" tabindex="-1" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered modal-xl p-5" role="document">
+    <div id="print-section" class="modal-content bd-0 tx-14 p-5">
+      <div class="modal-body pd-y-20 pd-x-25">
+        <!-- <div class="p-5"> -->
+          <app-bonus-slip-report-view [rows]="reportListing"></app-bonus-slip-report-view>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+</div>

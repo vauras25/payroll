@@ -1,0 +1,493 @@
+<ng-container *ngIf="employee_details">
+  <div class="br-pagebody pd-x-20 pd-sm-x-30 padding-top">
+
+
+    <div class="form-row mg-t-20">
+      <!-- <div class="col-lg-4 mb-4">
+                <div class="widget-2">
+                    <div class="card shadow-base overflow-hidden">
+                        <div class="card-header">
+                            <h6 class="card-title">Attendance Statistics</h6>
+                        </div>
+                        <div class="card-body pd-0 pading-body">
+                            <div class="prgss-main">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Today</h4>
+                                    <h5>{{attendanceStatistics?.daily_time}} / 8 Hrs</h5>
+                                </div>
+                                <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.daily_time / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
+                            </div>
+                            <div class="prgss-main">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>This Week</h4>
+                                    <h5>{{attendanceStatistics?.weekly_time}} / 8 Hrs</h5>
+                                </div>
+                                <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.weekly_time / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
+                            </div>
+                            <div class="prgss-main">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>This Month</h4> 
+                                    <h5>{{attendanceStatistics?.monthly_time}} / 8 Hrs</h5>
+                                </div>
+                                <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.monthly_time / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
+                            </div>
+                            <div class="prgss-main">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Remaining</h4>
+                                    <h5>3.45 / 8 Hrs</h5>
+                                </div>
+                                <div class="progress"><div class="progress-bar background-yello" role="progressbar" style="width: 70%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
+                            </div>
+                            <div class="prgss-main">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Overtime</h4>
+                                    <h5>{{attendanceStatistics?.overtime}} / 8 Hrs</h5>
+                                </div>
+                                <div class="progress"><div class="progress-bar bgcolor-blue" role="progressbar" [style.width.%]="(attendanceStatistics?.overtime / 8) * 100" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="widget-2">
+                    <div class="card shadow-base overflow-hidden">
+                        <div class="card-header">
+                            <h6 class="card-title">Today Activity</h6>
+                        </div>
+                        <div class="card-body pd-0 pading-body">
+                            <ul class="customlist">
+                                <li *ngFor="let break of attendanceStatistics?.today_activity">
+                                    <h4>Punch In at</h4>
+                                    <h5>{{break}}</h5>
+                                </li>
+                            
+                            </ul>
+                            <div *ngIf="!attendanceStatistics?.today_activity.length && !isAttendanceDataLoading" class="text-center" >
+                                    Not Login Yet!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+      <!-- <div class="col-lg-4 mb-4">
+                <div class="widget-2">
+                    <div class="card shadow-base overflow-hidden">
+                        <div class="card-header">
+                            <h6 class="card-title">Leave Activity</h6>
+                        </div>
+                        <div class="card-body pd-0 pading-body castam cstam-crt pb-0">
+                            <div class="text-center picarticon mb-3">
+                                <canvas
+                                    baseChart
+                                    class="chart"
+                                    [data]="pieChartData"
+                                    [options]="pieChartOptions"
+                                    [type]="pieChartType"
+                                    width="100"
+                                    height="280"
+                                ></canvas>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>Available Leave: <span>{{leaveBalanceSummmary?.available_balance}}</span></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Consumed: <span>{{leaveBalanceSummmary?.consumed_balance}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-design">
+                            <div class="row no-gutters">
+                                <div
+                                [ngClass]="{
+                                    'col-12':leaveBalanceSummmary?.leave_types.length == 1,
+                                    'col-6':leaveBalanceSummmary?.leave_types.length == 2,
+                                    'col-3':leaveBalanceSummmary?.leave_types.length >= 3
+                                }" 
+                                style="border-top: solid 1px #dee2e6;
+                                border-right: solid 1px #dee2e6;padding: 15px;"
+                                 *ngFor="let type of leaveBalanceSummmary?.leave_types">
+                                    <p class="m-0">{{type?.leave_abbreviation}}<br><span>{{type?.consumed_balance}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+      <div
+        *ngIf="
+          register_type == 'time' &&
+          employee_details?.employee_details?.employment_hr_details
+            ?.emp_self_service == 'yes' &&
+          employee_details?.employee_details?.employment_hr_details?.location_id
+        "
+        class="col-lg-3 col-md-4 col-sm-6"
+      >
+        <div class="card shadow-base overflow-hidden p-3">
+          <div class="d-flex align-items-center justify-content-between mr-2">
+            <div>
+              <div class="text-dark">Current Time</div>
+              <div>
+                <h5>{{ timeNow }}</h5>
+              </div>
+            </div>
+            <div>
+              <button
+              *ngIf="!IsPunchIn"
+                (click)="viewLocation()"
+                class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+              >
+                Punch In
+              </button>
+              <!-- <button 
+                    class="w-100 btn btn-danger pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+                            >Punch Out</button> -->
+                            <button
+                            *ngIf="IsPunchIn"
+                              (click)="viewLocation()"
+                              class="w-100 btn btn-danger pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+                            >
+                              Punch Out
+                            </button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div
+        [ngClass]="{ 
+          'col-lg-8 col-md-8 col-sm-12': register_type != 'time' ,
+          'col-lg-6 col-md-8 col-sm-6': register_type == 'time'}"
+      >
+        <div class="widget-2">
+          <div class="card shadow-base overflow-hidden">
+            <div class="card-header">
+              <h6 class="card-title">Attendance Summary</h6>
+              <h6>
+                {{ attendanceStatistics?.attendance_date?.month }},
+                {{ attendanceStatistics?.attendance_date?.year }}
+              </h6>
+            </div>
+            <div class="card-body pd-0">
+              <div class="table-responsive pending-table">
+                <table class="table table-hover mb-0">
+                  <tbody>
+                    <tr *ngIf="attendanceStatistics">
+                      <th wide="">
+                        <h5>Month days</h5>
+                        <h4>{{ attendanceStatistics?.month_days | number }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Pay Days</h5>
+                        <h4>{{ attendanceStatistics?.pay_days | number }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>LOP</h5>
+                        <h4>{{ attendanceStatistics?.total_lop | number }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Paid Leaves</h5>
+                        <h4>
+                          {{ attendanceStatistics?.paid_leaves | number }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>Overtime</h5>
+                        <h4>
+                          {{ attendanceStatistics?.total_overtime | number }}
+                        </h4>
+                      </th>
+                    </tr>
+                    <tr *ngIf="!attendanceStatistics">
+                      <td class="text-center">
+                        Attendance Summary Not Available!
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        [ngClass]="{
+          'col-lg-4 col-md-4 col-sm-12 mb-4': register_type != 'time',
+          'col-lg-3 col-md-12 col-sm-12': register_type == 'time' 
+        }"
+      >
+        <div class="widget-2">
+          <div class="card shadow-base overflow-hidden">
+            <div class="card-header">
+              <h6 class="card-title">Leave Activity</h6>
+            </div>
+            <div class="card-body pd-0 pading-body">
+              <div class="prgss-main" *ngFor="let leave of leave_activities">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4>{{ leave?.abbreviation }}</h4>
+                  <h4>{{ leave?.consumed }} / {{ leave?.total_balance }}</h4>
+                </div>
+                <div class="progress">
+                  <div
+                    class="progress-bar bgcolor-blue"
+                    role="progressbar"
+                    [style.width.%]="
+                      (leave?.consumed / leave?.total_balance) * 100
+                    "
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+              <div class="text-center" *ngIf="!leave_activities?.length">
+                Leave Activity Not Available
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-sm">
+      <div class="col-lg-12">
+        <div class="widget-2">
+          <div class="card shadow-base overflow-hidden">
+            <div class="card-header">
+              <h6 class="card-title">Pending Requests</h6>
+            </div>
+            <div class="card-body pd-0">
+              <div class="table-responsive pending-table">
+                <table class="table table-hover mb-0">
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let request of pendingRequests?.leave_request?.items
+                      "
+                    >
+                      <th wide="">
+                        <h5>Request type</h5>
+                        <h4>
+                          {{ pendingRequests?.leave_request?.type | titlecase }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>HOD</h5>
+                        <h4>
+                          {{ pendingRequests?.emp_hod?.first_name | titlecase }}
+                          {{ pendingRequests?.emp_hod?.last_name | titlecase }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>Request Date</h5>
+                        <h4>{{ request?.created_at | date }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Status</h5>
+                        <h4>
+                          {{
+                            request?.leave_approval_status || request?.status
+                              | titlecase
+                          }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>Remark</h5>
+                        <h4>{{ request?.note ?? "N/A" }}</h4>
+                      </th>
+                    </tr>
+                    <tr
+                      *ngFor="
+                        let request of pendingRequests?.advance_request?.items
+                      "
+                    >
+                      <th wide="">
+                        <h5>Request type</h5>
+                        <h4>
+                          {{
+                            pendingRequests?.advance_request?.type | titlecase
+                          }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>HOD</h5>
+                        <h4>
+                          {{ pendingRequests?.emp_hod?.first_name | titlecase }}
+                          {{ pendingRequests?.emp_hod?.last_name | titlecase }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>Request Date</h5>
+                        <h4>{{ request?.created_at | date }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Status</h5>
+                        <h4>{{ request?.status | titlecase }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Remark</h5>
+                        <h4>{{ request?.remarks ?? "N/A" }}</h4>
+                      </th>
+                    </tr>
+                    <tr
+                      *ngFor="
+                        let request of pendingRequests?.reimbursement_request
+                          ?.items
+                      "
+                    >
+                      <th wide="">
+                        <h5>Request type</h5>
+                        <h4>
+                          {{
+                            pendingRequests?.reimbursement_request?.type
+                              | titlecase
+                          }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>HOD</h5>
+                        <h4>
+                          {{ pendingRequests?.emp_hod?.first_name | titlecase }}
+                          {{ pendingRequests?.emp_hod?.last_name | titlecase }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>Request Date</h5>
+                        <h4>{{ request?.created_at | date }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Status</h5>
+                        <h4>{{ request?.status | titlecase }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Remark</h5>
+                        <h4>{{ request?.employee_remark ?? "N/A" }}</h4>
+                      </th>
+                    </tr>
+                    <tr
+                      *ngFor="
+                        let request of pendingRequests?.extra_earning_request
+                          ?.items
+                      "
+                    >
+                      <th wide="">
+                        <h5>Request type</h5>
+                        <h4>
+                          {{
+                            pendingRequests?.extra_earning_request?.type
+                              | titlecase
+                          }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>HOD</h5>
+                        <h4>
+                          {{ pendingRequests?.emp_hod?.first_name | titlecase }}
+                          {{ pendingRequests?.emp_hod?.last_name | titlecase }}
+                        </h4>
+                      </th>
+                      <th wide="">
+                        <h5>Request Date</h5>
+                        <h4>{{ request?.created_at | date }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Status</h5>
+                        <h4>{{ request?.status | titlecase }}</h4>
+                      </th>
+                      <th wide="">
+                        <h5>Remark</h5>
+                        <h4>{{ request?.employee_remark ?? "N/A" }}</h4>
+                      </th>
+                    </tr>
+                    <tr
+                      class="text-center"
+                      *ngIf="
+                        !pendingRequests?.leave_request?.items?.length &&
+                        !pendingRequests?.advance_request?.items?.length &&
+                        !pendingRequests?.extra_earning_request?.items?.length && 
+                        !pendingRequests?.reimbursement_request?.items?.length
+                      "
+                    >
+                      <td class="p-4">
+                        Currently, you don't have any pending requests.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      id="viewLocation"
+      [hidden]="true"
+      data-toggle="modal"
+      data-target="#viewLocationModel"
+    ></button>
+    <div id="viewLocationModel" tabindex="-1" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bd-0 tx-14">
+          <div class="modal-header pd-y-20 pd-x-25">
+            <h4 class="text-dark">Current Location</h4>
+            <button
+              (click)="locationMaster = null"
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body pd-y-20 pd-x-25">
+            <d-view-location-map
+              [location]="locationMaster"
+            ></d-view-location-map>
+          </div>
+          <!-- <div class="modal-footer justify-content-left pd-y-20 pd-x-25"> -->
+          <div class="m-3">
+            <div *ngIf="!isUserInCoverageArea(locationMaster?.latitude, locationMaster?.longitude)" class="text-danger mb-2" style="font-size: 13px;">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                You are not under permitted radius. Please check your GPS accuracy and try again!
+            </div>
+            <button
+            *ngIf="!IsPunchIn"
+              [disabled]="!isUserInCoverageArea(locationMaster?.latitude, locationMaster?.longitude)"                  
+              (click)="empCheckInAndOut(closeBtn)"
+              style="max-width: 160px"
+              class="w-100 btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            >
+              Confirm Punch
+            </button>
+            <button
+            *ngIf="IsPunchIn"
+              [disabled]="!isUserInCoverageArea(locationMaster?.latitude, locationMaster?.longitude)"                  
+              (click)="empCheckInAndOut(closeBtn)"
+              style="max-width: 160px"
+              class="w-100 btn btn-danger pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2"
+            >
+              Confirm Punch
+            </button>
+            <button
+              #closeBtn  
+              (click)="locationMaster = null"
+              style="max-width: 160px"
+              type="button"
+              data-dismiss="modal"
+              class="w-100 btn btn-cancel pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 ml-3"
+            >
+              Cancel
+            </button>
+          </div>
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

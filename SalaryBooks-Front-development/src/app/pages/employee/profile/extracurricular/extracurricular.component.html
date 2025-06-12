@@ -1,0 +1,144 @@
+<div class="tabheader">
+    <h5>Extra Curricular Details</h5>
+    <a class="editicon" href="javascript:;" *ngIf="!isNew" (click)="isNew=!isNew"><i class="fas fa-plus"></i> New</a>
+</div>
+<div class="table-main">
+    <div class="ed-details" *ngIf="isNew">
+      
+        <div class="table-responsive">
+            <form [formGroup]="curricularForm">
+            <table class="table table-hover mb-2">
+                <tbody >
+                    <tr>
+                        <th>Extra Curriculum Type</th>
+                        <td>
+                            <input class="form-control" type="text" formControlName="extra_curricular_type">
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(curricularForm, 'extra_curricular_type', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                  
+                    <tr>
+                        <th>Extra Curriculum File Image</th>
+                        <td>
+                            <input class="form-control" type="file" accept="image/*" formControlName="accident_file_image" (change)="onFileChanged($event, curricularForm, 'accident_file_image', 'extra_curricular_file_preview')">
+                            <p class="error-element" *ngIf="curricularForm.controls.accident_file_image.hasError('required') && ( curricularForm.controls.accident_file_image.dirty || curricularForm.controls.accident_file_image.touched )">This field is required</p>
+                            <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                            <p class="error-element" *ngIf="curricularForm.get('accident_file_image')?.hasError('fileSize')">File size exceeds {{ curricularForm.get('accident_file_image').getError('maxSize') }} KB.</p>
+                       
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>
+                            <textarea class="form-control" formControlName="description"></textarea>
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(curricularForm, 'description', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Comment</th>
+                        <td>
+                            <textarea class="form-control" formControlName="comments"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(curricularForm, 'comments', 'required')">This field is required</p>
+                        </td>
+                    </tr>
+                   
+                </tbody>
+    
+            </table>
+            <div class="text-right">
+                <a class="editicon ml-auto"  href="javascript:void(0)" (click)="isNew=!isNew"> Cancel</a>
+                <a   href="javascript: void(0)" (click)="createcurricularDetails($event)" class="editicon apply-btn">Save</a>   
+            </div>
+         </form>
+        </div>
+      
+    </div>     
+ <ng-container *ngIf="employee_details?.employee_details?.extra_curricular?.length > 0; else noTableFound">
+    <form [formGroup]="curriculareditForm">
+    <ng-container formArrayName="template_data">
+    <div class="ed-details" *ngFor="let templateDataControl of getTemplateRows('template_data'); let i = index" [formGroupName]="i">
+        <div class="table-responsive">
+            <table class="table table-hover mb-2" >
+                <tbody >
+                    <tr>
+                        <th>Extra Curriculum Type</th>
+                        <td>
+                            <input class="form-control" [ngClass]="{'readonlytext':curriculareditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="curriculareditForm.get('template_data')['controls'][i].value.isReadOnly" type="text" formControlName="extra_curricular_type">
+                        </td>
+                    </tr>
+                  
+                    <tr>
+                        <th>Extra Curriculum File Image</th>
+                        <td>
+                            
+                            <input class="form-control" *ngIf="!curriculareditForm.get('template_data')['controls'][i].value.accident_file_image else  extra_curricular_file_preview"
+                            [disabled]="curriculareditForm.get('template_data')['controls'][i].value.isReadOnly || net_uploaded_size>=max_upload_limit" type="file" accept="image/*"  (change)="test($event,i)">
+                            <ng-container *ngIf="!curriculareditForm.get('template_data')['controls'][i].value.isReadOnly">
+                                <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                <p class="error-element" *ngIf="curriculareditForm.controls.template_data.controls[i].controls.extra_curricular_file_preview?.hasError('fileSize');">File size exceeds {{curriculareditForm.controls.template_data.controls[i].controls.extra_curricular_file_preview.getError('maxSize') }} KB.</p>
+                            </ng-container>
+                            
+                            <ng-template #extra_curricular_file_preview>
+                                <a class="attachbtn" href="{{Global.BACKEND_URL}}/{{curriculareditForm.get('template_data')['controls'][i].value.accident_file_image}}" target="_blank">
+                                    <img src="assets/img/employee-panel/attch-file-icon.png"> 
+                                </a>      
+                            </ng-template>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>
+                            <textarea class="form-control" [ngClass]="{'readonlytext': curriculareditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="curriculareditForm.get('template_data')['controls'][i].value.isReadOnly" formControlName="description"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Comment</th>
+                        <td>
+                            <textarea class="form-control" [ngClass]="{'readonlytext': curriculareditForm.get('template_data')['controls'][i].value.isReadOnly==true}" [readOnly]="curriculareditForm.get('template_data')['controls'][i].value.isReadOnly" formControlName="comments"></textarea>
+
+                        </td>
+                    </tr>
+                  
+                   
+                    
+                </tbody>
+    
+            </table> 
+        </div>
+        <div class="text-right">
+            <ng-container *ngIf="curriculareditForm.get('template_data')['controls'][i].value.isReadOnly else save_btn_area">
+            <button class="btn-edtstyle btn editicon" (click)="togglereadOnly(i)">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+            <!-- <button class="btn-edtstyle btn editicon">
+                <i class="fas fa-trash text-danger"></i>
+            </button> -->
+            </ng-container>
+            <ng-template #save_btn_area>
+            <a class="editicon ml-auto" (click)="togglereadOnly(i,true)"> Cancel</a>
+            <a  href="javascript: void(0)" class="editicon apply-btn" (click)="updatecurricularDetails($event,i)">Save</a>
+            </ng-template>
+        </div>
+    </div>  
+    </ng-container>
+    </form>
+ </ng-container>   
+ <ng-template #noTableFound>
+    <div class="ed-details">
+        <div class="table-responsive">
+            <table class="table table-hover mb-2">
+                <tbody >
+                  
+                    <tr>
+                        <td colspan="100%" class="text-center">No Extra Curricular Found</td>
+
+                    </tr>
+                </tbody>
+    
+            </table>
+        </div>
+       
+    </div>    
+ </ng-template>
+</div>

@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-5">
+    <div class="row mt-1">
+      <span class="text-dark col-3">Location: </span>
+      <span class="col-9">{{location?.location || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-3">Address: </span>
+      <span class="col-9">{{location?.address || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-3">Latitude: </span>
+      <span class="col-9">{{location?.latitude || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-3">Longitude: </span>
+      <span class="col-9">{{location?.longitude || 'N/A'}}</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-3">Radius: </span>
+      <span class="col-9">{{location?.radius || 0}} Meter</span>
+    </div>
+    <div class="row mt-1">
+      <span class="text-dark col-3">Description: </span>
+      <span class="col-9">{{location?.description || 'N/A'}} </span>
+    </div>
+  </div>
+  <div class="col-7">
+    <!-- {{}}
+    {{ }} -->
+    <agm-map [latitude]="location?.latitude" [longitude]="location?.longitude" [zoom]="15">
+      <agm-marker [latitude]="location?.latitude" [longitude]="location?.longitude"></agm-marker>
+       <agm-circle [latitude]="+location?.latitude"  [longitude]="+location?.longitude"
+      [radius]="location?.radius"></agm-circle>
+    </agm-map>
+  </div>
+</div>

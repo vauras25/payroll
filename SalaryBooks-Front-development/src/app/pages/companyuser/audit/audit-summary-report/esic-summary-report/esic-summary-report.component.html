@@ -1,0 +1,165 @@
+<div class="mb-3 text-right">
+  <button
+    [disabled]="!anyRowsChecked()"
+    class="btn btn-info mt-3"
+    (click)="downloadExcelReport()"
+  >
+    Download Report
+  </button>
+</div>
+<div class="table-responsive mt-3">
+  <app-custom-tableoption
+  [searchable]="false"
+  (onFilterChanged)="reportPaginationOptions.limit = +$event?.length;reportTableFilterOptions.searchkey = $event.searchkey; onChecked.emit()"
+></app-custom-tableoption>
+  <table class="w-100 c-table">
+    <colgroup span="3"></colgroup>
+    <thead>
+      <tr>
+        <th>
+          <input
+            type="checkbox"
+            [value]="rowCheckedAll"
+            (change)="allRowsCheckboxChecked($event)"
+          />
+          SL No.
+        </th>
+        <th>Wage Month</th>
+        <th>Estt. Code</th>
+        <th>Total Number Of Employees</th>
+        <th>No.Of ESIC Covered Employees</th>
+        <th>Gross ESIC Wages Of E.S.I.C. Covered Employees</th>
+        <th>No.Of out of coverage Employees</th>
+        <th>Gross Wages Of out of coverage Employees</th>
+        <th>Bonus</th>
+        <th>Over Time</th>
+        <th>Quarterly Incentive</th>
+        <th>PLI</th>
+        <th>Total earned Gross Wages (Rs.)</th>
+        <!-- <th>Total Wages of employees getting below Rs. 176 per day</th> -->
+        <th>Salary Books Ref. no.</th>
+        <th>Employees Contribution</th>
+        <th>Employers Contribution</th>
+        <th>Total Contribution</th>
+        <th>Contribution Paid As Per Challan</th>
+        <th>Difference</th>
+        <th>Due Date</th>
+        <th>Date Of Payment</th>
+        <th>Challan No</th>
+        <th>Delay Days</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let challan of esicChallansListing; let i = index">
+        <tr >
+          <td>
+            <label
+              class="d-flex align-items-center"
+              [for]="'checkrow-' + (i + 1)"
+            >
+              <input
+                type="checkbox"
+                class="mr-2"
+                [attr.checked]="
+                challan?.checked == true ? 'checked' : null
+                "
+                id="checkrow-{{ i + 1 }}"
+                [attr.data-checkbox-id]="challan?._id"
+                (click)="rowCheckBoxChecked($event, challan);"
+              />
+              {{
+              i + 1
+              }}
+            </label>
+          </td>
+          <td>{{ challan?.wage_month || 'N/A'}}</td>
+          <td>{{ challan?.Establishment || "N/A" }}</td>
+          <td>{{ challan?.total_emp || 0 }}</td>
+          <td>{{ challan?.total_esic_emp || 0 }}</td>
+          <td>{{ challan?.total_esic || 0}}</td>
+          <td>{{ challan?.total_excluded_emp || 0 }}</td>
+          <td>{{ challan?.not_coverd_wage || "N/A" }}</td>
+          <td>{{ challan?.total_bonus_esic || 0 }}</td>
+          <td>{{ challan?.total_overtime_esic || 0 }}</td>
+          <td>{{ challan?.total_incentive_esic || 0}}</td>
+          <td>{{ "N/A" }}</td>
+          <td>{{ challan?.total_esic || 0 }}</td>
+          <td>{{ challan?.file_id || 'N/A'}}</td>
+          <td>{{ challan?.total_employee_contribution || 0}}</td>
+          <td>{{ challan?.total_employer_contribution || 0}}</td>
+          <td>
+            {{
+            (+challan?.total_employee_contribution || 0) +
+            ( +challan?.total_employer_contribution || 0)
+            }}
+          </td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <!-- <td>{{ challan?.payment_confirmation?.total_amount || 0 }}</td> -->
+          <!-- <td>{{ (+total_esic || 0 )-( +challan?.payment_confirmation?.total_amount || 0) || 0 }}</td> -->
+          <!-- <td>{{ challan?.due_date }}</td> -->
+          <!-- <td>{{ challan?.challan_submited }}</td> -->
+          <!-- <td>{{ challan?.challan_number }}</td> -->
+          <!-- <td>{{ getDaysDiffFromDates(challan?.due_date,challan?.challan_submited ) }}</td> -->
+          <!-- <td>
+  <label
+    class="d-flex align-items-center"
+    [for]="'checkrow-' + (i + 1)"
+  >
+    <input
+      type="checkbox"
+      class="mr-2"
+      [attr.checked]="
+        report?.checked == true ? 'checked' : null
+      "
+      id="checkrow-{{ i + 1 }}"
+      [attr.data-checkbox-id]="report?._id"
+      (click)="rowCheckBoxChecked($event, report)"
+    />
+    {{
+      Global.getTableSerialNumber(
+        i,
+        reportPaginationOptions.limit,
+        reportPaginationOptions.page
+      )
+    }}
+  </label>
+  </td> -->
+        </tr>
+        <tr *ngFor="let nested_challan of challan.challans">
+          <td>  </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <!-- <td> - </td> -->
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+          <td> - </td>
+            <td> - </td>
+          <td>{{ nested_challan?.total_pending_amount || 0 }}</td> 
+          <td>{{ nested_challan?.total_payment_amount || 0 }}</td> 
+          <td>{{ (+challan?.total_esic || 0 )-( +nested_challan?.total_payment_amount || 0) || 0 }}</td>
+          <td>{{ nested_challan?.due_date }}</td>
+          <td>{{ nested_challan?.challan_submited }}</td>
+          <td>{{ nested_challan?.challan_number }}</td>
+          <td>{{ getDaysDiffFromDates(nested_challan?.due_date,nested_challan?.challan_submited ) }}</td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="!esicChallansListing.length">
+        <td colspan="24" class="text-center">No Data Found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

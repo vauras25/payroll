@@ -1,0 +1,36 @@
+.from-pf,
+.bd_rightside {
+    width: 450px;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    right: 0;
+    display: none;
+    background: #fff;
+    box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -webkit-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -moz-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+    -o-box-shadow: -5px 0px 10px rgba(163, 163, 163, 0.3);
+}
+
+.from-pf .form-group label,
+.bd_rightside .form-group label,
+.from-pf .form-group span.select2,
+.bd_rightside .form-group span.select2,
+.from-pf .form-group .form-control,
+.bd_rightside .form-group .form-control {
+    width: 100% !important;
+}
+
+.advance-action {
+    display: none;
+}
+
+.bd_title {
+    font-size: 18px;
+    color: #212529;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}

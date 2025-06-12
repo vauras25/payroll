@@ -1,0 +1,700 @@
+<div *ngIf="template_data" class="modal-content bd-0 tx-14">
+  <div class="modal-header pd-y-20 pd-x-25">
+    <div
+      class="tablemain"
+      style="
+        width: 800px;
+        margin: 0 auto;
+        border: solid 1px #333;
+        padding: 32px;
+      "
+    >
+      <table class="template-table" style="width: 100%; margin-bottom: 10px">
+        <tr>
+          <th colspan="4">
+            <table style="margin-bottom: 10px">
+              <tr>
+                <th style="width: 20%">
+                  <img
+                    width="100%"
+                    style="aspect-ratio: 5/4; object-fit: cover"
+                    [src]="
+                      Global.BACKEND_URL + '/' + template_data?.company_logo ||
+                      'https://via.placeholder.com/150x80.png'
+                    "
+                    alt="logo"
+                  />
+                </th>
+                <th
+                  style="
+                    text-align: center;
+                    font-size: 14px;
+                    line-height: 22px;
+                    font-weight: 800;
+                    padding-bottom: 20px;
+                    width: 80%;
+                  "
+                >
+                  {{ template_data?.company_info }}<br />
+                </th>
+              </tr>
+            </table>
+          </th>
+        </tr>
+        <tr style="display: flex; flex-wrap: wrap">
+          <td
+            *ngFor="let field of template_data?.employee_details; let i = index"
+            style="flex: 49.9999%; width: 50%"
+          >
+            {{ field?.title }}:
+            {{ field?.template_dataCallback(getValueOfTemplateField) }}
+          </td>
+        </tr>
+      </table>
+      <table class="template-table" style="width: 100%; border: solid 1px #000">
+        <tr>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-bottom: solid 1px #000;
+              font-weight: 800;
+              text-align: center;
+            "
+          >
+            Earnings
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-bottom: solid 1px #000;
+              font-weight: 800;
+              text-align: center;
+            "
+          >
+            Rate
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-bottom: solid 1px #000;
+              font-weight: 800;
+              text-align: center;
+            "
+          >
+            Amount
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-bottom: solid 1px #000;
+              font-weight: 800;
+              text-align: center;
+            "
+          >
+            Deductions
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-bottom: solid 1px #000;
+              font-weight: 800;
+              text-align: center;
+            "
+          >
+            Amount
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 20%; border-right: solid 1px #000">
+            <div *ngFor="let head of template_data?.statutory_contribution">
+              {{ head?.head_title }}
+            </div>
+          </td>
+          <td
+            class="text-right"
+            style="width: 20%; border-right: solid 1px #000"
+          >
+            <div *ngFor="let head of template_data?.statutory_contribution">
+              {{ head?.head_rate || "00.00" }}
+            </div>
+          </td>
+          <td
+            class="text-right"
+            style="width: 20%; border-right: solid 1px #000"
+          >
+            <div *ngFor="let head of template_data?.statutory_contribution">
+              {{ head?.amount || "00.00" }}
+            </div>
+          </td>
+          <td style="width: 20%; border-right: solid 1px #000">
+            <div *ngFor="let head of template_data?.statutory_deduction">
+              {{ head?.head_title }}
+            </div>
+          </td>
+          <td
+            class="text-right"
+            style="width: 20%; border-right: solid 1px #000"
+          >
+            <div *ngFor="let head of template_data?.statutory_deduction">
+              {{
+                head?.amount || head?.refineValue(head?.head_title) || "00.00"
+              }}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-top: solid 1px #000;
+              font-weight: 800;
+            "
+          >
+            Total
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-top: solid 1px #000;
+              font-weight: 800;
+              text-align: right;
+            "
+          ></td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-top: solid 1px #000;
+              font-weight: 800;
+              text-align: right;
+            "
+          >
+            {{ template_data?.earning_total }}
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-top: solid 1px #000;
+              font-weight: 800;
+            "
+          >
+            Total
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-right: solid 1px #000;
+              border-top: solid 1px #000;
+              font-weight: 800;
+              text-align: right;
+            "
+          >
+            00.00
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 20%; border-top: solid 1px #000; font-weight: 800">
+            Net Pay
+          </td>
+          <td
+            style="
+              width: 20%;
+              border-top: solid 1px #000;
+              font-weight: 800;
+              text-align: right;
+            "
+          >
+            {{ template_data?.net_pay }}
+          </td>
+          <td
+            style="width: 20%; border-top: solid 1px #000; font-weight: 800"
+            colspan="3"
+          ></td>
+        </tr>
+        <tr>
+          <td style="width: 20%; font-weight: 800">In Words</td>
+          <td style="width: 20%; font-weight: 800" colspan="4">
+            {{ template_data?.net_pay | inWords }}
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="
+              width: 20%;
+              font-weight: 800;
+              text-align: right;
+              padding: 10px 50px;
+            "
+            colspan="5"
+          >
+            Signature
+          </td>
+        </tr>
+      </table>
+      <table style="width: 100%; margin-top: 20px">
+        <tr>
+          <td
+            style="
+              width: 50%;
+              padding: 0;
+              padding-right: 10px;
+              padding-bottom: 15px;
+            "
+          >
+            <table style="width: 100%; border: solid 1px #000">
+              <tr>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Lev.Type
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Op. Bal
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Allot.
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Avail.
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Encash.
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Adj.
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Cl. Bal
+                </th>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: center;
+                  "
+                >
+                  CL
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  2.5
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  1.25
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  0
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  0
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  0
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  3.75
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: center;
+                  "
+                >
+                  PL
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  7.5
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  1.25
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  0
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  0
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  0
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  8.75
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td
+            style="
+              width: 50%;
+              padding: 0;
+              padding-left: 10px;
+              padding-bottom: 15px;
+            "
+          >
+            <table style="width: 100%; border: solid 1px #000">
+              <tr>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: center;
+                  "
+                >
+                  Reim Name
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Op. Bal
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Alloted
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Claimed
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Cl. Bal
+                </th>
+              </tr>
+              <!-- <tr>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: center;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+          </tr> -->
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td
+            style="
+              width: 50%;
+              padding: 0;
+              padding-right: 10px;
+              padding-bottom: 15px;
+            "
+          >
+            <table style="width: 100%; border: solid 1px #000">
+              <tr>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: center;
+                  "
+                >
+                  Loan
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Taken
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Op. Bal
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  EMI/Rct.
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Cl. Bal
+                </th>
+              </tr>
+              <!-- <tr>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: center;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+            <td style="font-size: 11px; border: solid 1px #000; text-align: right;"></td>
+          </tr> -->
+            </table>
+          </td>
+          <td
+            style="
+              width: 50%;
+              padding: 0;
+              padding-left: 10px;
+              padding-bottom: 15px;
+            "
+          >
+            <table style="width: 100%; border: solid 1px #000">
+              <tr>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: center;
+                  "
+                >
+                  Advance
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Taken
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Op. Bal
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  EMI/Rct.
+                </th>
+                <th
+                  style="
+                    font-weight: 800;
+                    font-size: 11px;
+                    border: solid 1px #000;
+                  "
+                >
+                  Cl. Bal
+                </th>
+              </tr>
+              <tr>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: center;
+                  "
+                >
+                  Salary
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  30000
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  24000
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  3000
+                </td>
+                <td
+                  style="
+                    font-size: 11px;
+                    border: solid 1px #000;
+                    text-align: right;
+                  "
+                >
+                  21000
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align: center">
+            {{ template_data?.signature_message }}
+            <!-- This is a System Generated Payslip No Signature Required -->
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

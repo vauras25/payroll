@@ -1,0 +1,76 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item"
+               routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Attendance Management</a>
+            <a class="breadcrumb-item active">Attendance Summary</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-calendar"></i>
+        <div>
+            <h4>Attendance Summary</h4>
+            <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <companyuser-app-table-filter [monthFilter]="true" [yearFilter]="true" [basicFilter]="false" (onFiltered)="filterDataTable($event)"></companyuser-app-table-filter>
+            <div class="card bd-0">
+                <div class="card-body px-0 bd-t-0 rounded-bottom">
+                    <!-- <div class="table-responsive"> -->
+                    <table class="table table-bordered table-hover display responsive nowrap wd-100p"
+                           datatable
+                           [dtOptions]="dtOptions"
+                           id="my-datatable">
+                        <thead class="thead-colored thead-info">
+                            <tr>
+                                <th>EMP ID</th>
+                                <th>Employee Name</th>
+                                <th>Profile</th>
+
+                                <th>Pay Days</th>
+                                <th>Rollover Attendance</th>
+                                <th>Assumed Present Day</th>
+                                <th>Total Attendance</th>
+                                <th>Total ANL</th>
+                                <th>Total AWP</th>
+                                <th>Total CSL</th>
+                                <th>Total ERL</th>
+                                <th>Total LE1</th>
+                                <th>Total LE2</th>
+                                <th>Total LP1</th>
+                                <th>Total LP2</th>
+                                <th>Total LP3</th>
+                                <th>Total MDL</th>
+                                <th>Total MTL</th>
+                                <th>Total PDL</th>
+                                <th>Total PTL</th>
+                                <th>Total PVL</th>
+                                <th>Total SKL</th>
+                                <th>Total UWP</th>
+                                <th>Total Late</th>
+                                <th>Total LOP</th>
+                                <th>Total OT</th>
+                                <th>Total WO</th>
+                                <th>Total Absent</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

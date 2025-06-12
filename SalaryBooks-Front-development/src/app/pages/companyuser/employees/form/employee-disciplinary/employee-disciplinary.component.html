@@ -1,0 +1,152 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Disciplinary Attended</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Disciplinary Details
+
+                <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'disciplinary'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section" *ngIf="operation == 'edit'" id="disciplinary-submit-section">
+                <form [formGroup]="employeeDisciplinaryForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Disciplinary Type&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryForm, 'disciplinary_type', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="disciplinary_type">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryForm, 'disciplinary_type', 'required')">This field is required</p>
+                        </div>  
+                        
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Disciplinary File Image&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryForm, 'disciplinary_file_image', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="operation == 'edit'">
+                                <input class="form-control" type="file" accept="image/*" formControlName="disciplinary_file_image" (change)="onFileChanged($event, employeeDisciplinaryForm, 'disciplinary_file_image', 'disciplinary_file_image_file')">
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryForm, 'disciplinary_file_image', 'required')">This field is required</p>
+                                <p class="error-element" *ngIf="(max_upload_limit>0 && net_uploaded_size>max_upload_limit)">Max Upload Size Exceed</p>
+                                <p class="error-element" *ngIf="employeeDisciplinaryForm.get('disciplinary_file_image').hasError('fileSize')">
+                                    File size exceeds {{ employeeDisciplinaryForm.get('disciplinary_file_image').getError('maxSize') }} KB.</p>
+                    
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Description&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryForm, 'description', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="description"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryForm, 'description', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Comment&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeDisciplinaryForm, 'comments', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="comments"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDisciplinaryForm, 'comments', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-danger mr-2" (click)="cancelEntry()">Cancel</button>
+                            <button type="submit" class="btn btn-info" (click)="updateEmployeeDisciplinaryDetails($event)">
+                              <span *ngIf="disciplinary_id; else addDisciplinarySpanBlock">Update Disciplinary</span>
+                              <ng-template #addDisciplinarySpanBlock>
+                                <span>Add Disciplinary</span>
+                              </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bd bd-gray-300 rounded table-responsive mt-5">
+                <table class="table table-striped mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Disciplinary Type</th>
+                            <th>Description</th>
+                            <th>Comments</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="employee_details?.emp_det?.employment_disciplinary_details?.length > 0; else noTableFound">
+                        <tr *ngFor="let item of employee_details?.emp_det?.employment_disciplinary_details; let i = index">
+                            <th scope="row">{{ i+1 }}</th>
+                            <td>{{ item.disciplinary_type }}</td>
+                            <td>{{ item.description ? item.description : 'N/A' }}</td>
+                            <td>{{ item.comments ? item.comments : 'N/A' }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-info mr-2" *ngIf="item.disciplinary_file_image" (click)="imageViewer(Global.BACKEND_URL + '/' + item.disciplinary_file_image)" data-toggle="tooltip" data-placement="top" title="View Disciplinary Image File"><i class="fa fa-file"></i></button>
+                                <button class="btn btn-sm btn-primary" (click)="getEdit(item)" data-toggle="tooltip" data-placement="top" title="Edit Disciplinary"><i class="fa fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-template #noTableFound>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">No Disciplinarys Found</td>
+                            </tr>
+                        </tbody>
+                    </ng-template>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+
+<div id="image-viewer-modal" tabindex="-1" class="modal fade animated fadeInLeftBig">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0">
+            <div class="modal-body pd-0">
+                <div class="row flex-row-reverse no-gutters">
+                    <div class="col-lg-12">
+                        <button style="position: absolute; color: white; right: 0;" type="button" class="close mg-t-2 mg-r-2 text-dark" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <div class="p-3 pt-2 mt-2">
+                            <img src="" alt="" id="image-src" class="w-100 img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

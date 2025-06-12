@@ -1,0 +1,865 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item"
+         routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item"
+         routerLink="/company/settings">Company Settings</a>
+      <a class="breadcrumb-item"
+         routerLink="/company/settings"
+         [queryParams]="{ active: 'comprules' }">Company Rules</a>
+      <a class="breadcrumb-item active">Bonus Slip Template</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-ios-briefcase"></i>
+    <div>
+      <h4>Bonus Slip Template</h4>
+      <p class="mg-b-0">
+        Check/ Uncheck as per preference to customise 
+        <!-- Lorem Ipsum is simply dummy text of the printing and typesetting -->
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="Global.checkCompanyModulePermission({
+    company_module: 'company_rules_2',
+    company_sub_module: 'bonus_slip_template',
+    company_sub_operation: ['add', 'edit'],
+    company_strict: true
+  })" class="br-pagebody"
+       id="rule-submit-section">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-3"
+          *ngIf="editActionId == ''; else editHeader">
+        Define Bonus Slip Template
+        <button (click)="openTemplateLibrary()"
+                class="btn btn-primary btn-sm float-right">
+          <i class="fa fa-book"></i> Template Library
+        </button>
+      </h6>
+      <ng-template #editHeader>
+        <h6 class="br-section-label mb-3">Update Bonus Slip Template</h6>
+      </ng-template>
+
+      <div class="form-layout form-layout-6">
+        <form [formGroup]="bonusSlipForm">
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Template Name&nbsp;
+              <span *ngIf="
+                  Global.isValidationAvailable(
+                    bonusSlipForm,
+                    'template_name',
+                    'required'
+                  )
+                "
+                    class="text-danger">*</span>
+            </div>
+            <div class="col-9 col-sm-9">
+              <input class="form-control"
+                     formControlName="template_name"
+                     type="text" />
+
+              <p class="error-element"
+                 *ngIf="
+                  bonusSlipForm.controls.template_name.hasError('required') &&
+                  (bonusSlipForm.controls.template_name.dirty ||
+                    bonusSlipForm.controls.template_name.touched)
+                ">
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Company Logo&nbsp;
+              <span *ngIf="
+                  Global.isValidationAvailable(
+                    bonusSlipForm,
+                    'bonus_temp_company_logo',
+                    'required'
+                  )
+                "
+                    class="text-danger">*</span>
+            </div>
+            <div class="col-9 col-sm-9">
+              <input class="form-control"
+                     formControlName="bonus_temp_company_logo"
+                     type="file"
+                     accept="image/*"
+                     (change)="
+                  onFileChanged(
+                    $event,
+                    bonusSlipForm,
+                    'bonus_temp_company_logo',
+                    'bonus_temp_company_logo_file'
+                  )
+                " />
+
+              <p class="info-element"
+                 *ngIf="bonusSlipForm.value.logo_status == 'unchanged'">
+                Using Default Library Logo
+              </p>
+              <p class="error-element"
+                 *ngIf="
+                  bonusSlipForm.controls.bonus_temp_company_logo.hasError(
+                    'required'
+                  ) &&
+                  (bonusSlipForm.controls.bonus_temp_company_logo.dirty ||
+                    bonusSlipForm.controls.bonus_temp_company_logo.touched)
+                ">
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Company Name <br />
+              Address <br />
+              Phone No&nbsp;
+              <span *ngIf="
+                  Global.isValidationAvailable(
+                    bonusSlipForm,
+                    'company_info',
+                    'required'
+                  )
+                "
+                    class="text-danger">*</span>
+            </div>
+            <div class="col-9 col-sm-9">
+              <textarea class="form-control"
+                        formControlName="company_info"
+                        rows="3"
+                        cols="100%"></textarea>
+
+              <p class="error-element"
+                 *ngIf="
+                  bonusSlipForm.controls.company_info.hasError('required') &&
+                  (bonusSlipForm.controls.company_info.dirty ||
+                    bonusSlipForm.controls.company_info.touched)
+                ">
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <ng-container *ngIf="employeeDetailsMaster.length > 0">
+            <div class="row no-gutters"                             
+                 style="border-right: 1px solid #ced4da">
+              <div class="col-10 col-sm-10">Employee's Details</div>
+              <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                <label for="employeeDetailsAll" class="ckbox mb-0">
+                   <input [checked]="true" type="checkbox" name="employeeDetailsAll" id="employeeDetailsAll" (change)="checkSectionAllCheckBox('employee_details[]', $event?.target)">
+                   <span>
+                       Select All
+                   </span>
+                </label>
+           </div>
+            </div>
+
+            <div class="row no-gutters">
+              <div class="col-3 col-sm-3"
+                   style="background: #fff"
+                   *ngFor="let item of employeeDetailsMaster">
+                <label class="ckbox mb-0">
+                  <input [checked]="true" type="checkbox"
+                         name="employee_details[]"
+                         value="{{ item.value }}" />
+                  <span>{{ item.description }}</span>
+                </label>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="bonusDetailsMaster.length > 0">
+            <div class="row no-gutters"
+                 style="border-right: 1px solid #ced4da">
+              <div class="col-10 col-sm-10">Bonus Details</div>
+              <div class="col-2 col-sm-2 sameasfirst justify-content-end">
+                <label for="bonusDetailsAll" class="ckbox mb-0">
+                   <input [checked]="true" type="checkbox" name="bonusDetailsAll" id="bonusDetailsAll" (change)="checkSectionAllCheckBox('bonus_details[]', $event?.target)">
+                   <span>
+                       Select All
+                   </span>
+                </label>
+           </div>
+            </div>
+
+            <div class="row no-gutters">
+              <div class="col-3 col-sm-3"
+                   style="background: #fff"
+                   *ngFor="let item of bonusDetailsMaster">
+                <label class="ckbox mb-0">
+                  <input [checked]="true" type="checkbox"
+                         name="bonus_details[]"
+                         value="{{ item.value }}" />
+                  <span>{{ item.description }}</span>
+                </label>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- <ng-container *ngIf="otherPaymentMaster.length > 0">
+            <div class="row no-gutters"
+                 style="border-right: 1px solid #ced4da">
+              <div class="col-12 col-sm-12">Other Payments</div>
+            </div>
+
+            <div class="row no-gutters">
+              <div class="col-3 col-sm-3"
+                   style="background: #fff"
+                   *ngFor="let item of otherPaymentMaster">
+                <label class="ckbox mb-0">
+                  <input type="checkbox"
+                         name="other_payment[]"
+                         value="{{ item.value }}" />
+                  <span>{{ item.description }}</span>
+                </label>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="otherDeductionMaster.length > 0">
+            <div class="row no-gutters"
+                 style="border-right: 1px solid #ced4da">
+              <div class="col-12 col-sm-12">Other Deductions</div>
+            </div>
+
+            <div class="row no-gutters">
+              <div class="col-3 col-sm-3"
+                   style="background: #fff"
+                   *ngFor="let item of otherDeductionMaster">
+                <label class="ckbox mb-0">
+                  <input type="checkbox"
+                         name="other_deduction[]"
+                         value="{{ item.value }}" />
+                  <span>{{ item.description }}</span>
+                </label>
+              </div>
+            </div>
+          </ng-container> -->
+
+          <div class="row no-gutters">
+            <div class="col-3 col-sm-3">
+              Signature Message Box&nbsp;
+              <span *ngIf="
+                  Global.isValidationAvailable(
+                    bonusSlipForm,
+                    'signature_message',
+                    'required'
+                  )
+                "
+                    class="text-danger">*</span>
+            </div>
+            <div class="col-9 col-sm-9">
+              <textarea class="form-control"
+                        formControlName="signature_message"
+                        rows="3"
+                        cols="100%"></textarea>
+
+              <p class="error-element"
+                 *ngIf="
+                  bonusSlipForm.controls.signature_message.hasError(
+                    'required'
+                  ) &&
+                  (bonusSlipForm.controls.signature_message.dirty ||
+                    bonusSlipForm.controls.signature_message.touched)
+                ">
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row no-gutters bd-1">
+            <div class="col-12 col-sm-12">
+              <button class="btn btn-info"
+                      (click)="create($event)"
+                      *ngIf="editActionId == '' && Global.checkCompanyModulePermission({
+                        company_module: 'company_rules_2',
+                        company_sub_module: 'bonus_slip_template',
+                        company_sub_operation: ['add', ],
+                        company_strict: true
+                      })">
+                <span>Save Template</span>
+              </button>
+            </div>
+
+            <div *ngIf="editActionId  && Global.checkCompanyModulePermission({
+              company_module: 'company_rules_2',
+              company_sub_module: 'bonus_slip_template',
+              company_sub_operation: ['edit'],
+              company_strict: true
+            })">
+              <button type="button"
+                      (click)="cancelEntry()"
+                      class="btn btn-danger mg-r-5">
+                <span>Cancel</span>
+              </button>
+              <button type="submit"
+                      (click)="update($event)"
+                      class="btn btn-info">
+                <span>Update Template</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper">
+      <h6 class="br-section-label mb-5">Bonus Slip Template</h6>
+      <div class="table-wrapper">
+        <table class="table display responsive nowrap wd-100p"
+               datatable
+               [dtOptions]="dtOptions"
+               id="my-datatable">
+          <thead>
+            <tr>
+              <th class="wd-15p">SL</th>
+              <th class="wd-25p text-center">Action</th>
+              <th class="wd-15p">Template Name</th>
+              <th class="wd-15p">Company Logo</th>
+              <th class="wd-15p">Company Info</th>
+              <th class="wd-15p">Created At</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button id="librarymmodalbutton"
+          [hidden]="true"
+          data-toggle="modal"
+          data-target="#librarymodal"></button>
+  <div id="librarymodal"
+       tabindex="-1"
+       class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-lg modal-dialog-centered"
+         role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            View Template Library
+          </h6>
+          <button type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body pd-20">
+          <div class="table-responsive">
+            <table class="table display responsive nowrap wd-100p"
+                   datatable
+                   [dtOptions]="dtOptionsLibrary"
+                   id="library-datatable">
+              <thead>
+                <tr>
+                  <th class="wd-15p">SL</th>
+                  <th class="wd-25p text-center">Action</th>
+                  <th class="wd-15p">Template Name</th>
+                  <th class="wd-15p">Company Logo</th>
+                  <th class="wd-15p">Company Info</th>
+                  <th class="wd-15p">Created At</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button"
+                  class="btn text-uppercase btn-secondary tx-size-xs"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="viewTemplate"
+          [hidden]="true"
+          data-toggle="modal"
+          data-target="#viewTemplateModel"></button>
+  <div id="viewTemplateModel"
+       tabindex="-1"
+       class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg"
+         role="document">
+      <div class="modal-content bd-0 tx-14">
+        <div class="modal-header pd-y-20 pd-x-25">
+          <div class="tablemain"
+               style="
+              width: 800px;
+              margin: 0 auto;
+              border: solid 1px #333;
+              padding: 32px;
+            ">
+            <table style="width: 100%; margin-bottom: 10px">
+              <tr>
+                <th colspan="4">
+                  <table style="margin-bottom: 10px">
+                    <tr>
+                      <th style="width: 20%">
+                        <img width="100%"
+                             style="aspect-ratio: 5/4; object-fit: cover"
+                             [src]="
+                            Global.BACKEND_URL +
+                              '/' +
+                              templateData.company_logo ||
+                            'https://via.placeholder.com/150x80.png'
+                          "
+                             alt="logo" />
+                      </th>
+                      <th style="
+                          text-align: center;
+                          font-size: 14px;
+                          line-height: 22px;
+                          font-weight: 800;
+                          padding-bottom: 20px;
+                          width: 80%;
+                        "><br />
+                        <span [innerHTML]="formalizeCompanyInfoOnTemplate(templateData.company_info)"></span>
+
+                      </th>
+
+                    </tr>
+                  </table>
+                </th>
+              </tr>
+              <tr>
+                <td class="row mt-2 p-0">
+                  <ng-container *ngIf="templateData?.bonus_details?.includes('bonus-period')">
+                    <div class="col-12" style="font-size: 13px; margin-right: -15px; border: 1px solid #d7d7d7ab; padding: 10px;">Bonus Slip for the Period : mm/yyyy to mm/yyyy</div>
+                  </ng-container>
+                  <div *ngFor="
+                      let field of templateData.employee_details;
+                      let i = index
+                    "
+                       class="col-6 " style="border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">
+                    {{ field | titlecase }}:
+                  </div>
+                </td>
+           
+              </tr>
+            </table>
+              <!-- <ng-container *ngIf="templateData?.bonus_details?.length">
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 1rem;">
+                  <div *ngIf="templateData?.bonus_details?.includes('bonus-period')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Period</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('Ex-gratia')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Ex-Ggratia</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('bonus-rate')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Rate</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('earned-bonus-wage')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Earned Bonus Wage</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('bonus-details')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Details</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  ">
+                  <div *ngIf="templateData?.bonus_details?.includes('bonus-period')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Annual/Qtr</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('Ex-gratia')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('bonus-rate')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('earned-bonus-wage')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  <div *ngIf="templateData?.bonus_details?.includes('bonus-details')"
+                       style="flex: 0 0 20%; max-width: 20%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                </div>
+              </ng-container> -->
+              <ng-container *ngIf="templateData?.bonus_details?.length && templateData?.bonus_details?.includes('advance')">
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 1rem;">
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Type</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Wage</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Rate</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Amt</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recoverd</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">TDS</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Statutory Deduction</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Amount Remitted</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Annual/Qtr</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 12.5%; max-width: 12.5%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="templateData?.bonus_details?.length && templateData?.bonus_details?.includes('bonus-details')">
+                <div style="font-size: 15px; font-weight: 600; margin-right: -15px; margin-left: -15px; margin-top: 1rem;">Month Wise Details</div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;  margin-top: 0.2rem;">
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Wage Month</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Wage</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus Rate</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">mm yyyy</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                </div>
+               
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">So on</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Total</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                  <div style="flex: 0 0 25%; max-width: 25%;border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">###</div>
+                </div>
+              </ng-container>
+<!--           
+              <ng-container *ngIf="templateData?.bonus_details?.length">
+              <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; margin-top: 1rem;">
+                <div *ngIf="templateData?.other_payment?.includes('overtime')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Overtime</div>
+                <div *ngIf="templateData?.other_payment?.includes('bonus')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Bonus</div>
+                <div *ngIf="templateData?.other_payment?.includes('gratuity')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Gratuity</div>
+                <div *ngIf="templateData?.other_payment?.includes('incentive')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Incentive</div>
+                <div *ngIf="templateData?.other_payment?.includes('Ex-gratia')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Ex-Gratia</div>
+                <div *ngIf="templateData?.other_payment?.includes('arrear')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Arrear</div>
+                <div *ngIf="templateData?.other_payment?.includes('advance-given')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Given</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+                <div *ngIf="templateData?.other_payment?.includes('overtime')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                      <div *ngIf="templateData?.other_payment?.includes('bonus')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                      <div *ngIf="templateData?.other_payment?.includes('gratuity')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                      <div *ngIf="templateData?.other_payment?.includes('incentive')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                      <div *ngIf="templateData?.other_payment?.includes('Ex-gratia')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                      <div *ngIf="templateData?.other_payment?.includes('arrear')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                      <div *ngIf="templateData?.other_payment?.includes('advance-given')" style="flex: 0 0 14.2857%; max-width: 14.2857%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  </div>
+              </ng-container>
+           -->
+              <!-- <ng-container *ngIf="templateData?.bonus_details?.length">
+              <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; margin-top: 1rem;">
+                <div *ngIf="templateData?.other_deduction?.includes('advance-recover1')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 1</div>
+                <div *ngIf="templateData?.other_deduction?.includes('advance-recover2')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 2</div>
+                <div *ngIf="templateData?.other_deduction?.includes('advance-recover3')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 3</div>
+                <div *ngIf="templateData?.other_deduction?.includes('advance-recover4')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">Advance Recover 4</div>
+              </div>
+                <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
+                  <div *ngIf="templateData?.other_deduction?.includes('advance-recover1')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  <div *ngIf="templateData?.other_deduction?.includes('advance-recover2')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  <div *ngIf="templateData?.other_deduction?.includes('advance-recover3')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                  <div *ngIf="templateData?.other_deduction?.includes('advance-recover4')" style="flex: 0 0 25%; max-width: 25%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">00.00</div>
+                </div>
+              </ng-container> -->
+              <ng-container *ngIf="templateData?.signature_message">
+              <div style="display: flex; flex-wrap: wrap; margin-right: -15px; margin-left: -15px; margin-top: 1rem;">
+                      <div  style="flex: 0 0 100%; max-width: 100%; border: 1px solid #d7d7d7ab; padding: 10px; font-size: 13px;">{{templateData?.signature_message || 'Message and foot note signature'}}</div>
+                  </div>
+              </ng-container>
+
+            <!-- <table style="width: 100%; border: solid 1px #000">
+              <tr>
+                <th *ngIf="templateData?.bonus_details?.includes('bonus-period')"
+                    style="
+                    width: 20%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Bonus Period
+                </th>
+                <th *ngIf="templateData?.bonus_details?.includes('Ex-gratia')"
+                    style="
+                  width: 20%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  text-align: center;
+                ">
+                  Ex-Ggratia
+                </th>
+                <th *ngIf="templateData?.bonus_details?.includes('bonus-rate')"
+                    style="
+                    width: 20%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Bonus Rate
+                </th>
+                <th *ngIf="templateData?.bonus_details?.includes('earned-bonus-wage')"
+                    style="
+                    width: 20%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Earned Bonus Wage
+                </th>
+                <th *ngIf="templateData?.bonus_details?.includes('bonus-details')"
+                    style="
+                    width: 20%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Bonus Details
+                </th>
+              </tr>
+              <tr>
+                <td *ngIf="templateData?.bonus_details?.includes('bonus-period')"
+                    style="width: 20%; border: solid 1px #000; text-align: center;">
+                  Annual/Qtr
+                </td>
+                <td *ngIf="templateData?.bonus_details?.includes('Ex-gratia')"
+                    style="width: 20%; border: solid 1px #000; text-align: center;">
+                  #####
+                </td>
+                <td *ngIf="templateData?.bonus_details?.includes('bonus-rate')"
+                    style="width: 20%; border: solid 1px #000; text-align: center;">
+                  ##
+                </td>
+                <td *ngIf="templateData?.bonus_details?.includes('earned-bonus-wage')"
+                    style="width: 20%; border: solid 1px #000; text-align: center;">####</td>
+                <td *ngIf="templateData?.bonus_details?.includes('bonus-details')"
+                    style="width: 20%; border: solid 1px #000; text-align: center;">##</td>
+
+              </tr>
+
+            
+            </table>
+
+            <table style="width: 100%; border: solid 1px #000; margin-top: 15px;">
+              <tr>
+                <th *ngIf="templateData?.other_payment?.includes('overtime')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  OVERTIME </th>
+                <th *ngIf="templateData?.other_payment?.includes('bonus')"
+                    style="
+                  width: 14.28%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  text-align: center;
+                ">
+                  Bonus </th>
+                <th *ngIf="templateData?.other_payment?.includes('gratuity')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Gratuity </th>
+                <th *ngIf="templateData?.other_payment?.includes('incentive')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Incentive </th>
+                <th *ngIf="templateData?.other_payment?.includes('Ex-gratia')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Ex-Gratia </th>
+                <th *ngIf="templateData?.other_payment?.includes('arrear')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Arrear </th>
+                <th *ngIf="templateData?.other_payment?.includes('advance-given')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  Advance Given </th>
+
+              </tr>
+              <tr>
+                <th *ngIf="templateData?.other_payment?.includes('overtime')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_payment?.includes('bonus')"
+                    style="
+                  width: 14.28%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  text-align: center;
+                ">
+                00.00
+                </th>
+                <th *ngIf="templateData?.other_payment?.includes('gratuity')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_payment?.includes('incentive')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_payment?.includes('Ex-gratia')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_payment?.includes('arrear')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_payment?.includes('advance-given')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+
+              </tr>
+
+            </table>
+
+            <table style="width: 100%; border: solid 1px #000; margin-top: 15px;">
+              <tr>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover1')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  ADVANCE RECOVER 1</th>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover2')"
+                    style="
+                  width: 14.28%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  text-align: center;
+                ">
+                  ADVANCE RECOVER 2</th>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover3')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  ADVANCE RECOVER 3</th>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover4')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  ADVANCE RECOVER 4</th>
+              </tr>
+              <tr>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover1')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover2')"
+                    style="
+                  width: 14.28%;
+                  border-right: solid 1px #000;
+                  border-bottom: solid 1px #000;
+                  text-align: center;
+                ">
+                00.00
+                </th>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover3')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+                <th *ngIf="templateData?.other_deduction?.includes('advance-recover4')"
+                    style="
+                    width: 14.28%;
+                    border-right: solid 1px #000;
+                    border-bottom: solid 1px #000;
+                    text-align: center;
+                  ">
+                  00.00
+                </th>
+              </tr>
+            </table> -->
+
+            <!-- <table class="mt-3"
+                   style="width: 100%; border: solid 1px #000">
+              <tr>
+                <td>{{templateData.signature_message || 'Message and foot note signature'}}</td>
+              </tr>
+            </table> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

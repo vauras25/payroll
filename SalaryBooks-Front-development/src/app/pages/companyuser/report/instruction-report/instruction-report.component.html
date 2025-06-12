@@ -1,0 +1,318 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item active">Reports</a>
+            <a class="breadcrumb-item">Instruction Report</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon ion-document-text"></i>
+        <div>
+            <h4>Instruction Report</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+          <companyuser-app-table-filter
+          [yearFilter]="true"
+          [monthFilter]="true"
+          [isClient]="false"
+          (onFiltered)="generateMasterSheet({options:$event})"
+        ></companyuser-app-table-filter>
+            <div class="card bd-0">
+                <div class="card-header">
+                    <div class="row">
+                        <!-- <div class="col-12">
+                            <form [formGroup]="filterForm">
+                                <div class="row align-items-end">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="month" [options]="monthMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Month *'}"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="year" [options]="yearMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Year *'}"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="department" [options]="departmentMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Department *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="designation" [options]="designationMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Designation *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="branch" [options]="branchMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Branch *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <ngx-select-dropdown formControlName="hod" [options]="hodMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select HOD *'}" [multiple]="true"></ngx-select-dropdown>
+                                            </div>
+
+                                            <div class="col-sm-3 col-12 mb-3">
+                                                <button (click)="generateMasterSheet()" type="submit" class="btn btn-info pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block" [disabled]="!filterForm.valid">Filter</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> -->
+
+                        <!-- <div class="col-12">
+                            <hr>
+                        </div> -->
+
+                        <!-- <div class="col-12">
+                            <form [formGroup]="generateReportForm">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <ngx-select-dropdown formControlName="template" [options]="sheetTemplateMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Custom Template', displayKey : 'template_name', 'height': '250px'}"></ngx-select-dropdown>
+                                    </div>
+
+                                    <div class="col-sm-5"></div>
+
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block" [disabled]="empReportData.length < 1" (click)="excelExport()">Export</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> -->
+
+                        <div class="col-12">
+                            <form [formGroup]="exportReportForm">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <ngx-select-dropdown formControlName="template_id" [options]="bankSheetMaster" class="form-control p-1" [config]="{search:true, placeholder: 'Select Bank Template', displayKey : 'template_name', 'height': '250px'}"></ngx-select-dropdown>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block" [disabled]="(rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0)) || !exportReportForm.valid" (click)="generateReport()">Generate</button>
+                                    </div>
+
+                                    <div class="col-sm-3"></div>
+
+                                    <div class="col-sm-2">
+                                        <a routerLink="/company/reports/instruction-report/data" class="btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block">Payment Data</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body px-0 bd-t-0 rounded-bottom">
+                    <!-- <app-custom-tableoption (onFilterChanged)="generateMasterSheet({page: 1, options: $event})"></app-custom-tableoption> -->
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered cust-table table-striped" id="instruction-report-table" #salarysheetreporttable>
+                            <thead>
+                                <tr class="title-sec">
+                                    <th colspan="3" class="column-title"></th>
+
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <th class="column-title"
+                                            [ngStyle]="{ 'background-color': row.bg_color, 'color': row.text_color }"
+                                            [attr.colspan]="getSheetTemplateMasterHeadColspan(row.main_slug)">
+                                                {{ row.main_title }}
+                                        </th>
+                                    </ng-container>
+                                </tr>
+
+                                <tr class="title-sec">
+                                    <th colspan="3" class="column-title"></th>
+
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <ng-container [ngSwitch]="module.module_slug">
+                                                <ng-container *ngSwitchCase="'master_breakup'">
+                                                    <th *ngIf="this.empReportTempData.master_head_includes.length > 0"
+                                                        class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+
+                                                <ng-container *ngSwitchCase="'breakup'">
+                                                    <th *ngIf="this.empReportTempData.head_includes.length > 0"
+                                                        class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+
+                                                <ng-container *ngSwitchCase="'extraearnings'">
+                                                    <th *ngIf="this.empReportTempData.extra_earning_data.length > 0"
+                                                        class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+
+                                                <ng-container *ngSwitchDefault>
+                                                    <th class="column-title"
+                                                        [attr.colspan]="getSheetTemplateHeadColspan(row.main_slug, module.module_slug)">
+                                                            {{ module.module_title }}
+                                                    </th>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+
+                                <tr class="headings">
+                                    <th class="column-title">
+                                        <input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="empReportData.length > 0">
+                                    </th>
+
+                                    <th class="column-title text-center">Status</th>
+                                    <th class="column-title">RefID</th>
+
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <ng-container *ngFor="let field of module.fields">
+                                                <ng-container [ngSwitch]="field.slug">
+                                                    <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.master_head_includes">
+                                                            <th>
+                                                                <span data-toggle="tooltip" data-placement="top" title="{{ headInclude.head_title }}">{{ headInclude.head_abbreviation }}</span>
+                                                            </th>
+                                                        </ng-container>
+                                                        <!-- <ng-container *ngIf="empReportTempData.head_includes.length == 0">
+                                                            <th>-</th>
+                                                        </ng-container> -->
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.head_includes">
+                                                            <th>
+                                                                <span data-toggle="tooltip" data-placement="top" title="{{ headInclude.head_title }}">{{ headInclude.head_abbreviation }}</span>
+                                                            </th>                                                        </ng-container>
+                                                        <!-- <ng-container *ngIf="empReportTempData.head_includes.length == 0">
+                                                            <th>-</th>
+                                                        </ng-container> -->
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'extra-earnings'">
+                                                        <ng-container *ngFor="let extraEarning of empReportTempData.extra_earning_data">
+                                                            <th>{{ extraEarning.earning_abbreviation }}</th>
+                                                        </ng-container>
+                                                        <!-- <ng-container *ngIf="empReportTempData.extra_earning_data.length == 0">
+                                                            <th>-</th>
+                                                        </ng-container> -->
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <th>
+                                                            <ng-container *ngIf="field.abbreviation">
+                                                                <span data-toggle="tooltip" data-placement="top" title="{{ field.title }}">
+                                                                    {{field.abbreviation}}
+                                                                </span>
+                                                            </ng-container>
+
+                                                            <ng-container *ngIf="!field.abbreviation">
+                                                                {{field.title}}
+                                                            </ng-container>
+                                                        </th>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let report of empReportData; let i = index">
+                                    <td>
+                                        <ng-container *ngIf="(report?.emp_data?.emp_uan_no && !report?.referance_id)">
+                                            <input type="checkbox" [attr.checked]="report.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="report?.emp_data?._id" (click)="rowCheckBoxChecked($event, report)">
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!(report?.emp_data?.emp_uan_no && !report?.referance_id)">
+                                            -
+                                        </ng-container>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <ng-container *ngIf="report?.emp_data?.emp_uan_no">
+                                            <ng-container *ngIf="report?.salary_report?.bank_ins_referance_id">
+                                                <span class="badge badge-success px-2 py-1 text-uppercase">Generated</span>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="!report?.salary_report?.bank_ins_referance_id">
+                                                <span class="badge badge-primary px-2 py-1 text-uppercase">Ready</span>
+                                            </ng-container>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!report?.emp_data?.emp_uan_no">
+                                            <span class="badge badge-warning px-2 py-1 text-uppercase">Pending</span>
+                                        </ng-container>
+                                    </td>
+
+                                    <td>{{ report?.referance_id ?? "-" }}</td>
+
+                                    <!-- <td class="fixed-ls-1">{{ (i+1) }}</td> -->
+                                    <!-- <td class="fixed-ls-2">{{ report?.emp_data?.emp_first_name }} {{ report?.emp_data?.emp_last_name }}</td> -->
+                                    <!-- <td class="fixed-ls-3">{{ report?.emp_data?.emp_id ?? "-" }}</td> -->
+
+                                    <ng-container *ngFor="let row of _tempSheetTemplate">
+                                        <ng-container *ngFor="let module of row.modules">
+                                            <ng-container *ngFor="let field of module.fields">
+                                                <ng-container [ngSwitch]="field.slug">
+                                                    <ng-container *ngSwitchCase="'sl_no'">
+                                                            <td>{{ (i+1) }}</td>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'master-dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.head_includes">
+                                                            <td>{{ getHeadValue(report.heads_rate, headInclude.head_id, 'amount') }}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'dynamic-heads'">
+                                                        <ng-container *ngFor="let headInclude of empReportTempData.head_includes">
+                                                            <td>{{ getHeadValue(report.heads, headInclude.head_id, 'amount') }}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'extra-earnings'">
+                                                        <ng-container *ngFor="let extraEarning of empReportTempData.extra_earning_data">
+                                                            <td>{{ getExtraEarningValue(report.extra_earning_data, extraEarning.earning_abbreviation, 'earning_amount') }}</td>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'sex'">
+                                                        <td class="text-uppercase">{{ getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report) ?? 'N/A' }}</td>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'age'">
+                                                        <td class="text-uppercase">
+                                                            {{ getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report) ? Global.parseToInteger(getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report)) : 'N/A' }}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <td>
+                                                            {{ getSheetTemplateReportValue(row.main_slug, module.module_slug, field.slug, report) ?? 'N/A' }}
+                                                        </td>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+
+                                <tr *ngIf="empReportData.length == 0">
+                                    <td class="text-center" colspan="100%">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <app-custom-pagination [rows]="empReportData" [paginationOptions]="paginationOptions" (onPageClicked)="generateMasterSheet({'page' : $event})"></app-custom-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

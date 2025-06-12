@@ -1,0 +1,1999 @@
+<div class="br-sideleft sideleft-scrollbar">
+  <label class="sidebar-label pd-x-10 mg-t-20 op-3">Navigation</label>
+  <ul class="br-sideleft-menu">
+    <li class="br-menu-item">
+      <a routerLink="/company"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="br-menu-link">
+        <i class="menu-item-icon icon ion-ios-speedometer-outline tx-24"></i>
+        <span class="menu-item-label">Dashboard</span>
+      </a>
+    </li>
+
+    <!-- *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'employee',
+          company_operation: ['listing_add_approve'],
+          company_strict: true
+        })
+      " -->
+    <li class="br-menu-item">
+      <a routerLink="/company/employees"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: false }"
+         class="br-menu-link">
+        <i class="menu-item-icon icon ion-ios-people-outline tx-24"></i>
+        <span class="menu-item-label">Employees</span>
+      </a>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/attendance-management/edit',
+            '/company/attendance-management/daily-details',
+            '/company/reports/attendance-report',
+            '/company/attendance-management/attendance-listing-console',
+            '/company/attendance-management/weekly-holiday',
+            '/company/attendance-management/yearly-holiday'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-calendar tx-20"></i>
+        <span class="menu-item-label">Attendance Management</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            AppComponent.checkCompanyModulePermission({
+              company_module: 'attendance',
+              company_operation: ['attendance_upload', 'attendance_edit'],
+              company_sub_module: ['upload_attendance', 'edit_attendance'],
+              company_sub_operation: ['view']
+            })
+          ">
+          <a routerLink="/company/attendance-management/edit"
+             routerLinkActive="active"
+             class="sub-link">Upload / Edit
+          </a>
+        </li>
+
+        <li class="sub-item">
+          <a routerLink="/company/attendance-management/daily-details"
+             routerLinkActive="active"
+             class="sub-link">Attendance Summary</a>
+        </li>
+
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'attendance',
+              company_operation: 'attendance_report',
+              company_sub_module: ['attendance_report'],
+              company_sub_operation: ['view']
+            })
+          ">
+          <a routerLink="/company/attendance-management/attendance-listing-console"
+             routerLinkActive="active"
+             class="sub-link">Attendance Listing Console</a>
+        </li>
+
+        <li class="sub-item">
+          <a routerLink="/company/attendance-management/yearly-holiday"
+             routerLinkActive="active"
+             class="sub-link">Yearly Holiday</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/attendance-management/weekly-holiday"
+             routerLinkActive="active"
+             class="sub-link">Weekly Holiday</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        AppComponent.checkCompanyModulePermission({
+          company_module: 'attendance',
+          company_operation: 'attendance_funnel',
+          company_sub_module: 'attendance_funnel',
+          company_sub_operation: ['view', 'edit']
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          ['/company/attendance-funnel/upload'].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-calendar tx-20"></i>
+        <span class="menu-item-label">Attendance Funnel</span>
+      </a>
+      <ul class="br-menu-sub">
+        <!-- <li class="sub-item">
+          <a
+            routerLink="/company/attendance-funnel/upload"
+            routerLinkActive="active"
+            class="sub-link"
+            >Upload</a
+          >
+        </li> -->
+
+        <li class="sub-item">
+          <a routerLink="/company/attendance-funnel/upload-csv"
+             routerLinkActive="active"
+             class="sub-link">Upload CSV</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <!-- reportsalarysheet.isActive || -->
+      <a href="#"
+         class="br-menu-link with-sub"
+         [ngClass]="{
+          active: [
+            '/company/reports/salary-sheet-new',
+            '/company/reports/payslip',
+            '/company/reports/master-sheet-new',
+            '/company/salary-calculator'
+          ].includes(this.router.url)
+        }">
+        <!-- reportmastersheet.isActive || -->
+        <i class="menu-item-icon icon icon ion-document-text tx-20"></i>
+        <span class="menu-item-label">Salary</span>
+      </a>
+      <ul class="br-menu-sub">
+        <!-- <li class="sub-item">
+          <a
+            #reportsalarysheet="routerLinkActive"
+            routerLink="/company/reports/salary-sheet"
+            routerLinkActive="active"
+            class="sub-link"
+            >Run Payroll</a
+          >
+        </li> -->
+        <li class="sub-item"
+            *ngIf="
+            AppComponent.checkCompanyModulePermission({
+              company_module: 'salary',
+              company_sub_module: ['run_payroll'],
+              company_sub_operation: ['view'],
+              company_operation: 'run_payroll'
+            })
+          ">
+          <a #reportsalarysheetnew="routerLinkActive"
+             routerLink="/company/reports/salary-sheet-new"
+             routerLinkActive="active"
+             class="sub-link">Run Payroll</a>
+        </li>
+
+        <li class="sub-item"
+            *ngIf="
+            AppComponent.checkCompanyModulePermission({
+              company_module: 'salary',
+              company_sub_module: ['pay_slip'],
+              company_sub_operation: ['view'],
+              company_operation: 'payslip'
+            })
+          ">
+          <a #reportpayslip="routerLinkActive"
+             routerLink="/company/reports/payslip"
+             routerLinkActive="active"
+             class="sub-link">Pay Slip</a>
+        </li>
+        <!-- <li class="sub-item">
+          <a
+            #reportmastersheet="routerLinkActive"
+            routerLink="/company/reports/master-sheet"
+            routerLinkActive="active"
+            class="sub-link"
+            >Salary Report</a
+          >
+        </li> -->
+        <li class="sub-item"
+            *ngIf="
+            AppComponent.checkCompanyModulePermission({
+              company_module: 'salary',
+              company_sub_module: ['salary_report'],
+              company_sub_operation: ['view'],
+              company_operation: 'salary_earning_report'
+            })
+          ">
+          <a #reportmastersheetnew="routerLinkActive"
+             routerLink="/company/reports/master-sheet-new"
+             routerLinkActive="active"
+             class="sub-link">Salary Report</a>
+        </li>
+        <!-- <li class="sub-item">
+                    <a #reportmastersheet="routerLinkActive" routerLink="/company/reports/master-sheet-refactor" routerLinkActive="active" class="sub-link">Salary Report New</a>
+                </li> -->
+
+        <li class="sub-item">
+          <a #salaryExtraEarning="routerLinkActive"
+             routerLink="/company/salary-calculator"
+             routerLinkActive="active"
+             class="sub-link">Salary Calculator</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'incentive',
+          company_operation: ['apply_incentive', 'list_incentive'],
+          company_sub_module: ['add_apply_incentive', 'incentive_report'],
+          company_sub_operation: ['view']
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/incentive-management/list',
+            '/company/incentive-management/report-listing'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Incentive
+           <i data-toggle="tooltip" data-placement="top" title='"First, apply the Incentive."
+          "Then, run the Incentive."' class="fa fa-info-circle" aria-hidden="true"></i>
+        </span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'incentive',
+              company_operation: ['add_incentive', 'apply_incentive'],
+              company_sub_module: ['add_apply_incentive'],
+              company_sub_operation: ['view']
+            })
+          ">
+          <a routerLink="/company/incentive-management/list"
+             routerLinkActive="active"
+             class="sub-link">Apply/Run Incentive</a>
+        </li>
+
+        <!-- <li class="sub-item">
+                    <a routerLink="/company/incentive-management/list-refactor" routerLinkActive="active" class="sub-link">Apply Incentive New</a>
+                </li> -->
+
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'incentive',
+              company_sub_module: ['incentive_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['list_incentive']
+            })
+          ">
+          <a routerLink="/company/incentive-management/report-listing"
+             routerLinkActive="active"
+             class="sub-link">Incentive Report Listing</a>
+        </li>
+        <!-- <li class="sub-item">
+          <a href="javascript:;" routerLinkActive="active" class="sub-link"
+            >Incentive Report</a
+          >
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'bonus',
+          company_sub_module: [
+            'apply_bonus',
+            'bonus_report',
+            'payment_instructions'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'bonus_applyed',
+            'bonus_run',
+            'bonus_report',
+            'bonus_slip'
+          ]
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/bonus-management/run',
+            '/company/bonus-management/applied',
+            '/company/bonus-management/report-listing',
+            '/company/bonus-management/slip'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Bonus
+          <i data-toggle="tooltip" data-placement="top" title='"First, apply the bonus."
+          "Then, run the bonus."' class="fa fa-info-circle" aria-hidden="true"></i>
+        </span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'bonus',
+              company_sub_module: ['apply_bonus'],
+              company_sub_operation: ['view'],
+              company_operation: ['bonus_applyed']
+            })
+          ">
+          <a routerLink="/company/bonus-management/applied"
+             routerLinkActive="active"
+             class="sub-link">Apply Bonus</a>
+        </li>
+        <li class="sub-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'bonus',
+          company_sub_module: ['run_bonus'],
+          company_sub_operation: ['view'],
+          company_operation: ['bonus_run']
+        })
+      ">
+      <a routerLink="/company/bonus-management/run"
+         routerLinkActive="active"
+         class="sub-link">Run Bonus</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'bonus',
+              company_sub_module: ['bonus_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['bonus_report']
+            })
+          ">
+          <a routerLink="/company/bonus-management/report-listing"
+             routerLinkActive="active"
+             class="sub-link">Bonus Report Listing</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'bonus',
+              company_sub_module: ['bonus_slip'],
+              company_sub_operation: ['view'],
+              company_operation: ['bonus_slip']
+            })
+          ">
+          <a routerLink="/company/bonus-management/slip"
+             routerLinkActive="active"
+             class="sub-link">Bonus Slip</a>
+        </li>
+        <!-- <li class="sub-item">
+                    <a routerLink="/company/bonus-management/applied-refactor" routerLinkActive="active" class="sub-link">Apply Bonus New</a>
+                </li> -->
+
+        <!-- <li class="sub-item">
+                    <a routerLink="/company/bonus-management/report" routerLinkActive="active" class="sub-link">Bonus Report</a>
+                </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <!-- *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'advance_management',
+          company_sub_module: ['apply_advance', 'approve_advance', 'advance_report'],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'apply_approve_advance',
+            'advance_report'
+          ]
+        })
+      " -->
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/advance-management/manage',
+            '/company/advance-management/listing-console',
+            '/company/advance-management/run'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Advance  
+          <i data-toggle="tooltip" data-placement="top" title='"First, apply the Advance."
+          "Then, run the Advance."' class="fa fa-info-circle" aria-hidden="true"></i></span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'advance_management',
+              company_sub_module: ['apply_advance'],
+              company_sub_operation: ['view'],
+              company_operation: 'apply_approve_advance'
+            }) ||
+            Global.checkCompanyModulePermission({
+              company_module: 'advance',
+              company_sub_module: ['apply_advance'],
+              company_sub_operation: ['view'],
+              company_operation: 'apply_approve_advance'
+            })
+          ">
+          <a routerLink="/company/advance-management/manage"
+             routerLinkActive="active"
+             class="sub-link">Apply/Manage Advance</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'advance_management',
+              company_sub_module: ['approve_advance'],
+              company_sub_operation: ['view'],
+              company_strict: true
+            }) ||
+            Global.checkCompanyModulePermission({
+              company_module: 'advance',
+              company_sub_module: ['approve_advance'],
+              company_sub_operation: ['view'],
+              company_strict: true
+            })
+          ">
+          <a routerLink="/company/advance-management/run"
+             routerLinkActive="active"
+             class="sub-link">Run Advance</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'advance_management',
+              company_sub_module: ['advance_report'],
+              company_sub_operation: ['view'],
+              company_operation: 'advance_report'
+            }) ||
+            Global.checkCompanyModulePermission({
+              company_module: 'advance',
+              company_sub_module: ['advance_report'],
+              company_sub_operation: ['view'],
+              company_operation: 'advance_report'
+            })
+          ">
+          <a routerLink="/company/advance-management/listing-console"
+             routerLinkActive="active"
+             class="sub-link">Advance Listing Console</a>
+        </li>
+
+        <!-- <li class="sub-item">
+          <a href="javascript:;"
+             routerLinkActive="active"
+             class="sub-link">Advance Report</a>
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'salary_revision',
+          company_sub_module: [
+            'apply_revision',
+            'revision_report',
+            'run_arrear',
+            'arrear_report'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'apply_revision',
+            'revision_report',
+            'run_arrear',
+            'arrear_report'
+          ]
+        }) ||
+        Global.checkCompanyModulePermission({
+          company_module: 'revision_management',
+          company_sub_module: [
+            'apply_revision',
+            'revision_report',
+            'run_arrear',
+            'arrear_report'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'apply_revision',
+            'revision_report',
+            'run_arrear',
+            'arrear_report'
+          ]
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/revision-management/manage',
+            '/company/revision-management/run',
+            '/company/revision-management/new-report',
+            '/company/revision-management/emp/'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Salary Revision</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'salary_revision',
+              company_sub_module: ['apply_revision'],
+              company_sub_operation: ['view'],
+              company_operation: ['apply_revision']
+            }) ||
+            Global.checkCompanyModulePermission({
+              company_module: 'revision_management',
+              company_sub_module: ['apply_revision'],
+              company_sub_operation: ['view'],
+              company_operation: ['apply_revision']
+            })
+          ">
+          <a routerLink="/company/revision-management/manage"
+             routerLinkActive="active"
+             class="sub-link">Apply Revision</a>
+        </li>
+
+        <li class="sub-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'salary_revision',
+          company_sub_module: ['run_arrear'],
+          company_sub_operation: ['view'],
+          company_operation: ['run_arrear']
+        }) ||
+        Global.checkCompanyModulePermission({
+          company_module: 'revision_management',
+          company_sub_module: ['run_arrear'],
+          company_sub_operation: ['view'],
+          company_operation: ['run_arrear']
+        })
+      ">
+      <a routerLink="/company/revision-management/run"
+         routerLinkActive="active"
+         class="sub-link">Run Revision/Arrear</a>
+    </li>
+
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'salary_revision',
+              company_sub_module: ['revision_report', 'arrear_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['revision_report', 'arrear_report']
+            }) ||
+            Global.checkCompanyModulePermission({
+              company_module: 'revision_management',
+              company_sub_module: ['revision_report', 'arrear_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['revision_report', 'arrear_report']
+            })
+          ">
+          <a routerLink="/company/revision-management/new-report"
+             routerLinkActive="active"
+             class="sub-link">Revision Report</a>
+        </li>
+
+        <li class="sub-item"
+            [hidden]="true"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'salary_revision',
+              company_sub_module: ['arrear_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['arrear_report']
+            }) ||
+            Global.checkCompanyModulePermission({
+              company_module: 'revision_management',
+              company_sub_module: ['arrear_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['arrear_report']
+            })
+          ">
+          <a #reportarrearreport="routerLinkActive"
+             routerLink="/company/reports/arrear-report"
+             routerLinkActive="active"
+             class="sub-link">Arrear Report</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'over_time',
+          company_sub_module: ['ot_report'],
+          company_sub_operation: ['view'],
+          company_operation: ['overtime_report']
+        }) ||
+        Global.checkCompanyModulePermission({
+          company_module: 'over_time',
+          company_sub_module: ['ot_report'],
+          company_sub_operation: ['view'],
+          company_operation: ['overtime_report']
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [ngClass]="{}"
+         [class.active]="['/company/overtime/report'].includes(this.router.url)">
+        <!-- active: overtimwReport.isActive || runOvertime.isActive -->
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Over-Time</span>
+      </a>
+      <ul class="br-menu-sub">
+        <!-- <li class="sub-item">
+          <a
+            #runOvertime="routerLinkActive"
+            routerLink="/company/overtime/run"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >Run Overtime</a
+          >
+        </li> -->
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'over_time',
+              company_sub_module: ['ot_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['overtime_report']
+            })
+          ">
+          <a #overtimwReport="routerLinkActive"
+             routerLink="/company/overtime/report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Overtime Report</a>
+        </li>
+        <!-- <li class="sub-item">
+          <a href="javascript:;" class="sub-link">Overtime Report</a>
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'leave_management',
+          company_operation: ['leave_ledger', 'leave_report'],
+          company_sub_module: [
+            'leave_ledger',
+            'leave_encashment',
+            'leave_report'
+          ],
+          company_sub_operation: ['view']
+        }) ||
+        Global.checkCompanyModulePermission({
+          company_module: 'leave',
+          company_operation: ['leave_ledger', 'leave_report'],
+          company_sub_module: [
+            'leave_ledger',
+            'leave_encashment',
+            'leave_report'
+          ],
+          company_sub_operation: ['view']
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          ['/company/leave/encashment', '/company/leave/report'].includes(
+            this.router.url
+          )
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Leave</span>
+      </a>
+      <ul class="br-menu-sub">
+        <!-- <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'leave_management',
+              company_sub_module: ['leave_ledger'],
+              company_sub_operation: ['view'],
+              company_operation: ['leave_ledger']
+            })
+          "
+        >
+          <a href="javascript:;" class="sub-link">Leave Ledger</a>
+        </li> -->
+        <li *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'leave_management',
+              company_sub_module: ['leave_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['leave_report']
+            })
+          "
+            #leaveReport="routerLinkActive"
+            routerLink="/company/leave/report"
+            [hidden]="true"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-item">
+          <a href="javascript:;"
+             class="sub-link">Leave Report</a>
+        </li>
+        <li *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'leave',
+              company_sub_module: ['leave_encashment'],
+              company_operation: ['leave_encashment'],
+              company_sub_operation: ['view'],
+              company_strict: true
+            })
+          "
+            class="sub-item"
+            #leaveReport="routerLinkActive"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
+          <a routerLink="/company/leave/encashment"
+             class="sub-link">Leave Encashment Report</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'tds_management',
+          company_sub_module: [
+            'apply_tds_decl',
+            'approve_tds_decl',
+            'tds_report'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: ['apply_approve_tds', 'tds_report']
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/tds/apply-approve',
+            '/company/tds/report',
+            '/company/approval/tds-declaretion'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">TDS</span>
+      </a>
+      <ul class="br-menu-sub">
+        <!-- <li class="sub-item">
+          <a href="javascript:;" class="sub-link">Apply / Approve</a>
+        </li> -->
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'tds_management',
+              company_sub_module: ['apply_tds_decl', 'approve_tds_decl'],
+              company_sub_operation: ['view'],
+              company_operation: ['apply_approve_tds']
+            })
+          ">
+          <a #tdsApplyApprove="routerLinkActive"
+             routerLink="/company/tds/apply-approve"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Apply / Approve</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'tds_management',
+              company_sub_module: ['tds_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['tds_report']
+            })
+          ">
+          <a #tdsReport="routerLinkActive"
+             routerLink="/company/tds/report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">TDS Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/approval/tds-declaretion"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">TDS Declaretion</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/approval/tds-deduction"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">TDS Deduction</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#"
+         class="br-menu-link with-sub"
+         *ngIf="
+          Global.checkCompanyModulePermission({
+            company_module: 'shift_management',
+            company_sub_module: [
+              'define_shift',
+              'define_shift_allowance',
+              'allocate_shift',
+              'manage_shift_batch',
+              'shift_report',
+              'shift_duty_report',
+              'shift_earning_report'
+            ],
+            company_sub_operation: ['view'],
+            company_operation: [
+              'setup_shift',
+              'manage_shift_rate',
+              'define_shift_allowance_batch',
+              'shift_earning_report',
+              'shift_duty_report',
+              'shift_report',
+              'employee_shift_add'
+            ]
+          })
+        "
+         [class.active]="
+          [
+            '/company/shift-management/setup',
+            '/company/shift-management/add',
+            '/company/shift-management/rate',
+            '/company/shift-management/batch',
+            '/company/shift-management/report',
+            '/company/shift-management/earning-report',
+            '/company/shift-management/duty-report'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-clock tx-20"></i>
+        <span class="menu-item-label">Shift Management</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['define_shift'],
+              company_sub_operation: ['view'],
+              company_operation: 'setup_shift'
+            })
+          ">
+          <a routerLink="/company/shift-management/setup"
+             routerLinkActive="active"
+             class="sub-link">Define/Create Shift</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['define_shift_allowance'],
+              company_sub_operation: ['view'],
+              company_operation: 'manage_shift_rate'
+            })
+          ">
+          <a routerLink="/company/shift-management/rate"
+             routerLinkActive="active"
+             class="sub-link">Define Shift Allowance</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['allocate_shift'],
+              company_sub_operation: ['view'],
+              company_operation: 'employee_shift_add'
+            })
+          ">
+          <a routerLink="/company/shift-management/add"
+             routerLinkActive="active"
+             class="sub-link">Allocate Shift</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['manage_shift_batch'],
+              company_sub_operation: ['view'],
+              company_operation: 'define_shift_allowance_batch'
+            })
+          ">
+          <a routerLink="/company/shift-management/batch"
+             routerLinkActive="active"
+             class="sub-link">Manage Shift Batch</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['shift_earning_report'],
+              company_sub_operation: ['view'],
+              company_operation: 'shift_earning_report'
+            })
+          ">
+          <a routerLink="/company/shift-management/earning-report"
+             routerLinkActive="active"
+             class="sub-link">Shift Earinging Report</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['shift_duty_report'],
+              company_sub_operation: ['view'],
+              company_operation: 'shift_duty_report'
+            })
+          ">
+          <a routerLink="/company/shift-management/duty-report"
+             routerLinkActive="active"
+             class="sub-link">Shift Duty Report</a>
+        </li>
+        <!-- <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'shift_management',
+              company_sub_module: ['shift_report'],
+              company_sub_operation: ['view'],
+              company_operation: 'shift_report'
+            })
+          "
+        >
+          <a
+            routerLink="/company/shift-management/report"
+            routerLinkActive="active"
+            class="sub-link"
+            >Shift Report</a
+          >
+        </li> -->
+
+        <!-- <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+            >Shift Report</a
+          >
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Shift Batch Report</a></li>
+            <li><a class="dropdown-item" href="#">Shift Earning Report</a></li>
+            <li><a class="dropdown-item" href="#">Shift Duty Report</a></li>
+          </ul>
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'layoff_management',
+          company_sub_module: ['apply_lay-off', 'lay-off_report'],
+          company_sub_operation: ['view'],
+          company_operation: ['apply_layoff', 'layoff_report']
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          ['/company/layoff/apply', '/company/layoff/report'].includes(
+            this.router.url
+          )
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Lay Off</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'layoff_management',
+              company_sub_module: ['apply_lay-off'],
+              company_sub_operation: ['view'],
+              company_operation: ['apply_layoff']
+            })
+          ">
+          <a #applyLayoff="routerLinkActive"
+             routerLink="/company/layoff/apply"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Apply Layoff</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'layoff_management',
+              company_sub_module: ['lay-off_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['layoff_report']
+            })
+          ">
+          <a #layoffReport="routerLinkActive"
+             routerLink="/company/layoff/report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Layoff Report</a>
+        </li>
+        <!-- <li class="sub-item">
+          <a href="javascript:;" class="sub-link">Overtime Report</a>
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <a routerLink="/company/reports/instruction-report/data"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: false }"
+         class="br-menu-link">
+        <i class="menu-item-icon icon icon ion-document-text tx-24"></i>
+        <span class="menu-item-label">Payment Instructions</span>
+      </a>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'compliance',
+          company_sub_module: [
+            'compliance_listing',
+            'challan_data',
+            'pf_report',
+            'esi_report',
+            'p_tax_report',
+            'lwf_report'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'compliance_listing',
+            'challan_data_listing',
+            'pf_report',
+            'esi_report',
+            'p_tax_report',
+            'lwf_report'
+          ]
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/reports/pf-challan-report',
+            '/company/reports/pf-challan-report/data',
+            '/company/reports/pf-challan-report/data-new',
+            '/company/reports/esic-challan-report',
+            '/company/reports/esic-challan-report/data',
+            '/company/reports/compliance-listing-console',
+            '/company/reports/compliance/pf-report',
+            '/company/reports/compliance/pt-report',
+            '/company/reports/compliance/esic-report',
+            '/company/reports/compliance/upload-file-excel-contribution'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Compliance</span>
+      </a>
+      <ul class="br-menu-sub">
+        <!-- <li class="sub-item">
+          <a
+            #reportpfchallan="routerLinkActive"
+            routerLink="/company/reports/pf-challan-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >Generate PF Challan</a
+          >
+        </li> -->
+        <!-- <li class="sub-item">
+          <a
+            #reportpfchallandata="routerLinkActive"
+            routerLink="/company/reports/pf-challan-report/data"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >PF Challan Data/Confirm
+          </a>
+        </li> -->
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'compliance',
+              company_sub_module: ['compliance_listing'],
+              company_sub_operation: ['view'],
+              company_operation: ['compliance_listing']
+            })
+          ">
+          <a #complianceListingConsole="routerLinkActive"
+             routerLink="/company/reports/compliance-listing-console"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Compliance Listing Console</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'compliance',
+              company_sub_module: ['challan_data'],
+              company_sub_operation: ['view'],
+              company_operation: ['challan_data_listing']
+            })
+          ">
+          <a #reportpfchallandata="routerLinkActive"
+             routerLink="/company/reports/pf-challan-report/data-new"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Challan Data/Confirm
+          </a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'compliance',
+              company_sub_module: ['pf_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['pf_report']
+            })
+          ">
+          <a #reportpfReport="routerLinkActive"
+             routerLink="/company/reports/compliance/pf-report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">PF Report
+          </a>
+        </li>
+        <li hidden="true"
+            class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'compliance',
+              company_sub_module: ['p_tax_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['p_tax_report']
+            })
+          ">
+          <a #reporttaxReport="routerLinkActive"
+             routerLink="/company/reports/compliance/pt-report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">P.Tax Report
+          </a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'compliance',
+              company_sub_module: ['esi_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['esi_report']
+            })
+          ">
+          <a #reportesicReport="routerLinkActive"
+             routerLink="/company/reports/compliance/esic-report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">ESI Report
+          </a>
+        </li>
+        <li  class="sub-item">
+          <a #reportesicReport="routerLinkActive"
+             routerLink="/company/reports/compliance/bulk-kyc-upload-file"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Bulk KYC Upload File
+          </a>
+        </li>
+        <li  class="sub-item">
+          <a #reportesicReport="routerLinkActive"
+             routerLink="/company/reports/compliance/upload-file-excel-contribution"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Upload file Excel (Contribution)
+          </a>
+        </li>
+
+        <!-- <li class="sub-item">
+          <a href="javascript:;" class="sub-link">PF Report</a>
+        </li> -->
+        <!-- <li class="sub-item">
+          <a
+            #reportesicchallan="routerLinkActive"
+            routerLink="/company/reports/esic-challan-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >Generate ESIC Challan</a
+          >
+        </li> -->
+        <!-- <li class="sub-item">
+          <a
+            #reportesicchallandata="routerLinkActive"
+            routerLink="/company/reports/esic-challan-report/data"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >ESIC Challan Data/Confirm
+          </a>
+        </li> -->
+        <!-- <li class="sub-item">
+          <a href="javascript:;" class="sub-link">ESI Report</a>
+        </li> -->
+        <!-- <li class="sub-item">
+          <a href="javascript:;" class="sub-link">P.Tax Report</a>
+        </li> -->
+        <!-- <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'compliance',
+              company_sub_module: ['lwf_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['lwf_report']
+            })
+          "
+        >
+          <a href="javascript:void(0)" class="sub-link">LWF Report</a>
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="Global.checkCompanyModulePermission({
+          company_module: 'unique_payroll_reports',
+          company_sub_module: [
+            'gratuity_report',
+            'full_and_final_report',
+            'extra_earning_report',
+            'reimbursment_report',
+            'p_tax_report_internal',
+            'lwf_report_internal'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'gratuity_report',
+            'full_and_final_report',
+            'extra_earning_report',
+            'reimbursment_report',
+            'p_tax_report_internal',
+            'lwf_report_internal'
+          ]
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/reports/attendance-report',
+
+            '/company/reports/leave-encashment',
+            '/company/reports/leave-ledger-report',
+            '/company/reports/lwf-report'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Payroll Reports</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a routerLink="/company/attendance-management/attendance-listing-console"
+             class="sub-link">Attendance Reports</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/reports/master-sheet-new"
+             class="sub-link">Salary Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/incentive-management/report-listing"
+             class="sub-link">Incentive Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/bonus-management/report-listing"
+             class="sub-link">Bonus Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/advance-management/listing-console"
+             class="sub-link">Advance Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/revision-management/manage"
+             class="sub-link">Revision History</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/revision-management/new-report"
+             class="sub-link">Arrear Earning Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/overtime/report"
+             class="sub-link">Overtime Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/leave/report"
+             class="sub-link">Leave Reports</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/reports/leave-ledger-report"
+             class="sub-link">Leave Ledger Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/leave/encashment"
+             class="sub-link">Leave Encashment Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/tds/report"
+             class="sub-link">TDS Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/shift-management/batch"
+             class="sub-link">Shift Batch Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/shift-management/earning-report"
+             class="sub-link">Shift Earning Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/shift-management/duty-report"
+             class="sub-link">Shift Duty Report</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'unique_payroll_reports',
+              company_sub_module: ['full_and_final_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['full_and_final_report']
+            })
+          ">
+          <a href="javascript:;"
+             class="sub-link">Full & Final Report</a>
+        </li>
+        <!-- <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'unique_payroll_reports',
+              company_sub_module: ['gratuity_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['gratuity_report']
+            })
+          ">
+          <a href="javascript:;"
+             class="sub-link">Gratuity Report</a>
+        </li> -->
+        <li class="sub-item">
+          <a routerLink="/company/layoff/report"
+             class="sub-link">Lay Off Report</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'unique_payroll_reports',
+              company_sub_module: ['extra_earning_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['extra_earning_report']
+            })
+          ">
+          <a routerLink="/company/approval/extra-deduction"
+             class="sub-link">Extra Earning Reports</a>
+        </li>
+        <li class="sub-item">
+          <a href="javascript:;"
+             class="sub-link"
+             *ngIf="
+              Global.checkCompanyModulePermission({
+                company_module: 'unique_payroll_reports',
+                company_sub_module: ['reimbursment_report'],
+                company_sub_operation: ['view'],
+                company_operation: ['reimbursment_report']
+              })
+            ">Reimbursement Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/reports/compliance/pf-report"
+             class="sub-link">PF Report</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/reports/compliance/esic-repor"
+             class="sub-link">ESI Report</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'unique_payroll_reports',
+              company_sub_module: ['p_tax_report_internal'],
+              company_sub_operation: ['view'],
+              company_operation: ['p_tax_report_internal']
+            })
+          ">
+          <a routerLink="/company/reports/compliance/pt-report"
+             class="sub-link">P-Tax Report</a>
+        </li>
+        <!-- <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'unique_payroll_reports',
+              company_sub_module: ['lwf_report_internal'],
+              company_sub_operation: ['view'],
+              company_operation: ['lwf_report_internal']
+            })
+          "
+        >
+          <a routerLink="/company/reports/lwf-report" class="sub-link"
+            >LWF Report</a
+          >
+        </li> -->
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/govt-forms/wage-reister-wage-b',
+            '/company/shift-management/add',
+            '/company/shift-management/rate',
+            '/company/shift-management/batch',
+            '/company/shift-management/report',
+            '/company/reports/lwf-report',
+            '/company/govt-forms/full-and-final-history',
+            '/company/govt-forms/gratuity-form-l',
+            '/company/govt-forms/ptax-return-data',
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-clock tx-20"></i>
+        <span class="menu-item-label">Govt Forms & Registers</span>
+      </a>
+      <!-- <a href="#" class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Govt Forms & Registers</span>
+      </a> -->
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a routerLink="/company/employees"
+             class="sub-link">Form A (Master Roll)</a>
+        </li>
+        <li class="sub-item">
+          <a #govtForms&Register="routerLinkActive"
+             routerLink="/company/govt-forms/wage-reister-wage-b"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Form B (Wage Register)
+          </a>
+          <!-- <a href="javascript:;" class="sub-link"></a> -->
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/advance-management/listing-console"
+             class="sub-link">Form C (Advance Register)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/bonus-management/report-listing"
+             class="sub-link">Form C (Bonus Details)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/attendance-management/attendance-listing-console"
+             class="sub-link">Form D (Attendance Register)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/bonus-management/report-listing"
+             class="sub-link">Form D (Bonus Return)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/leave/encashment"
+             class="sub-link">Form E (Leave Registter)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/overtime/report"
+             class="sub-link">OT Reg Form 23 (CLRA)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/overtime/report"
+             class="sub-link">OT Reg (Factory Act)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/overtime/report"
+             class="sub-link">OT Reg (Payment of Wages Act)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/govt-forms/full-and-final-history"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Full And Final History</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/govt-forms/gratuity-form-l"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Form L (Gratuity)</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/govt-forms/esic-37-and-7a"
+             class="sub-link">ESIC form 37 & 7A</a>
+        </li>
+        <li hidden="true" class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'government_returns',
+              company_sub_module: ['clra_return'],
+              company_sub_operation: ['view'],
+              company_operation: ['clra_return']
+            })
+          ">
+          <a href="javascript:;"
+             class="sub-link">CLRA Return Data</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'government_returns',
+              company_sub_module: ['p_tax_return_data'],
+              company_sub_operation: ['view'],
+              company_operation: ['p_tax_return_data']
+            })
+          ">
+          <a routerLink="/company/govt-forms/ptax-return-data"
+          routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">P Tax Return Data</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'government_returns',
+              company_sub_module: ['lwf_return_data'],
+              company_sub_operation: ['view'],
+              company_operation: ['lwf_return_data']
+            })
+          ">
+          <a routerLink="/company/reports/lwf-report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">LWF Return Data</a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- <li class="br-menu-item">
+      <a href="#"
+         class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Appraisal</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a href="javascript:;"
+             class="sub-link">Apply Appraisal</a>
+        </li>
+        <li class="sub-item">
+          <a href="javascript:;"
+             class="sub-link">Appraisal Report</a>
+        </li>
+      </ul>
+    </li> -->
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'appraisal',
+          company_sub_module: ['apply_appraisal', 'appraisal_report'],
+          company_sub_operation: ['view'],
+          company_operation: ['apply_appraisal', 'appraisal_report'],
+          staff_strict: true
+        })
+      ">
+      <a href="#"
+         [class.active]="
+          [
+            '/company/appraisal/apply-appraisal',
+            '/company/appraisal/appraisal-report'
+          ].includes(this.router.url)
+        "
+         class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Appraisal</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'appraisal',
+              company_sub_module: ['apply_appraisal'],
+              company_sub_operation: ['view'],
+              company_operation: ['apply_appraisal'],
+              staff_strict: true
+            })
+          ">
+          <a routerLink="/company/appraisal/apply-appraisal"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Apply Appraisal</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'appraisal',
+              company_sub_module: ['appraisal_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['appraisal_report']
+            })
+          ">
+          <a routerLink="/company/appraisal/appraisal-report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Appraisal Report</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item"
+        *ngIf="
+        Global.checkCompanyModulePermission({
+          company_module: 'audit',
+          company_sub_module: [
+            'summary_report',
+            'variance_report',
+            'liability_report',
+            'contribution_paid_report',
+            'summary_briefcase'
+          ],
+          company_sub_operation: ['view'],
+          company_operation: [
+            'summary_report',
+            'variance_report',
+            'liability_report',
+            'contribution_paid_report',
+            'summary_briefcase'
+          ]
+        })
+      ">
+      <a href="#"
+         class="br-menu-link with-sub"
+         [class.active]="
+          [
+            '/company/audit/summary-report/pf',
+            '/company/audit/summary-report/esic',
+            '/company/audit/variance-report'
+          ].includes(this.router.url)
+        ">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Audit</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['summary_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['summary_report']
+            })
+          ">
+          <a #auditSummaryReport="routerLinkActive"
+             routerLink="/company/audit/summary-report/pf"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">PF Summary Report</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['summary_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['summary_report']
+            })
+          ">
+          <a #auditSummaryReport="routerLinkActive"
+             routerLink="/company/audit/summary-report/esic"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">ESIC Summary Report</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['variance_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['variance_report']
+            })
+          ">
+          <a #auditSummaryReport="routerLinkActive"
+             routerLink="/company/audit/variance-report"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Variance Report</a>
+        </li>
+        <!-- <li class="sub-item">
+          <a href="javascript:;"
+             class="sub-link">Summary Report</a>
+        </li> -->
+        <!-- <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['liability_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['liability_report']
+            })
+          "
+        >
+          <a href="javascript:;" class="sub-link">Liability Report</a>
+        </li>
+        <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['contribution_paid_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['contribution_paid_report']
+            })
+          "
+        >
+          <a href="javascript:;" class="sub-link">Contribution Paid Report</a>
+        </li> -->
+        <!-- <li class="sub-item">
+          <a href="javascript:;"
+             class="sub-link">Variance Report</a>
+        </li> -->
+        <li #auditSummaryReport="routerLinkActive"
+            routerLink="/company/audit/summary-briefcase"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-item"
+            *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['summary_briefcase '],
+              company_sub_operation: ['view'],
+              company_operation: ['summary_briefcase']
+            })
+          ">
+          <a href="javascript:;"
+             class="sub-link">Summary Briefcase</a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- <li class="br-menu-item">
+      <a
+        routerLink="/company/invoice"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="br-menu-link"
+       
+        
+      >
+        <i class="menu-item-icon icon ion-ios-speedometer-outline tx-24"></i>
+        <span class="menu-item-label">Invoice</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['summary_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['summary_report']
+            })
+          "
+        >
+          <a
+            #auditSummaryReport="routerLinkActive"
+            routerLink="/company/invoice"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >Invoice Report Listing</a
+          >
+        </li>
+        <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['summary_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['summary_report']
+            })
+          "
+        >
+          <a
+            #auditSummaryReport="routerLinkActive"
+            routerLink="/company/audit/summary-report/esic"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >ESIC Summary Report</a
+          >
+        </li>
+        <li
+          class="sub-item"
+          *ngIf="
+            Global.checkCompanyModulePermission({
+              company_module: 'audit',
+              company_sub_module: ['variance_report'],
+              company_sub_operation: ['view'],
+              company_operation: ['variance_report']
+            })
+          "
+        >
+          <a
+            #auditSummaryReport="routerLinkActive"
+            routerLink="/company/audit/variance-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sub-link"
+            >Variance Report</a
+          >
+        </li>
+      </ul>
+    </li> -->
+
+    <li class="br-menu-item">
+      <a href="#"
+         [class.active]="
+          [
+            '/company/invoice',
+            '/company/purchase-history',
+            '/company/consumption-history'
+          ].includes(this.router.url)
+        "
+         class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Invoice</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a routerLink="/company/invoice"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Invoice Report Listing</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/purchase-history"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Purchase History</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/consumption-history"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Consumption History</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#"
+         [class.active]="
+          [
+            '/company/approval/leave',
+            '/company/approval/extra-deduction',
+            '/company/approval/advance-request',
+            '/company/approval/extra-deduction',
+            '/company/approval/reimbursement',
+
+            '/company/approval/approval/tds-view'
+          ].includes(this.router.url)
+        "
+         class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Approval</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a routerLink="/company/approval/leave"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Leave</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/approval/reimbursement"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Reimbursement</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/approval/extra-deduction"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Extra Earning</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/approval/advance-request"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Advance Request</a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#"
+         [class.active]="
+          [
+            '/company/reimbursement/bank-instruction',
+            '/company/reimbursement/run',
+            '/company/extra-earning/run',
+            '/company/extra-earning/bank-instruction',
+            '/company/employee/extra-deduction',
+            '/company/reimbursement/apply'
+          ].includes(this.router.url)
+        "
+         class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Expense Management</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a routerLink="/company/reimbursement/apply"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Apply Reimbursement</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/reimbursement/run"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Run Reimbursement</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/reimbursement/bank-instruction"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Reimbursement Console</a>
+        </li>
+
+        <li class="sub-item">
+          <a routerLink="/company/extra-earning/run"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Run Extra Earning</a>
+        </li>
+        <li class="sub-item"
+            *ngIf="
+            AppComponent.checkCompanyModulePermission({
+              company_module: 'salary',
+              company_sub_module: ['extra_earning'],
+              company_sub_operation: ['view'],
+              company_operation: 'extra_earning'
+            })
+          ">
+          <a #salaryExtraEarning="routerLinkActive"
+             routerLink="/company/employee/extra-deduction"
+             routerLinkActive="active"
+             class="sub-link">Apply Extra Earning</a>
+        </li>
+        <li class="sub-item">
+          <a routerLink="/company/extra-earning/bank-instruction"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="sub-link">Extra Earning Console</a>
+        </li>
+      </ul>
+    </li>
+    <!-- <li class="br-menu-item">
+      <a href="#" class="br-menu-link with-sub">
+        <i class="menu-item-icon icon icon ion-cash tx-20"></i>
+        <span class="menu-item-label">Library</span>
+      </a>
+      <ul class="br-menu-sub">
+        <li class="sub-item">
+          <a href="javascript:;" class="sub-link">Forms</a>
+        </li>
+        <li class="sub-item">
+          <a href="javascript:;" class="sub-link">Acts</a>
+        </li>
+        <li class="sub-item">
+          <a href="javascript:;" class="sub-link">Circulars</a>
+        </li>
+      </ul>
+    </li> -->
+  </ul>
+</div>

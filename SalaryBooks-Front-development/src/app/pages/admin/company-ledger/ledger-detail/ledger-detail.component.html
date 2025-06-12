@@ -1,0 +1,167 @@
+
+<button
+type="button"
+class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+style="float: right;margin-bottom: 8px;"
+[disabled]="
+    !anyRowsChecked()
+  "
+  (click)="exportData('excel');"
+>
+<span
+  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+  >Export</span
+>
+</button>
+<button
+type="button"
+class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+style="float: right;margin-bottom: 8px;"
+[disabled]="
+    !anyRowsChecked()
+  "
+  (click)="exportData('pdf');"
+>
+<span
+  ><i style="font-size: 12px" class="mr-1 fa fa-file"></i
+  >PDF</span
+>
+</button>
+<button
+type="button"
+class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+style="float: right;margin-bottom: 8px;"(click)="cancellData();"><span>Cancel</span>
+</button>
+<div class="table-wrapper mt-1" style="margin-top:5px;">
+
+  
+
+    <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" *ngIf="showContent" id="my-datatable">
+        <thead>
+            <tr>
+                <th class=""><input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)"></th>
+                <th class="">SL No</th>
+                <th class="">Inv Dt</th>
+                <th class="">Inv No</th>
+                <th class="">Order Id</th>
+                <th class="">Transaction Id</th>
+                <th class="">Credit Purchesed</th>
+                <th class="">Rate</th>
+                <th class="">SAC No</th>
+                <th class="">Description</th>
+                <th class="">Promo Code</th>
+                <th class="">Free Credits</th>
+                <th class="">Taxable Value</th>
+                <th class="">TDS</th>
+                <th class="">IGST</th>
+                <th class="">CGST</th>
+                <th class="">SGST</th>
+                <th class="">Total GST</th>
+                <th class="">Invoive Amount</th>
+                <th class="">Gateway</th>
+                <th class="">Amoumt Remitted</th>
+                <th class="">Download Invoice</th>
+
+            </tr>
+           
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let row of rows">
+              <tr *ngFor="let item of row.credit_purchases;let i=index">
+                <td class="">
+                    <label
+                    class="d-flex align-items-center"
+                    [for]="'checkrow-' + item?.sl_no"
+                  >
+                    <input
+                      type="checkbox"
+                      class="mr-2"
+                      [attr.checked]="
+                      item?.checked == true ? 'checked' : null
+                      "
+                      id="checkrow-{{ item?.sl_no }}"
+                      [attr.data-checkbox-id]="row?._id"
+                      (click)="rowCheckBoxChecked($event, row)"
+                    />
+                   
+                  </label>    
+
+
+                </td>
+                <td class=""> {{
+                  item?.sl_no
+                  }}</td>
+                <td class="">{{item?.created_at | date:'dd/MM/YYYY'}}</td>
+                <td class="">{{item?.inv_id}}</td>
+                <td class="">{{item?.razorpay_order_id ?? 'N/A'}}</td>
+                <td class="">{{item?.razorpay_payment_id ??'N/A'}}</td>
+                <td class="">{{(item?.credit_qty) ?? 'N/A' }}</td>
+                <td class="">{{(item?.credit_amount | number:'1.2-2') ?? 'N/A' }}</td>
+                <td class="">{{item?.sac_no}}</td>
+                <td class="">{{item?.payment_details?.description ?? 'N/A'}}</td>
+                <td class="">{{item?.coupon_code}}</td>
+                <td class="">{{item?.free_credit}}</td>
+                <td class="">{{(item?.gst_amount | number:'1.2-2') ?? 'N/A'}}</td>
+                <td class="">{{item?.tds | number:'1.2-2'}}</td>
+                <td class="">{{item?.igst | number:'1.2-2'}}</td>
+                <td class="">{{item?.cgst | number:'1.2-2'}}</td>
+                <td class="">{{item?.sgst | number:'1.2-2'}}</td>
+                <td class="">{{(item?.gst_amount | number:'1.2-2') ?? 'N/A'}}</td>
+                <td class="">{{((item?.gst_amount ?? 0)+item?.credit_amount)}}</td>
+                <td class="">{{item?.gateway | titlecase}}</td>
+                <td class=""></td>
+                <td class="">
+                    <button
+                    type="button"
+                    class="btn btn-info tx-11 tx-mont tx-medium h-100 flex-1 mr-2"
+                    style="float: right;"
+                    (click)="exportSingleData(item);"
+                  >
+                    <span
+                      ><i style="font-size: 12px" class="mr-1 fa fa-file-pdf-o"></i
+                      >PDF</span
+                    >
+                    </button>  
+                </td>
+
+            </tr>
+            </ng-container>
+            
+          
+            
+        </tbody>
+    </table>
+</div>
+
+<button id="historymmodalbutton" [hidden]="true" data-toggle="modal" data-target="#historymodal"></button>
+<div id="historymodal" tabindex='-1' class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-header pd-x-20">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold"></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                <div class="" *ngIf="ledgerDetails">
+                    <table class="table display responsive nowrap wd-100p employee-table" >
+                      <tr>
+                        <td>
+                       
+                        <iframe frameBorder="0" *ngIf="ledgerDetails?.file_path!=''" [src]="ledgerDetails?.file_path"  style="height: 800px;width:100%;border:none;" ></iframe>
+                        </td>
+                      </tr>
+                        
+
+                 
+                        
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn text-uppercase btn-secondary tx-size-xs" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

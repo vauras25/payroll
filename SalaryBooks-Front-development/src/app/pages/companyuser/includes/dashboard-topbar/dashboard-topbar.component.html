@@ -1,0 +1,362 @@
+<div class="br-header">
+    <div class="br-header-left">
+        <!-- <div class="navicon-left hidden-md-down"><a id="btnLeftMenu" href="javascript:void(0);"><i class="icon ion-navicon-round"></i></a></div>
+         <img src="../../../../../assets/img/sb.png" alt="Logo" width="120" height="50"/> -->
+
+        <div class="navicon-left hidden-md-down">
+            <a id="btnLeftMenu"
+               href="javascript:void(0);"
+               (click)="toggleMenu()">
+                <i class="icon ion-navicon-round"></i>
+            </a>
+        </div>
+
+        <img *ngIf="isMenuOpen" src="../../../../../assets/img/sb.png" alt="Logo" width="120" height="50" />
+
+
+        <div class="navicon-left hidden-lg-up"><a id="btnLeftMenuMobile"
+               href="javascript:void(0);"><i class="icon ion-navicon-round"></i></a></div>
+    </div>
+    <div class="br-header-right">
+        <nav class="nav">
+            <!-- <div class="dropdown">
+                <a href="javascript:void(0);" class="nav-link pd-x-7 pos-relative" data-toggle="dropdown">
+                    <i class="icon ion-ios-bell-outline tx-24"></i>
+                    <span class="square-8 bg-danger pos-absolute t-15 r-5 rounded-circle"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-header">
+                    <div class="dropdown-menu-label">
+                        <label>Notifications</label>
+                        <a href="javascript:void(0);">Mark All as Read</a>
+                    </div>
+
+                    <div class="media-list">
+                        <a href="javascript:void(0);" class="media-list-link read">
+                            <div class="media">
+                                <img src="https://via.placeholder.com/500" alt="">
+                                <div class="media-body">
+                                    <p class="noti-text"><strong>Suzzeth Bungaos</strong> tagged you and 18 others in a post.</p>
+                                    <span>January 03, 2021 8:45am</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="javascript:void(0);" class="media-list-link read">
+                            <div class="media">
+                                <img src="https://via.placeholder.com/500" alt="">
+                                <div class="media-body">
+                                    <p class="noti-text"><strong>Mellisa Brown</strong> appreciated your work <strong>The Social Network</strong></p>
+                                    <span>January 02, 2021 12:44am</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="javascript:void(0);" class="media-list-link read">
+                            <div class="media">
+                                <img src="https://via.placeholder.com/500" alt="">
+                                <div class="media-body">
+                                    <p class="noti-text">20+ new items added are for sale in your <strong>Sale Group</strong></p>
+                                    <span>January 01, 2021 10:20pm</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="javascript:void(0);" class="media-list-link read">
+                            <div class="media">
+                                <img src="https://via.placeholder.com/500" alt="">
+                                <div class="media-body">
+                                    <p class="noti-text"><strong>Julius Erving</strong> wants to connect with you on your conversation with <strong>Ronnie Mara</strong></p>
+                                    <span>January 01, 2021 6:08pm</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-footer">
+                            <a href="javascript:void(0);"><i class="fa fa-angle-down"></i> Show All Notifications</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="dropdown">
+                <a href="javascript:void(0);"
+                   class="nav-link nav-link-profile"
+                   data-toggle="dropdown">
+                    <span class="logged-name hidden-md-down text-capitalize">
+                        <ng-container *ngIf="userDetails.user_type == 'staff'; else companyAdminName">
+                            {{userDetails.first_name}} {{userDetails.last_name}}
+                        </ng-container>
+                        <ng-template #companyAdminName>
+                            {{userDetails.establishment_name}}
+                        </ng-template>
+                    </span>
+
+                    <ng-container *ngIf="userDetails.com_logo; else elseBlock1">
+                        <img src="{{Global.BACKEND_URL}}/{{userDetails.com_logo}}"
+                             class="wd-32 rounded-circle"
+                             alt="">
+                    </ng-container>
+                    <ng-template #elseBlock1>
+                        <img src="https://via.placeholder.com/500"
+                             class="wd-32 rounded-circle"
+                             alt="">
+                    </ng-template>
+
+                    <span class="square-10 bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-header wd-250">
+                    <div class="tx-center">
+                        <a>
+                            <ng-container *ngIf="userDetails.com_logo; else elseBlock2">
+                                <img src="{{Global.BACKEND_URL}}/{{userDetails.com_logo}}"
+                                     class="wd-80"
+                                     alt="">
+                            </ng-container>
+                            <ng-template #elseBlock2>
+                                <img src="https://via.placeholder.com/500"
+                                     class="wd-80"
+                                     alt="">
+                            </ng-template>
+                            <!-- <span class="dbpick-icon" data-toggle="modal" data-target="#compLogoModal"><i class="fa fa-camera"></i></span> -->
+                        </a>
+                        <h6 class="logged-fullname text-capitalize">
+                            <ng-container *ngIf="userDetails.user_type == 'staff'; else companyAdminName">
+                                {{userDetails.first_name}} {{userDetails.last_name}}
+                            </ng-container>
+                        </h6>
+                        <p>{{userDetails.email_id}}</p>
+                    </div>
+                    <hr>
+                    <div class="tx-center">
+                        <span class="profile-earning-label">Credit Balance</span>
+                        <h3 class="profile-earning-amount"
+                            (click)="fetchTransactionHistory()"
+                            style="cursor: pointer;">{{userDetails?.credit_stat ?? 0}}</h3>
+                        <button class="btn btn-sm btn-info mt-2"
+                                (click)="initCreditPurchase()">Purchase Credit</button>
+                    </div>
+                    <hr>
+                    <ul class="list-unstyled user-profile-nav">
+                        <li><a routerLink="/company/profile"
+                               routerLinkActive="active"
+                               [routerLinkActiveOptions]="{exact: true}"><i class="icon ion-ios-home"></i> Company Profile</a></li>
+                        <li><a routerLink="/company/settings"
+                               routerLinkActive="active"
+                               [routerLinkActiveOptions]="{exact: true}"><i class="icon ion-ios-gear"></i>Company Settings</a></li>
+                        <li><a style="cursor: pointer;"
+                               (click)="logout()"><i class="icon ion-power"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<button id="creditPurchaseModalButton"
+        [hidden]="true"
+        data-toggle="modal"
+        data-target="#creditPurchaseModal"></button>
+<div id="creditPurchaseModal"
+     tabindex='-1'
+     class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-md"
+         role="document">
+        <div class="modal-content bd-0 tx-14">
+            <div class="modal-header pd-y-20 pd-x-25">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Purchase Credit</h6>
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="creditForm">
+                <div class="modal-body pd-25">
+                    <div class="row">
+                        <div class="col-lg-12 mb-3">
+                            <label>Credit Amount&nbsp;<span class="text-danger">*</span></label>
+                            <input type="number"
+                                   class="form-control"
+                                   formControlName="credit_amount"
+                                   (input)="calculatePayableTotal('credit_amount')">
+
+                            <p class="mt-1 text-danger"
+                               *ngIf="creditForm.controls.credit_amount.hasError('required') && ( creditForm.controls.credit_amount.dirty || creditForm.controls.credit_amount.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-lg-12 mb-3">
+                            <label>Credit Token&nbsp;<span class="text-danger">*</span></label>
+                            <input type="number"
+                                   class="form-control"
+                                   formControlName="credit_coupon"
+                                   (input)="calculatePayableTotal('credit_coupon')">
+
+                            <p class="mt-1 text-danger"
+                               *ngIf="creditForm.controls.credit_coupon.hasError('required') && ( creditForm.controls.credit_coupon.dirty || creditForm.controls.credit_coupon.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-lg-12 mb-3">
+                            <label>Coupon Code</label>
+                            <div class="input-group">
+                                <input type="text"
+                                       class="form-control"
+                                       formControlName="coupon_code"
+                                       [readonly]="appliedCoupon != null">
+                                <div class="input-group-append">
+                                    <ng-container *ngIf="!appliedCoupon; else removeCouponBlock">
+                                        <button type="button"
+                                                (click)="applyCouponCode($event)"
+                                                [disabled]="!creditForm.valid || !creditForm.value.coupon_code"
+                                                class="input-group-text btn btn-info bg-info text-white bd-info"><span>Apply Coupon</span></button>
+                                    </ng-container>
+
+                                    <ng-template #removeCouponBlock>
+                                        <button type="button"
+                                                (click)="removeCouponCode()"
+                                                class="input-group-text btn btn-info bg-danger text-white bd-danger"><span>Remove Coupon</span></button>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <p *ngIf="appliedCoupon"
+                               class="mt-1 mb-0 text-center text-success">Extra <b class="text-info">{{appliedCoupon?.coupon_amount}} Credits</b> will be added</p>
+
+                            <p class="mt-1 text-danger"
+                               *ngIf="creditForm.controls.coupon_code.hasError('required') && ( creditForm.controls.coupon_code.dirty || creditForm.controls.coupon_code.touched )">This field is required</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"
+                     style="display: block; float: left; width: 100%; padding: 15px 26px;">
+                    <span *ngIf="this.creditForm.value.payable_amount"
+                          class="payableamount text-primary">
+                        &#8377;{{this.creditForm.value.payable_amount}}&nbsp;<small>(Inc. GST)</small>
+                    </span>
+
+                    <button type="button"
+                            (click)="purchaseCredit($event)"
+                            [disabled]="!creditForm.valid"
+                            type="button"
+                            class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium"
+                            style="float: right;">
+                        <span>Purchase</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<button id="redeemedListModalButton"
+        [hidden]="true"
+        data-toggle="modal"
+        data-target="#redeemedListModal"></button>
+<div id="redeemedListModal"
+     tabindex='-1'
+     class="modal fade effect-slide-in-right">
+    <div class="modal-dialog modal-xl modal-dialog-centered"
+         role="document">
+        <div class="modal-content tx-size-sm">
+            <div class="modal-header pd-x-20">
+                <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">View Transaction History</h6>
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped bd mb-0">
+                        <thead class="bg-info text-white">
+                            <th>
+                                <label class="d-flex align-items-center mb-0"
+                                       for="select-all">
+                                    <input class="mb-0 mr-1"
+                                           id="select-all"
+                                           [value]="rowCheckedAll"
+                                           (change)="allRowsCheckboxChecked($event)"
+                                           *ngIf="transactionHistory.length>0"
+                                           type="checkbox" />
+                                    SL No.
+                                </label>
+                            </th>
+                            <th>Date</th>
+                            <th>Invoice No</th>
+                            <th>Transaction No</th>
+                            <th>Gateway</th>
+                            <th>Gateway ID</th>
+                            <th>Inv Value</th>
+                            <th>Payment Value</th>
+                            <th>Mode</th>
+                            <th>Status</th>
+                            <th>Receipt</th>
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of transactionHistory; let i = index">
+                                <td>
+                                    <label class="d-flex align-items-center"
+                                           [for]="'checkrow-' + (i + 1)">
+                                        <input type="checkbox"
+                                               class="mr-2"
+                                               [attr.checked]="item?.checked == true ? 'checked' : null"
+                                               id="checkrow-{{ i + 1 }}"
+                                               [attr.data-checkbox-id]="item?._id"
+                                               (click)="rowCheckBoxChecked($event, item)" />
+                                        {{
+                                        Global.getTableSerialNumber(
+                                        i,
+                                        paginationOptions.limit,
+                                        paginationOptions.page
+                                        )
+                                        }}
+                                    </label>
+
+                                </td>
+                                <td>{{item?.created_at | date:'dd/MM/YYYY'}}</td>
+                                <td>{{item?.inv_id ?? 'N/A'}}</td>
+                                <td>{{item?.razorpay_payment_id ?? 'N/A'}}</td>
+                                <td>Razorpay</td>
+                                <td>{{item?.razorpay_order_id ?? 'N/A'}}</td>
+                                <td>{{(item?.credit_qty | number) ?? 'N/A'}}</td>
+                                <td>{{(item?.credit_amount | number) ?? 'N/A'}}</td>
+                                <td>{{item?.method ?? 'N/A'}}</td>
+                                <td>{{(item?.status | titlecase) ?? 'N/A'}}</td>
+                                <td><button class="btn btn-primary btn-icon mx-1"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Download"
+                                            id="downloadButton"
+                                            (click)="exportsingleData(item?._id)">
+                                        <div style="width:25px; height:25px;"><i class="fa fa-download"></i></div>
+                                    </button></td>
+
+                            </tr>
+                            <tr *ngIf="transactionHistory.length == 0">
+                                <td colspan="100%"
+                                    class="text-center"
+                                    colspan="11">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <app-custom-pagination [rows]="transactionHistory"
+                                       [paginationOptions]="paginationOptions"
+                                       (onPageClicked)="fetchTransactionHistory($event)"></app-custom-pagination>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        (click)="exportData();"
+                        class="btn text-uppercase btn-secondary tx-size-xs">Export</button>
+
+                <button type="button"
+                        class="btn text-uppercase btn-secondary tx-size-xs"
+                        data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

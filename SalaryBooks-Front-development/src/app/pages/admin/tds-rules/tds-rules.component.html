@@ -1,0 +1,417 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Government Rules</a>
+            <a class="breadcrumb-item">TDS Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <!-- <i class="icon icon"></i> -->
+        <i class="icon icon ion-card"></i>
+
+        <div>
+            <h4>TDS Rule Management</h4>
+            <p class="mg-b-0">Create, assign, edit, view rights</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody" id="role-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Add TDS Rule</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit TDS Rule</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-7 ">
+                <form [formGroup]="tdsForm" *ngIf="tdsForm">
+                    <h6 class="br-section-label mb-3"></h6>
+                    <div class="">
+                      <table class="table table-bordered define-lwf-rule-table nowrap">
+                        <tbody>
+                          <tr>
+                            <td class="p-0" colspan="3">
+                              <table class="w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Salary Heads</th>
+                                        <th >Income tax Earning Heads</th>
+                                    </tr>
+                                </thead>
+                               
+                              <tbody>
+                                <ng-container formArrayName="salary_head_to_earning_head" >
+                                    <tr *ngFor="let templateDataControl of getTemplateRows('salary_head_to_earning_head'); let i = index" [formGroupName]="i">
+                                        <td *ngIf="salaryHeads.length>0">
+                                            <ngx-select-dropdown
+                                            formControlName="salary_head"
+                                            [options]="salaryHeads"
+                                            class="form-control p-1"
+                                            [config]="{ search: true, placeholder: 'Select Head' }"
+                                           
+                                          ></ngx-select-dropdown>
+                                        </td>
+                                        <td *ngIf="gov_earning_heads.length>0">
+                                            
+                                            <ngx-select-dropdown
+                                            formControlName="tax_earning_head"
+                                            [options]="gov_earning_heads"
+                                            class="form-control p-1"
+                                            [config]="{ search: true, placeholder: 'Select Head' }"
+                                           
+                                          ></ngx-select-dropdown>
+                                        </td>    
+                                        <td>
+                                            <div class="">
+                                                <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('salary_head_to_earning_head')" class="btn btn-primary btn-icon mg-r-5" *ngIf="((getTemplateRows('salary_head_to_earning_head').length - 1) == i)">
+                                                <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                            </button>
+            
+                                                <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('salary_head_to_earning_head', i)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('salary_head_to_earning_head').length > 1">
+                                                <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                            </button>
+                                            </div>
+                                        </td>
+                                </ng-container>    
+                               
+                              </tbody>
+                              
+                              </table>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="5">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch25" 
+                                    [checked]="tdsForm.value.define_deductions_rebate=='yes'" (click)="definerebate($event,'define_deductions_rebate')"
+                                    >
+                                    <label class="custom-control-label" for="customSwitch25"> Define Deductions/Rebate</label>
+                                  </div>
+                            </td>
+                        </tr>
+                        <tr>
+                           <td >Financial Year<span class="text-danger">*</span></td>
+                           <td>
+                            <input type="text" class="form-control" placeholder="Financial Year" formControlName="define_deductions_rebate_financial_year">
+                           </td>
+                           <td colspan="3">
+                            <div class="form-check">
+                                <label class="form-check-label" style="width: 104px;">
+                                  <input class="form-check-input radio-inline" type="radio" formControlName="define_deductions_rebate_status" id="gridRadios1" value="old_regime">
+                                  OLD Regime</label>
+                                  <label class="form-check-label">
+                                  <input class="form-check-input radio-inline" type="radio" formControlName="define_deductions_rebate_status" id="gridRadios2" value="new_regime">
+                                  NEW Regime</label>
+                                
+                              </div>
+                           </td>
+            
+                          
+                        </tr>
+                      
+                        <tr>
+                          <td colspan="5"   class="tds_accordian" data-toggle="collapse" href="#old_regime">OLD Regime</td>
+                        </tr>
+                        <tr>
+                          <td colspan="5" id="old_regime" class="panel-collapse ">
+                            <ng-container >
+                              <tr>
+                                  <td colspan="5">
+                                     
+                                      <div class="custom-control custom-switch">
+                                          <input type="checkbox" class="custom-control-input" id="customSwitch21" 
+                                          [checked]="tdsForm.value.define_standard_deduction=='yes'" 
+                                          (click)="definerebate($event,'define_standard_deduction')"
+                                          >
+                                          <label class="custom-control-label" for="customSwitch21">Define Standard Deduction <span class="text-danger">*</span></label>
+                                        </div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td colspan="5">Standard Deduction for the FY <span class="text-danger">*</span></td>
+                                  <td colspan="5"><input type="text" placeholder="Standard Deduction for the FY" class="form-control" formControlName="standard_deduction_amount"></td>
+                              </tr>
+                              <tr>
+                                  <td colspan="10">
+                  
+                                      <div class="custom-control custom-switch">
+                                          <input type="checkbox" class="custom-control-input" id="customSwitch23" 
+                                          [checked]="tdsForm.value.define_rebate=='yes'" (click)="definerebate($event,'define_rebate')"
+                                          >
+                                          <label class="custom-control-label" for="customSwitch23">Define Rebate (<span class="text-danger">*</span>)</label>
+                                        </div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td colspan="3">Eligibility for Rebate is taxable Value <span class="text-danger">*</span></td>
+                                  <td colspan="3">
+                                      <div class="form-check">
+                                          <label class="form-check-label"  style="width: 104px;">
+                                            <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value" id="gridRadios3" value="higher">
+                                            Higher than </label>
+                                            <label class="form-check-label">
+                                            <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value" id="gridRadios4" value="lower">
+                                            Lower than</label>
+                                          
+                                        </div>
+                                  </td>
+                                  <td colspan="3">
+                                      <input type="text" class="form-control" placeholder="Taxable Value(*)" formControlName="eligibility_for_rebate_is_taxable_amount">
+                                  </td>
+                                  
+                              </tr>
+                              <tr>
+                                  <td colspan="5">
+                                      <div class="custom-control custom-switch">
+                                          <input type="checkbox" class="custom-control-input" id="customSwitch24" 
+                                          [checked]="tdsForm.value.define_hra_deduction_limits!=null"
+                                          >
+                                          <label class="custom-control-label" for="customSwitch24"> DefineHRA Deduction limits   ---   Consider  Higher <span class="text-danger">*</span></label>
+                                        </div>
+                                  </td>
+                                  <td colspan="5">
+                                      <div class="form-check">
+                                          <label class="form-check-label"  style="width: 104px;">
+                                            <input class="form-check-input radio-inline" type="radio" formControlName="define_hra_deduction_limits" id="gridRadios5" value="higher">
+                                            Higher</label>
+                                            <label class="form-check-label">
+                                            <input class="form-check-input radio-inline" type="radio" formControlName="define_hra_deduction_limits" id="gridRadios6" value="lower">
+                                            Lower</label>
+                                          
+                                        </div>
+                                  </td>
+                              </tr>
+                              <ng-container formGroupName="actual_hra_earned_metro">
+                                  <tr>
+                                      <td colspan="2">Actual HRAearned (Metro)</td>
+                                      <td colspan="2"><input type="text" placeholder="Actual HRAearned (Metro)" class="form-control" formControlName="percentage"></td>
+                                      <td colspan="2">Of Basic</td>
+                                      <td colspan="2">
+                                          Or Actual declared HRA whichever is <span class="text-danger">*</span>
+                                      </td>
+                                      <td colspan="2">
+                                          <div class="form-check">
+                                              <label class="form-check-label"  style="width: 104px;">
+                                                <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios55" value="higher">
+                                                Higher</label>
+                                                <label class="form-check-label">
+                                                <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios66" value="lower">
+                                                Lower</label>
+                                              
+                                            </div>
+                                      </td>
+                                  </tr>
+                              </ng-container>
+                              <ng-container formGroupName="actual_hra_earned_non_metro">
+                                  <tr>
+                                      <td colspan="2">Actual HRA (earned) Non-Metro</td>
+                                      <td colspan="2"><input type="text" placeholder="Actual HRA (earned) Non-Metro" class="form-control" formControlName="percentage">
+                  
+                                      
+                                      </td>
+                                      <td colspan="2">Of Basic</td>
+                                      <td colspan="2">
+                                          Or Actual declared HRA whichever is <span class="text-danger">*</span>
+                                      </td>
+                                      <td colspan="2">
+                                          <div class="form-check">
+                                              <label class="form-check-label"  style="width: 104px;">
+                                                <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios7" value="higher">
+                                                Higher</label>
+                                                <label class="form-check-label">
+                                                <input class="form-check-input radio-inline" type="radio" formControlName="actual_declared_hra_whichever" id="gridRadios8" value="lower">
+                                                Lower</label>
+                                              
+                                            </div>
+                                      </td>
+                                  </tr>
+                              </ng-container>
+                  
+                              <ng-container formGroupName="actual_hra_earned_non_metro">
+                                  <tr>
+                                      <td colspan="2">Actual rent Declared</td>
+                                      <td colspan="2">Less <input type="text" class="form-control" placeholder="Less" formControlName="percentage"></td>
+                                      <td colspan="6">Of Basic</td>
+                                     
+                                  </tr>
+                              </ng-container>
+                              <tr>
+                                  <td colspan="10">
+                                      <div class="custom-control custom-switch">
+                                          <input type="checkbox" class="custom-control-input" id="p_tax_chapter_vi_deduction_limits" 
+                                          [checked]="tdsForm.value.define_p_tax_chapter_vi_deduction_limits=='yes'"  (click)="definerebate($event,'define_p_tax_chapter_vi_deduction_limits')" 
+                                          >
+                                          <label class="custom-control-label" for="p_tax_chapter_vi_deduction_limits"> Define P.TAX & Chapter VI Deduction limits</label>
+                                        </div>
+                                  </td>
+                              </tr>
+                              <tr>
+                               
+                             
+                                  <tr>
+                                      <td colspan="5">Deduction Items</td>
+                                      <td colspan="5">UPPER LIMIT</td>
+                                  </tr>
+                                      
+                                  <ng-container formArrayName="deduction_items">
+                                  <ng-container *ngFor="let deductDataControl of deductionRows(); let i = index" [formGroupName]="i">
+                                    
+                                      <ng-container formArrayName="children">
+                                        <ng-container *ngIf="deductionSubItems(i).controls.length>0;else no_children">
+                                          
+                                          <tr *ngFor="let subItem of deductionSubItems(i).controls; let j=index" [formGroupName]="j">
+                                            <td colspan="5" [ngClass]="{'text-center': !deductionSubItems(i).controls[j]?.value?.is_parent}"  >
+                                               <label>{{deductionSubItems(i).controls[j]?.value?.label  }}</label> 
+                  
+                                                <br/>
+                                                  <div class="custom-control custom-switch inline_custom_chk" >
+                                                    <input type="checkbox" class="custom-control-input" id="customSwitch{{i}}{{j}}_na" 
+                                                    (click)="duductCheckbox($event,i,j)" 
+                                                    value="NA"
+            
+                                                    [checked]="deductionSubItems(i).controls[j]?.value?.type=='NA'"
+            
+                                                    [disabled]="deductionSubItems(i).controls[j]?.value?.type=='no_limit'"
+                                                    >
+                                                    <label class="custom-control-label" for="customSwitch{{i}}{{j}}_na">N/A</label>
+                                                  </div>
+                                                  <div class="custom-control custom-switch inline_custom_chk" >
+                  
+                                                    <input type="checkbox" class="custom-control-input" id="customSwitch{{i}}{{j}}_limit" 
+                  
+                                                    [disabled]="deductionSubItems(i).controls[j]?.value?.type=='NA'"
+                                                   
+                                                    (click)="duductCheckbox($event,i,j)" 
+                                                    
+                                                    value="no_limit"
+                                        
+                                                    [checked]="deductionSubItems(i).controls[j]?.value?.type=='no_limit'"
+                                                    
+                                                    >
+                                                    <label class="custom-control-label" for="customSwitch{{i}}{{j}}_limit">No Limit</label>
+                  
+                                                  </div>
+                                            </td>
+                                            <td colspan="5">
+                  
+                                                <input type="text" class="form-control" placeholder="Amount"  [readOnly]="deductionSubItems(i).controls[j]?.value?.type!='' && deductionSubItems(i).controls[j]?.value?.type!='limit'" formControlName="amount">
+                                            </td>
+                                          </tr>   
+                                        
+                  
+                                        </ng-container>
+                                      
+                  
+                                       
+                                       </ng-container>
+                                        
+                                    </ng-container>
+                                    </ng-container>
+                            </ng-container>
+            
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="5" class="tds_accordian" data-toggle="collapse" href="#new_regime">New Regime</td>
+                        </tr>
+                        <tr>
+                          <td colspan="5" id="new_regime" class="panel-collapse " style="width: 100%;">
+                            
+                            <ng-container >
+                              <tr>
+                                  <td colspan="5">
+                                      <div class="custom-control custom-switch">
+                                          <input type="checkbox" class="custom-control-input" id="customSwitch26" 
+                                          [checked]="tdsForm.value.define_standard_deduction_new_regime=='yes'" (click)="definerebate($event,'define_standard_deduction_new_regime')"
+                                          >
+                                          <label class="custom-control-label" for="customSwitch26"> Define Standard Deduction</label>
+                                  </div>
+                              </td>
+                              </tr>
+                              <tr>
+                                  <td colspan="5">Standard Deduction for the FY <span class="text-danger"> * </span></td>
+                                  <td colspan="5"><input type="text" formControlName="standard_deduction_amount_new_regime" placeholder="Standard Deduction for the FY" class="form-control"></td>
+                              </tr>
+                              <tr>
+                                  <td colspan="5"><input type="checkbox" [checked]="tdsForm.value.define_rebate_new_regime=='yes'" (click)="definerebate($event,'define_rebate_new_regime')"> Define Rebate (<span class="text-danger">*</span>)</td>
+                              </tr>
+                              <tr>
+                                  <td colspan="5">Eligibility for Rebate is taxable Value (<span class="text-danger">*</span>)</td>
+                                  <td colspan="5">
+                                      <div class="form-check">
+                                          <label class="form-check-label" style="width: 100px;">
+                                            <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value_new_regime" id="gridRadios17" value="higher">
+                                            Higher than </label>
+                                            <label class="form-check-label">
+                                            <input class="form-check-input radio-inline" type="radio" formControlName="eligibility_for_rebate_is_taxable_value_new_regime" id="gridRadios18" value="lower">
+                                            Lower than</label>
+                                          
+                                        </div>
+                                        <td>
+                                          <input type="text" class="form-control" placeholder="Amount(*)" formControlName="eligibility_for_rebate_is_taxable_amount_new_regime">
+                                        </td>
+              
+                              </tr>
+                          </ng-container>
+                          </td>
+                        </tr>
+                          
+                           
+                        
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="text-center">
+                     
+            
+                      <ng-container *ngIf="!editActionId; else updateButton">
+                        <button type="button" (click)="add($event)" [disabled]="!tdsForm.valid"  class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150">
+                          <span>Save</span>
+                        </button>
+                      </ng-container>
+                      <ng-template #updateButton>
+                        <button type="button" (click)="add($event)" [disabled]="!tdsForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150">
+                          <span>Update</span>
+                        </button>
+                      </ng-template>
+                    </div>
+                  </form>   
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-card"></i>
+        <div>
+            <h4>TDS Rules</h4>
+            <p class="mg-b-0">List of predefined role templates</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-15p">SL</th>
+
+                            <th class="wd-15p text-center">Status</th>
+                            <th class="wd-15p text-center">Financial year</th>
+
+                            <th class="wd-25p text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

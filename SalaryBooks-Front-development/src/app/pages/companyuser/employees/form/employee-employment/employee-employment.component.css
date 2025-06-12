@@ -1,0 +1,8 @@
+.mt-table input,
+.mt-table ngx-select-dropdown {
+    border: 1px solid #eee;
+}
+
+.form-control.ng-touched.ng-invalid {
+    border-color: red !important;
+}

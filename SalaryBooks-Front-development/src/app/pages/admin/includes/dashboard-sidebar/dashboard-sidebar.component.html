@@ -1,0 +1,230 @@
+<div class="br-sideleft sideleft-scrollbar">
+    <label class="sidebar-label pd-x-10 mg-t-20 op-3">Navigation</label>
+    <ul class="br-sideleft-menu">
+        <li class="br-menu-item">
+            <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-speedometer-outline tx-24"></i>
+                <span class="menu-item-label">Dashboard</span>
+            </a>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/admin/team-management/sub-admin', '/admin/team-management/role-access'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-personadd-outline tx-20"></i>
+                <span class="menu-item-label">Team Management</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/admin/team-management/sub-admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Sub Admin</a></li>
+                <li class="sub-item"><a routerLink="/admin/team-management/role-access" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Roles Access</a></li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a routerLink="/admin/user-management" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link">
+                <i class="menu-item-icon icon ion-ios-list-outline tx-20"></i>
+                <span class="menu-item-label">User Management</span>
+            </a>
+        </li>
+
+        <!-- <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/admin/role-access/manage-roles'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-people-outline tx-20"></i>
+                <span class="menu-item-label">Role Based Access</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/admin/role-access/manage-roles" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Roles Management</a></li>
+            </ul>
+        </li> -->
+
+        <li class="br-menu-item">
+            <a class="br-menu-link with-sub" href="#" [class.active]="['/admin/master/department','/admin/master/branch','/admin/master/designation','/admin/master/reseller', '/admin/master/credit-invoice'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-cog tx-20"></i>
+                <span class="menu-item-label">Master</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item">
+                    <a routerLink="/admin/master/department" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        Department
+                    </a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/admin/master/designation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        Designation
+                    </a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/admin/master/branch" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        Branch
+                    </a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/admin/master/reseller" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        Reseller
+                    </a>
+                </li>
+
+                <li class="sub-item">
+                    <a routerLink="/admin/master/credit-invoice" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        Credit Invoice
+                    </a>
+                </li>
+                
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/admin/govt-rules/epfo-rules', '/admin/govt-rules/esic-rules', '/admin/govt-rules/bonus-rules', '/admin/govt-rules/gratuity-rules', '/admin/govt-rules/itax-slabs', '/admin/govt-rules/itax-categories', '/admin/govt-rules/tds-rule'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-card tx-20"></i>
+                <span class="menu-item-label">Government Rules</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/admin/govt-rules/epfo-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">EPFO Rule</a></li>
+                <li class="sub-item"><a routerLink="/admin/govt-rules/esic-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">ESIC Rule</a></li>
+                <li class="sub-item"><a routerLink="/admin/govt-rules/bonus-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Bonus Rule</a></li>
+                <!-- <li class="sub-item"><a routerLink="/admin/govt-rules/gratuity-rules" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Gratuity Rule</a></li> -->
+                <li class="sub-item"><a routerLink="/admin/govt-rules/itax-slabs" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Income Tax Slab</a></li>
+                <li class="sub-item"><a routerLink="/admin/govt-rules/itax-categories" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Income Tax Category</a></li>
+                <li class="sub-item"><a routerLink="/admin/govt-rules/tds-rule" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Income Tax TDS Rule</a></li>
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/admin/company-rules/attendance-policy', '/admin/company-rules/incentive-policy', '/admin/company-rules/bonus-policy', '/admin/company-rules/overtime-policy', '/admin/company-rules/bonusslip-template', '/admin/company-rules/arrearslip-template', '/admin/company-rules/tds-rule', '/admin/company-rules/payslip-template', '/admin/company-rules/ptax-rule', '/admin/company-rules/lwf-rule', '/admin/company-rules/salary-template', '/admin/company-rules/leave-rule'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-briefcase-outline tx-20"></i>
+                <span class="menu-item-label">Company Rules</span>
+            </a>
+            <ul class="br-menu-sub">
+                <!-- <li class="sub-item"><a routerLink="/admin/company-rules/attendance-policy" routerLinkActive="active" class="sub-link ">Attendance Policy Rule</a></li> -->
+                <li class="sub-item"><a routerLink="/admin/company-rules/attendance-policy" routerLinkActive="active" class="sub-link ">Attendance</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/salary-template" routerLinkActive="active" class="sub-link ">Salary Template</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/leave-rule" routerLinkActive="active" class="sub-link ">Leave Policy</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/incentive-policy" routerLinkActive="active" class="sub-link ">Incentive</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/bonus-policy" routerLinkActive="active" class="sub-link ">Bonus</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/overtime-policy" routerLinkActive="active" class="sub-link ">Overtime</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/payslip-template" routerLinkActive="active" class="sub-link ">Payslip</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/arrearslip-template" routerLinkActive="active" class="sub-link ">Arrear Slip</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/bonusslip-template" routerLinkActive="active" class="sub-link ">Bonus Slip</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/tds-rule" routerLinkActive="active" class="sub-link ">TDS Policy</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/ptax-rule" routerLinkActive="active" class="sub-link ">P-TAX Rule</a></li>
+                <li class="sub-item"><a routerLink="/admin/company-rules/lwf-rule" routerLinkActive="active" class="sub-link ">LWF Rule</a></li>
+                <!-- <li class="sub-item"><a routerLink="/admin/company-rules/tds-rule" routerLinkActive="active" class="sub-link ">TDS Rule</a></li> -->
+                <!-- <li class="sub-item"><a routerLink="/admin/company-rules/incentive-policy" routerLinkActive="active" class="sub-link ">Incentive Policy Template</a></li> -->
+                <!-- <li class="sub-item"><a routerLink="/admin/company-rules/bonus-policy" routerLinkActive="active" class="sub-link ">Bonus Policy Template</a></li> -->
+                <!-- <li class="sub-item"><a href="javascript:void(0);" class="sub-link">Leave Policy Rule</a></li> -->
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/admin/client-package','/admin/subscription-management/plans', '/admin/subscription-management/credit'].includes(this.router.url)">
+                <i class="menu-item-icon icon ion-ios-list-outline tx-20"></i>
+                <span class="menu-item-label">Package</span>
+            </a>
+            <ul class="br-menu-sub">
+                <li class="sub-item"><a routerLink="/admin/client-package" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Client Package</a></li>
+                <li class="sub-item"><a routerLink="/admin/subscription-management/plans" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Client Plan</a></li>
+                <li class="sub-item"><a routerLink="/admin/subscription-management/credit" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">Credit Settings</a></li>
+                <!-- <li class="sub-item"><a routerLink="/admin/subscription-management/users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link ">User Management</a></li> -->
+            </ul>
+        </li>
+
+        <li class="br-menu-item">
+            <a href="#" class="br-menu-link with-sub" [class.active]="['/admin/invoice','/admin/ledger-report', '/admin/credit-usage', '/admin/sales-ledger'].includes(this.router.url)">
+                <!-- <i class="menu-item-icon icon ion-ios-list-outline tx-20"></i> -->
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+
+                <span class="menu-item-label">Reports</span>
+            </a>
+            <ul class="br-menu-sub">
+                 <li class="sub-item">
+                    <a routerLink="/admin/invoice" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        <span class="menu-item-label">Invoice Listing</span>
+                    </a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/admin/sales-ledger" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        <span class="menu-item-label">Sales Ledger</span>
+                    </a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/admin/credit-usage" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        <span class="menu-item-label">Usage Ledger</span>
+                    </a>
+                </li>
+                <li class="sub-item">
+                    <a routerLink="/admin/ledger-report" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sub-link">
+                        <span class="menu-item-label">Client Ledger</span>
+                    </a>
+                </li>
+                    </ul>
+                </li>   
+
+        <!-- <li class="br-menu-item">
+            <a routerLink="/admin/client-package" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">Client Package</span>
+            </a>
+        </li> -->
+        <!-- <li class="br-menu-item">
+            <a routerLink="/admin/tds-rule" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">TDS Rule</span>
+            </a>
+        </li> -->
+        
+        <!-- <li class="br-menu-item">
+            <a routerLink="/admin/invoice" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">Invoice</span>
+            </a>
+        </li>
+        <li class="br-menu-item">
+            <a routerLink="/admin/ledger-report" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">Client Ledger</span>
+            </a>
+        </li>
+        <li class="br-menu-item">
+            <a routerLink="/admin/credit-usage" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">Credit Usage</span>
+            </a>
+        </li>
+        <li class="br-menu-item">
+            <a routerLink="/admin/sales-ledger" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-grid tx-24"></i>
+                <span class="menu-item-label">Sales Ledger</span>
+            </a>
+        </li> -->
+        <li class="br-menu-item">
+            <a routerLink="/admin/promotion-management" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-flag tx-24"></i>
+                <span class="menu-item-label">Promotion Management</span>
+            </a>
+        </li>
+        <li class="br-menu-item">
+            <a routerLink="/admin/smtp" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="br-menu-link ">
+                <i class="menu-item-icon icon ion-ios-email tx-24"></i>
+                <span class="menu-item-label">SMTP Management</span>
+            </a>
+        </li>
+
+        <li class="br-menu-item">
+          <a href="#" class="br-menu-link with-sub" [class.active]="[
+          '/admin/landing/page',
+          '/admin/landing/posts',
+          '/admin/landing/settings'].includes(this.router.url)">
+              <i class="menu-item-icon icon ion-ios-briefcase-outline tx-20"></i>
+              <span class="menu-item-label">Landing Page</span>
+          </a>
+          <ul class="br-menu-sub">
+              <li class="sub-item"><a routerLink="/admin/landing/page" routerLinkActive="active" class="sub-link ">Page</a></li>
+              <li class="sub-item"><a routerLink="/admin/landing/posts" routerLinkActive="active" class="sub-link ">Posts</a></li>
+              <li class="sub-item"><a routerLink="/admin/landing/membership" routerLinkActive="active" class="sub-link ">Membership</a></li>
+              <li class="sub-item"><a routerLink="/admin/landing/settings" routerLinkActive="active" class="sub-link ">Settings</a></li>
+          </ul>
+      </li>
+    </ul>
+</div>

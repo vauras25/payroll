@@ -1,0 +1,95 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item">Bonus Management</a>
+            <a class="breadcrumb-item active">Run Bonus</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-cash"></i>
+        <div>
+            <h4>Run Bonus</h4>
+            <!-- <p class="mg-b-0">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+            </p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper pd-10">
+            <companyuser-app-table-filter [monthFilter]="true" [yearFilter]="true" [isClient]="false" (onFiltered)="fetchEmployees({page: 1, filter: $event})"></companyuser-app-table-filter>
+
+            <div>
+                <div class="d-flex justify-content-between btn btn-info-border px-0">
+                    <button [disabled]="(rowCheckedAll == false && (checkedRowIds.length == 0 && uncheckedRowIds.length == 0))" class="btn btn-info tx-11 tx-spacing-2" (click)="generateReport()">RUN BONUS</button>
+                </div>
+                
+                <app-custom-tableoption (onFilterChanged)="fetchEmployees({page: 1, options: $event})"></app-custom-tableoption>
+                
+                <div class="table-wrapper">
+                    <table class="table display responsive nowrap wd-100p employee-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="d-flex align-items-center mb-0" for="all">
+                                        <input type="checkbox" class="mr-2" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" *ngIf="employees.length > 0">                                        
+                                        SL No.
+                                    </label>
+                                </th>
+                                <th>Status</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Bonus Value</th>
+                                <th>Bonus Type</th>
+                                <th>Disbursement</th>
+                                <th>Exgratia Status</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let employee of employees; let i = index">
+                                <td>
+                                    <label class="d-flex align-items-center" [for]="i">
+                                        <ng-container *ngIf="getSheetGenerationStatus(employee)?.checkbox == true">
+                                            <input type="checkbox" class="mr-2" [attr.checked]="employee.checked == true ? 'checked' : null" id="checkrow-{{i+1}}" [attr.data-checkbox-id]="employee._id" (click)="rowCheckBoxChecked($event, employee)">
+                                        </ng-container>
+                                        {{ Global.getTableSerialNumber(i, employeePaginationOptions.limit, employeePaginationOptions.page) }}
+                                    </label>
+                                </td>
+                                <td>{{ getSheetGenerationStatus(employee).label }}</td>
+                                <td>{{ employee.emp_id }}</td>
+                                <td>{{ employee.emp_first_name }} {{ employee.emp_last_name }}</td>
+                                <td>{{ employee?.bonus_module[0]?.bonus_value ?? '-' }}</td>
+                                <td class="text-uppercase">{{ employee.employee_details?.template_data?.bonus_temp_data?.disbursement_type ?? '-' }}</td>
+                                <td class="text-uppercase">{{ employee.employee_details?.template_data?.bonus_temp_data?.disbursement_frequency ?? '-' }}</td>
+                                <td class="text-uppercase">{{ employee.bonus_module[0]?.exgratia ?? '-' }}</td>
+                                <td>{{ employee.bonus_module[0]?.bonus_from_month ? (((+employee.bonus_module[0]?.bonus_from_month + 1) + '-01-' + +employee.bonus_module[0]?.bonus_from_year) | date:"MMM yyyy") : '-' }}</td>
+                                <td>{{ employee.bonus_module[0]?.bonus_to_month ? (((+employee.bonus_module[0]?.bonus_to_month + 1) + '-01-' + +employee.bonus_module[0]?.bonus_to_year) | date:"MMM yyyy") : '-' }}</td>
+                                <!-- <td>{{ employee.bonus_module[0]?.bonus_to_date ? (employee.bonus_module[0]?.bonus_to_date | date) : '-' }}</td> -->
+                                <!-- <td>
+                                    <ng-container *ngIf="employee?.client">
+                                        {{ employee?.client?.client_name }} <small class="font-weight-bold">{{ employee?.client?.client_code }}</small>
+                                    </ng-container>
+                                    <ng-container *ngIf="!employee?.client">N/A</ng-container>
+                                </td> -->
+                                <!-- <td>{{ employee?.branch?.branch_name ?? "N/A" }}</td> -->
+                                <!-- <td>{{ employee?.department?.department_name ?? "N/A" }}</td>-->
+                            </tr>
+                            <tr *ngIf="employees.length == 0">
+                                <td colspan="100%" class="text-center" style="background-color: #f7f7f7;">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+                </div>
+                
+                <app-custom-pagination [rows]="employees" [paginationOptions]="employeePaginationOptions" (onPageClicked)="fetchEmployees({'page' : $event})"></app-custom-pagination>
+            </div>
+        </div>
+    </div>
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

@@ -1,0 +1,40 @@
+.input-edit {
+    border: 0;
+    padding: 5px 8px;
+    font-weight: 500;
+    background: transparent;
+    width: 100%;
+}
+
+input.ng-dirty,
+input.ng-touched,
+select.ng-dirty,
+select.ng-touched {
+    border: 1px solid red;
+}
+
+input,
+select,
+input.ng-valid,
+select.ng-valid {
+    border: 1px solid #eee;
+}
+
+input,
+select {
+    padding: 5px 10px;
+}
+
+#ecr-details-table select,
+#ecr-details-table input,
+#payment-confirmation-table select,
+#payment-confirmation-table input {
+    width: 100%;
+}
+
+#ecr-details-table .table-bordered th,
+#ecr-details-table .table-bordered td,
+#payment-confirmation-table .table-bordered th,
+#payment-confirmation-table .table-bordered td {
+    border: 1px solid #7a7a7a;
+}

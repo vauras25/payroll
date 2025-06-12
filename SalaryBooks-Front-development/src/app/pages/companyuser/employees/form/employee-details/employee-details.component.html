@@ -1,0 +1,514 @@
+<companyuser-app-dashboard-header *ngIf="!isInvite"></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader" *ngIf="!isInvite">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <!-- <div class="br-pagetitle">
+        <i class="icon icon ion-ios-people"></i>
+        <div>
+            <h4>Employees</h4>
+          <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> 
+        </div>
+    </div> -->
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar ></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Details
+
+                <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'personaldetails'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section">
+                <form [formGroup]="employeeDetailsForm">
+                    <div class="row no-gutters" *ngIf="['add'].includes(operation)">
+                        <div class="col-6 col-sm-3">
+                            HOD
+                            &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_hod', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                            <ngx-select-dropdown formControlName="emp_hod" [options]="hodMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_hod', 'required')">This field is required</p>
+                        </div>
+                        <div class="col-3 col-sm-3 sameasfirst">
+                          Gross
+                          &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'gross_salary', 'required')" class="text-danger">*</span>
+                      </div>
+                      <div class="col-3 col-sm-3">
+                          <input class="form-control" type="text" formControlName="gross_salary">
+                          <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'gross_salary', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'gross_salary', 'min'))">Enter valid Amount</p>
+
+                          <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'gross_salary', 'required')">This field is required</p>
+                      </div>
+                    </div>
+
+                    <ng-container *ngIf="['view', 'edit', 'add'].includes(operation)">
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Employee First Name
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_first_name', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="emp_first_name">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_first_name', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Employee Last Name
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_last_name', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="emp_last_name">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_last_name', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Mobile
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'mobile_no', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="mobile_no">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'mobile_no', 'maxlength'))">Enter valid contact number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                <!-- Alternate Mobile
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'alternate_mob_no', 'required')" class="text-danger">*</span> -->
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <!-- <input class="form-control" type="email" formControlName="alternate_mob_no"> -->
+
+                                <!-- <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'required')">This field is required</p> -->
+
+                                <!-- <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'maxlength'))">Enter valid contact number</p> -->
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Date of Birth 
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_dob', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="date" formControlName="emp_dob" [max]="getToday()" (keydown)="disableType($event)">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_dob', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Gender
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'sex', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="sex" [options]="sexMaster" class="form-control" [config]="{search:true, placeholder: 'Select Gender'}" [multiple]="false"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'sex', 'required')">This field is required</p>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="['view', 'edit'].includes(operation) || CheckIsFormValid()">
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Father's Name
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_father_name', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="emp_father_name">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_father_name', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Email ID
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'email_id', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="email" formControlName="email_id">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'email_id', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'email_id', 'email')">Please enter a valid email</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Alternate Mobile
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'alternate_mob_no', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="email" formControlName="alternate_mob_no">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'maxlength'))">Enter valid contact number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                              Emergency Contact Number
+                              &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emergency_contact_no', 'required')" class="text-danger">*</span>
+                          </div>
+                          <div class="col-3 col-sm-3">
+                              <input class="form-control" type="text" formControlName="emergency_contact_no">
+
+                              <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'required')">This field is required</p>
+
+                              <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_no', 'maxlength'))">Enter valid contact number</p>
+                          </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Aadhar Card Number
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'aadhar_no', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="aadhar_no">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'aadhar_no', 'maxlength'))">Enter valid Aadhaarcard Number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                <ng-container *ngIf="employeeDetailsForm.controls.aadhar_no.value && employeeDetailsForm.controls.aadhar_no.value != 'N/A'">
+                                    Aadhar Card Image
+                                    &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_aadhaar_image', 'required')" class="text-danger">*</span>
+                                </ng-container>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ng-container *ngIf="employeeDetailsForm.controls.aadhar_no.value && employeeDetailsForm.controls.aadhar_no.value != 'N/A'">
+                                    <ng-container *ngIf="operation == 'view'">
+                                        <button *ngIf="employee_details.emp_aadhaar_image" (click)="imageViewer(Global.BACKEND_URL + '/' + employee_details.emp_aadhaar_image)" class="btn btn-primary">View Aadharcard Image</button>
+                                        <span *ngIf="!employee_details.emp_aadhaar_image"></span>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="operation == 'edit' || operation == 'add'">
+                                        <input class="form-control" data-toggle="tooltip" data-placement="top" 
+                                         type="file" accept="image/*"
+                                        formControlName="emp_aadhaar_image" (change)="onFileChanged($event, employeeDetailsForm, 'emp_aadhaar_image', 'emp_aadhaar_image_file')">
+                                       
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_aadhaar_image', 'required')">This field is required</p>
+
+                                        <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                        <p class="error-element" *ngIf="employeeDetailsForm.get('emp_aadhaar_image').hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('emp_aadhaar_image').getError('maxSize') }} KB.</p>
+  
+
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                PAN Card Number
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'pan_no', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="pan_no" 
+                                (input)="transformToUpperCase($event)">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'pan_no', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'pan_no', 'pattern')">Enter valid PAN Number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                <ng-container *ngIf="employeeDetailsForm.controls.pan_no.value && employeeDetailsForm.controls.pan_no.value != 'N/A'">
+                                    PAN Card Image&nbsp;
+                                    <span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_pan_image', 'required')" class="text-danger">*</span>
+                                </ng-container>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ng-container *ngIf="employeeDetailsForm.controls.pan_no.value && employeeDetailsForm.controls.pan_no.value != 'N/A'">
+                                    <ng-container *ngIf="operation == 'view'">
+                                        <button *ngIf="employee_details.emp_pan_image" (click)="imageViewer(Global.BACKEND_URL + '/' + employee_details.emp_pan_image)" class="btn btn-primary">View Pancard Image</button>
+                                        <span *ngIf="!employee_details.emp_pan_image"></span>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="operation == 'edit' || operation == 'add'">
+                                        <input class="form-control" type="file" accept="image/*" formControlName="emp_pan_image" (change)="onFileChanged($event, employeeDetailsForm, 'emp_pan_image', 'emp_pan_image_file')">
+
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_pan_image', 'required')">This field is required</p>
+
+                                        <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                        <p class="error-element" *ngIf="employeeDetailsForm.get('emp_pan_image').hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('emp_pan_image').getError('maxSize') }} KB.</p>
+
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Passport Number
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'passport_no', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="passport_no">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_no', 'required')">This field is required</p>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_no', 'pattern')">Enter valid PAN Number</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                <ng-container *ngIf="employeeDetailsForm.controls.passport_no.value && employeeDetailsForm.controls.passport_no.value != 'N/A'">
+                                    Passport Image&nbsp;
+                                    <span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emp_passport_image', 'required')" class="text-danger">*</span>
+                                </ng-container>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ng-container *ngIf="employeeDetailsForm.controls.passport_no.value && employeeDetailsForm.controls.passport_no.value != 'N/A'">
+                                    <ng-container *ngIf="operation == 'view'">
+                                        <button *ngIf="employee_details.emp_passport_image" (click)="imageViewer(Global.BACKEND_URL + '/' + employee_details.emp_passport_image)" class="btn btn-primary">Passport Image</button>
+                                        <span *ngIf="!employee_details.emp_passport_image">N/A</span>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="operation == 'edit' || operation == 'add'">
+                                        <input class="form-control" type="file" accept="image/*" formControlName="emp_passport_image" (change)="onFileChanged($event, employeeDetailsForm, 'emp_passport_image', 'emp_passport_image_file')">
+
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_passport_image', 'required')">This field is required</p>
+                                        <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                        <p class="error-element" *ngIf="employeeDetailsForm.get('emp_passport_image').hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('emp_passport_image').getError('maxSize') }} KB.</p>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters" *ngIf="employeeDetailsForm.controls.passport_no.value">
+                            <div class="col-3 col-sm-3">
+                                Passport Valid From
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'passport_val_form', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="date" formControlName="passport_val_form">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_val_form', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Passport Valid To
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'passport_val_to', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="date" formControlName="passport_val_to">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'passport_val_to', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Nationality
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'nationality', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="nationality">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'nationality', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Blood Group
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'blood_group', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="blood_group" [options]="bloodGroupMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'blood_group', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                Physical Disability
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'physical_disability', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="physical_disability" [options]="yesNoMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'physical_disability', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Marital Status
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'marital_status', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="marital_status" [options]="maritalStatusMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'marital_status', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3">
+                                <ng-container *ngIf="employeeDetailsForm.controls.marital_status.value?.value == 'married'">
+                                    Date of Marriage
+                                    &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'marriage_date', 'required')" class="text-danger">*</span>
+                                </ng-container>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ng-container *ngIf="employeeDetailsForm.controls.marital_status.value?.value == 'married'">
+                                    <input class="form-control" type="date" formControlName="marriage_date">
+
+                                    <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'marriage_date', 'required')">This field is required</p>
+                                </ng-container>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Emergency Contact Name
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'emergency_contact_name', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="emergency_contact_name">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emergency_contact_name', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-3 col-sm-3 ">
+                                Domicile
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'domicile', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="domicile">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'domicile', 'required')">This field is required</p>
+                            </div>
+
+                            <div class="col-3 col-sm-3 sameasfirst">
+                                Height
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'height', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <input class="form-control" type="text" formControlName="height">
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'height', 'required')">This field is required</p>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+
+                            <div class="col-3 col-sm-3 ">
+                                Religion
+                                &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'religion', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <ngx-select-dropdown formControlName="religion" [options]="religionMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'religion', 'required')">This field is required</p>
+                              </div>
+
+                              <div class="col-3 col-sm-3 sameasfirst">
+                                  Addional ID&nbsp;
+                                  <span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'additional_id_image', 'required')" class="text-danger">*</span>
+                              </div>
+                              <div class="col-3 col-sm-3">
+                                  <ng-container *ngIf="operation == 'view'">
+                                      <button *ngIf="employee_details?.additional_id_image" (click)="imageViewer(Global.BACKEND_URL + '/' + employee_details.additional_id_image)" class="btn btn-primary">Additional ID</button>
+                                      <span *ngIf="!employee_details.additional_id_image">N/A</span>
+                                  </ng-container>
+
+                                  <ng-container *ngIf="operation == 'edit' || operation == 'add'">
+                                      <input class="form-control" type="file" accept="image/*"   formControlName="additional_id_image" (change)="onFileChanged($event, employeeDetailsForm, 'additional_id_image', 'additional_id_image_file')">
+
+                                      <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'additional_id_image', 'required')">This field is required</p>
+                                      <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                      <p class="error-element" *ngIf="employeeDetailsForm.get('additional_id_image').hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('additional_id_image').getError('maxSize') }} KB.</p>
+
+                                  </ng-container>
+                              </div>
+
+                              <div class="col-3 col-sm-3 sameasfirst">
+                                Profile Image&nbsp;
+                                <span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'profile_image', 'required')" class="text-danger">*</span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                    <ng-container *ngIf="operation == 'view'">
+                                        <button *ngIf="employee_details?.profile_pic" (click)="imageViewer(Global.BACKEND_URL + '/' + employee_details?.profile_pic)" class="btn btn-primary">View Profile Image</button>
+                                        <span *ngIf="!employee_details?.profile_pic"></span>
+                                    </ng-container>
+                                    
+                                    <ng-container *ngIf="operation == 'edit' || operation == 'add'">
+                                        <input class="form-control" data-toggle="tooltip" data-placement="top" 
+                                         type="file" accept="image/*"
+                                        formControlName="profile_image" (change)="onFileChanged($event, employeeDetailsForm, 'profile_image', 'profile_image_file')">
+                                       
+                                        <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'profile_image', 'required')">This field is required</p>
+        
+                                        <p class="error-element" *ngIf="net_uploaded_size>=max_upload_limit">Max Upload Size Exceed</p>
+                                        <p class="error-element" *ngIf="employeeDetailsForm.get('profile_image').hasError('fileSize')">File size exceeds {{ employeeDetailsForm.get('profile_image').getError('maxSize') }} KB.</p>
+        
+        
+                                    </ng-container>
+                            </div>
+                            </div>
+
+
+                    </ng-container>
+                  
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'add'">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info text-uppercase" (click)="createEmployee($event)"><span>Create</span></button>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button class="btn btn-info text-uppercase" (click)="updateEmployee($event)"><span>Update</span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer *ngIf="!isInvite"></companyuser-app-dashboard-footer>
+</div>
+
+<div id="image-viewer-modal" tabindex="-1" class="modal fade animated fadeInLeftBig">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0">
+            <div class="modal-body pd-0">
+                <div class="row flex-row-reverse no-gutters">
+                    <div class="col-lg-12">
+                        <button style="position: absolute; color: white; right: 0;" type="button" class="close mg-t-2 mg-r-2 text-dark" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <div class="p-3 pt-2 mt-2">
+                            <img src="" alt="" id="image-src" class="w-100 img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

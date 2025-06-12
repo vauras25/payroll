@@ -1,0 +1,61 @@
+<div class="table-responsive mt-3" *ngIf="report_type==''">
+   <div class="table-responsive mt-3">
+      <table class="table nowrap wd-100p employee-table">
+         <thead>
+             <tr >
+                <th class="text-center" colspan="11">REGISTER OF OVERTIME</th>
+                
+             </tr>
+             <tr>
+                <th class="text-center" colspan="11">FORM XXIII, See Rule 78 (1) (a) (iii)</th>
+             </tr>
+             <tr>
+                
+                <th class="text-center" colspan="11">
+                  {{empReportData?.[0]?.companies?.establishment_name}},
+                  {{empReportData?.[0]?.company_details?.reg_office_address?.door_no}}, 
+                  {{empReportData?.[0]?.company_details?.reg_office_address?.street_name}}, 
+                  {{empReportData?.[0]?.company_details?.reg_office_address?.district_name}} - {{empReportData?.[0]?.company_details?.reg_office_address?.pin_code}}</th>
+             </tr>
+            
+             <tr >
+                <th  rowspan="2" >Sl.No</th>
+                <th  rowspan="2"> Name Of the Employee</th>
+                <th  rowspan="2"> Father&#39;s/ Husband&#39;s  Name</th>
+                <th  rowspan="2"> Designation/Nature of Employment</th>
+                <th  rowspan="2"> Dates on which Overtime Worked</th>
+                <th  rowspan="2"> Total Overtime Worked or Production in Case of Piece--Rates</th>
+                <th  rowspan="2"> Normal Rate of Wages</th>
+                <th  rowspan="2"> Overtime Rate of Wages</th>
+                <th  rowspan="2"> Overtime Earnings</th>
+                <th  rowspan="2"> Date on which Overtime Wages Paid</th>
+                <th  rowspan="2"> Remarks</th>
+             </tr>
+          </thead>
+         <tbody>
+            
+         
+            <tr *ngFor="let item of empReportData; let i = index">
+               <td class="s34" style="width: 3%;"> {{ i+1 }}</td>
+               
+               <td class="s35">{{item?.emp_first_name}} {{item?.emp_last_name}}</td>
+               <td class="s35">{{item?.emp_father_name}}</td>
+               <td class="s35">{{item?.designation?.designation_name}} &amp; {{item?.department?.department_name}}</td>
+               <td class="s34"></td>
+               <td class="s36">{{item.employee_monthly_reports?(item?.employee_monthly_reports?.attendance_summaries?.total_overtime | number:'1.2-2' ):'N/A'}}</td>
+               <td class="s37">{{item?.employee_details?.template_data?.overtime_temp_data?.overtime_rate | currency:'₹'}}</td>
+               <td class="s38">{{item.employee_monthly_reports?(item?.employee_monthly_reports?.ot_report?.overtime_wages | currency:'₹'):'N/A'}}</td>
+               <td class="s38">{{item.employee_monthly_reports?(item?.employee_monthly_reports?.ot_report?.gross_earning | currency:'₹' ):'N/A'}}</td>
+               <td class="s38"></td>
+               <td class="s37"></td>
+               
+               
+            </tr>
+            <tr *ngIf="empReportData.length<=0">
+               <td colspan="11">No record(s) found</td>
+            </tr>
+          
+         </tbody>
+      </table>
+   </div>
+</div>

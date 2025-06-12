@@ -1,0 +1,640 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <!-- <a class="breadcrumb-item" routerLink="/company/settings">Company Settings</a> -->
+            <a class="breadcrumb-item">Company Rules</a>
+            <a class="breadcrumb-item active">LWF Rule</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-briefcase"></i>
+        <div>
+            <h4>LWF Rule</h4>
+          <p class="mg-b-0">Define State-wise LWF</p>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper" id="lwf-rule-form">
+            <form [formGroup]="lwfRuleForm">
+                <h6 class="br-section-label mb-3">
+                    <ng-container *ngIf="!editActionId; else updateHeadingText">
+                        Define LWF Rule
+
+                        <!-- <button (click)="openTemplateLibrary()" class="btn btn-sm btn-primary float-right"><i class="fa fa-book"></i>&nbsp;Template Library</button> -->
+                    </ng-container>
+                    <ng-template #updateHeadingText>
+                        Update LWF Rule
+                    </ng-template>
+                </h6>
+
+                <div class="form-layout form-layout-6">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            State&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="state" [options]="stateMaster" class="form-control" [config]="{search: true, placeholder: 'Select State', 'height': '200px'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="lwfRuleForm.controls.state.hasError('required') && ( lwfRuleForm.controls.state.dirty || lwfRuleForm.controls.state.touched )">This field is required</p>
+                        </div>
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="lwfRuleForm.controls.publish_status.hasError('required') && (lwfRuleForm.controls.publish_status.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <!-- <table class="table table-bordered define-lwf-rule-table nowrap table-responsive"> -->
+                       
+                            <!-- <tbody> -->
+                                <!-- <tr *ngFor="let templateDataControl of getTemplateRows('template_data'); let i = index" [formGroupName]="i">
+                                <td>
+                                    <label class="tx-medium">Leave Type &nbsp;<span class="text-danger">*</span></label>
+                                    <ngx-select-dropdown formControlName="leave_type" [options]="stateMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+
+                                    <label class="tx-medium mt-3">Restriction on Availment &nbsp;<span class="text-danger">*</span></label>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="col-sm-6 col-12 p-0">
+                                            <label class="rdiobox">
+                                              <input type="radio" formControlName="restriction_on_availment" value="yes">
+                                              <span>Yes</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="col-sm-6 col-12 p-0">
+                                            <label class="rdiobox">
+                                              <input type="radio" formControlName="restriction_on_availment" value="no">
+                                              <span>No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <label class="tx-medium">Number of Days &nbsp;<span class="text-danger">*</span></label>
+                                    <input type="number" formControlName="no_of_day" class="form-control wd-200" placeholder="Days">
+
+                                    <label class="tx-medium mt-3">Number of Working Days</label>
+                                    <input type="number" formControlName="no_of_working_day" class="form-control wd-200" placeholder="Number of Working Days">
+
+                                    <label class="tx-medium mt-3">Restriction Tenure &nbsp;<span class="text-danger">*</span></label>
+                                    <ngx-select-dropdown formControlName="restriction_tenure" [options]="tenureMaster" class="form-control" [config]="{search: true, placeholder: 'Select Option', 'height': '200px'}"></ngx-select-dropdown>
+                                </td>
+
+                                <td>
+                                    <label class="tx-medium">Leave Tenure &nbsp;<span class="text-danger">*</span></label>
+                                    <ngx-select-dropdown formControlName="leave_tenure" [options]="tenureMaster" class="form-control" [config]="{search: true, placeholder: 'Select Option', 'height': '200px'}"></ngx-select-dropdown>
+
+                                    <label class="tx-medium mt-3">Restriction Days &nbsp;<span class="text-danger">*</span></label>
+                                    <input type="number" formControlName="restriction_days" class="form-control wd-200" placeholder="Days">
+                                </td>
+
+                                <td style="width: 150px;">
+                                    <label class="tx-medium">Carry Forward &nbsp;<span class="text-danger">*</span></label>
+                                    <div class="d-flex flex-wrap ">
+                                        <div class="col-sm-6 col-12 p-0">
+                                            <label class="rdiobox">
+                                              <input formControlName="carry_forward" type="radio" value="yes">
+                                              <span>Yes</span>
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-6 col-12 p-0">
+                                            <label class="rdiobox">
+                                              <input formControlName="carry_forward" type="radio" value="no">
+                                              <span>No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <label class="tx-medium mt-3">Cashable &nbsp;<span class="text-danger">*</span></label>
+                                    <div class="d-flex flex-wrap ">
+                                        <div class="col-sm-6 col-12 p-0">
+                                            <label class="rdiobox">
+                                              <input formControlName="cashable" type="radio" value="yes">
+                                              <span>Yes</span>
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-6 col-12 p-0">
+                                            <label class="rdiobox">
+                                              <input formControlName="cashable" type="radio" value="no">
+                                              <span>No</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <label class="tx-medium">Carry Forward Years</label>
+                                    <input type="number" formControlName="carry_forward_years" class="form-control wd-150" placeholder="Years">
+
+                                    <label class="tx-medium mt-3">Effective Form &nbsp;<span class="text-danger">*</span></label>
+                                    <input type="date" formControlName="effective_form" class="form-control wd-150" placeholder="Effective Form">
+                                </td>
+
+                                <td class="text-center" style="vertical-align: middle !important; white-space: nowrap;">
+                                    <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('template_data')" class="btn btn-primary btn-icon mg-r-5" *ngIf="(getTemplateRows('template_data').length - 1) == i">
+                                        <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                    </button>
+
+                                    <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('template_data', i)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('template_data').length > 1">
+                                        <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                    </button>
+                                </td>
+                            </tr> -->
+<!-- 
+                                <tr >
+                                    <td class="p-0">
+                                    
+                                    </td>
+
+                                   
+                                </tr> -->
+                            <!-- </tbody>
+                        
+                    </table> -->
+                    <table class="table table-bordered define-lwf-rule-table nowrap table-responsive">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="tx-medium m-0">Effective From&nbsp;<span class="text-danger">*</span></label>
+                                </td>
+
+                                <td>
+                                    <input type="date" formControlName="effective_form" class="form-control wd-200" placeholder="Select a date">
+                                </td>
+
+                                <td>
+                                    <label class="tx-medium m-0">Gross Type&nbsp;<span class="text-danger">*</span></label>
+                                </td>
+
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label class="rdiobox ">
+                                          <input type="radio" formControlName="gross_type" value="rate" >
+                                          <span style="padding-left:1px;">Rate of Gross</span>
+                                        </label>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <label class="rdiobox ">
+                                          <input type="radio" formControlName="gross_type" value="earned" >
+                                          <span style="padding-left:1px;">Earned Gross </span>
+                                        </label>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <label class="rdiobox ">
+                                          <input type="radio" formControlName="gross_type" value="na" >
+                                          <span style="padding-left:1px;">NA</span>
+                                        </label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr >
+                                <td>
+                                    <label class="ckbox m-0">
+                                        <input type="checkbox" formControlName="wage_band" (change)="show_addmore($event,'template_data')">
+                                        <span>Wage Band</span>
+                                    </label>
+                                </td>
+                               
+                                <td>
+                                    <label class="tx-medium m-0">Period&nbsp;<span class="text-danger">*</span></label>
+                                </td>
+
+                                <td>
+                                    <ngx-select-dropdown formControlName="from_date" [options]="Global.monthMaster" class="form-control" [config]="{search: false, placeholder: 'Form', 'height': '200px'}"></ngx-select-dropdown>
+                                </td>
+
+                                <td>
+                                    <ngx-select-dropdown formControlName="to_date" [options]="Global.monthMaster" class="form-control" [config]="{search: false, placeholder: 'To', 'height': '200px'}"></ngx-select-dropdown>
+
+                                </td>
+
+                               
+                            </tr>
+                            <ng-container formArrayName="template_data">
+                            <tr *ngFor="let templateDataControl of getTemplateRows('template_data'); let i = index" [formGroupName]="i">
+                               <ng-container >
+                                <td >
+                                    <label class="ckbox" *ngIf="getTemplateRows('template_data')?.length == (i+1)">
+                                        <input (change)="configLastSlab($event.target,'template_data')" type="checkbox" formControlName="last_slab">
+                                        <span>Last Slab </span>
+                                      </label>
+                                    <!-- <input type="number" [readOnly]="lwfRuleForm.value?.wage_band_2==false || lwfRuleForm.value?.wage_band_2==null" formControlName="wage_from" class="form-control wd-200" placeholder="Enter Starting Wage"> -->
+                                </td>
+                                <td>
+                                    <input type="number" [readOnly]="lwfRuleForm.value?.wage_band==false || lwfRuleForm.value?.wage_band==null" formControlName="wage_from" class="form-control wd-200" placeholder="Enter Starting Wage">
+                                </td>
+                                <td>
+                                    <input type="number" formControlName="wage_to" [readOnly]="lwfRuleForm.value?.wage_band==false || lwfRuleForm.value?.wage_band==null" class="form-control wd-200" placeholder="Enter Ending Wage">
+                                </td>
+                               </ng-container>
+                               
+                                <td>
+                                    <input type="number" formControlName="employee_contribution" class="form-control " placeholder="Enter Employee Contribution">
+                                </td>
+                                <td>
+                                    <input type="number" formControlName="employer_contribution" class="form-control " placeholder="Enter Employer Contribution">
+                                </td>
+                                <td *ngIf="lwfRuleForm.value?.wage_band != false && lwfRuleForm.value?.wage_band != null && !templateDataControl.get('last_slab')?.value">
+                                    <div >
+                                        <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('template_data')" class="btn btn-primary btn-icon mg-r-5" *ngIf="lwfRuleForm.value.wage_band && ((getTemplateRows('template_data').length - 1) == i)">
+                                        <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                    </button>
+
+                                        <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('template_data', i)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('template_data').length > 1">
+                                        <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                    </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </ng-container>
+                            <tr >
+                                <td>
+                                    <label class="ckbox m-0">
+                                        <input type="checkbox" formControlName="wage_band_2" (change)="show_addmore($event,'template_data_2')">
+                                        <span>Wage Band</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="tx-medium m-0">Period&nbsp;<span class="text-danger">*</span></label>
+                                </td>
+                                <td>
+                                    <ngx-select-dropdown formControlName="from_date_2" [options]="Global.monthMaster" class="form-control" [config]="{search: false, placeholder: 'Form', 'height': '200px'}"></ngx-select-dropdown>
+
+                                </td>
+                                <td>
+                                    <ngx-select-dropdown formControlName="to_date_2" [options]="Global.monthMaster" class="form-control" [config]="{search: false, placeholder: 'Form', 'height': '200px'}"></ngx-select-dropdown>
+
+                                </td>
+
+                               
+                            </tr>
+                            <ng-container formArrayName="template_data_2">
+                            <tr *ngFor="let templateDataControl of getTemplateRows('template_data_2'); let j = index" [formGroupName]="j">
+                                <ng-container >
+                                    <td >
+                                        <label class="ckbox" *ngIf="getTemplateRows('template_data_2')?.length == (j+1)">
+                                            <input (change)="configLastSlab($event.target,'template_data_2')" type="checkbox" formControlName="last_slab">
+                                            <span>Last Slab</span>
+                                          </label>
+                                        <!-- <input type="number" [readOnly]="lwfRuleForm.value?.wage_band_2==false || lwfRuleForm.value?.wage_band_2==null" formControlName="wage_from" class="form-control wd-200" placeholder="Enter Starting Wage"> -->
+                                    </td>
+                                <td>
+                                    <input type="number" [readOnly]="lwfRuleForm.value?.wage_band_2==false || lwfRuleForm.value?.wage_band_2==null" formControlName="wage_from" class="form-control wd-200" placeholder="Enter Starting Wage">
+                                </td>
+                                <td>
+                                    <input type="number"  [readOnly]="lwfRuleForm.value?.wage_band_2==false || lwfRuleForm.value?.wage_band_2==null" formControlName="wage_to" class="form-control wd-200" placeholder="Enter Ending Wage">
+                                </td>
+                               </ng-container>
+                               
+                                <td>
+                                    <input type="number" formControlName="employee_contribution" class="form-control " placeholder="Enter Employee Contribution">
+                                </td>
+                                <td>
+                                    <input type="number" formControlName="employer_contribution" class="form-control " placeholder="Enter Employer Contribution">
+                                </td>
+                                <td class="" style="vertical-align:bottom !important;" *ngIf="lwfRuleForm.value.wage_band_2 && ((getTemplateRows('template_data_2').length - 1) == j) && !templateDataControl.get('last_slab')?.value">
+                                    <div class="">
+                                        <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('template_data_2')" class="btn btn-primary btn-icon mg-r-5" >
+                                        <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                    </button>
+
+                                        <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('template_data_2', j)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('template_data_2').length > 1">
+                                        <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                    </button>
+                                    </div>
+                                </td>
+                            </tr>
+                           </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center">
+                    <button type="button" (click)="cancelEntry()" class="btn btn-danger pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150 mg-r-5"><span>Cancel</span></button>
+
+                    <ng-container *ngIf="!editActionId; else updateButton">
+                        <button type="button" (click)="add($event)" [disabled]="!lwfRuleForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"><span>Save</span></button>
+                    </ng-container>
+                    <ng-template #updateButton>
+                        <button type="button" (click)="edit($event)" [disabled]="!lwfRuleForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"><span>Update</span></button>
+                    </ng-template>
+                </div>
+            </form>
+
+          
+        </div>
+    </div>
+
+    <!-- <div class="br-pagebody">
+        <div class="br-section-wrapper" id="lwf-rule-form">
+            <form [formGroup]="lwfRuleForm">
+                <h6 class="br-section-label mb-3">
+                    <ng-container *ngIf="!editActionId; else updateHeadingText">Define LWF Rule</ng-container>
+                    <ng-template #updateHeadingText>
+                        Update LWF Rule
+                    </ng-template>
+                </h6>
+
+                <div class="form-layout form-layout-6">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            State&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="state" [options]="stateMaster" class="form-control" [config]="{search: true, placeholder: 'Select State', 'height': '200px'}"></ngx-select-dropdown>
+
+                            <p class="error-element" *ngIf="lwfRuleForm.controls.state.hasError('required') && ( lwfRuleForm.controls.state.dirty || lwfRuleForm.controls.state.touched )">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Publish Status&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="publish_status" [options]="publishStatusMaster" class="form-control" [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="lwfRuleForm.controls.publish_status.hasError('required') && (lwfRuleForm.controls.publish_status.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-bordered define-lwf-rule-table nowrap">
+                    <ng-container formArrayName="template_data">
+                        <tbody>
+                        
+                            <tr *ngFor="let templateDataControl of getTemplateRows('template_data'); let i = index" [formGroupName]="i">
+                                <td class="p-0">
+                                    <table class="w-100">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <label class="tx-medium m-0">Effective From&nbsp;<span class="text-danger">*</span></label>
+                                                </td>
+
+                                                <td>
+                                                    <input type="date" formControlName="effective_form" class="form-control wd-200" placeholder="Select a date">
+                                                </td>
+
+                                                <td colspan="3">&nbsp;</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <label class="tx-medium m-0">Period&nbsp;<span class="text-danger">*</span></label>
+                                                </td>
+                                                <td>
+                                                    <input type="date" formControlName="from_date" class="form-control wd-200" placeholder="From">
+                                                </td>
+                                                <td>
+                                                    <input type="date" formControlName="to_date" class="form-control wd-200" placeholder="To">
+                                                </td>
+
+                                                <td>
+                                                    <label class="tx-medium m-0">Employee Contribution&nbsp;<span class="text-danger">*</span></label>
+                                                </td>
+                                                <td>
+                                                    <label class="tx-medium m-0">Employer Contribution&nbsp;<span class="text-danger">*</span></label>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <label class="ckbox m-0">
+                                                      <input type="checkbox" formControlName="wage_band">
+                                                      <span>Wage Band</span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <input type="number" formControlName="wage_from" class="form-control wd-200" placeholder="Enter Starting Wage">
+                                                </td>
+                                                <td>
+                                                    <input type="number" formControlName="wage_to" class="form-control wd-200" placeholder="Enter Ending Wage">
+                                                </td>
+                                                <td>
+                                                    <input type="number" formControlName="employee_contribution" class="form-control wd-200" placeholder="Enter Employee Contribution">
+                                                </td>
+                                                <td>
+                                                    <input type="number" formControlName="employer_contribution" class="form-control wd-200" placeholder="Enter Employer Contribution">
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <label class="tx-medium m-0">Gross Type&nbsp;<span class="text-danger">*</span></label>
+                                                </td>
+
+                                                <td colspan="4">
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <label class="rdiobox my-3">
+                                                              <input type="radio" formControlName="gross_type" value="rate" >
+                                                              <span>Rate of Gross</span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-sm-2">
+                                                            <label class="rdiobox my-3">
+                                                              <input type="radio" formControlName="gross_type" value="earned" >
+                                                              <span>Earned Gross </span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="col-sm-2">
+                                                            <label class="rdiobox my-3">
+                                                              <input type="radio" formControlName="gross_type" value="na" >
+                                                              <span>NA</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="">
+                                        <button data-toggle="tooltip" data-placement="top" title="Add New" type="button" (click)="addTemplateRows('template_data')" class="btn btn-primary btn-icon mg-r-5" *ngIf="(getTemplateRows('template_data').length - 1) == i">
+                                            <div style="width:25px;height:25px;"><i class="fa fa-plus"></i></div>
+                                        </button>
+
+                                        <button data-toggle="tooltip" data-placement="top" title="Remove" type="button" (click)="removeTemplateRow('template_data', i)" class="btn btn-danger btn-icon" *ngIf="getTemplateRows('template_data').length > 1">
+                                            <div style="width:25px;height:25px;"><i class="fa fa-trash"></i></div>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+                </table>
+
+                <div class="text-center">
+                    <button type="button" (click)="cancelEntry()" class="btn btn-danger pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150 mg-r-5"><span>Cancel</span></button>
+
+                    <ng-container *ngIf="!editActionId; else updateButton">
+                        <button type="button" (click)="add($event)" [disabled]="!lwfRuleForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"><span>Save</span></button>
+                    </ng-container>
+                    <ng-template #updateButton>
+                        <button type="button" (click)="edit($event)" [disabled]="!lwfRuleForm.valid" class="btn btn-info pd-y-13 pd-x-20 bd-0 mg-t-10 mg-md-t-0 tx-uppercase tx-11 tx-spacing-2 wd-150"><span>Update</span></button>
+                    </ng-template>
+                </div>
+            </form>
+        </div>
+    </div> -->
+<!-- 
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-4">All LWF Rules</h6>
+
+            <div class="table-wrapper">
+                <div class="table-responsive">
+                    <table class="table nowrap wd-100p table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="">SL</th>
+                                <th class="">Publish</th>
+                                <th class="text-center">Action</th>
+                                <th>State</th>
+                                <th>Effective From</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Wage Band</th>
+                                <th>Wage From</th>
+                                <th>Wage To</th>
+                                <th>Employee Contribution</th>
+                                <th>Employer Contribution</th>
+                                <th>Gross Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let template of templateRows; let i = index">
+                                <tr *ngFor="let item of template.template_data; let ri = index">
+                                    <td [attr.rowspan]="template.template_data.length" *ngIf="ri == 0">{{i+1}}</td>
+
+                                    <td>
+                                        <div class="br-toggle br-toggle-rounded br-toggle-primary" [ngClass]="{'on': template.publish_status == 'published', 'off' : template.publish_status == 'privet' }" (click)="changePublishStatus(template)">
+                                            <div class="br-toggle-switch"></div>
+                                        </div>
+                                    </td>
+
+                                    <td [attr.rowspan]="template.template_data.length" *ngIf="ri == 0">
+                                        <button (click)="getEdit(template)" class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Edit" id="editButton-` + meta.row + `">
+                                            <div style="width:25px; height:25px;"><i class="fa fa-pen"></i></div>
+                                        </button>
+
+                                        <button (click)="deleteItem(template)" class="btn btn-danger btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Delete" id="deleteButton-`+ meta.row + `">
+                                            <div style="width:25px; height:25px;"><i class="fa fa-trash"></i></div>
+                                        </button>
+                                    </td>
+
+                                    <td [attr.rowspan]="template.template_data.length" *ngIf="ri == 0">
+                                        {{template.state ? (getStateDetails(template.state, 'description') ?? template.code) : "N/A"}}
+                                    </td>
+
+                                    <td>{{item.effective_form ? (item.effective_form | date : 'mediumDate') : "N/A"}}</td>
+                                    <td>{{item.from_date ? (item.from_date | date : 'mediumDate') : "N/A"}}</td>
+                                    <td>{{item.to_date ? (item.to_date | date : 'mediumDate') : "N/A"}}</td>
+                                    <td class="text-uppercase">{{item.wage_band}}</td>
+                                    <td>{{item.wage_from ?? "N/A"}}</td>
+                                    <td>{{item.wage_to ?? "N/A"}}</td>
+                                    <td>{{item.employee_contribution ?? "N/A"}}</td>
+                                    <td>{{item.employer_contribution ?? "N/A"}}</td>
+                                    <td class="text-uppercase">{{item.gross_type ?? "N/A"}}</td>
+                                </tr>
+                            </ng-container>
+
+                            <tr *ngIf="templateRows.length == 0">
+                                <td colspan="12" class="text-center">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <app-custom-pagination [rows]="templateRows" [paginationOptions]="paginationOptions" (onPageClicked)="fetch($event)"></app-custom-pagination>
+        </div>
+    </div> -->
+
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-4">All LWF Rules</h6>
+
+            <div class="table-wrapper">
+                <div class="">
+                    <!-- <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable"> -->
+                    <table class="table nowrap wd-100p table-bordered " style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="">SL</th>
+                                <th class="">Publish</th>
+                                <th class="text-center">Action</th>
+                                <th>State</th>
+                                <th>Effective From</th>
+                                <th>Gross Type</th>
+                                <th>P1</th>
+                                <th>P2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          
+                                <tr *ngFor="let item of templateRows; let i = index">
+                                    <td>{{i+1}}</td>
+                                    
+                                    <td>
+                                        <div class="br-toggle br-toggle-rounded br-toggle-primary" [ngClass]="{'on': item?.publish_status == 'published', 'off' : item?.publish_status == 'privet' }" (click)="changePublishStatus(item)">
+                                            <div class="br-toggle-switch"></div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <button (click)="getEdit(item)" class="btn btn-primary btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Edit" id="editButton-` + meta.row + `">
+                                            <div style="width:25px; height:25px;"><i class="fa fa-pen"></i></div>
+                                        </button>
+
+                                        <button (click)="deleteItem(item)" class="btn btn-danger btn-icon mx-1" data-toggle="tooltip" data-placement="top" title="Delete" id="deleteButton-`+ meta.row + `">
+                                            <div style="width:25px; height:25px;"><i class="fa fa-trash"></i></div>
+                                        </button>
+                                    </td>
+
+                                    <td>
+                                        {{item.state ? item.state:"N/A" }}
+                                    </td>
+
+                                    <td>{{item.effective_form ? (item.effective_form | date : 'mediumDate') : "N/A"}}</td>
+                                   
+                                    <td class="text-uppercase">{{item.gross_type ?? "N/A"}}</td>
+                                    
+                                    
+
+                                    <td >{{item.period_one.from_month!=undefined?this.showMonth(item.period_one.from_month)+' - ':''}}{{item.period_one.to_month!=undefined?this.showMonth(item.period_one.to_month):'N/A'}}</td>
+                                    <td >{{item.period_two.from_month!=undefined?this.showMonth(item.period_two.from_month)+' - ':''}}{{item.period_two.to_month!=undefined?this.showMonth(item.period_two.to_month):'N/A'}}</td>
+
+                                </tr>
+                           
+
+                            <tr *ngIf="templateRows.length == 0">
+                                <td colspan="12" class="text-center">No records found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <app-custom-pagination [rows]="templateRows" [paginationOptions]="paginationOptions" (onPageClicked)="fetch($event)"></app-custom-pagination>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>

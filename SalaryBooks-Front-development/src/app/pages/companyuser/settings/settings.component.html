@@ -1,0 +1,1070 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashbaord</a>
+      <span class="breadcrumb-item active">Company Settings</span>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-settings"></i>
+    <div>
+      <h4>Company Settings</h4>
+      <p class="mg-b-0">
+        Manage your Templates, Govt Rules, Cost Centers & Staff/Sub User here
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="row">
+      <div
+        class="col-12 accordion"
+        id="settings-accordion"
+        role="tablist"
+        aria-multiselectable="true"
+      >
+        <!-- Government Rules -->
+        <div
+          class="card pd-0 bd-0 shadow-base"
+          *ngIf="
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'gov_pf_rule',
+              company_operation: ['customizable', 'default']
+            }) ||
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'gov_esic_rule',
+              company_operation: ['customizable', 'default']
+            }) ||
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'bonus_rule',
+              company_operation: ['customizable', 'default']
+            }) ||
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'gov_gratuity_rule',
+              company_operation: ['customizable', 'default']
+            }) ||
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'government_rules',
+              company_sub_module: [
+                'pf_rules',
+                'esi_rules',
+                'bonus_rules',
+                'gratuity',
+                'income_tax_slabs'
+              ],
+              company_sub_operation: ['add', 'edit', 'view', 'delete']
+            })
+          "
+        >
+          <div class="pd-x-30 pd-t-30 pd-b-30" role="tab" id="heading-govrules">
+            <a
+              data-toggle="collapse"
+              data-parent="#settings-accordion"
+              href="#collapse-govrules"
+              aria-expanded="true"
+              aria-controls="collapse-govrules"
+              class="tx-gray-800 transition"
+            >
+              <div class="d-flex align-items-center overflow-hidden">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/953/953585.png"
+                  class="wd-40"
+                />
+                <div class="ml-3">
+                  <h6
+                    class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1"
+                  >
+                    Government Rules
+                  </h6>
+                  <p class="mg-b-0">View/Customer Govt Rules</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div
+            class="pd-x-30 pd-t-10 pd-b-30 collapse"
+            id="collapse-govrules"
+            role="tabpanel"
+            aria-labelledby="heading-govrules"
+          >
+            <div class="row">
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'gov_pf_rule',
+                    company_operation: ['customizable', 'default']
+                  }) ||
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'government_rules',
+                    company_sub_module: ['pf_rules'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete']
+                  })
+                "
+              >
+                <a routerLink="/company/govt-rules/epfo-rules">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-card tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          EPFO Rules
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'gov_esic_rule',
+                    company_operation: ['customizable', 'default']
+                  }) ||
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'government_rules',
+                    company_sub_module: ['esi_rules'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete']
+                  })
+                "
+              >
+                <a routerLink="/company/govt-rules/esic-rules">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-card tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          ESIC Rules
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'gov_bonus_rule',
+                    company_operation: ['customizable', 'default']
+                  }) ||
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'government_rules',
+                    company_sub_module: ['bonus_rules'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete']
+                  })
+                "
+              >
+                <a routerLink="/company/govt-rules/bonus-rules">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-card tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Bonus Rules
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'gov_gratuity_rule',
+                    company_operation: ['customizable', 'default']
+                  }) ||
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'government_rules',
+                    company_sub_module: ['gratuity'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete']
+                  })
+                "
+              >
+                <a routerLink="/company/govt-rules/gratuity-rules">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-card tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Gratuity Rules
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'gov_gratuity_rule',
+                    company_operation: ['customizable', 'default']
+                  }) ||
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'government_rules',
+                    company_sub_module: ['income_tax_slabs'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete']
+                  })
+                "
+              >
+                <a routerLink="/company/govt-rules/itax-slabs">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-card tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Income Tax Slab
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'gov_gratuity_rule',
+                    company_operation: ['customizable', 'default']
+                  })
+                "
+              >
+                <a routerLink="/company/govt-rules/itax-categories">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-card tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Income Tax Category
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Company Rules -->
+        <div
+          class="card pd-0 bd-0 shadow-base mt-4"
+          *ngIf="
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'company_rules_1',
+              company_sub_module: [
+                'policy_package',
+                'salary_template',
+                'attendance_policy_',
+                'leave_policy',
+                'incentive_policy',
+                'bonus_policy',
+                'overtime_policy'
+              ],
+              company_sub_operation: ['add', 'edit', 'view', 'delete'],
+              company_strict: true
+            }) ||
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'company_rules_2',
+              company_sub_module: [
+                'p_tax_rules',
+                'lwf_rules',
+                'tds_rules',
+                'tds_template',
+                'pay_slip_template',
+                'bonus_slip_template',
+                'arrear_slip_tekmplate'
+              ],
+              company_sub_operation: ['add', 'edit', 'view', 'delete'],
+              company_strict: true
+            })
+          "
+        >
+          <div
+            class="pd-x-30 pd-t-30 pd-b-30"
+            role="tab"
+            id="heading-comprules"
+          >
+            <a
+              data-toggle="collapse"
+              data-parent="#settings-accordion"
+              href="#collapse-comprules"
+              aria-expanded="true"
+              aria-controls="collapse-comprules"
+              class="tx-gray-800 transition"
+            >
+              <div class="d-flex align-items-center overflow-hidden">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2891/2891526.png"
+                  class="wd-40"
+                />
+                <div class="ml-3">
+                  <h6
+                    class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1"
+                  >
+                    Company Rules
+                  </h6>
+                  <p class="mg-b-0">
+                    Create, View, Manage - Company Policy Templates
+                  </p>
+                </div>
+                <div class="tx-13"></div>
+              </div>
+            </a>
+          </div>
+          <div
+            class="pd-x-30 pd-t-10 pd-b-15 collapse"
+            id="collapse-comprules"
+            role="tabpanel"
+            aria-labelledby="heading-comprules"
+          >
+            <div class="row">
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_1',
+                    company_sub_module: ['policy_package'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/package/employee-packages">
+                  <div
+                    class="bg-primary rounded overflow-hidden"
+                    style="background: #004183 !important"
+                  >
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-ios-list tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Policy Package
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-sm-6 col-xl-3 mb-4">
+                <a
+                  routerLink="/company/salary-template"
+                  *ngIf="
+                    this.AppComponent.checkCompanyModulePermission({
+                      company_module: 'company_rules_1',
+                      company_sub_module: ['salary_template'],
+                      company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                      company_strict: true
+                    })
+                  "
+                >
+                  <div
+                    class="bg-primary rounded overflow-hidden"
+                    style="background: #004183 !important"
+                  >
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-ios-list tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Salary Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_1',
+                    company_sub_module: ['attendance_policy_'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/attendance-policy">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Attendance Policy Rule
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_1',
+                    company_sub_module: ['leave_policy'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/leave-policy/define-rule">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Leave Policy Rule
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_1',
+                    company_sub_module: ['incentive_policy'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/incentive-policy">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Incentive Policy Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_1',
+                    company_sub_module: ['bonus_policy'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/bonus-policy">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Bonus Policy Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_1',
+                    company_sub_module: ['overtime_policy'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/overtime-policy">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Overtime Policy Rule
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['pay_slip_template'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/payslip-template">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Payslip Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['bonus_slip_template'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/bonusslip-template">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Bonus Slip Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['arrear_slip_template'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/arrearslip-template">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          Arrear Slip Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['tds_rules'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict:true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/tds-template">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          TDS Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['tds_template'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/tds-rule">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          TDS Rule
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['p_tax_rules'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/ptax-rule">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          P-Tax Template
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'company_rules_2',
+                    company_sub_module: ['lwf_rules'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/company-rules/lwf-rule">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i class="ion ion-briefcase tx-30 lh-0 tx-white op-7"></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-2">
+                          LWF Rule
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master Settings -->
+        <div
+          class="card pd-0 bd-0 shadow-base mt-4"
+          *ngIf="
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'master',
+              company_sub_module: [
+                'department',
+                'designation',
+                'branch',
+                'client',
+                'bank_payment',
+                'letter_writer'
+              ],
+              company_sub_operation: ['add', 'edit', 'view', 'delete'],
+              company_strict: true
+            })
+          "
+        >
+          <div
+            class="pd-x-30 pd-t-30 pd-b-30"
+            role="tab"
+            id="heading-mastersettings"
+          >
+            <a
+              data-toggle="collapse"
+              data-parent="#settings-accordion"
+              href="#collapse-mastersettings"
+              aria-expanded="true"
+              aria-controls="collapse-mastersettings"
+              class="tx-gray-800 transition"
+            >
+              <div class="d-flex align-items-center overflow-hidden">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/535/535679.png"
+                  class="wd-40"
+                />
+                <div class="ml-3">
+                  <h6
+                    class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1"
+                  >
+                    Master Settings
+                  </h6>
+                  <p class="mg-b-0">Manage Cost Center master</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div
+            class="pd-x-30 pd-t-10 pd-b-30 collapse"
+            id="collapse-mastersettings"
+            role="tabpanel"
+            aria-labelledby="heading-mastersettings"
+          >
+            <div class="row">
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'master',
+                    company_sub_module: ['department'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/master/department">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Department Master
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'master',
+                    company_sub_module: ['designation'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/master/designation">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Designation Master
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'master',
+                    company_sub_module: ['branch'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a
+                  routerLink="/company/profile"
+                  [queryParams]="{ active: 'Company' }"
+                >
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Branch Master
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'master',
+                    company_sub_module: ['client'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/master/client">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Client Master
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'master',
+                    company_sub_module: ['letter_writer'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/master/letter">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Letter Writing
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3 mb-4"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'master',
+                    company_sub_module: ['bank_payment'],
+                    company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                    company_strict: true
+                  })
+                "
+              >
+                <a routerLink="/company/master/payment-bank">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Bank Payment
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-sm-6 col-xl-3 mb-4">
+                <a routerLink="/company/smtp">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          SMTP
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-sm-6 col-xl-3 mb-4">
+                <a routerLink="/company/geo-fence">
+                  <div class="bg-teal rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-settings tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Location Master
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff & Roles Settings -->
+        <div
+          class="card pd-0 bd-0 shadow-base mt-4"
+          *ngIf="
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: 'staff_management',
+              company_operation: 'staff_management'
+            }) ||
+            this.AppComponent.checkCompanyModulePermission({
+              company_module: ['role_management'],
+              company_operation: 'role_management'
+            })||
+            this.AppComponent.checkCompanyModulePermission({
+                company_sub_module: ['staff_management', 'role_&_rights'],
+                company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                company_module: ['sub_admin']
+              })
+          "
+        >
+          <div
+            class="pd-x-30 pd-t-30 pd-b-30"
+            role="tab"
+            id="heading-staffroles"
+          >
+            <a
+              data-toggle="collapse"
+              data-parent="#settings-accordion"
+              href="#collapse-staffroles"
+              aria-expanded="true"
+              aria-controls="collapse-staffroles"
+              class="tx-gray-800 transition"
+            >
+              <div class="d-flex align-items-center overflow-hidden">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/1789/1789197.png"
+                  class="wd-40"
+                />
+                <div class="ml-3">
+                  <h6
+                    class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1"
+                  >
+                    Staff & Roles Settings
+                  </h6>
+                  <p class="mg-b-0">
+                    Create & Manage Sub-User and their access rights
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div
+            class="pd-x-30 pd-t-10 pd-b-30 collapse"
+            id="collapse-staffroles"
+            role="tabpanel"
+            aria-labelledby="heading-staffroles"
+          >
+            <div class="row">
+              <div
+                class="col-sm-6 col-xl-3"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'staff_management',
+                    company_operation: 'staff_management'
+                  })||
+                  this.AppComponent.checkCompanyModulePermission({
+                      company_sub_module: ['staff_management'],
+                      company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                      company_module: ['sub_admin']
+                    })
+                "
+              >
+                <a routerLink="/company/staff/manage">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-personadd tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Staff Members
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div
+                class="col-sm-6 col-xl-3"
+                *ngIf="
+                  this.AppComponent.checkCompanyModulePermission({
+                    company_module: 'role_management',
+                    company_operation: 'role_management'
+                  })
+                  ||
+            this.AppComponent.checkCompanyModulePermission({
+                company_sub_module: ['role_&_rights'],
+                company_sub_operation: ['add', 'edit', 'view', 'delete'],
+                company_module: ['sub_admin']
+              })
+                "
+              >
+                <a routerLink="/company/role-access/manage-roles">
+                  <div class="bg-primary rounded overflow-hidden">
+                    <div class="pd-25 d-flex align-items-center">
+                      <i
+                        class="ion ion-ios-people tx-30 lh-0 tx-white op-7"
+                      ></i>
+                      <div class="mg-l-20">
+                        <p class="tx-15 tx-white tx-lato tx-bold mg-b-0 lh-1">
+                          Role Base Access
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

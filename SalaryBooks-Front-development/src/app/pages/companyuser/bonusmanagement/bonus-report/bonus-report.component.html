@@ -1,0 +1,241 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+  <div class="br-pageheader">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+      <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+      <a class="breadcrumb-item">Bonus Management</a>
+      <a class="breadcrumb-item active">Bonus Report</a>
+    </nav>
+  </div>
+
+  <div class="br-pagetitle">
+    <i class="icon icon ion-cash"></i>
+    <div>
+      <h4>Bonus Report</h4>
+      <p class="mg-b-0">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+      </p>
+    </div>
+  </div>
+
+  <div class="br-pagebody">
+    <div class="br-section-wrapper">
+      <companyuser-app-table-filter [monthFilter]="true">
+        <div addOn_btn1 class="col-sm-2 col-12">
+          <button
+            [disabled]="true"
+            class="btn-block btn btn-dark pd-y-13 pd-x-20 bd-0 tx-uppercase mg-r-5 tx-11 tx-spacing-2"
+          >
+            <i class="fa fa-refresh" aria-hidden="false"></i>
+            <i style="font-size: 10px" class="fa">&#xf021;</i>
+            Reset
+          </button>
+        </div>
+      </companyuser-app-table-filter>
+
+      <form>
+        <div class="row">
+          <div class="col-sm-5">
+            <ngx-select-dropdown
+              formControlName="template"
+              class="form-control p-1"
+              [config]="{
+                search: true,
+                placeholder: 'Select Custom Template',
+                displayKey: 'template_name',
+                height: '250px'
+              }"
+            ></ngx-select-dropdown>
+          </div>
+
+          <div class="col-sm-1">
+            <button
+              type="button"
+              class="btn btn-block btn-primary pd-y-7 pd-x-12 bd-0 tx-uppercase tx-20 tx-spacing-2"
+              (click)="initTemplateCreate()"
+            >
+              <i class="fa fa-cog"></i>
+            </button>
+          </div>
+
+          <div class="col-sm-4"></div>
+
+          <div class="col-sm-2">
+            <button
+              class="btn btn-primary pd-y-13 pd-x-20 bd-0 tx-uppercase tx-11 tx-spacing-2 btn-block"
+            >
+              Export
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="finacial-tbl mt-3">
+        <!-- <div class="table-responsive"> -->
+        <table class="w-100">
+          <thead>
+            <tr>
+              <th>SL No.</th>
+              <th>Employee ID</th>
+              <th>Name</th>
+              <th>Payment Status</th>
+              <th>Compliance Status</th>
+              <th>Net Pay Amount</th>
+              <th>EE PF Amount</th>
+              <th>ER PF Amount</th>
+              <th>EE ESI Amount</th>
+              <th>EE ESI Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>1234D55</td>
+              <td>John Doe</td>
+              <td><input type="checkbox" name="" id="" /></td>
+              <td><input type="checkbox" name="" id="" /></td>
+              <td>12326.00</td>
+              <td>1526.00</td>
+              <td>1189.00</td>
+              <td>786.00</td>
+              <td>2541.00</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>1234D55</td>
+              <td>John Doe</td>
+              <td><input type="checkbox" name="" id="" /></td>
+              <td><input type="checkbox" name="" id="" /></td>
+              <td>12326.00</td>
+              <td>1526.00</td>
+              <td>1189.00</td>
+              <td>786.00</td>
+              <td>2541.00</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>1234D55</td>
+              <td>John Doe</td>
+              <td><input type="checkbox" name="" id="" /></td>
+              <td><input type="checkbox" name="" id="" /></td>
+              <td>12326.00</td>
+              <td>1526.00</td>
+              <td>1189.00</td>
+              <td>786.00</td>
+              <td>2541.00</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- </div> -->
+      </div>
+
+      <app-custom-pagination></app-custom-pagination>
+    </div>
+  </div>
+
+  <button
+    id="settingsTemplateModalOpen"
+    [hidden]="true"
+    data-toggle="modal"
+    data-target="#settingsTemplateModal"
+  ></button>
+  <div
+    id="settingsTemplateModal"
+    tabindex="-1"
+    class="modal fade effect-slide-in-right"
+  >
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div class="modal-content tx-size-sm">
+        <div class="modal-header pd-x-20">
+          <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">
+            Create New Template
+          </h6>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form id="settingsTemplateForm">
+          <div class="modal-body pd-20 px-5">
+            <div>
+              <input
+                type="text"
+                class="form-control error"
+                placeholder="Enter Template Name"
+                formControlName="template_name"
+              />
+            </div>
+            <div
+              class="c-table my-3"
+              *ngFor="let row of bonusExportCustomFields"
+            >
+              <div class="c-tr">
+                <div class="c-th">
+                  <h4 class="text-dark m-0 mr-2">{{ row.section }}</h4>
+                  <label class="mb-0 text-dark" [for]="row.section">
+                    <input
+                      type="checkbox"
+                      (change)="
+                        adjustTemplateFields(row.values, $event);
+                        rowSelecion($event, row.section)
+                      "
+                      name="fields[{{ row.section }}]"
+                      [id]="row.section"
+                      class="mr-1"
+                    />
+                    Select All
+                  </label>
+                </div>
+                <div class="c-td" *ngFor="let item of row.values">
+                  <label
+                    (change)="adjustTemplateFields([item], $event)"
+                    class=""
+                    [for]="item.label"
+                  >
+                    <input
+                      #innerInput
+                      type="checkbox"
+                      name="fields[{{ row.section }}]"
+                      [id]="item.label"
+                      class="mr-1"
+                    />
+                    {{ item.label ?? "N/A" | titlecase }}
+                  </label>
+                </div>
+              </div>
+              <!-- <label for="field-{{ i }}">
+                    <input type="checkbox" id="field-{{ i }}" />
+                    {{
+                      employeeExportCustomFields[i]?.label ?? "N/A"
+                        | titlecase
+                    }}
+                  </label> -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn text-uppercase btn-secondary tx-size-xs"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn text-uppercase btn-primary tx-size-xs"
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>

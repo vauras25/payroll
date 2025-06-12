@@ -1,0 +1,150 @@
+<companyuser-app-dashboard-header></companyuser-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/company">Dashboard</a>
+            <a class="breadcrumb-item"><a routerLink="/company/employees">Employees</a></a>
+            <a class="breadcrumb-item">Extra Curriculum Attended</a>
+            <a class="breadcrumb-item active text-capitalize">{{operation}}</a>
+        </nav>
+    </div>
+
+    <div class="br-pagebody">
+        <companyuser-appemployee-form-navbar></companyuser-appemployee-form-navbar>
+
+        <div class="br-section-wrapper pd-20">
+            <h5 class="text-uppercase mb-3">
+                Employee Extra Curriculum Details
+
+                <a class="float-right"
+                    *ngIf="['view'].includes(this.operation)"
+                    target="_blank"
+                    routerLink="/company/employees/{{ this.employee_details?._id }}/print"
+                    [queryParams]="{section: 'extracurriculum'}">
+                    <i class="fa fa-print"></i>
+                </a>
+            </h5>
+
+            <div class="form-layout form-layout-6 employee-{{operation}}-form-section" *ngIf="operation == 'edit'" id="extracurriculum-submit-section">
+                <form [formGroup]="employeeExtraCurriculumForm">
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Extra Curriculum Type&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'extra_curricular_type', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" type="text" formControlName="extra_curricular_type">
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeExtraCurriculumForm, 'extra_curricular_type', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Extra Curriculum File Image&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'extra_curricular_file_image', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ng-container *ngIf="operation == 'edit'">
+                                <input class="form-control" type="file" accept="image/*" formControlName="extra_curricular_file_image" (change)="onFileChanged($event, employeeExtraCurriculumForm, 'extra_curricular_file_image', 'extra_curricular_file_image_file')">
+                                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeExtraCurriculumForm, 'extra_curricular_file_image', 'required')">This field is required</p>
+                                <p class="error-element" *ngIf="(max_upload_limit>0 && net_uploaded_size>max_upload_limit)">Max Upload Size Exceed</p>
+                                <p class="error-element" *ngIf="employeeExtraCurriculumForm.get('extra_curricular_file_image').hasError('fileSize')">
+                                    File size exceeds {{ employeeExtraCurriculumForm.get('extra_curricular_file_image').getError('maxSize') }} KB.</p>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Description&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'description', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="description"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeExtraCurriculumForm, 'description', 'required')">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Comment&nbsp;
+                            <span *ngIf="Global.isValidationAvailable(employeeExtraCurriculumForm, 'comments', 'required')" class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea class="form-control" type="text" formControlName="comments"></textarea>
+
+                            <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeExtraCurriculumForm, 'comments', 'required')">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1" *ngIf="operation == 'edit'">
+                        <div class="col-12 col-sm-12">
+                            <button type="button" class="btn btn-danger mr-2" (click)="cancelEntry()">Cancel</button>
+                            <button type="submit" class="btn btn-info" (click)="updateEmployeeExtraCurriculumDetails($event)">
+                              <span *ngIf="extracurriculum_id; else addExtraCurriculumSpanBlock">Update Extra Curriculum</span>
+                              <ng-template #addExtraCurriculumSpanBlock>
+                                <span>Add Extra Curriculum</span>
+                              </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bd bd-gray-300 rounded table-responsive mt-5">
+                <table class="table table-striped mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Extra Curriculum Type</th>
+                            <th>Description</th>
+                            <th>Comments</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="employee_details?.emp_det?.extra_curricular?.length > 0; else noTableFound">
+                        <tr *ngFor="let item of employee_details?.emp_det?.extra_curricular; let i = index">
+                            <th scope="row">{{ i+1 }}</th>
+                            <td>{{ item.extra_curricular_type }}</td>
+                            <td>{{ item.description ? item.description : 'N/A' }}</td>
+                            <td>{{ item.comments ? item.comments : 'N/A' }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-info mr-2" *ngIf="item.extra_curricular_file_image" (click)="imageViewer(Global.BACKEND_URL + '/' + item.extra_curricular_file_image)" data-toggle="tooltip" data-placement="top" title="View ExtraCurriculum Image File"><i class="fa fa-file"></i></button>
+                                <button class="btn btn-sm btn-primary" (click)="getEdit(item)" data-toggle="tooltip" data-placement="top" title="Edit ExtraCurriculum"><i class="fa fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <ng-template #noTableFound>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center">No Extra Curriculums Found</td>
+                            </tr>
+                        </tbody>
+                    </ng-template>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <companyuser-app-dashboard-footer></companyuser-app-dashboard-footer>
+</div>
+<div id="image-viewer-modal" tabindex="-1" class="modal fade animated fadeInLeftBig">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0">
+            <div class="modal-body pd-0">
+                <div class="row flex-row-reverse no-gutters">
+                    <div class="col-lg-12">
+                        <button style="position: absolute; color: white; right: 0;" type="button" class="close mg-t-2 mg-r-2 text-dark" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <div class="p-3 pt-2 mt-2">
+                            <img src="" alt="" id="image-src" class="w-100 img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

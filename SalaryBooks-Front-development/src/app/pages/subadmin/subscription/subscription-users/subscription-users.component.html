@@ -1,0 +1,181 @@
+<subadmin-app-dashboard-header></subadmin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/sub-admin">Dashboard</a>
+            <a class="breadcrumb-item">Subscription Management</a>
+            <a class="breadcrumb-item active">User Management</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'user_manager', 'view')">
+        <i class="icon ion-ios-list"></i>
+        <div>
+            <h4>User Management</h4>
+          <!-- <p class="mg-b-0">Lorem Ipsum is simply dummy text of the printing and typesetting</p> -->
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'user_manager', 'view')">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3">Search User</h6>
+
+            <div class="card" style="border:0px;">
+                <form [formGroup]="subscriptionUserSearchForm">
+                    <div class="card-block pd-0">
+                        <div class="row row-sm mg-t-20">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Name</label>
+                                    <input class="form-control" type="text" formControlName="establishment_name">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-md-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Package</label>
+                                    <div>
+                                        <ngx-select-dropdown formControlName="package_id" [options]="packageMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Status</label>
+                                    <ngx-select-dropdown formControlName="status" [options]="statusMaster" class="form-control" [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Email</label>
+                                    <input type="email" formControlName="email_id" class="form-control tx-14">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-sm mg-t-20">
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Plan</label>
+                                    <ngx-select-dropdown formControlName="plan_id" [options]="planMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-md-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label class="d-block">Mobile</label>
+                                    <div>
+                                        <input type="number" formControlName="phone_no" class="form-control tx-14">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Sort</label>
+                                    <ngx-select-dropdown formControlName="status" [options]="sortingMaster" class="form-control" [config]="{search:false, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-3 mg-t-10 mg-lg-t-0">
+                                <div class="form-group mg-b-0">
+                                    <label>Corporate ID</label>
+                                    <input type="text" formControlName="corporate_id" class="form-control tx-14">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button (click)="searchSubmit($event)" class="btn btn-info tx-11 tx-spacing-1 tx-uppercase tx-semibold tx-mont pd-y-12 pd-x-30 mg-t-30">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'user_manager', 'view')">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">User List
+                <button class="btn btn-info pull-right add-company" *ngIf="this.AppComponent.checkModulePermission('subadmin', 'user_manager', 'add')" (click)="addCompany()" style="float:right; clear: both;">Add Company</button>
+            </h6>
+            <div class="table-wrapper mt-5">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="">SL No</th>
+                            <th class="">Establishment Name</th>
+                            <th class="">Action</th>
+                            <th class="">Corporate Id</th>
+                            <!-- <th class="">Package</th> -->
+                            <th class="">Plan</th>
+                            <th class="">Email</th>
+                            <th class="">Mobile</th>
+                            <th class="">Status</th>
+                            <th class="">Credit Status (Available)</th>
+                            <th class="">Used Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="company-desc animate__animated animate__slideInRight">
+        <div class="pd-20 pd-xs-40" style="width:100%;">
+            <h6 class="tx-gray-800 tx-uppercase tx-bold">Add Company
+                <button class="btn btn-info pull-right close-earnings" (click)="cancelCompanyEntry()" style="float:right;clear: both;"><i class="fa fa-times"></i></button>
+            </h6>
+            <p class="tx-gray-600 mg-b-30">Add details below</p>
+
+            <form [formGroup]="subscriptionCompanyForm">
+                <div class="form-group">
+                    <label> Establishment Name <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="establishment_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Corporate ID <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="corporate_id" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Master User Name (User ID) <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="userid" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Email Id <span class="text-danger">*</span></label>
+                    <input type="email" formControlName="email_id" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Phone Number <span class="text-danger">*</span></label>
+                    <input type="number" formControlName="phone_no" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label> Password <span class="text-danger">*</span></label>
+                    <input type="password" formControlName="password" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label>Package <span class="text-danger">*</span></label>
+                    <ngx-select-dropdown formControlName="package_id" [options]="packageMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                </div>
+
+                <div class="form-group">
+                    <label>Plan <span class="text-danger">*</span></label>
+                    <ngx-select-dropdown formControlName="plan_id" [options]="planMaster" class="form-control" [config]="{search:true, placeholder: 'Choose One'}"></ngx-select-dropdown>
+                </div>
+
+                <button class="btn btn-info btn-block pd-y-10 mg-b-30" (click)="createCompany($event)" [disabled]="!subscriptionCompanyForm.valid">
+                    <span>Save</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <subadmin-app-dashboard-footer></subadmin-app-dashboard-footer>
+</div>

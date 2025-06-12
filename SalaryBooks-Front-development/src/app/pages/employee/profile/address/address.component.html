@@ -1,0 +1,162 @@
+
+<form [formGroup]="employeeAddressForm">
+<table class="table table-hover mb-0">
+    <tbody>
+        <tr>
+            <th><b>Residence no</b></th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="resident_no">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'resident_no', 'required')">This field is required</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Residence name</th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="residential_name">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'residential_name', 'required')">This field is required</p>
+            </td>
+        </tr>
+       
+        <tr>
+            <th>Road/road</th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="road">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'road', 'required')">This field is required</p>
+            </td>
+        </tr>
+        
+        <tr>
+            <th>Locality/Area</th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="locality">
+
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'locality', 'required')">This field is required</p>
+            </td>
+        </tr>
+        <tr>
+            <th>City/Town</th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="city">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'city', 'required')">This field is required</p>
+
+            </td>
+        </tr>
+        <tr>
+            <th>District</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="district">
+
+               <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'district', 'required')">This field is required</p>
+            
+            </td>
+        </tr>
+        <tr>
+            <th>State</th>
+            <td>
+                <ngx-select-dropdown formControlName="state" [disabled]="isReadOnly"  [options]="stateMaster" class="form-control" [disabled]="isReadOnly"  [config]="{search: true, placeholder: 'Choose One', 'height': '200px'}"></ngx-select-dropdown>
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'state', 'required')">This field is required</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Pincode</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="pincode">
+
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'pincode', 'required')">This field is required</p>
+
+                <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeAddressForm, 'pincode', 'pattern') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'minlength') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'maxlength'))">Enter valid Pincode</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Country</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="country">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'country', 'required')">This field is required</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="mt-3">
+<h6>Permanent Address</h6>
+<div class="form-check">
+<input type="checkbox" class="form-check-input"  [disabled]= "isReadOnly" id="exampleCheck1" (change)="checkpermanentadd($event)" [attr.checked]="employeeAddressForm.value.diff_current_add=='yes'" >
+<label class="form-check-label" for="exampleCheck1">Same as above</label>
+</div>
+</div>
+  <table class="table table-hover mb-0" *ngIf="employeeAddressForm.value.diff_current_add=='no'">
+    <tbody>
+        <tr>
+            <th><b>Current Residence no</b></th>
+            <td>
+                <input class="form-control" type="text" formControlName="curr_resident_no">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_resident_no', 'required')">This field is required</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Current Residence name</th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="curr_residential_name">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_residential_name', 'required')">This field is required</p>
+            </td>
+        </tr>
+        
+        <tr>
+            <th>Current Road/road</th>
+            <td>
+                <input class="form-control"  [readonly]= "isReadOnly" type="text" formControlName="curr_road">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_road', 'required')">This field is required</p>
+            </td>
+        </tr>
+        
+        <tr>
+            <th>Current Locality/Area</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="curr_locality">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_locality', 'required')">This field is required</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Current City/Town</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="curr_city">
+
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_city', 'required')">This field is required</p>
+            
+            </td>
+        </tr>
+        <tr>
+            <th>Current District</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="curr_district">
+
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_district', 'required')">This field is required</p>
+
+            </td>
+        </tr>
+        <tr>
+            <th>Current State</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="curr_state">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_state', 'required')">This field is required</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Current Pincode</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="curr_pincode">
+
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_pincode', 'required')">This field is required</p>
+
+                <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeAddressForm, 'curr_pincode', 'pattern') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'minlength') || !Global.isInputRuleValid(employeeAddressForm, 'pincode', 'maxlength'))">Enter valid Pincode</p>
+            </td>
+        </tr>
+        <tr>
+            <th>Current Country</th>
+            <td>
+                <input class="form-control" type="text"  [readonly]= "isReadOnly" formControlName="curr_country">
+                <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeAddressForm, 'curr_country', 'required')">This field is required</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</form>

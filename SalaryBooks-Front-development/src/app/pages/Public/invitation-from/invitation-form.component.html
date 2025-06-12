@@ -1,0 +1,4929 @@
+<div *ngIf="isLinkValid && isFormPending">
+  <div  class="navbar-line">
+    <button style="all: unset;" class="d-inline d-md-none d-lg-none rounded" (click)="addRemoveMenuClass(ul)"><i class="fa fa-bars"></i></button>
+    <ul #ul class="d-none d-md-flex d-lg-flex">
+      <ng-container >
+        <li (click)="employee_details ? formType = 'personal_details' : null" [class.active]="formType === 'personal_details'">Personal Details</li>
+        <li (click)="employee_details ? formType = 'address_details' : null" [class.active]="formType === 'address_details'">Address</li>
+        <li (click)="employee_details ? formType = 'bank_details' : null" [class.active]="formType === 'bank_details'">Bank Details</li>
+        <li (click)="employee_details ? formType = 'pf_esi_data' : null" [class.active]="formType === 'pf_esi_data'">PF & ESI</li>
+        <li (click)="employee_details ? formType = 'educational' : null" [class.active]="formType === 'educational'">Educational</li>
+        <li (click)="employee_details ? formType = 'accident' : null" [class.active]="formType === 'accident'">Accident</li>
+        <li (click)="employee_details ? formType = 'training' : null" [class.active]="formType === 'training'">Training</li>
+        <li (click)="employee_details ? formType = 'extra_curricular' : null" [class.active]="formType === 'extra_curricular'">Extra Curricular</li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'personal_details'">
+    <h5 class="text-uppercase mb-3">Employee Details</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+    >
+      <form [formGroup]="employeeDetailsForm">
+        <ng-container>
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Employee First Name &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'emp_first_name',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="emp_first_name"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emp_first_name',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Employee Last Name &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'emp_last_name',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="emp_last_name"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emp_last_name',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Mobile &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'mobile_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="mobile_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'mobile_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'mobile_no',
+                    'pattern'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'mobile_no',
+                    'minlength'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'mobile_no',
+                    'maxlength'
+                  )
+                "
+              >
+                Enter valid contact number
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 blank">
+              <!-- Alternate Mobile
+                          &nbsp;<span *ngIf="Global.isValidationAvailable(employeeDetailsForm, 'alternate_mob_no', 'required')" class="text-danger">*</span> -->
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3 blank">
+              <!-- <input class="form-control" type="email" formControlName="alternate_mob_no"> -->
+
+              <!-- <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'required')">This field is required</p> -->
+
+              <!-- <p class="error-element" *ngIf="(!Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'pattern') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'minlength') || !Global.isInputRuleValid(employeeDetailsForm, 'alternate_mob_no', 'maxlength'))">Enter valid contact number</p> -->
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Date of Birth &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'emp_dob',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="date"
+                formControlName="emp_dob"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emp_dob',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Gender &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'sex',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ngx-select-dropdown
+                formControlName="sex"
+                [options]="sexMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select Gender' }"
+                [multiple]="false"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'sex',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container>
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Father's Name &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'emp_father_name',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="emp_father_name"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emp_father_name',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Email ID &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'email_id',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="email"
+                formControlName="email_id"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'email_id',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'email_id',
+                    'email'
+                  )
+                "
+              >
+                Please enter a valid email
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Alternate Mobile &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'alternate_mob_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="email"
+                formControlName="alternate_mob_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'alternate_mob_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'alternate_mob_no',
+                    'pattern'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'alternate_mob_no',
+                    'minlength'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'alternate_mob_no',
+                    'maxlength'
+                  )
+                "
+              >
+                Enter valid contact number
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Emergency Contact Number &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'emergency_contact_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="emergency_contact_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emergency_contact_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emergency_contact_no',
+                    'pattern'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emergency_contact_no',
+                    'minlength'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emergency_contact_no',
+                    'maxlength'
+                  )
+                "
+              >
+                Enter valid contact number
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Aadhar Card Number &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'aadhar_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="aadhar_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'aadhar_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'aadhar_no',
+                    'pattern'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'aadhar_no',
+                    'minlength'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'aadhar_no',
+                    'maxlength'
+                  )
+                "
+              >
+                Enter valid Aadhaarcard Number
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.aadhar_no.value &&
+                  employeeDetailsForm.controls.aadhar_no.value != 'N/A'
+                "
+              >
+                Aadhar Card Image &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employeeDetailsForm,
+                      'emp_aadhaar_image',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </ng-container>
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ng-container *ngIf="employeeDetailsForm.controls.aadhar_no.value && employeeDetailsForm.controls.aadhar_no.value != 'N/A'">
+                  <!-- <ng-container>
+                      <button *ngIf="employee_details.emp_aadhaar_image" (click)="Global.imageViewer(Global.BACKEND_URL + '/' + employee_details.emp_aadhaar_image)" class="btn btn-primary">View Aadharcard Image</button>
+                      <span *ngIf="!employee_details.emp_aadhaar_image"></span>
+                  </ng-container> -->
+
+                  <ng-container >
+                      <input class="form-control" type="file" accept="image/*" formControlName="emp_aadhaar_image" (change)="onFileChanged($event, employeeDetailsForm, 'emp_aadhaar_image', 'emp_aadhaar_image_file')">
+
+                      <p class="error-element" *ngIf="!Global.isInputRuleValid(employeeDetailsForm, 'emp_aadhaar_image', 'required')">This field is required</p>
+                  </ng-container>
+              </ng-container>
+          </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              PAN Card Number &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'pan_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="pan_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'pan_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'pan_no',
+                    'pattern'
+                  )
+                "
+              >
+                Enter valid PAN Number
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.pan_no.value &&
+                  employeeDetailsForm.controls.pan_no.value != 'N/A'
+                "
+              >
+                PAN Card Image&nbsp;
+                <span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employeeDetailsForm,
+                      'emp_pan_image',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </ng-container>
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.pan_no.value &&
+                  employeeDetailsForm.controls.pan_no.value != 'N/A'
+                "
+              >
+                <!-- <ng-container >
+                  <button
+                    *ngIf="employee_details.emp_pan_image"
+                    (click)="
+                      Global.imageViewer(
+                        Global.BACKEND_URL +
+                          '/' +
+                          employee_details.emp_pan_image
+                      )
+                    "
+                    class="btn btn-primary"
+                  >
+                    View Pancard Image
+                  </button>
+                  <span *ngIf="!employee_details.emp_pan_image"></span>
+                </ng-container> -->
+
+                <ng-container>
+                  <input
+                    class="form-control"
+                    type="file"
+                    accept="image/*"
+                    formControlName="emp_pan_image"
+                    (change)="
+                      onFileChanged(
+                        $event,
+                        employeeDetailsForm,
+                        'emp_pan_image',
+                        'emp_pan_image_file'
+                      )
+                    "
+                  />
+
+                  <p
+                    class="error-element"
+                    *ngIf="
+                      !Global.isInputRuleValid(
+                        employeeDetailsForm,
+                        'emp_pan_image',
+                        'required'
+                      )
+                    "
+                  >
+                    This field is required
+                  </p>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Passport Number &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'passport_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="passport_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'passport_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'passport_no',
+                    'pattern'
+                  )
+                "
+              >
+                Enter valid PAN Number
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.passport_no.value &&
+                  employeeDetailsForm.controls.passport_no.value != 'N/A'
+                "
+              >
+                Passport Image&nbsp;
+                <span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employeeDetailsForm,
+                      'emp_passport_image',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </ng-container>
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.passport_no.value &&
+                  employeeDetailsForm.controls.passport_no.value != 'N/A'
+                "
+              >
+                <!-- <ng-container >
+                  <button
+                    *ngIf="employee_details.emp_passport_image"
+                    (click)="
+                      Global.imageViewer(
+                        Global.BACKEND_URL +
+                          '/' +
+                          employee_details.emp_passport_image
+                      )
+                    "
+                    class="btn btn-primary"
+                  >
+                    Passport Image
+                  </button>
+                  <span *ngIf="!employee_details.emp_passport_image">N/A</span>
+                </ng-container> -->
+
+                <ng-container>
+                  <input
+                    class="form-control"
+                    type="file"
+                    accept="image/*"
+                    formControlName="emp_passport_image"
+                    (change)="
+                      onFileChanged(
+                        $event,
+                        employeeDetailsForm,
+                        'emp_passport_image',
+                        'emp_passport_image_file'
+                      )
+                    "
+                  />
+
+                  <p
+                    class="error-element"
+                    *ngIf="
+                      !Global.isInputRuleValid(
+                        employeeDetailsForm,
+                        'emp_passport_image',
+                        'required'
+                      )
+                    "
+                  >
+                    This field is required
+                  </p>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+
+          <div
+            class="row "
+            *ngIf="employeeDetailsForm.controls.passport_no.value"
+          >
+            <div class="col col-6 col-md-3 col-lg-3">
+              Passport Valid From &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'passport_val_form',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="date"
+                formControlName="passport_val_form"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'passport_val_form',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Passport Valid To &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'passport_val_to',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="date"
+                formControlName="passport_val_to"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'passport_val_to',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Nationality &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'nationality',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="nationality"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'nationality',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Blood Group &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'blood_group',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ngx-select-dropdown
+                formControlName="blood_group"
+                [options]="bloodGroupMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'blood_group',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Physical Disability &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'physical_disability',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ngx-select-dropdown
+                formControlName="physical_disability"
+                [options]="yesNoMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'physical_disability',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Marital Status &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'marital_status',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ngx-select-dropdown
+                formControlName="marital_status"
+                [options]="maritalStatusMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'marital_status',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.marital_status.value?.value ==
+                  'married'
+                "
+              >
+                Date of Marriage &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employeeDetailsForm,
+                      'marriage_date',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </ng-container>
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ng-container
+                *ngIf="
+                  employeeDetailsForm.controls.marital_status.value?.value ==
+                  'married'
+                "
+              >
+                <input
+                  class="form-control"
+                  type="date"
+                  formControlName="marriage_date"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeDetailsForm,
+                      'marriage_date',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </ng-container>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Emergency Contact Name &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'emergency_contact_name',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="emergency_contact_name"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'emergency_contact_name',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Domicile &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'domicile',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="domicile"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'domicile',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Height &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'height',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="height"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'height',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Religion &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'religion',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <ngx-select-dropdown
+                formControlName="religion"
+                [options]="religionMaster"
+                class="form-control"
+                [config]="{ search: true, placeholder: 'Select One' }"
+              ></ngx-select-dropdown>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeDetailsForm,
+                    'religion',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Addional ID&nbsp;
+              <span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'additional_id_image',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container >
+                <input
+                  class="form-control"
+                  type="file"
+                  accept="image/*"
+                  formControlName="additional_id_image"
+                  (change)="
+                    onFileChanged(
+                      $event,
+                      employeeDetailsForm,
+                      'additional_id_image',
+                      'additional_id_image_file'
+                    )
+                  "
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeDetailsForm,
+                      'additional_id_image',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+            </ng-container>
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              PROFILE IMAGE&nbsp;
+              <span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeDetailsForm,
+                    'profile_image_file',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container >
+                <input
+                  class="form-control"
+                  type="file"
+                  accept="image/*"
+                  formControlName="profile_image"
+                  (change)="
+                    onFileChanged(
+                      $event,
+                      employeeDetailsForm,
+                      'profile_image',
+                      'profile_image_file'
+                    )
+                  "
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employeeDetailsForm,
+                      'profile_image',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              *ngIf="!employee_details"
+              [disabled]="employeeDetailsForm.invalid"
+              class="btn btn-info text-uppercase"
+              (click)="createEmployee($event)"
+            >
+              <span>Create</span>
+            </button>
+            <button
+            *ngIf="employee_details"
+              [disabled]="employeeDetailsForm.invalid"
+              class="btn btn-info text-uppercase"
+              (click)="updateEmployee($event)"
+            >
+              <span>Update</span>
+            </button>
+            <button 
+              *ngIf="employee_details"
+              [disabled]="employeeDetailsForm.invalid"
+              class="btn btn-info text-uppercase ml-4 d-inline d-md-none d-lg-none"
+              (click)="employee_details ? formType = 'address_details' : null">
+              <span>Add Address Details</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'address_details'">
+    <h5 class="text-uppercase mb-3">Employee Address Details</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+    >
+      <form [formGroup]="employeeAddressForm">
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Residence no &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'resident_no',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="resident_no"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'resident_no',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Residence name &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'residential_name',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="residential_name"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'residential_name',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Road/road &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'road',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="road" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'road',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Locality/Area &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'locality',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="locality"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'locality',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            City/Town &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'city',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="city" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'city',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            District &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'district',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="district"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'district',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            State &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'state',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ngx-select-dropdown
+              formControlName="state"
+              [options]="stateMaster"
+              class="form-control"
+              [config]="{
+                search: true,
+                placeholder: 'Choose One',
+                height: '200px'
+              }"
+            ></ngx-select-dropdown>
+            <!-- <input formControlName="state" class="form-control" type="text"> -->
+            <!-- <p class="error-element" *ngIf="employeeAddressForm.controls.state.hasError('required') && (employeeAddressForm.controls.state.dirty)">This field is required</p> -->
+            <!-- <input class="form-control" type="text" formControlName="state"> -->
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'state',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Pincode &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'pincode',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="pincode" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'pincode',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'pincode',
+                  'pattern'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'pincode',
+                  'minlength'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'pincode',
+                  'maxlength'
+                )
+              "
+            >
+              Enter valid Pincode
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Country &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'country',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="country" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'country',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-sm-6 "></div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-sm-6">
+            Is current Residential Address is different from the above
+            &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAddressForm,
+                  'diff_current_add',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-sm-6">
+            <label class="rdiobox">
+              <input
+                formControlName="diff_current_add"
+                type="radio"
+                value="yes"
+              />
+              <span>Yes</span>
+            </label>
+            <label class="rdiobox">
+              <input
+                formControlName="diff_current_add"
+                type="radio"
+                value="no"
+              />
+              <span>No</span>
+            </label>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAddressForm,
+                  'diff_current_add',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div id="current-address-fields">
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Current Residence no &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_resident_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_resident_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_resident_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Current Residence name &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_residential_name',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_residential_name"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_residential_name',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Current Road/road &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_road',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_road"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_road',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Current Locality/Area &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_locality',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_locality"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_locality',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Current City/Town &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_city',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_city"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_city',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Current District &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_district',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_district"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_district',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Current State &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_state',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_state"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_state',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Current Pincode &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_pincode',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_pincode"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_pincode',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_pincode',
+                    'pattern'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'pincode',
+                    'minlength'
+                  ) ||
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'pincode',
+                    'maxlength'
+                  )
+                "
+              >
+                Enter valid Pincode
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Current Country &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employeeAddressForm,
+                    'curr_country',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="curr_country"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAddressForm,
+                    'curr_country',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-sm-6 "></div>
+          </div>
+        </div>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              *ngIf="employee_details"
+              class="btn btn-info text-uppercase"
+              [disabled]="employeeAddressForm.invalid"
+              (click)="updateEmployeeAddress($event)"
+            >
+              <span>Update</span>
+            </button>
+            <button 
+            *ngIf="employee_details"
+            class="btn btn-info text-uppercase ml-4 d-inline d-md-none d-lg-none"
+            (click)="employee_details ? formType = 'bank_details' : null">
+            <span>Add Bank Details</span>
+          </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'bank_details'">
+    <h5 class="text-uppercase mb-3">Employee Bank Details</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+    >
+      <form [formGroup]="employeeBankForm">
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Bank Name &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'bank_name',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="bank_name"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'bank_name',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Branch &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'branch_name',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="branch_name"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'branch_name',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Branch Address &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'branch_address',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="branch_address"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'branch_address',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Bank PIN &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'branch_pin',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="branch_pin"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'branch_pin',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            A/C No &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'account_no',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="account_no"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no',
+                  'pattern'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no',
+                  'minlength'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no',
+                  'maxlength'
+                )
+              "
+            >
+              Enter valid A/C No
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Re-enter A/C No &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'account_no_confirmation',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="account_no_confirmation"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no_confirmation',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no_confirmation',
+                  'pattern'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no_confirmation',
+                  'minlength'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_no_confirmation',
+                  'maxlength'
+                )
+              "
+            >
+              Enter valid A/C No
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            A/C Type &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'account_type',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ngx-select-dropdown
+              formControlName="account_type"
+              [options]="accountTypeMaster"
+              class="form-control"
+              [config]="{ search: false, placeholder: 'Select One' }"
+              [multiple]="false"
+            ></ngx-select-dropdown>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'account_type',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            IFSC Code &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'ifsc_code',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="ifsc_code"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'ifsc_code',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'ifsc_code',
+                  'pattern'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'ifsc_code',
+                  'minlength'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'ifsc_code',
+                  'maxlength'
+                )
+              "
+            >
+              Enter valid IFSC Code
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            MICR No &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'micr_no',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="micr_no" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'micr_no',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'micr_no',
+                  'pattern'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'micr_no',
+                  'minlength'
+                ) ||
+                !Global.isInputRuleValid(
+                  employeeBankForm,
+                  'micr_no',
+                  'maxlength'
+                )
+              "
+            >
+              Enter valid MICR No
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Upload Cheque/Passbook &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeBankForm,
+                  'cancel_cheque',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container>
+              <button
+                *ngIf="
+                  employee_details?.emp_det?.bank_details?.cancel_cheque;
+                  else noPassbookImage
+                "
+                (click)="
+                  imageViewer(
+                    Global.BACKEND_URL +
+                      '/' +
+                      employee_details.emp_det?.bank_details?.cancel_cheque
+                  )
+                "
+                class="btn btn-primary"
+              >
+                View Passbook Image
+              </button>
+              <ng-template #noPassbookImage> N/A </ng-template>
+            </ng-container>
+
+            <ng-container>
+              <input
+                class="form-control"
+                type="file"
+                accept="image/*"
+                formControlName="cancel_cheque"
+                (change)="
+                  onFileChanged(
+                    $event,
+                    employeeBankForm,
+                    'cancel_cheque',
+                    'cancel_cheque_file'
+                  )
+                "
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeBankForm,
+                    'cancel_cheque',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              *ngIf="employee_details"
+              [disabled]="employeeBankForm.invalid"  
+              class="btn btn-info text-uppercase"
+              (click)="updateEmployeeBankDetail($event)">
+                <span>Update</span>
+            </button>
+            <button 
+            *ngIf="employee_details"
+            class="btn btn-info text-uppercase ml-4 d-inline d-md-none d-lg-none"
+            (click)="employee_details ? formType = 'pf_esi_data' : null">
+            <span>Add PF & ESI</span>
+          </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'pf_esi_data'">
+    <h5 class="text-uppercase mb-3">Employee Employment Details</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+    >
+      <form [formGroup]="employmentForm">
+        <!-- Start of Previous Employment Details -->
+        <div class="row ">
+          <div class="col-md-6 bg-dark">
+            <h6 class="mb-0 text-white">Previous Employment</h6>
+          </div>
+          <div class="col-md-6 bg-dark">
+            <div
+              id="previousemployment-toggle-ab"
+              [class.on]="isPrev"
+              class="br-toggle br-toggle-rounded bg-white"
+              (click)="isPrev = !isPrev; shuffleFields()"
+            >
+              <div class="br-toggle-switch bg-dark"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="prevemployment-fields-ab" style="display: none">
+          <ng-container formGroupName="pre_er_details">
+            <div class="row ">
+              <div class="col col-6 col-md-3 col-lg-3">
+                Name of Prev Employer &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employmentForm,
+                      'pre_er_details.er_name',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col col-6 col-md-3 col-lg-3">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="er_name"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.er_name',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col col-6 col-md-3 col-lg-3 ">
+                Exit Date at Prev Employer &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employmentForm,
+                      'pre_er_details.exit_date',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col col-6 col-md-3 col-lg-3">
+                <input
+                  class="form-control"
+                  type="date"
+                  formControlName="exit_date"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.exit_date',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+
+            <div class="row ">
+              <div class="col col-6 col-md-3 col-lg-3">
+                Last Drawn Gross &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employmentForm,
+                      'pre_er_details.last_drawn_gross',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col col-6 col-md-3 col-lg-3">
+                <input
+                  class="form-control"
+                  type="number"
+                  formControlName="last_drawn_gross"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.last_drawn_gross',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col col-6 col-md-3 col-lg-3 ">
+                Last Designation &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employmentForm,
+                      'pre_er_details.last_designation',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col col-6 col-md-3 col-lg-3">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="last_designation"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.last_designation',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+            </div>
+
+            <div class="row ">
+              <div class="col col-6 col-md-3 col-lg-3">
+                Reporting to &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employmentForm,
+                      'pre_er_details.reporting_to',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col col-6 col-md-3 col-lg-3">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="reporting_to"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.reporting_to',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+              </div>
+
+              <div class="col col-6 col-md-3 col-lg-3 ">
+                Contact No &nbsp;<span
+                  *ngIf="
+                    Global.isValidationAvailable(
+                      employmentForm,
+                      'pre_er_details.contact_no',
+                      'required'
+                    )
+                  "
+                  class="text-danger"
+                  >*</span
+                >
+              </div>
+              <div class="col col-6 col-md-3 col-lg-3">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="contact_no"
+                />
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.contact_no',
+                      'required'
+                    )
+                  "
+                >
+                  This field is required
+                </p>
+
+                <p
+                  class="error-element"
+                  *ngIf="
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.contact_no',
+                      'pattern'
+                    ) ||
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.contact_no',
+                      'minlength'
+                    ) ||
+                    !Global.isInputRuleValid(
+                      employmentForm,
+                      'pre_er_details.contact_no',
+                      'maxlength'
+                    )
+                  "
+                >
+                  Enter valid contact number
+                </p>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Start of EPFO & ESIC Details -->
+          <div class="row ">
+            <div class="col-md-6 d-block">
+              <h6 class="mb-0 text-primary text-uppercase text-center">
+                EPFO Details
+              </h6>
+            </div>
+            <div class="col-md-6 d-block" style="background-color: #f8f9fa">
+              <h6 class="mb-0 text-primary text-uppercase text-center">
+                ESIC Details
+              </h6>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              UAN No &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employmentForm,
+                    'pre_er_epfo_details.uan_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3" formGroupName="pre_er_epfo_details">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="uan_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employmentForm,
+                    'pre_er_epfo_details.uan_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              IP/ESIC No &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employmentForm,
+                    'pre_er_esic_details.esic_no',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3" formGroupName="pre_er_esic_details">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="esic_no"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employmentForm,
+                    'pre_er_esic_details.esic_no',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Last Member ID &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employmentForm,
+                    'pre_er_epfo_details.last_member_id',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3" formGroupName="pre_er_epfo_details">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="last_member_id"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employmentForm,
+                    'pre_er_epfo_details.last_member_id',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              IP Dispensary &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employmentForm,
+                    'pre_er_esic_details.ip_dispensary',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3" formGroupName="pre_er_esic_details">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="ip_dispensary"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employmentForm,
+                    'pre_er_esic_details.ip_dispensary',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+
+          <div class="row ">
+            <div class="col col-6 col-md-3 col-lg-3">
+              Last RO &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employmentForm,
+                    'pre_er_epfo_details.last_ro',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3" formGroupName="pre_er_epfo_details">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="last_ro"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employmentForm,
+                    'pre_er_epfo_details.last_ro',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+
+            <div class="col col-6 col-md-3 col-lg-3 ">
+              Family Dispensary &nbsp;<span
+                *ngIf="
+                  Global.isValidationAvailable(
+                    employmentForm,
+                    'pre_er_esic_details.family_dispensary',
+                    'required'
+                  )
+                "
+                class="text-danger"
+                >*</span
+              >
+            </div>
+            <div class="col col-6 col-md-3 col-lg-3" formGroupName="pre_er_esic_details">
+              <input
+                class="form-control"
+                type="text"
+                formControlName="family_dispensary"
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employmentForm,
+                    'pre_er_esic_details.family_dispensary',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </div>
+          </div>
+          <!-- End of EPFO & ESIC Details -->
+        </div>
+        <!-- End of Previous Employment Details -->
+
+        <!-- Start of Current Employer Details -->
+        <div class="row ">
+          <div class="col-md-12 bg-dark d-block">
+            <h6 class="mb-0 text-white text-center">
+              Current Employer Details
+            </h6>
+          </div>
+        </div>
+
+        <!-- Start of EPFO & ESIC Details -->
+        <div class="row ">
+          <div class="col-md-6 d-block">
+            <h6 class="mb-0 text-primary text-uppercase text-center">
+              EPFO Details
+            </h6>
+          </div>
+          <div class="col-md-6 d-block" style="background-color: #f8f9fa">
+            <h6 class="mb-0 text-primary text-uppercase text-center">
+              ESIC Details
+            </h6>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            UAN No &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_epfo_details.uan_no',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_epfo_details">
+            <input class="form-control" type="text" formControlName="uan_no" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_epfo_details.uan_no',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            IP/ESIC No &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_esic_details.esic_no',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_esic_details">
+            <input class="form-control" type="text" formControlName="esic_no" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_esic_details.esic_no',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Last Member ID &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_epfo_details.last_member_id',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_epfo_details">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="last_member_id"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_epfo_details.last_member_id',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            IP Dispensary &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_esic_details.ip_dispensary',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_esic_details">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="ip_dispensary"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_esic_details.ip_dispensary',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Last RO &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_epfo_details.last_ro',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_epfo_details">
+            <input class="form-control" type="text" formControlName="last_ro" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_epfo_details.last_ro',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Family Dispensary &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_esic_details.family_dispensary',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_esic_details">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="family_dispensary"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_esic_details.family_dispensary',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Date of Membership as per portal &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_epfo_details.membership_date',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_epfo_details">
+            <input
+              class="form-control"
+              type="date"
+              formControlName="membership_date"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_epfo_details.membership_date',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Date of Membership as per portal &nbsp;<span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employmentForm,
+                  'curr_er_esic_details.membership_date',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3" formGroupName="curr_er_esic_details">
+            <input
+              class="form-control"
+              type="date"
+              formControlName="membership_date"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employmentForm,
+                  'curr_er_esic_details.membership_date',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+        <!-- End of EPFO & ESIC Details -->
+        <!-- End of Current Employer Details -->
+
+        <!-- Start of Family Details for ESIC -->
+        <div class="row mt-3">
+          <div
+            class="col-12 p-0 bg-white "
+            style="border-right: 1px solid #ced4da !important"
+          >
+            <div class="overflow-x-auto table-responsive--n w-100">
+              <table
+                class="pf-table mt-table table table-bordered text-center"
+                style="border: 1px solid #e9ecef !important"
+              >
+                <thead>
+                  <tr class="bg-dark">
+                    <th colspan="100%" class="text-center text-white">
+                      Family Details for ESIC
+                    </th>
+                  </tr>
+                  <tr >
+                    <th>Name</th>
+                    <th>DOB</th>
+                    <th>Relation</th>
+                    <th>Sex</th>
+                    <th>Residing with IP</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="esic_family_details">
+                  <tr
+                    *ngFor="
+                      let item of Global.getFormGroupArray(
+                        employmentForm,
+                        'esic_family_details'
+                      );
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
+                    <td>
+                      <input
+                        formControlName="fm_name"
+                        type="text"
+                        class="px-3 form-control"
+                        placeholder="Name"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('fm_name')!.status
+                          ) &&
+                          (item.get('fm_name')!.dirty ||
+                            item.get('fm_name')!.touched)
+                        "
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        formControlName="fm_dob"
+                        type="date"
+                        class="px-3 form-control"
+                        placeholder="DOB"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('fm_dob')!.status
+                          ) &&
+                          (item.get('fm_dob')!.dirty ||
+                            item.get('fm_dob')!.touched)
+                        "
+                      />
+                    </td>
+
+                    <td>
+                      <ngx-select-dropdown
+                        formControlName="fm_relation"
+                        [options]="relationMaster"
+                        class="px-3 form-control"
+                        [config]="{
+                          search: true,
+                          placeholder: 'Select Relation'
+                        }"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('fm_relation')!.status
+                          ) &&
+                          (item.get('fm_relation')!.dirty ||
+                            item.get('fm_relation')!.touched)
+                        "
+                      ></ngx-select-dropdown>
+                    </td>
+
+                    <td>
+                      <ngx-select-dropdown
+                        formControlName="sex"
+                        [options]="sexMaster"
+                        class="px-3 form-control"
+                        [config]="{
+                          search: false,
+                          placeholder: 'Select Gender'
+                        }"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('sex')!.status
+                          ) &&
+                          (item.get('sex')!.dirty || item.get('sex')!.touched)
+                        "
+                      ></ngx-select-dropdown>
+                    </td>
+
+                    <td class="text-center">
+                      <input
+                        type="checkbox"
+                        formControlName="residing_with_if"
+                      />
+                    </td>
+
+                    <td class="text-center">
+                      <button
+                        class="btn btn-danger btn-sm"
+                        type="button"
+                        (click)="
+                          Global.removeFormGroupArrRow(
+                            employmentForm,
+                            'esic_family_details',
+                            i
+                          )
+                        "
+                      >
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr
+                    *ngIf="
+                      Global.getFormGroupArray(
+                        employmentForm,
+                        'esic_family_details'
+                      ).length == 0
+                    "
+                  >
+                    <td colspan="100%" class="text-center">No records found</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5"></td>
+                    <td colspan="1" class="text-center">
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="
+                          addFormRows(employmentForm, 'esic_family_details')
+                        "
+                      >
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- End of Family Details for ESIC -->
+
+        <!-- Start of Nominee Details for PF -->
+        <div class="row mt-3">
+          <div
+            class="col-12 p-0 bg-white"
+            style="border-right: 1px solid #ced4da !important"
+          >
+            <div class="overflow-x-auto table-responsive--n w-100">
+              <table
+                class="mt-table table table-bordered text-center"
+                style="border: 1px solid #e9ecef !important"
+              >
+                <thead>
+                  <tr class="bg-dark">
+                    <th colspan="100%" class="text-center text-white">
+                      Nominee Details for PF
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Aadhar No</th>
+                    <th>DOB</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Relation</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="pf_nominee_details">
+                  <tr
+                    *ngFor="
+                      let item of Global.getFormGroupArray(
+                        employmentForm,
+                        'pf_nominee_details'
+                      );
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
+                    <td>
+                      <input
+                        formControlName="aadhar_no"
+                        type="text"
+                        class="px-3 form-control"
+                        placeholder="Aadhar No"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('aadhar_no')!.status
+                          ) &&
+                          (item.get('aadhar_no')!.dirty ||
+                            item.get('aadhar_no')!.touched)
+                        "
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        formControlName="dob"
+                        type="date"
+                        class="px-3 form-control"
+                        placeholder="DOB"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('dob')!.status
+                          ) &&
+                          (item.get('dob')!.dirty || item.get('dob')!.touched)
+                        "
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        formControlName="name"
+                        type="text"
+                        class="px-3 form-control"
+                        placeholder="Name"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('name')!.status
+                          ) &&
+                          (item.get('name')!.dirty || item.get('name')!.touched)
+                        "
+                      />
+                    </td>
+
+                    <td>
+                      <ngx-select-dropdown
+                        formControlName="sex"
+                        [options]="sexMaster"
+                        class="px-3 form-control"
+                        [config]="{
+                          search: false,
+                          placeholder: 'Select Gender'
+                        }"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('sex')!.status
+                          ) &&
+                          (item.get('sex')!.dirty || item.get('sex')!.touched)
+                        "
+                      ></ngx-select-dropdown>
+                    </td>
+
+                    <td>
+                      <ngx-select-dropdown
+                        formControlName="fm_relation"
+                        [options]="relationMaster"
+                        class="px-3 form-control"
+                        [config]="{
+                          search: true,
+                          placeholder: 'Select Relation'
+                        }"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('fm_relation')!.status
+                          ) &&
+                          (item.get('fm_relation')!.dirty ||
+                            item.get('fm_relation')!.touched)
+                        "
+                      ></ngx-select-dropdown>
+                    </td>
+
+                    <td>
+                      <input
+                        formControlName="address"
+                        type="text"
+                        class="px-3 form-control"
+                        placeholder="Address"
+                        [class.is-invalid]="
+                          !['VALID', 'DISABLED'].includes(
+                            item.get('address')!.status
+                          ) &&
+                          (item.get('address')!.dirty ||
+                            item.get('address')!.touched)
+                        "
+                      />
+                    </td>
+
+                    <td class="text-center">
+                      <button
+                        class="btn btn-danger btn-sm"
+                        type="button"
+                        (click)="
+                          Global.removeFormGroupArrRow(
+                            employmentForm,
+                            'pf_nominee_details',
+                            i
+                          )
+                        "
+                      >
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr
+                    *ngIf="
+                      Global.getFormGroupArray(
+                        employmentForm,
+                        'pf_nominee_details'
+                      ).length == 0
+                    "
+                  >
+                    <td colspan="100%" class="text-center">No records found</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6"></td>
+                    <td colspan="1" class="text-center">
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="
+                          addFormRows(employmentForm, 'pf_nominee_details')
+                        "
+                      >
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- End of Nominee Details for PF -->
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <!-- [disabled]="employmentForm.invalid" -->
+            <button
+              *ngIf="employee_details"
+              class="btn btn-info text-uppercase"
+              type="submit"
+              (click)="updateEmployeeOtherDetail($event)"
+            >
+              <span>Update</span>
+            </button>
+            <button 
+            *ngIf="employee_details"
+            class="btn btn-info text-uppercase ml-4 d-inline d-md-none d-lg-none"
+            (click)="employee_details ? formType = 'educational' : null">
+            <span>Add Education</span>
+          </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'educational'">
+    <h5 class="text-uppercase mb-3">Employee Education Attended</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+      id="education-submit-section"
+    >
+      <form [formGroup]="employeeEducationForm">
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Institute&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'institute',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="institute"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeEducationForm,
+                  'institute',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            University&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'university',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="university"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeEducationForm,
+                  'university',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Stream&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'stream',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="stream" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeEducationForm,
+                  'stream',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Level&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'level',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input class="form-control" type="text" formControlName="level" />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeEducationForm,
+                  'level',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Specialisation&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'specialisation',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="specialisation"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeEducationForm,
+                  'specialisation',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Completion&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'completion',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="completion"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeEducationForm,
+                  'completion',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Education File Image&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeEducationForm,
+                  'education_file_image',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container>
+              <input
+                class="form-control"
+                type="file"
+                accept="image/*"
+                formControlName="education_file_image"
+                (change)="
+                  onFileChanged(
+                    $event,
+                    employeeEducationForm,
+                    'education_file_image',
+                    'education_file_image_file'
+                  )
+                "
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  employeeEducationForm.controls.education_file_image.hasError(
+                    'required'
+                  ) &&
+                  (employeeEducationForm.controls.education_file_image.dirty ||
+                    employeeEducationForm.controls.education_file_image.touched)
+                "
+              >
+                This field is required
+              </p>
+            </ng-container>
+          </div>
+
+          <div class="col-sm-6 "></div>
+        </div>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              type="button"
+              class="btn btn-danger mr-2"
+              (click)="cancelEntry()"
+            >
+              Cancel
+            </button>
+            <button
+            [disabled]="employeeEducationForm.invalid"
+              type="submit"
+              class="btn btn-info"
+              (click)="updateEmployeeEducationDetails($event)"
+            >
+              <span *ngIf="education_id; else addEducationSpanBlock"
+                >Update Education</span
+              >
+              <ng-template #addEducationSpanBlock>
+                <span>Add Education</span>
+              </ng-template>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bd bd-gray-300 rounded table-responsive mt-5">
+      <table class="table table-striped mg-b-0">
+        <thead>
+          <tr>
+            <th>Sl</th>
+            <th>Institute</th>
+            <th>University</th>
+            <th>Stream</th>
+            <th>Level</th>
+            <th>Specialisation</th>
+            <th>Completion</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody
+          *ngIf="
+            employee_details?.emp_det?.education?.length > 0;
+            else noTableFound
+          "
+        >
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.education;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item?.institute ?? "N/A" }}</td>
+            <td>{{ item?.university ?? "N/A" }}</td>
+            <td>{{ item?.stream ?? "N/A" }}</td>
+            <td>{{ item?.level ?? "N/A" }}</td>
+            <td>{{ item?.specialisation ?? "N/A" }}</td>
+            <td>{{ item?.completion ?? "N/A" }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-info mr-2"
+                *ngIf="item.education_file_image"
+                (click)="
+                  imageViewer(
+                    Global.BACKEND_URL + '/' + item.education_file_image
+                  )
+                "
+                data-toggle="tooltip"
+                data-placement="top"
+                title="View Education Image File"
+              >
+                <i class="fa fa-file"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="getEditEducation(item)"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Edit Education"
+              >
+                <i class="fa fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+
+        <ng-template #noTableFound>
+          <tbody>
+            <tr>
+              <td colspan="100%" class="text-center">No Educations Found</td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="btn btn-info mt-3"
+        (click)="formType = 'accident'"
+      >
+        Add Accident Detail
+      </button>
+      
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'accident'">
+    <h5 class="text-uppercase mb-3">Employee Accident Details</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+      id="accident-submit-section"
+    >
+      <form [formGroup]="employeeAccidentForm">
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Accident Type&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAccidentForm,
+                  'accident_type',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="accident_type"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAccidentForm,
+                  'accident_type',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Accident File Image&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAccidentForm,
+                  'accident_file_image',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container>
+              <input
+                class="form-control"
+                type="file"
+                accept="image/*"
+                formControlName="accident_file_image"
+                (change)="
+                  onFileChanged(
+                    $event,
+                    employeeAccidentForm,
+                    'accident_file_image',
+                    'accident_file_image_file'
+                  )
+                "
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeAccidentForm,
+                    'accident_file_image',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Description&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAccidentForm,
+                  'description',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <textarea
+              class="form-control"
+              type="text"
+              formControlName="description"
+            ></textarea>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAccidentForm,
+                  'description',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Comment&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeAccidentForm,
+                  'comments',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <textarea
+              class="form-control"
+              type="text"
+              formControlName="comments"
+            ></textarea>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeAccidentForm,
+                  'comments',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              type="button"
+              class="btn btn-danger mr-2"
+              (click)="cancelEntry()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-info"
+              [disabled]="employeeAccidentForm.invalid"
+              (click)="updateEmployeeAccidentDetails($event)"
+            >
+              <span *ngIf="accident_id; else addAccidentSpanBlock"
+                >Update Accident</span
+              >
+              <ng-template #addAccidentSpanBlock>
+                <span>Add Accident</span>
+              </ng-template>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bd bd-gray-300 rounded table-responsive mt-5">
+      <table class="table table-striped mg-b-0">
+        <thead>
+          <tr>
+            <th>Sl</th>
+            <th>Accident Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody
+          *ngIf="
+            employee_details?.emp_det?.accident?.length > 0;
+            else noTableFound
+          "
+        >
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.accident;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.accident_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-info mr-2"
+                *ngIf="item.accident_file_image"
+                (click)="
+                  imageViewer(
+                    Global.BACKEND_URL + '/' + item.accident_file_image
+                  )
+                "
+                data-toggle="tooltip"
+                data-placement="top"
+                title="View Accident Image File"
+              >
+                <i class="fa fa-file"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="getEditAccident(item)"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Edit Accident"
+              >
+                <i class="fa fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+
+        <ng-template #noTableFound>
+          <tbody>
+            <tr>
+              <td colspan="6" class="text-center">No Accidents Found</td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="btn btn-info mt-3"
+        (click)="formType = 'training'"
+      >
+        Add Training Detail
+      </button>
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'training'">
+    <h5 class="text-uppercase mb-3">
+      Employee Training Attended
+
+
+    </h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+      id="training-submit-section"
+    >
+      <form [formGroup]="employeeTrainingForm">
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Training Type&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeTrainingForm,
+                  'training_type',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="training_type"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeTrainingForm,
+                  'training_type',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Training File Image&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeTrainingForm,
+                  'training_file_image',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container>
+              <input
+                class="form-control"
+                type="file"
+                accept="image/*"
+                formControlName="training_file_image"
+                (change)="
+                  onFileChanged(
+                    $event,
+                    employeeTrainingForm,
+                    'training_file_image',
+                    'training_file_image_file'
+                  )
+                "
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeTrainingForm,
+                    'training_file_image',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Description&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeTrainingForm,
+                  'description',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <textarea
+              class="form-control"
+              type="text"
+              formControlName="description"
+            ></textarea>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeTrainingForm,
+                  'description',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Comment&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeTrainingForm,
+                  'comments',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <textarea
+              class="form-control"
+              type="text"
+              formControlName="comments"
+            ></textarea>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeTrainingForm,
+                  'comments',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              type="button"
+              class="btn btn-danger mr-2"
+              (click)="cancelEntry()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-info"
+              [disabled]="employeeTrainingForm.invalid"
+              (click)="updateEmployeeTrainingDetails($event)"
+            >
+              <span *ngIf="training_id; else addTrainingSpanBlock"
+                >Update Training</span
+              >
+              <ng-template #addTrainingSpanBlock>
+                <span>Add Training</span>
+              </ng-template>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bd bd-gray-300 rounded table-responsive mt-5">
+      <table class="table table-striped mg-b-0">
+        <thead>
+          <tr>
+            <th>Sl</th>
+            <th>Training Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody
+          *ngIf="
+            employee_details?.emp_det?.training?.length > 0;
+            else noTableFound
+          "
+        >
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.training;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.training_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-info mr-2"
+                *ngIf="item.training_file_image"
+                (click)="
+                  imageViewer(
+                    Global.BACKEND_URL + '/' + item.training_file_image
+                  )
+                "
+                data-toggle="tooltip"
+                data-placement="top"
+                title="View Training Image File"
+              >
+                <i class="fa fa-file"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="getEditTraining(item)"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Edit Training"
+              >
+                <i class="fa fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+
+        <ng-template #noTableFound>
+          <tbody>
+            <tr>
+              <td colspan="6" class="text-center">No Trainings Found</td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="btn btn-info mt-3"
+        (click)="formType = 'extra_curricular'"
+      >
+        Add Extra Curricular
+      </button>
+    </div>
+  </div>
+
+  <div class="br-section-wrapper pd-20" *ngIf="formType === 'extra_curricular'">
+    <h5 class="text-uppercase mb-3">Employee Extra Curriculum Details</h5>
+
+    <div
+      class="form-layout form-layout-6 employee-{{ operation }}-form-section"
+      id="extracurriculum-submit-section"
+    >
+      <form [formGroup]="employeeExtraCurriculumForm">
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Extra Curriculum Type&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeExtraCurriculumForm,
+                  'extra_curricular_type',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              formControlName="extra_curricular_type"
+            />
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeExtraCurriculumForm,
+                  'extra_curricular_type',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Extra Curriculum File Image&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeExtraCurriculumForm,
+                  'extra_curricular_file_image',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <ng-container>
+              <input
+                class="form-control"
+                type="file"
+                accept="image/*"
+                formControlName="extra_curricular_file_image"
+                (change)="
+                  onFileChanged(
+                    $event,
+                    employeeExtraCurriculumForm,
+                    'extra_curricular_file_image',
+                    'extra_curricular_file_image_file'
+                  )
+                "
+              />
+
+              <p
+                class="error-element"
+                *ngIf="
+                  !Global.isInputRuleValid(
+                    employeeExtraCurriculumForm,
+                    'extra_curricular_file_image',
+                    'required'
+                  )
+                "
+              >
+                This field is required
+              </p>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row ">
+          <div class="col col-6 col-md-3 col-lg-3">
+            Description&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeExtraCurriculumForm,
+                  'description',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <textarea
+              class="form-control"
+              type="text"
+              formControlName="description"
+            ></textarea>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeExtraCurriculumForm,
+                  'description',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+
+          <div class="col col-6 col-md-3 col-lg-3 ">
+            Comment&nbsp;
+            <span
+              *ngIf="
+                Global.isValidationAvailable(
+                  employeeExtraCurriculumForm,
+                  'comments',
+                  'required'
+                )
+              "
+              class="text-danger"
+              >*</span
+            >
+          </div>
+          <div class="col col-6 col-md-3 col-lg-3">
+            <textarea
+              class="form-control"
+              type="text"
+              formControlName="comments"
+            ></textarea>
+
+            <p
+              class="error-element"
+              *ngIf="
+                !Global.isInputRuleValid(
+                  employeeExtraCurriculumForm,
+                  'comments',
+                  'required'
+                )
+              "
+            >
+              This field is required
+            </p>
+          </div>
+        </div>
+
+        <div class="row  bd-1">
+          <div class="col-12 col-sm-12">
+            <button
+              type="button"
+              class="btn btn-danger mr-2"
+              (click)="cancelEntry()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-info"
+              [disabled]="employeeExtraCurriculumForm.invalid"
+              (click)="updateEmployeeExtraCurriculumDetails($event)"
+            >
+              <span *ngIf="extracurriculum_id; else addExtraCurriculumSpanBlock"
+                >Update Extra Curriculum</span
+              >
+              <ng-template #addExtraCurriculumSpanBlock>
+                <span>Add Extra Curriculum</span>
+              </ng-template>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bd bd-gray-300 rounded table-responsive mt-5">
+      <table class="table table-striped mg-b-0">
+        <thead>
+          <tr>
+            <th>Sl</th>
+            <th>Extra Curriculum Type</th>
+            <th>Description</th>
+            <th>Comments</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody
+          *ngIf="
+            employee_details?.emp_det?.extra_curricular?.length > 0;
+            else noTableFound
+          "
+        >
+          <tr
+            *ngFor="
+              let item of employee_details?.emp_det?.extra_curricular;
+              let i = index
+            "
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.extra_curricular_type }}</td>
+            <td>{{ item.description ? item.description : "N/A" }}</td>
+            <td>{{ item.comments ? item.comments : "N/A" }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-info mr-2"
+                *ngIf="item.extra_curricular_file_image"
+                (click)="
+                  imageViewer(
+                    Global.BACKEND_URL + '/' + item.extra_curricular_file_image
+                  )
+                "
+                data-toggle="tooltip"
+                data-placement="top"
+                title="View ExtraCurriculum Image File"
+              >
+                <i class="fa fa-file"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="getEditExCurr(item)"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Edit ExtraCurriculum"
+              >
+                <i class="fa fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+
+        <ng-template #noTableFound>
+          <tbody>
+            <tr>
+              <td colspan="6" class="text-center">
+                No Extra Curriculums Found
+              </td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+
+    <div>
+      <button
+        type="submit"
+        class="btn btn-info mt-3"
+        (click)="isFormPending = false"
+      >
+        Submit Form
+      </button>
+    </div>
+  </div>
+</div>
+<div *ngIf="!isLinkValid && !isLoading" class="text-center">
+  <h2 class="mt-5 pt-5">This Invite link is Expired!</h2>
+</div>
+<div *ngIf="!isFormPending" class="text-center">
+  <h2 class="mt-5 pt-5">Thanks for filling out our form!</h2>
+</div>
+<div id="image-viewer-modal" tabindex="-1" class="modal fade animated fadeInLeftBig">
+  <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content bd-0">
+          <div class="modal-body pd-0">
+              <div class="row flex-row-reverse no-gutters">
+                  <div class="col-lg-12">
+                      <button style="position: absolute; color: white; right: 0;" type="button" class="close mg-t-2 mg-r-5 text-dark" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+
+                      <div class="p-3 pt-2 mt-2">
+                          <img src="" alt="" id="image-src" class="w-100 img-fluid">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

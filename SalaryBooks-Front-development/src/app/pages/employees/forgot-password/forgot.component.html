@@ -1,0 +1,88 @@
+<form [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()">
+  <div class="otp-container">
+    <div class="otp-header"></div>
+
+    <div class="form-group"
+         style="display: flex; align-items: center;">
+      <label for="corporate_id"
+             style="width: 150px;">Corporate ID:</label>
+      <input type="text"
+             class="form-control"
+             formControlName="corporate_id"
+             placeholder="Enter Corporate Id"
+             style="width: 500px;" />
+      <span *ngIf="
+          loginForm.controls.corporate_id.hasError('required') &&
+          (loginForm.controls.corporate_id.dirty ||
+            loginForm.controls.corporate_id.touched)
+        "
+            class="error">The Corporate Id field is required</span>
+    </div>
+
+    <div class="form-group"
+         style="display: flex; align-items: center;">
+      <label for="corporate_id"
+             style="width: 150px;">User Id:</label>
+      <input type="text"
+             class="form-control"
+             formControlName="userid"
+             placeholder="Enter User Id"
+             style="width: 500px;" />
+      <span *ngIf="
+          loginForm.controls.userid.hasError('required') &&
+          (loginForm.controls.userid.dirty ||
+            loginForm.controls.userid.touched)
+        "
+            class="error">The User Id field is required</span>
+    </div>
+
+    <div class="otp-button-wrapper">
+      <button class="otp-button"
+              type="submit">Verify</button>
+    </div>
+
+
+
+    <!-- <div *ngIf="emailId"
+         class="result">To change password
+      <p>Please Contact this Email ID : <strong>{{ emailId }} {{ message }}</strong></p>
+    </div> -->
+
+
+
+    <!-- <div *ngIf="staff && emailId; else showError">
+      To change password
+      <p>Please contact this Email ID: <strong>{{ emailId }}</strong></p>
+    </div>
+
+
+    <ng-template #showError>
+      <p class="error-message">Your Corporate ID or User ID is wrong.</p>
+    </ng-template> -->
+
+
+
+    <div *ngIf="super; else noMessage">
+      <p class="info-message">your request go to Super Admin , Please wait</p>
+    </div>
+
+
+    <ng-template #noMessage>
+      <div *ngIf="staff && emailId; else showError">
+        To change password
+        <p>Please contact this Email ID: <strong>{{ emailId }}</strong></p>
+      </div>
+
+      <ng-template #showError>
+        <p class="error-message">Your Corporate ID or User ID is wrong.</p>
+      </ng-template>
+    </ng-template>
+
+
+
+
+
+
+  </div>
+</form>

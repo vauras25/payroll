@@ -1,0 +1,132 @@
+<div class="p-5">
+  <table *ngIf="layoffListing?.length" class="w-100 c-table p-5" id="print-section">
+    <colgroup span="3"></colgroup>
+    <thead>
+      <tr>
+        <!-- <th>
+          <input type="checkbox" [value]="rowCheckedAll" (change)="allRowsCheckboxChecked($event)" />
+          SL No.
+        </th> -->
+        <th>Employee ID</th>
+        <th>Employee Name</th>
+        <th>Department</th>
+        <th>Designation</th>
+        <th>Branch</th>
+        <th>Client</th>
+        <th>HOD</th>
+        <th>Wage %</th>
+        <th>From </th>
+        <th>To</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let report of layoffListing; let i = index">
+        <!-- <td>
+          <label
+            class="d-flex align-items-center"
+            [for]="'checkrow-' + (i + 1)"
+          >
+            <input
+              type="checkbox"
+              class="mr-2"
+              [attr.checked]="
+                report?.checked == true ? 'checked' : null
+              "
+              id="checkrow-{{ i + 1 }}"
+              [attr.data-checkbox-id]="report?._id"
+              (click)="rowCheckBoxChecked($event, report)"
+            />
+            {{
+              Global.getTableSerialNumber(
+                i,
+                employeePaginationOptions.limit,
+                employeePaginationOptions.page
+              )
+            }}
+          </label>
+        </td> -->
+        <!-- <td>
+          <button
+            (click)="
+              openLayoffEditModal(
+                'single',
+                layoffListType,
+                report?.employee_detail?.employee_id,
+                report
+              )
+            "
+            class="btn btn-primary btn-icon mg-r-5"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Edit"
+          >
+            <div style="width: 25px; height: 25px">
+              <i class="fa fa-edit"></i>
+            </div>
+          </button>
+        </td> -->
+        <td>{{ report?.emp_id }}</td>
+        <td>
+          {{ report?.emp_first_name }} {{ report?.emp_last_name }}
+        </td>
+        <td>{{ report?.department?.department_name || "N/A" }}</td>
+        <td>{{ report?.designation?.designation_name || "N/A" }}</td>
+        <td>{{ report?.branch?.branch_name || "N/A" }}</td>
+        <td>{{ report?.client?.client_name || "N/A" }}</td>
+        <td>
+          {{ report?.hod?.first_name || "N/A" }}
+          {{ report?.hod?.last_name }}
+        </td>
+        <ng-container *ngIf="layoffListType === 'summary'">
+          <td>{{ report?.layoff_modules[0]?.wage_value || "N/A" }}</td>
+          <td>
+            {{ utilizeMonth(report?.layoff_modules[0]?.wage_month_from) }}
+            {{ report?.layoff_modules[0]?.wage_year_from || 'N/A'}}
+          </td>
+          <td>
+            {{ utilizeMonth(report?.layoff_modules[0]?.wage_month_to) }}
+            {{ report?.layoff_modules[0]?.wage_year_to || 'N/A' }}
+          </td>
+        </ng-container>
+        <ng-container *ngIf="layoffListType === 'detailed'">
+          <td>
+            <tr style="background-color: transparent !important;" class="border-0" *ngFor="let logs of report?.layoff_history_logs">
+              <td class="px-0 py-1">{{ logs?.wage_value || "N/A" }}</td>
+            </tr>
+          </td>
+          <td>
+            <tr style="background-color: transparent !important;" class="border-0" *ngFor="let logs of report?.layoff_history_logs">
+              <td class="px-0 py-1">
+                {{ utilizeMonth(logs?.wage_month_from) }}
+                {{ logs?.wage_year_from }}
+              </td>
+            </tr>
+          </td>
+          <td>
+            <tr  style="background-color: transparent !important;" class="border-0" *ngFor="let logs of report?.layoff_history_logs">
+              <td class="px-0 py-1">
+                {{ utilizeMonth(logs?.wage_month_to) }}
+                {{ logs?.wage_year_to }}
+              </td>
+            </tr>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+
+  <div #btns *ngIf="layoffListing?.length" class="text-right py-3">
+    <button
+    (click)="closeWindow()"
+      class="btn btn-dark tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium mr-2"
+    >
+      Cancel
+    </button>
+    <button
+      (click)="btns.hidden = true; printDoc(btns)"
+      class="btn btn-primary tx-11 tx-uppercase pd-y-12 pd-x-25 tx-mont tx-medium ml-2"
+    >
+      Print
+    </button>
+  </div>
+</div>

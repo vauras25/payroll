@@ -1,0 +1,16 @@
+.table th {
+  border-bottom: 1px solid #dee2e6 ;
+}
+.table td {
+  border-bottom: 1px solid #dee2e6 ;
+  border-top: none;
+}
+
+.section-box{
+  padding: 4px;
+  border: 1px solid #dee2e6;
+}
+.section-box .row{
+ padding: 8px;
+}
+

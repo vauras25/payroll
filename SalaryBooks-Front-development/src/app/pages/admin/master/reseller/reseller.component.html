@@ -1,0 +1,288 @@
+<admin-app-dashboard-header></admin-app-dashboard-header>
+
+<div class="br-mainpanel">
+    <div class="br-pageheader">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" routerLink="/admin">Dashboard</a>
+            <a class="breadcrumb-item">Master</a>
+            <a class="breadcrumb-item active">Reseller</a>
+        </nav>
+    </div>
+
+    <div class="br-pagetitle">
+        <i class="icon icon ion-ios-home"></i>
+        <div>
+            <h4>Reseller</h4>
+            <p class="mg-b-0">Create Reseller</p>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="reseller-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label mb-3" *ngIf="editActionId == ''; else editHeader">Create Reseller</h6>
+            <ng-template #editHeader>
+                <h6 class="br-section-label mb-3">Edit Reseller</h6>
+            </ng-template>
+
+            <div class="form-layout form-layout-6">
+                <form [formGroup]="resellerForm">
+                    <!-- Reseller Basic Details -->
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Reseller Name&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <input class="form-control" formControlName="reseller_name" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.reseller_name.hasError('required') && (resellerForm.controls.reseller_name.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            SubSeller of
+                            <!-- &nbsp;<span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="reseller_of" [options]="subSellerMaster" class="form-control" [config]="{search:true, placeholder: 'Select Sub-Seller'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="resellerForm.controls.reseller_of.hasError('required') && (resellerForm.controls.reseller_of.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Mapped to Branch&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="branch_id" [options]="branchMaster" class="form-control" [config]="{search:true, placeholder: 'Select Branch'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="resellerForm.controls.branch_id.hasError('required') && (resellerForm.controls.branch_id.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <!-- End of Reseller Basic Details -->
+
+                    <!-- Reseller Address Informations -->
+                    <div class="row no-gutters">
+                        <div class="col-12 col-sm-12 label-div">
+                            Address
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Address&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea formControlName="address" class="form-control"></textarea>
+                            <p class="error-element" *ngIf="resellerForm.controls.address.hasError('required') && (resellerForm.controls.address.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            State&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="state" (change)="stateChanged($event)" [options]="stateMaster" class="form-control" [config]="{search:true, placeholder: 'Select State', height: '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="resellerForm.controls.state.hasError('required') && (resellerForm.controls.state.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            City&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <ngx-select-dropdown formControlName="city" [options]="cityMaster" class="form-control" [config]="{search:true, placeholder: 'Select City', height: '200px'}"></ngx-select-dropdown>
+                            <p class="error-element" *ngIf="resellerForm.controls.city.hasError('required') && (resellerForm.controls.city.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-6 col-sm-6 sameasfirst label-div"></div>
+
+                        <!-- <div class="col-3 col-sm-3 sameasfirst">
+                            Pincode
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" formControlName="pincode" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.pincode.hasError('required') && (resellerForm.controls.pincode.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="(resellerForm.controls.pincode.hasError('pattern') || resellerForm.controls.pincode.hasError('minlength') || resellerForm.controls.pincode.hasError('maxlength')) && (resellerForm.controls.pincode.dirty)">This pincode format is invalid</p>
+                        </div> -->
+                    </div>
+                    <!-- End of Reseller Address Informations -->
+
+                    <!-- Reseller Banking Informations -->
+                    <div class="row no-gutters">
+                        <div class="col-12 col-sm-12 label-div">
+                            Bank Information
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Bank Name&nbsp;
+                            <!-- <span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea formControlName="bank_details" class="form-control"></textarea>
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_details.hasError('required') && (resellerForm.controls.bank_details.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Branch Name
+                            <!-- &nbsp;<span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input class="form-control" formControlName="bank_name" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_name.hasError('required') && (resellerForm.controls.bank_name.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Beneficiary
+                            <!-- &nbsp;<span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea formControlName="bank_beneficiary" class="form-control"></textarea>
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_beneficiary.hasError('required') && (resellerForm.controls.bank_beneficiary.dirty)">This field is required</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            IFSC
+                            <!-- &nbsp;<span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="bank_ifsc" class="form-control" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_ifsc.hasError('required') && (resellerForm.controls.bank_ifsc.dirty)">This field is required</p>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Account No
+                            <!-- &nbsp;<span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <textarea formControlName="bank_acc_no" class="form-control"></textarea>
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_acc_no.hasError('required') && (resellerForm.controls.bank_acc_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_acc_no.hasError('pattern') && (resellerForm.controls.bank_acc_no.dirty)">This field should contain only numeric value</p>
+                        </div>
+
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            Account Type
+                            <!-- &nbsp;<span class="text-danger">*</span> -->
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <!-- <input formControlName="bank_acc_type" class="form-control" type="text"> -->
+                            <ngx-select-dropdown formControlName="bank_acc_type" [options]="bankAccountTypeMaster" class="form-control" [config]="{search:true, placeholder: 'Select One'}"></ngx-select-dropdown>
+
+
+                            <p class="error-element" *ngIf="resellerForm.controls.bank_acc_type.hasError('required') && (resellerForm.controls.bank_acc_type.dirty)">This field is required</p>
+                        </div>
+                    </div>
+                    <!-- End of Reseller Banking Informations -->
+
+
+                    <!-- Reseller Company Informations -->
+                    <div class="row no-gutters">
+                        <div class="col-12 col-sm-12 label-div">
+                            Company Information
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            PAN No&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="pan_no" class="form-control" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.pan_no.hasError('required') && (resellerForm.controls.pan_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="resellerForm.controls.pan_no.hasError('pattern') && (resellerForm.controls.pan_no.dirty)">This Pancard Number format is invalid</p>
+                        </div>
+                        <div class="col-3 col-sm-3 sameasfirst">
+                            GST No&nbsp;<span class="text-danger">*</span>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="gst_no" class="form-control" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.gst_no.hasError('required') && (resellerForm.controls.gst_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="resellerForm.controls.gst_no.hasError('pattern') && (resellerForm.controls.gst_no.dirty)">This GSTIN Number format is invalid</p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Aadharcard No
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <input formControlName="aadharcard_no" class="form-control" type="text">
+                            <p class="error-element" *ngIf="resellerForm.controls.aadharcard_no.hasError('required') && (resellerForm.controls.aadharcard_no.dirty)">This field is required</p>
+                            <p class="error-element" *ngIf="(resellerForm.controls.aadharcard_no.hasError('pattern') || resellerForm.controls.aadharcard_no.hasError('minlength') || resellerForm.controls.aadharcard_no.hasError('maxlength'))  && (resellerForm.controls.aadharcard_no.dirty)">This Aadharcard Number format is invalid</p>
+                        </div>
+                        <div class="col-6 col-sm-6 sameasfirst label-div">
+
+                        </div>
+                    </div> -->
+                    <!-- End of Reseller Company Informations -->
+
+                    <div class="row no-gutters">
+                        <div class="col-12 col-sm-12 label-div">
+                            Status
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-3 col-sm-3">
+                            Reseller Status
+                        </div>
+                        <div class="col-9 col-sm-9">
+                            <div class="reseller-status-name br-toggle br-toggle-rounded br-toggle-primary on">
+                                <div class="br-toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row no-gutters bd-1">
+                        <div class="col-12 col-sm-12 label-div">
+                            <button type="submit" [disabled]="!resellerForm.valid" (click)="create($event)" class="btn btn-info" *ngIf="editActionId == ''; else editButtonSection">
+                                <span>Add Reseller</span>
+                            </button>
+
+                            <ng-template #editButtonSection>
+                                <button type="button" (click)="cancelEdit()" class="btn btn-danger mg-r-5">
+                                    <span>Cancel Editing</span>
+                                </button>
+                                <button type="submit" [disabled]="!resellerForm.valid" (click)="update($event)" class="btn btn-info">
+                                    <span>Update Reseller</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="br-pagebody pd-x-20 pd-sm-x-30" id="reseller-submit-section">
+        <div class="br-section-wrapper">
+            <h6 class="br-section-label">View, manage resellers</h6>
+            <div class="table-wrapper">
+                <table class="table display responsive nowrap wd-100p" datatable [dtOptions]="dtOptions" id="my-datatable">
+                    <thead>
+                        <tr>
+                            <th class="wd-25p">SL</th>
+                            <th class="wd-25p text-center">Action</th>
+                            <th class="wd-15p">Reseller Name</th>
+                            <th class="wd-15p">Added By</th>
+                            <th class="wd-25p">Branch</th>
+                            <th class="wd-25p">Sub Seller to</th>
+                            <th class="wd-25p">Address</th>
+                            <th class="wd-25p">State</th>
+                            <th class="wd-25p">City</th>
+                            <th class="wd-25p">PAN No</th>
+                            <th class="wd-25p">GST No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <admin-app-dashboard-footer></admin-app-dashboard-footer>
+</div>
