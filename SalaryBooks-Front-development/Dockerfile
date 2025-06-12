@@ -1,15 +1,15 @@
-# Stage 1: Build the Angular app
-FROM node:18 as build
+# Step 1: Build Angular app
+FROM node:18 AS builder
 
 WORKDIR /app
 COPY package*.json ./
-# RUN npm install --legacy-peer-deps
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 COPY . .
 RUN npm run build --prod
 
-# Stage 2: Serve the app using NGINX
+# Step 2: Serve app using nginx
 FROM nginx:alpine
-COPY --from=build /app/dist/your-app-name /usr/share/nginx/html
+COPY --from=builder /app/dist/YOUR_PROJECT_NAME /usr/share/nginx/html
 EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
