@@ -5,7 +5,9 @@ WORKDIR /app
 
 # Install dependencies with compatibility mode
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+# RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
+
 
 # Copy full source code and build
 COPY . .
