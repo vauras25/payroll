@@ -1,5 +1,5 @@
 # Step 1: Build Angular app
-FROM node:18 AS builder
+FROM node:14.20.0 AS builder
 
 WORKDIR /app
 
