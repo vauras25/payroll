@@ -1,26 +1,29 @@
-# Step 1: Build Angular app
+# ---------- STEP 1: Build Angular App ----------
 FROM node:14.20.0 AS builder
 
+# Set working directory
 WORKDIR /app
 
-# Install dependencies with compatibility mode
+# Install dependencies
 COPY package*.json ./
-# RUN npm install --legacy-peer-deps
 RUN npm ci --legacy-peer-deps
 
-
-# Copy full source code and build
+# Copy project files and build
 COPY . .
 RUN npm run build --prod
 
-# Step 2: Serve app using nginx
+
+# ---------- STEP 2: Serve using Nginx ----------
 FROM nginx:alpine
 
-# Replace with your actual Angular output folder name inside /dist/
+# Copy Angular dist files from builder
 COPY --from=builder /app/dist/SalaryBooks-Front-development /usr/share/nginx/html
 
-# Copy default nginx config (optional but recommended for Angular routing)
+# Copy custom nginx config to support Angular routes
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Expose port
 EXPOSE 80
+
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
