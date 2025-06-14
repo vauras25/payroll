@@ -1,7 +1,8 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://api.vauras.cloud',
-  BASEHREF: '/payroll/payroll_frontend/',
+  apiUrl: 'https://back.finalpayroll.in/',
+  BASEHREF: '',
+  // BASEHREF: '/payroll/payroll_frontend/',
   ASSET_URL: '',
   APPNAME: 'Vauras Advisory Services',
   DATATABLELENGTH: 20,
