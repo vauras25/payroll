@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.vauras.cloud',
+  apiUrl: 'https://back.finalpayroll.in',
   BASEHREF: '/',
   ASSET_URL: '',
   APPNAME: 'Vauras Advisory Services',
