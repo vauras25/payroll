@@ -31,11 +31,7 @@ const hostname = '127.0.0.1';
 const port = 7777;
 const basepath ='';
 
-const corsOptions = {
-  origin: 'https://front.finalpayroll.in',  // <-- ALLOW frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-};
+
 // const server = http.createServer((req, res) => {
 //   res.statusCode = 200;
 //   res.setHeader('Content-Type', 'text/plain');
