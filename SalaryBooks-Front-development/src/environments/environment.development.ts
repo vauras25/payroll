@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://back.finalpayroll.in/',
+  apiUrl: 'https://back.finalpayroll.in',
   BASEHREF: '',
   // BASEHREF: '/payroll/payroll_frontend/',
   ASSET_URL: '',
