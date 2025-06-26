@@ -496,7 +496,7 @@ module.exports = {
         } else {
           return resp
             .status(200)
-            .json({ status: "error", message: "Wrong login credentials" });
+            .json({ status: "error", message: "Wrong login credentials-employee" });
         }
       } else {
         entity = await Company.findOne(
@@ -544,7 +544,7 @@ module.exports = {
         } else {
           return resp.status(200).json({
             status: "error",
-            message: "Wrong login credentials",
+            message: "Wrong login credentials-company",
           });
         }
       } else {
@@ -607,7 +607,7 @@ module.exports = {
         } else {
           return resp.status(200).json({
             status: "error",
-            message: "Wrong login credentials",
+            message: "Wrong login credentials-staff",
           });
         }
       } else {
@@ -625,7 +625,7 @@ module.exports = {
               if (!superadmin) {
                 return resp.status(200).json({
                   status: "error",
-                  message: "Wrong login credentials",
+                  message: "Wrong login credentials-!superadmin",
                 });
               }
               if (superadmin.status != "active") {
@@ -660,7 +660,7 @@ module.exports = {
               } else {
                 return resp.status(200).json({
                   status: "error",
-                  message: "Wrong login credentials",
+                  message: "Wrong login credentials-superadmin",
                 });
               }
             }
